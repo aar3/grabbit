@@ -1,0 +1,7 @@
+mypy
+mypy-extensions
+pylint
+black
+faker
+setuptools
+wheel

@@ -1,0 +1,20 @@
+# django
+django
+djangorestframework
+django-cors-headers
+gunicorn
+django-utils
+celery
+
+# postgres
+psycopg2
+psycopg2-binary
+
+# google
+google-cloud-storage
+
+# misc
+inflection
+
+redis
+httpx
