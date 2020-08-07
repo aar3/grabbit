@@ -18,11 +18,18 @@ CMD_BLACK_FORMAT = find $(PROJECT) -type f -name "*.py" | xargs black
 CMD_PYLINT = find $(PROJECT) -type f -name "*.py" | xargs pylint --rcfile $(SOURCE)/.pylintrc
 CMD_PYTEST = python -m pytest --cov=./ -s -v -rxs tests/*.py
 
+CMD_DJANGO_SHOW_MIGRATIONS = $(PROJECT)/manage.py showmigrations
 CMD_DJANGO_MAKE_MIGRATIONS = $(PROJECT)/manage.py makemigrations
 CMD_DJANGO_MIGRATE = $(PROJECT)/manage.py migrate
 
+CMD_START_APP_DEV = cd $(PROJECT) && gunicorn grabbit.wsgi:application \
+	-w 2 -b 127.0.0.1:8000 --reload --log-level DEBUG
 
-.PHONY: format lint migrate test install installock freeze
+
+.PHONY: format lint migrate test install installock freeze start show_migrations
+
+
+APPS = partners
 
 
 format:
@@ -32,13 +39,13 @@ lint: format
 	$(foreach dir,$(SOURCE),cd $(dir); $(CMD_PYLINT))
 
 make_migrations:
-	$(CMD_DJANGO_MAKE_MIGRATIONS)
+	$(CMD_DJANGO_MAKE_MIGRATIONS) && $(CMD_DJANGO_SHOW_MIGRATIONS)
 
 migrate: make_migrations
-	$(foreach app,$(merchant grabber),$(CMD_DJANGO_MIGRATE) $(app))
+	$(foreach app,$(APPS), $(CMD_DJANGO_MIGRATE) $(app);)
 
 test: lint migrate
-	$(foreach app,$(merchant grabber),cd $(PWD)/grabbit/$(app); $(CMD_PYTEST))
+	$(foreach app,$(merchant broker),cd $(PWD)/grabbit/$(app); $(CMD_PYTEST))
 
 install:
 	$(CMD_PIP_INSTALL)
@@ -48,3 +55,9 @@ installock:
 
 freeze:
 	$(CMD_PIP_FREEZE)
+
+start_dev: migrate
+	$(CMD_START_APP_DEV)
+
+show_migrations:
+	$(CMD_DJANGO_SHOW_MIGRATIONS)

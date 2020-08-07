@@ -30,8 +30,7 @@ DEBUG = True
 # Application definition
 
 INSTALLED_APPS = [
-    "merchant",
-    "grabber",
+    "partners",
     "corsheaders",
     "rest_framework",
     "django.contrib.admin",
@@ -145,9 +144,7 @@ GOOGLE_STORAGE_DEFAULT_BUCKET = os.environ["GOOGLE_STORAGE_DEFAULT_BUCKET"]
 GOOGLE_STORAGE_SECRET_BUCKET = os.environ["GOOGLE_STORAGE_SECRET_BUCKET"]
 
 
-API_DIR = os.path.dirname(
-    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-)
+API_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 LOGGING = {
