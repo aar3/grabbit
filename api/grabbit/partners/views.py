@@ -141,12 +141,13 @@ def UserExploreView(request, pk=None):
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
 
+
 @api_view(["POST"])
 @authentication_classes([TokenAuthentication])
 def UploadImageView(request, pk=None):
     params = request.data
     user = get_object_or_404(User, pk=pk)
-    
+
     # TODO: verify photo, format, and send to gcloud (create task)
     # return full url from gcloud and store it in user instance
 

@@ -121,7 +121,6 @@ class Notification(BaseModel):
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
 
-
 class Interest(BaseModel):
     class Meta:
         db_table = "interests"

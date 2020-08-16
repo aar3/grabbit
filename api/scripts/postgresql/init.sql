@@ -2,23 +2,23 @@
 -- *** Obviously for dev use ONLY!!!!!!! *** --
 DO $$
 BEGIN
-  CREATE ROLE postgres WITH PASSWORD 'password';
+  CREATE ROLE postgres WITH PASSWORD '';
   EXCEPTION WHEN DUPLICATE_OBJECT THEN
-  RAISE NOTICE 'not creating role postgres -- it already exists';
+  RAISE NOTICE 'Not creating role postgres -- It already exists';
 END
 $$;
 
 DO $$
 BEGIN
-   IF EXISTS (SELECT FROM pg_database WHERE datname = 'css') THEN
-      RAISE NOTICE 'Database already exists';  -- optional
+   IF EXISTS (SELECT FROM pg_database WHERE datname = 'grabbit_prod') THEN
+      RAISE NOTICE 'Not creating database grabbit_prod -- It already exists';  -- optional
    ELSE
-      PERFORM dblink_exec('css=' || current_database(), 'CREATE DATABASE mydb');
+      PERFORM dblink_exec('grabbit_prod=' || current_database(), 'CREATE DATABASE grabbit_prod');
    END IF;
 END
 $$;
 
-GRANT ALL PRIVILEGES ON DATABASE css TO postgres;
+GRANT ALL PRIVILEGES ON DATABASE grabbit_prod TO postgres;
 --
 -- PostgreSQL database dump
 --

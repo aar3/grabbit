@@ -1,15 +1,15 @@
 import React from 'react';
-import {View, Text, StyleSheet, TextInput, Image} from 'react-native';
+import {View, Text, StyleSheet, Platform, TextInput, Image, KeyboardAvoidingView} from 'react-native';
+
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import {Color, Font} from 'grabbit/src/const';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default class InterestScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       email: '',
-      // error: {details: 'Invalid Email'},
       error: null,
       pending: false,
     };
@@ -51,7 +51,9 @@ export default class InterestScreen extends React.Component {
   render() {
     const error = this._renderErrorHeader();
     return (
-      <View style={styles.Interest}>
+      <KeyboardAvoidingView 
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        style={styles.Interest}>
         <View style={styles.Interest__ContentContainer}>
           <View style={styles.Interest__ContentContainer__Img}>
             <Image source={require('../../assets/imgs/white-letters-logo.png')}/>
@@ -84,7 +86,7 @@ export default class InterestScreen extends React.Component {
             </View>
           </TouchableOpacity>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

@@ -16,7 +16,14 @@ class Migration(migrations.Migration):
             model_name="user",
             name="user_meta",
             field=models.JSONField(
-                default='{"pantSize": "32x32", "shirtSize": "m", "shoeSize": "12.5", "sizeCountry": "US"}'
+                default=dict(
+                    {
+                        "pantSize": "32x32",
+                        "shirtSize": "m",
+                        "shoeSize": "12.5",
+                        "sizeCountry": "US",
+                    }
+                )
             ),
         ),
         migrations.AddField(

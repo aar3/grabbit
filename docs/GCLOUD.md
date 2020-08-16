@@ -11,3 +11,5 @@
 
 - Run
     - `docker run --env-file $PWD/.env ralston3/grabbit:latest make start_dev`
+    - Blow away all old `docker stop $(docker ps -qa) && docker system prune -af --volumes`
+    - Start `docker-compose up`

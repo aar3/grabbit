@@ -23,11 +23,11 @@ target 'grabbit' do
   end
 end
 
-target 'grabbit-tvOS' do
-  # Pods for grabbit-tvOS
+# target 'grabbit-tvOS' do
+#   # Pods for grabbit-tvOS
 
-  target 'grabbit-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-end
+#   target 'grabbit-tvOSTests' do
+#     inherit! :search_paths
+#     # Pods for testing
+#   end
+# end

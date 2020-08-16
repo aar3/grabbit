@@ -144,8 +144,10 @@ GOOGLE_STORAGE_API_JSON = os.environ["GOOGLE_STORAGE_API_JSON"]
 GOOGLE_STORAGE_DEFAULT_BUCKET = os.environ["GOOGLE_STORAGE_DEFAULT_BUCKET"]
 GOOGLE_STORAGE_SECRET_BUCKET = os.environ["GOOGLE_STORAGE_SECRET_BUCKET"]
 
-API_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-LOGS_DIR = pathlib.Path(os.path.join(API_DIR, "grabbit", "logs"))
+SOURCE_DIR = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+)
+LOGS_DIR = pathlib.Path(os.path.join(SOURCE_DIR, "grabbit", "logs"))
 LOGS_DIR.mkdir(exist_ok=True)
 
 
@@ -171,7 +173,7 @@ LOGGING = {
             "level": "DEBUG",
             "class": "logging.FileHandler",
             "filters": ["require_debug_true"],
-            "filename": os.path.join(API_DIR, "logs", "grabbit.log"),
+            "filename": os.path.join(LOGS_DIR, "grabbit.log"),
             "formatter": "standard",
         },
         "logdna": {

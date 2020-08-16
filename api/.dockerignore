@@ -1,7 +1,7 @@
-secrets/
 venv/
 docs/
 .envrc
 .DS_Store
 __pycache__
 *.pyc
+secrets/ubuntu-v1*

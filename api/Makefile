@@ -27,8 +27,11 @@ CMD_CREATE_LOGS = mkdir $(PROJECT)/logs && touch $(PROJECT)/logs/grabbit.log
 CMD_START_APP_DEV = cd $(PROJECT) && gunicorn grabbit.wsgi:application \
 	-w 2 -b 127.0.0.1:8000 --reload --log-level DEBUG
 
+CMD_START_APP_PROD = cd $(PROJECT) && gunicorn grabbit.wsgi:application \
+	-w 2 -b 0.0.0.0:8000 --log-level DEBUG
 
-.PHONY: format lint migrate test install install_lock freeze start show_migrations create_logs create_db
+
+.PHONY: format lint migrate test install install_lock freeze start_dev start_prod show_migrations create_logs create_db
 
 
 APPS = partners
@@ -60,6 +63,9 @@ freeze:
 
 start_dev: migrate
 	$(CMD_START_APP_DEV)
+
+start_prod: migrate
+	$(CMD_START_APP_PROD)
 
 show_migrations:
 	$(CMD_DJANGO_SHOW_MIGRATIONS)
