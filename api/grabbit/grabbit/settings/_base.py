@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import sys
+import pathlib
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -143,8 +144,9 @@ GOOGLE_STORAGE_API_JSON = os.environ["GOOGLE_STORAGE_API_JSON"]
 GOOGLE_STORAGE_DEFAULT_BUCKET = os.environ["GOOGLE_STORAGE_DEFAULT_BUCKET"]
 GOOGLE_STORAGE_SECRET_BUCKET = os.environ["GOOGLE_STORAGE_SECRET_BUCKET"]
 
-
 API_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+LOGS_DIR = pathlib.Path(os.path.join(API_DIR, "grabbit", "logs"))
+LOGS_DIR.mkdir(exist_ok=True)
 
 
 LOGGING = {

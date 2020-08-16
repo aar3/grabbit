@@ -149,3 +149,11 @@ def UploadImageView(request, pk=None):
     
     # TODO: verify photo, format, and send to gcloud (create task)
     # return full url from gcloud and store it in user instance
+
+
+@api_view(["POST"])
+def InterestView(request):
+    params = request.data
+    interest = Interest.objects.create(email=params["email"])
+    serializer = InterestSerializer(interest)
+    return Response(serializer.data)

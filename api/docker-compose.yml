@@ -1,0 +1,43 @@
+version: "3"
+volumes:
+  postgresdata:
+services:
+  api:
+    build: .
+    restart: always
+    command:
+      - /bin/sh
+      - -c
+      - make start_prod
+    ports:
+      - 8080:8080
+    # environment:
+    #   PGSQL_HOST: postgresql
+    volumes:
+      - .:/var/www/grabbit
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - postgresql
+  postgresql:
+    image: postgres:12.2
+    restart: always
+    ports:
+      - 5432
+    volumes:
+      - ./scripts/pgsql:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_PASSWORD: ‘password’
+      POSTGRES_DB: grabbit_dev
+  redis:
+    restart: always
+    image: redis:5.0
+    ports:
+      - 6379
+  redis-cli:
+    restart: always
+    depends_on:
+        - redis
+    image: redis:5.0
+    command: redis-cli -h localhost ping

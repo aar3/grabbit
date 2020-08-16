@@ -121,6 +121,14 @@ class Notification(BaseModel):
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
 
+
+class Interest(BaseModel):
+    class Meta:
+        db_table = "interests"
+
+    email = models.CharField(max_length=255, primary_key=True)
+
+
 class LikeFor:
     Merchant = 0
     Product = 1

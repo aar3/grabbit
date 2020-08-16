@@ -13,4 +13,5 @@ router.register(r"likes", LikeViewSet, basename="Like")
 urlpatterns = [
     path("", include(router.urls)),
     path(r"login/", LoginView),
+    path(r"interest/", InterestView),
 ]

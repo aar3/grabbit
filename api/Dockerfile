@@ -1,0 +1,17 @@
+FROM python:3.8-slim-buster
+
+RUN apt-get update && apt-get install
+
+RUN apt-get install -y \
+    curl \
+    gcc \
+    make \
+    python3-psycopg2 \
+    postgresql-client \
+    libpq-dev
+
+RUN mkdir -p /var/www/grabbit
+WORKDIR /var/www/grabbit
+COPY . /var/www/grabbit
+
+RUN make install_lock

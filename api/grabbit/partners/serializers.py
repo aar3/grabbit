@@ -124,3 +124,14 @@ class MessageSerializer(BaseModelSerializer):
             "sender",
             "text",
         ]
+
+
+class InterestSerializer(BaseModelSerializer):
+    class Meta:
+        model = Interest
+        fields = [
+            "id",
+            "created_at",
+            "updated_at",
+            "email",
+        ]

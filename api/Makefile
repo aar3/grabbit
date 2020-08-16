@@ -22,11 +22,13 @@ CMD_DJANGO_SHOW_MIGRATIONS = $(PROJECT)/manage.py showmigrations
 CMD_DJANGO_MAKE_MIGRATIONS = $(PROJECT)/manage.py makemigrations
 CMD_DJANGO_MIGRATE = $(PROJECT)/manage.py migrate
 
+CMD_CREATE_LOGS = mkdir $(PROJECT)/logs && touch $(PROJECT)/logs/grabbit.log
+
 CMD_START_APP_DEV = cd $(PROJECT) && gunicorn grabbit.wsgi:application \
 	-w 2 -b 127.0.0.1:8000 --reload --log-level DEBUG
 
 
-.PHONY: format lint migrate test install installock freeze start show_migrations
+.PHONY: format lint migrate test install install_lock freeze start show_migrations create_logs create_db
 
 
 APPS = partners
@@ -50,7 +52,7 @@ test: lint migrate
 install:
 	$(CMD_PIP_INSTALL)
 
-installock:
+install_lock:
 	$(CMD_PIP_INSTALL_LOCK)
 
 freeze:
@@ -61,3 +63,9 @@ start_dev: migrate
 
 show_migrations:
 	$(CMD_DJANGO_SHOW_MIGRATIONS)
+
+create_logs:
+	$(CMD_CREATE_LOGS)
+
+create_db:
+	createdb -U postgres grabbit_dev
