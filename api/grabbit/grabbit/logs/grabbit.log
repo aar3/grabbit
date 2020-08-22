@@ -57,3 +57,122 @@ Traceback (most recent call last):
   File "/usr/local/lib/python3.8/site-packages/redis/connection.py", line 563, in connect
     raise ConnectionError(self._error_message(e))
 redis.exceptions.ConnectionError: Error 99 connecting to localhost:6379. Cannot assign requested address.
+2020-08-22 23:26:01,698 [DEBUG] gunicorn.error: GET /api/v1/users/1/
+2020-08-22 23:26:01,775 [WARNING] django.request: Not Found: /api/v1/users/1/
+2020-08-22 23:28:09,086 [DEBUG] gunicorn.error: GET /api/v1/users/1/
+2020-08-22 23:28:09,165 [WARNING] django.request: Not Found: /api/v1/users/1/
+2020-08-22 23:28:43,870 [DEBUG] gunicorn.error: POST /api/v1/users/
+2020-08-22 23:28:44,005 [ERROR] django.request: Internal Server Error: /api/v1/users/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/site-packages/redis/connection.py", line 559, in connect
+    sock = self._connect()
+  File "/usr/local/lib/python3.8/site-packages/redis/connection.py", line 615, in _connect
+    raise err
+  File "/usr/local/lib/python3.8/site-packages/redis/connection.py", line 603, in _connect
+    sock.connect(socket_address)
+OSError: [Errno 99] Cannot assign requested address
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.8/site-packages/django/core/handlers/base.py", line 179, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.8/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/usr/local/lib/python3.8/site-packages/rest_framework/viewsets.py", line 114, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.8/site-packages/rest_framework/views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.8/site-packages/rest_framework/views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.8/site-packages/rest_framework/views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.8/site-packages/rest_framework/views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/var/www/grabbit/grabbit/partners/views.py", line 80, in create
+    instance = self.model.objects.create(**params)
+  File "/var/www/grabbit/grabbit/partners/managers.py", line 21, in create
+    user.save()
+  File "/usr/local/lib/python3.8/site-packages/django/db/models/base.py", line 750, in save
+    self.save_base(using=using, force_insert=force_insert,
+  File "/usr/local/lib/python3.8/site-packages/django/db/models/base.py", line 798, in save_base
+    post_save.send(
+  File "/usr/local/lib/python3.8/site-packages/django/dispatch/dispatcher.py", line 177, in send
+    return [
+  File "/usr/local/lib/python3.8/site-packages/django/dispatch/dispatcher.py", line 178, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/var/www/grabbit/grabbit/partners/models.py", line 77, in create_session_for_new_user
+    _ = RedisClient.set(key, session.serialize())
+  File "/usr/local/lib/python3.8/site-packages/redis/client.py", line 1801, in set
+    return self.execute_command('SET', *pieces)
+  File "/usr/local/lib/python3.8/site-packages/redis/client.py", line 898, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/usr/local/lib/python3.8/site-packages/redis/connection.py", line 1192, in get_connection
+    connection.connect()
+  File "/usr/local/lib/python3.8/site-packages/redis/connection.py", line 563, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 99 connecting to localhost:6379. Cannot assign requested address.
+2020-08-22 23:29:35,791 [INFO] gunicorn.error: Worker reloading: /var/www/grabbit/grabbit/grabbit/settings/_base.py modified
+2020-08-22 23:29:35,792 [INFO] gunicorn.error: Worker exiting (pid: 45)
+2020-08-22 23:29:36,016 [INFO] gunicorn.error: Worker reloading: /var/www/grabbit/grabbit/grabbit/settings/_base.py modified
+2020-08-22 23:29:36,017 [INFO] gunicorn.error: Worker exiting (pid: 46)
+2020-08-22 23:30:05,359 [DEBUG] gunicorn.error: POST /api/v1/users/
+2020-08-22 23:30:05,495 [ERROR] django.request: Internal Server Error: /api/v1/users/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/usr/local/lib/python3.8/site-packages/django/core/handlers/base.py", line 179, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python3.8/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/usr/local/lib/python3.8/site-packages/rest_framework/viewsets.py", line 114, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python3.8/site-packages/rest_framework/views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "/usr/local/lib/python3.8/site-packages/rest_framework/views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/usr/local/lib/python3.8/site-packages/rest_framework/views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "/usr/local/lib/python3.8/site-packages/rest_framework/views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/var/www/grabbit/grabbit/partners/views.py", line 80, in create
+    instance = self.model.objects.create(**params)
+  File "/var/www/grabbit/grabbit/partners/managers.py", line 21, in create
+    user.save()
+  File "/usr/local/lib/python3.8/site-packages/django/db/models/base.py", line 750, in save
+    self.save_base(using=using, force_insert=force_insert,
+  File "/usr/local/lib/python3.8/site-packages/django/db/models/base.py", line 798, in save_base
+    post_save.send(
+  File "/usr/local/lib/python3.8/site-packages/django/dispatch/dispatcher.py", line 177, in send
+    return [
+  File "/usr/local/lib/python3.8/site-packages/django/dispatch/dispatcher.py", line 178, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+  File "/var/www/grabbit/grabbit/partners/models.py", line 86, in notify_new_account
+    _ = Notification.objects.create(text="Welcome to Grabbit!", user=instance.id)
+  File "/usr/local/lib/python3.8/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/usr/local/lib/python3.8/site-packages/django/db/models/query.py", line 445, in create
+    obj = self.model(**kwargs)
+  File "/usr/local/lib/python3.8/site-packages/django/db/models/base.py", line 483, in __init__
+    _setattr(self, field.name, rel_obj)
+  File "/usr/local/lib/python3.8/site-packages/django/db/models/fields/related_descriptors.py", line 215, in __set__
+    raise ValueError(
+ValueError: Cannot assign "1": "Notification.user" must be a "User" instance.
+2020-08-22 23:31:34,206 [INFO] gunicorn.error: Worker reloading: /var/www/grabbit/grabbit/grabbit/settings/_base.py modified
+2020-08-22 23:31:34,207 [INFO] gunicorn.error: Worker exiting (pid: 46)
+2020-08-22 23:31:34,207 [INFO] gunicorn.error: Worker reloading: /var/www/grabbit/grabbit/grabbit/settings/_base.py modified
+2020-08-22 23:31:34,208 [INFO] gunicorn.error: Worker exiting (pid: 45)
+2020-08-22 23:31:43,952 [INFO] gunicorn.error: Worker reloading: /var/www/grabbit/grabbit/grabbit/settings/_base.py modified
+2020-08-22 23:31:43,952 [INFO] gunicorn.error: Worker exiting (pid: 49)
+2020-08-22 23:31:43,994 [INFO] gunicorn.error: Worker reloading: /var/www/grabbit/grabbit/grabbit/settings/_base.py modified
+2020-08-22 23:31:43,995 [INFO] gunicorn.error: Worker exiting (pid: 50)
+2020-08-22 23:32:07,899 [INFO] gunicorn.error: Worker reloading: /var/www/grabbit/grabbit/grabbit/settings/_base.py modified
+2020-08-22 23:32:07,900 [INFO] gunicorn.error: Worker exiting (pid: 53)
+2020-08-22 23:32:07,968 [INFO] gunicorn.error: Worker reloading: /var/www/grabbit/grabbit/grabbit/settings/_base.py modified
+2020-08-22 23:32:07,969 [INFO] gunicorn.error: Worker exiting (pid: 54)
+2020-08-22 23:32:43,128 [INFO] gunicorn.error: Worker reloading: /var/www/grabbit/grabbit/grabbit/settings/dev.py modified
+2020-08-22 23:32:43,128 [INFO] gunicorn.error: Worker reloading: /var/www/grabbit/grabbit/grabbit/settings/dev.py modified
+2020-08-22 23:32:43,129 [INFO] gunicorn.error: Worker exiting (pid: 57)
+2020-08-22 23:32:43,129 [INFO] gunicorn.error: Worker exiting (pid: 58)

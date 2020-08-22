@@ -83,7 +83,7 @@ def create_session_for_new_user(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def notify_new_account(sender, instance, created, **kwargs):
     if created:
-        _ = Notification.objects.create(text="Welcome to Grabbit!", user=instance.id)
+        _ = Notification.objects.create(text="Welcome to Grabbit!", user=instance)
 
 
 class Login(BaseModel):

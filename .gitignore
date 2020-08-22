@@ -6,7 +6,7 @@
 venv/
 __pycache__
 .envrc
-.env
+.env*
 TODO.md
 api/.gcloud-storage-creds.json
 api/grabbit/logs

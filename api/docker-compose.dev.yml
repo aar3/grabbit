@@ -1,0 +1,53 @@
+version: "3"
+volumes:
+  postgresdata:
+services:
+  grabbit:
+    build: .
+    restart: always
+    command:
+      - /bin/sh
+      - -c
+      - |
+        chmod 700 scripts/*.sh
+        ./scripts/pgwait.sh postgresql
+        make start_dev
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/var/www/grabbit
+    # env_file:
+    #   - .env.prod
+    environment:
+      GOOGLE_STORAGE_API_JSON: /var/www/grabbit/secrets/gcloud-storage.json
+      GOOGLE_PROJECT: grabbit-1
+      GOOGLE_STORAGE_SECRET_BUCKET: gsecret
+      GOOGLE_STORAGE_DEFAULT_BUCKET: grabbit
+      LOGDNA_INGESTION_KEY: 123
+      DJANGO_SETTINGS_MODULE: grabbit.settings.dev
+      # TEST_STRIPE_PUBLISHER_KEY: pk_test_51HEOqQHckHQIlKL38CY4YayO8Eaf5ym3OXxU8UQ7ofX1GW2Lp2Nd9Q3CKt6Mb1qHld5Hd27bEIdtLKCGQU8x8toK00ghgkXpTh
+      # TEST_STRIPE_SECRET: k_test_51HEOqQHckHQIlKL3oGiEL4MV2InCuVWtDvy7chK0jOgC1nxVFD5bXPcACTgwep9SCi5ho60EruxylUaaiRveGO4z00RKqXnv7i
+    depends_on:
+      - redis
+      - postgresql
+  postgresql:
+    image: postgres:12.2
+    restart: always
+    ports:
+      - 5432
+    volumes:
+      - ./scripts/postgresql/dev:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: grabbit_dev
+      POSTGRES_USER: postgres
+  redis:
+    restart: always
+    image: redis:5.0
+    ports:
+      - 6379
+  redis-cli:
+    depends_on:
+        - redis
+    image: redis:5.0
+    command: redis-cli -h redis ping
