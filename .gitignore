@@ -38,6 +38,7 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
+grabbit/ios/grabbit/ProvisioningProfiles/
 
 # Android/IntelliJ
 #
