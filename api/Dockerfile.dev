@@ -13,5 +13,3 @@ RUN apt-get install -y \
 RUN mkdir -p /var/www/grabbit
 WORKDIR /var/www/grabbit
 COPY . /var/www/grabbit
-
-RUN make install_lock

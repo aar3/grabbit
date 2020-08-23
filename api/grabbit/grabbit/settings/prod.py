@@ -2,6 +2,8 @@ import os
 
 from ._base import *
 
+DEBUG = False
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -35,13 +37,13 @@ LOGGING = {
         "require_debug_true": {"()": "django.utils.log.RequireDebugTrue",},
     },
     "handlers": {
-        # "console": {
-        #     "level": "DEBUG",
-        #     "class": "logging.StreamHandler",
-        #     "filters": ["require_debug_true"],
-        #     "formatter": "standard",
-        #     "stream": sys.stderr,
-        # },
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "filters": ["require_debug_true"],
+            "formatter": "standard",
+            "stream": sys.stderr,
+        },
         "file": {
             "level": "DEBUG",
             "class": "logging.FileHandler",
