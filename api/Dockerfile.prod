@@ -14,4 +14,4 @@ RUN mkdir -p /var/www/grabbit
 WORKDIR /var/www/grabbit
 COPY . /var/www/grabbit
 
-RUN chmod 700 scripts/*.sh
+RUN chmod 700 ./scripts/*.sh

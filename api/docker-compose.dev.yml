@@ -8,6 +8,7 @@ services:
       dockerfile: Dockerfile.dev
     image: ralston3/grabbit_api:dev-latest
     restart: always
+    tty: true
     command:
       - /bin/sh
       - -c

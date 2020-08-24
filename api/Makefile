@@ -1,3 +1,8 @@
+# NOTE
+#
+# Very copy-pasta for the first iteration. Since we're only working with dev/prod-latest
+# then we can just use a {CMD}_dev and {CMD}_prod. If we ever start versioning things
+# we will need to come back and make this more dynamic
 SOURCE = .
 PWD = $(shell pwd)
 PROJECT = $(SOURCE)/grabbit
@@ -31,6 +36,13 @@ CMD_START_APP_PROD = cd $(PROJECT) && gunicorn grabbit.wsgi:application -w 2 -b 
 CMD_SOURCE_VIRTUAL_ENV = source $(SOURCE)/venv/bin/activate
 CMD_CREATE_LOGS = mkdir -pv $(PROJECT)/logs && touch $(PROJECT)/logs/grabbit.log
 
+# docker
+CMD_DOCKER_BUILD_DEV = docker build -t ralston3/grabbit_api:dev-latest -f Dockerfile.dev .
+CMD_DOCKER_BUILD_PROD = docker build -t ralston3/grabbit_api:prod-latest -f Dockerfile.prod .
+CMD_DOCKER_CLEAN_ALL = docker image prune && docker volume prune && docker container stop $(docker ps -aq) && docker container rm $(docker ps -aq)
+CMD_DOCKER_PUSH_DEV = docker push ralston3/grabbit_api:dev-latest
+CMD_DOCKER_PUSH_PROD = docker push ralston3/grabbit_api:prod-latest
+
 
 .PHONY: format \
 lint \
@@ -43,7 +55,12 @@ start_dev \
 start_prod \
 show_migrations \
 create_logs \
-bootstrap_env
+bootstrap_env \
+docker_build_dev \
+docker_build_prod \
+docker_clean_all \
+docker_push_prod \
+docker_push_dev
 
 
 APPS = partners
@@ -90,3 +107,18 @@ create_logs:
 
 bootstrap_env:
 	$(CMD_SOURCE_VIRTUAL_ENV) && $(CMD_PIP_INSTALL_LOCK)
+
+docker_build_dev:
+	$(CMD_DOCKER_BUILD_DEV)
+
+docker_build_prod:
+	$(CMD_DOCKER_BUILD_PROD)
+
+docker_clean_all:
+	$(CMD_DOCKER_CLEAN_ALL)
+
+docker_push_dev: docker_clean_all docker_build_dev
+	$(CMD_DOCKER_PUSH_DEV)
+
+docker_push_prod: docker_clean_all docker_build_prod
+	$(CMD_DOCKER_PUSH_PROD)

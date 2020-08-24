@@ -13,6 +13,9 @@
         - [Docker-compose environment variables](https://stackoverflow.com/questions/29580798/docker-compose-environment-variables)
         - [Remove previous volumes](https://github.com/docker-library/postgres/issues/41#issuecomment-167603905)
 
+- Git
+    - [Clone repo into /usr/local](https://stackoverflow.com/questions/37228769/why-cant-i-clone-a-repo-into-usr-local)
+
 
 ## CLIENT
 

@@ -4,13 +4,8 @@ volumes:
 services:
   grabbit:
     image: ralston3/grabbit_api:prod-latest
-    restart: always
-    command:
-      - /bin/sh
-      - -c
-      - |
-       ./scripts/pgwait.sh postgresql && 
-        make start_prod
+    tty: true
+    command: /bin/bash -c "/var/www/grabbit/scripts/pgwait.sh postgresql && make start_prod"
     ports:
       - 8000:8000
     volumes:
