@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import sys
+import pathlib
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,8 +31,7 @@ DEBUG = True
 # Application definition
 
 INSTALLED_APPS = [
-    "merchant",
-    "grabber",
+    "partners",
     "corsheaders",
     "rest_framework",
     "django.contrib.admin",
@@ -106,7 +106,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 
 
-REDIS_HOST = "localhost"
+REDIS_HOST = "redis"
 REDIS_PORT = 6379
 REDIS_DB = 0
 
@@ -144,10 +144,11 @@ GOOGLE_STORAGE_API_JSON = os.environ["GOOGLE_STORAGE_API_JSON"]
 GOOGLE_STORAGE_DEFAULT_BUCKET = os.environ["GOOGLE_STORAGE_DEFAULT_BUCKET"]
 GOOGLE_STORAGE_SECRET_BUCKET = os.environ["GOOGLE_STORAGE_SECRET_BUCKET"]
 
-
-API_DIR = os.path.dirname(
-    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+SOURCE_DIR = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 )
+LOGS_DIR = pathlib.Path(os.path.join(SOURCE_DIR, "grabbit", "logs"))
+LOGS_DIR.mkdir(exist_ok=True)
 
 
 LOGGING = {
@@ -172,7 +173,7 @@ LOGGING = {
             "level": "DEBUG",
             "class": "logging.FileHandler",
             "filters": ["require_debug_true"],
-            "filename": os.path.join(API_DIR, "logs", "grabbit.log"),
+            "filename": os.path.join(LOGS_DIR, "grabbit.log"),
             "formatter": "standard",
         },
         "logdna": {
