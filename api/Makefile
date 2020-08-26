@@ -117,8 +117,8 @@ docker_build_prod:
 docker_clean_all:
 	$(CMD_DOCKER_CLEAN_ALL)
 
-docker_push_dev: docker_clean_all docker_build_dev
+docker_push_dev: docker_build_dev
 	$(CMD_DOCKER_PUSH_DEV)
 
-docker_push_prod: docker_clean_all docker_build_prod
+docker_push_prod: docker_build_prod
 	$(CMD_DOCKER_PUSH_PROD)

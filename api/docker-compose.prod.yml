@@ -4,12 +4,17 @@ volumes:
 services:
   grabbit:
     image: ralston3/grabbit_api:prod-latest
-    tty: true
-    command: /bin/bash -c "/var/www/grabbit/scripts/pgwait.sh postgresql && make start_prod"
+    restart: always
+    command:
+      - /bin/sh
+      - -c
+      - |
+       ./scripts/pgwait.sh postgresql && 
+        make start_dev
     ports:
-      - 8000:8000
-    volumes:
-      - .:/var/www/grabbit
+      - 443:8000
+    # volumes:
+    #   - .:/var/www/grabbit
     environment:
       GOOGLE_STORAGE_API_JSON: /var/www/grabbit/secrets/gcloud-storage.json
       GOOGLE_PROJECT: grabbit-1

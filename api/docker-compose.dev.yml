@@ -8,18 +8,16 @@ services:
       dockerfile: Dockerfile.dev
     image: ralston3/grabbit_api:dev-latest
     restart: always
-    tty: true
     command:
       - /bin/sh
       - -c
       - |
-       chmod 700 scripts/*.sh &&
        ./scripts/pgwait.sh postgresql && 
         make start_dev
     ports:
       - 8000:8000
-    volumes:
-      - .:/var/www/grabbit
+    # volumes:
+    #   - .:/var/www/grabbit
     environment:
       GOOGLE_STORAGE_API_JSON: /var/www/grabbit/secrets/gcloud-storage.json
       GOOGLE_PROJECT: grabbit-1
