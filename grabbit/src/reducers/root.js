@@ -6,6 +6,10 @@ import ACTIONS from 'grabbit/src/actions';
 import {httpRequestAsync} from 'grabbit/src/utils';
 
 const defaultState = {
+  userType: null,
+  navigation: {
+    currentScene: null,
+  },
   broker: {
     session: {
       user: null,
@@ -144,6 +148,9 @@ export const postUserAuth = ({options}) => {
 
 export default mainReducer = (state = defaultState, action) => {
   switch (action.type) {
+    case ACTIONS.SET_USER_TYPE: {
+      return {...state, ...action};
+    }
     case ACTIONS.SESSION_PENDING:
     case ACTIONS.SESSION_SUCCESS:
     case ACTIONS.SESSION_ERROR:

@@ -2,6 +2,9 @@
 
 
 ## API 
+- Postgres
+    - Creating postgres user with db
+        - User default `ralston` user to psql and use `CREATE USER` for `postgres` user as `SUPERUSER`
 - Let's Encrypt
     - [Using Let's Encrypt on Google Cloud Compute](https://techmonger.github.io/46/free-ssl-google-cloud/)
 

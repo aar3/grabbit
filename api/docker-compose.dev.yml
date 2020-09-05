@@ -16,14 +16,11 @@ services:
         make start_dev
     ports:
       - 8000:8000
-    # volumes:
-    #   - .:/var/www/grabbit
     environment:
       GOOGLE_STORAGE_API_JSON: /var/www/grabbit/secrets/gcloud-storage.json
       GOOGLE_PROJECT: grabbit-1
       GOOGLE_STORAGE_SECRET_BUCKET: gsecret
       GOOGLE_STORAGE_DEFAULT_BUCKET: grabbit
-      LOGDNA_INGESTION_KEY: 123
       DJANGO_SETTINGS_MODULE: grabbit.settings.dev
     depends_on:
       - redis

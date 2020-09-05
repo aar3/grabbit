@@ -1,0 +1,49 @@
+language: python
+python:
+  - '3.8'
+dist: xenial - sudo apt-get update - sudo apt-get -y install docker-ce
+services:
+  - postgresql
+  - redis
+
+install:
+    cd $TRAVIS_BUILD_DIR/api/ && make install_lock
+
+jobs:
+  include:
+    - stage: Testing
+      env:
+        - >-
+          GOOGLE_STORAGE_API_JSON=$TRAVIS_BUILD_DIR/api/secrets/gcloud-storage.json
+          GOOGLE_PROJECT=grabbit-1
+          GOOGLE_STORAGE_SECRET_BUCKET=gsecret
+          GOOGLE_STORAGE_DEFAULT_BUCKET=grabbit
+          DJANGO_SETTINGS_MODULE=grabbit.settings.ci
+      before_script:
+        - cd $TRAVIS_BUILD_DIR/api && make lint
+        - 'psql -c "create database grabbit_dev;" -U postgres'
+        - mkdir -pv $TRAVIS_BUILD_DIR/api/secrets
+        - >-
+          openssl aes-256-cbc 
+          -K $encrypted_ec97da759651_key 
+          -iv $encrypted_ec97da759651_iv
+          -in $TRAVIS_BUILD_DIR/.travis/gcloud-storage.json.enc 
+          -out $TRAVIS_BUILD_DIR/api/secrets/gcloud-storage.json 
+          -d
+        - >-
+          openssl aes-256-cbc 
+          -K $encrypted_2523017273e2_key 
+          -iv $encrypted_2523017273e2_iv
+          -in $TRAVIS_BUILD_DIR/.travis/gcloud-compute.json.enc 
+          -out $TRAVIS_BUILD_DIR/api/secrets/gcloud-compute.json 
+          -d
+      script:
+        - make test
+      after_success:
+        - codecov
+    - stage: Deploy
+      if: $TRAVIS_BRANCH =~ v(\d+\.)?(\d+\.)?(\*|\d+)$
+      before_script:
+        - docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
+      deploy:
+        - make docker_push_dev

@@ -1,5 +1,3 @@
-import os
-
 from ._base import *
 
 DATABASES = {
@@ -17,4 +15,4 @@ DATABASES = {
 PGSQL_USER = DATABASES["default"]["USER"]
 PGSQL_HOST = DATABASES["default"]["HOST"]
 
-PGSQL_ENVIRONMENT = "dev"
+PGSQL_ENVIRONMENT = "ci"

@@ -7,12 +7,11 @@ export class BasicButton extends React.Component {
   };
 
   render() {
-    const title = this.props.title || 'Basic Button';
-    const onPress = this.props.onPress || this._baseOnPress;
+    const {buttonStyle, titleStyle, title, onPress} = this.props;
     return (
-      <TouchableOpacity onPress={onPress}>
-        <View style={styles.BasicButton}>
-          <Text>{title}</Text>
+      <TouchableOpacity onPress={onPress || this._baseOnPress}>
+        <View style={buttonStyle || styles.BasicButton}>
+          <Text style={titleStyle}>{title || 'Basic Button'}</Text>
         </View>
       </TouchableOpacity>
     );

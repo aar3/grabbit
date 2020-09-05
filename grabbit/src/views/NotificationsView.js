@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image, FlatList} from 'react-native';
 
-import {FakeImage, Color} from 'grabbit/src/const';
+import {FakeImage, Color, Font} from 'grabbit/src/const';
 
 const data = [
   {
@@ -43,7 +43,7 @@ const data = [
   {
     id: '5',
     text:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis urna nulla, malesuada at felis et, placerat vehicula felis.',
+      'Sed in felis sed nibh auctor mattis id eu sem. Mauris eu consequat tortor. Ut ligula nisi, posuere interdum facilisis id, consequat non justo. Donec eu urna eu libero bibendum elementum. Curabitur aliquam lorem ipsum, a sollicitudin sem tincidunt eget. Praesent id magna ut ante tincidunt vehicula sed non metus. Suspendisse tempus urna vel hendrerit rhoncus.',
     user: {
       id: '1',
       image_url: FakeImage,
@@ -79,7 +79,7 @@ const data = [
   {
     id: '9',
     text:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis urna nulla, malesuada at felis et, placerat vehicula felis.',
+      'Sed in felis sed nibh auctor mattis id eu sem. Mauris eu consequat tortor. Ut ligula nisi, posuere interdum facilisis id, consequat non justo. Donec eu urna eu libero bibendum elementum. Curabitur aliquam lorem ipsum, a sollicitudin sem tincidunt eget. Praesent id magna ut ante tincidunt vehicula sed non metus. Suspendisse tempus urna vel hendrerit rhoncus.',
     user: {
       id: '1',
       image_url: FakeImage,
@@ -102,13 +102,16 @@ class FlatListRow extends React.Component {
     return (
       <View style={styles.FlatListRow__Container}>
         <View style={styles.FlatListRow__Container__Image}>
-          <Image
-            source={{uri: data.user.image_url}}
-            style={{height: 50, width: 50}}
-          />
+          <Image source={{uri: data.user.image_url}} style={{height: 50, width: 50}} />
         </View>
         <View style={styles.FlatListRow__Container__Info}>
-          <Text style={{fontSize: 12}}>{data.text}</Text>
+          <Text
+            style={{
+              fontSize: 12,
+              color: Color.GreyText,
+            }}>
+            {data.text}
+          </Text>
         </View>
       </View>
     );
@@ -121,18 +124,21 @@ export default class NotificationsView extends React.Component {
   }
 
   render() {
-    const msg = 'You have ' + data.length + ' new notifications';
+    const msg = `You have ${data.length} new notifications`;
     return (
       <View style={styles.container}>
-        <Text
-          style={{marginTop: 10, marginBottom: 10, color: Color.DarkerGrey}}>
-          {msg}
-        </Text>
-        <FlatList
-          data={data}
-          renderItem={this._renderItem}
-          keyExtractor={(_item, index) => index.toString()}
-        />
+        {/* <View style={styles.NotificationCount}>
+          <Text
+            style={{
+              marginTop: 10,
+              marginBottom: 10,
+              color: Color.DarkerGrey,
+              fontFamily: Font.Default,
+            }}>
+            {msg}
+          </Text>
+        </View> */}
+        <FlatList data={data} renderItem={this._renderItem} keyExtractor={(_item, index) => index.toString()} />
       </View>
     );
   }
@@ -144,24 +150,41 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  NotificationCount: {
+    // borderWidth: 1,
+    // borderColor: 'red',
+    borderBottomColor: Color.LightGrey,
+    borderBottomWidth: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
+    elevation: 5,
+    backgroundColor: Color.White,
+  },
   FlatListRow__Container: {
-    borderWidth: 1,
-    borderColor: 'blue',
+    borderBottomWidth: 1,
+    borderBottomColor: Color.LightGrey,
     flexDirection: 'row',
     width: 400,
     padding: 10,
     marginBottom: 10,
   },
   FlatListRow__Container__Info: {
-    borderWidth: 1,
-    borderColor: 'red',
+    // borderWidth: 1,
+    // borderColor: 'red',
     width: 285,
     marginLeft: 10,
   },
   FlatListRow__Container__Image: {
-    borderWidth: 1,
-    borderColor: 'green',
+    // borderWidth: 1,
+    // borderColor: 'green',
     borderRadius: 50,
+    height: 50,
+    width: 50,
     overflow: 'hidden',
   },
 });

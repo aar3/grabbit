@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Platform,
-  TextInput,
-  Image,
-  KeyboardAvoidingView,
-} from 'react-native';
+import {View, Text, StyleSheet, Platform, TextInput, Image, KeyboardAvoidingView} from 'react-native';
 
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
@@ -32,11 +24,7 @@ export default class InterestScreen extends React.Component {
   }
 
   _validateEmail(email) {
-    if (
-      !this.state.email ||
-      !this.state.email.includes('@') ||
-      !this.state.email.includes('.com')
-    ) {
+    if (!this.state.email || !this.state.email.includes('@') || !this.state.email.includes('.com')) {
       return false;
     }
     return true;
@@ -49,9 +37,7 @@ export default class InterestScreen extends React.Component {
 
     return (
       <View style={styles.Interest__ContentContainer__Error}>
-        <Text style={{color: Color.DarkOrange, fontFamily: Font.Default}}>
-          {this.state.error.details}
-        </Text>
+        <Text style={{color: Color.DarkOrange, fontFamily: Font.Default}}>{this.state.error.details}</Text>
       </View>
     );
   }
@@ -59,19 +45,13 @@ export default class InterestScreen extends React.Component {
   render() {
     const error = this._renderErrorHeader();
     return (
-      <KeyboardAvoidingView
-        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-        style={styles.Interest}>
+      <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} style={styles.Interest}>
         <View style={styles.Interest__ContentContainer}>
           <View style={styles.Interest__ContentContainer__Img}>
-            <Image
-              source={require('../../assets/imgs/white-letters-logo.png')}
-            />
+            <Image source={require('../../assets/imgs/white-letters-logo.png')} />
           </View>
           <View style={styles.Interest__ContentContainer__Blurb}>
-            <Text style={{color: Color.White, fontFamily: Font.Default}}>
-              {'Grab free stuff. Show it off.'}
-            </Text>
+            <Text style={{color: Color.White, fontFamily: Font.Default}}>{'Grab free stuff. Show it off.'}</Text>
           </View>
           {error}
           {/* <View style={styles.Interest__ContentContainer__Label}>
