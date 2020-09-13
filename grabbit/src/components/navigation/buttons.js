@@ -4,13 +4,13 @@ import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
 
-import {TabIconSize} from 'grabbit/src/const';
+import {TabIconSize, Color} from 'grabbit/src/const';
 
 export const BackButton = () => {
   return (
     <TouchableOpacity onPress={() => Actions.pop()}>
       <View style={styles.BaseTopNavigationBar__Button}>
-        <Icon name={'chevron-left'} size={TabIconSize} />
+        <Icon name={'chevron-left'} size={TabIconSize} color={Color.GreyText} />
       </View>
     </TouchableOpacity>
   );
@@ -18,9 +18,9 @@ export const BackButton = () => {
 
 export const AccountSettingsButton = () => {
   return (
-    <TouchableOpacity onPress={() => Actions.userAccount()}>
+    <TouchableOpacity onPress={() => {}}>
       <View style={styles.BaseTopNavigationBar__Button}>
-        <Icon name={'more-vertical'} size={TabIconSize} />
+        <Icon name={'settings'} size={TabIconSize} color={Color.GreyText} />
       </View>
     </TouchableOpacity>
   );

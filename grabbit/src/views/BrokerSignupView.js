@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, Image, KeyboardAvoidingView} from 'react-native'
 
 import {Actions} from 'react-native-router-flux';
 
-import {BasicTextInput} from 'grabbit/src/components/TextInput';
+import {BasicTextInput} from 'grabbit/src/components/text-input';
 import {BasicButton} from 'grabbit/src/components/buttons';
 
 import {Color, Font} from 'grabbit/src/const';

@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Image, Text, View, KeyboardAvoidingView} from 'react-native';
 
-import {BasicTextInput} from 'grabbit/src/components/TextInput';
+import {BasicTextInput} from 'grabbit/src/components/text-input';
 import {BasicButton} from 'grabbit/src/components/buttons';
 import {Actions} from 'react-native-router-flux';
 

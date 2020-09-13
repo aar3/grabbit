@@ -8,6 +8,7 @@ import {Actions} from 'react-native-router-flux';
 import {Color, UserType, FakeImage} from 'grabbit/src/const';
 import {BasicButton} from 'grabbit/src/components/buttons';
 import BrokerModal from 'grabbit/src/components/modals/BrokerProductInfoDetails';
+import MerchantModal from 'grabbit/src/components/modals/MerchantProductInfoDetails';
 
 const data = {
   id: '1',
@@ -28,29 +29,6 @@ const data = {
   image4_url: FakeImage,
 };
 
-const detailSelections = [
-  {
-    id: '0',
-    title: 'Leave Feedback',
-    onPress: () => console.log('Feedback left'),
-  },
-  {
-    id: '1',
-    title: 'Report a problem with this Product',
-    onPress: () => console.log('Product problem reported'),
-  },
-  {
-    id: '2',
-    title: 'Report a problem with this Merchant',
-    onPress: () => console.log('Merchant problem reported'),
-  },
-  {
-    id: '3',
-    title: 'Report another problem',
-    onPress: () => console.log('Another problem reported'),
-  },
-];
-
 class DetailsItem extends React.Component {
   render() {
     const {data} = this.props;
@@ -69,11 +47,16 @@ class ProductInfoView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      renderDetailsIcon: false,
       hasLike: false,
       showDetailsModal: false,
     };
 
     this.modal = React.createRef();
+  }
+
+  componentDidMount() {
+    this.setState({renderDetailsIcon: true});
   }
 
   _renderDetailItem({item, index}) {
@@ -85,7 +68,7 @@ class ProductInfoView extends React.Component {
 
     const color = this.state.hasLike ? Color.Pink2 : Color.GreyText;
     const likeIcon = userType === UserType.Broker ? <Icon name="heart" size={20} color={color} /> : null;
-    const modal = userType === UserType.Broker ? <BrokerModal ref={this.modal} /> : null;
+    const modal = userType === UserType.Broker ? <BrokerModal ref={this.modal} /> : <MerchantModal ref={this.modal} />;
 
     return (
       <View style={styles.ProductInfoView}>

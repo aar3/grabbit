@@ -127,6 +127,7 @@ docker_push_dev: docker_build_dev
 docker_push_prod: docker_build_prod
 	$(CMD_DOCKER_PUSH_PROD)
 
+# docker start/stop commands require you to be in the directory of the docker-compose file
 docker_start_dev:
 	$(CMD_DOCKER_START_DEV)
 

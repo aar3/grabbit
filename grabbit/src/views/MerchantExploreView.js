@@ -4,7 +4,7 @@ import {StyleSheet, Text, View, FlatList, Image} from 'react-native';
 import Emoji from 'react-native-emoji';
 
 import {FakeImage, Color} from 'grabbit/src/const';
-// import {SearchTextInput} from 'grabbit/src/components/TextInput';
+// import {SearchTextInput} from 'grabbit/src/components/text-input';
 
 // emoji list https://unicodey.com/emoji-data/table.htm
 const data = [

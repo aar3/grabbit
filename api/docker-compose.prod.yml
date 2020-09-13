@@ -10,7 +10,7 @@ services:
       - -c
       - |
        ./scripts/pgwait.sh postgresql && 
-        make start_dev
+        make start_prod
     ports:
       - 8000:8000
     environment:

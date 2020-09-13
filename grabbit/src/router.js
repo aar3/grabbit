@@ -33,6 +33,7 @@ import {
 import {TabIconSize, Color, UserType} from 'grabbit/src/const';
 import BasicTopNavigationBar from 'grabbit/src/components/navigation/BasicTopNavigation';
 import BackOnlyTopNavigationBar from 'grabbit/src/components/navigation/BackOnlyTopNavigation';
+import AccountSettingsTopNavigationBar from 'grabbit/src/components/navigation/AccountSettingsTopNavigation';
 import ActivityTopNavigationBar from 'grabbit/src/components/navigation/ActivityTopNavigation';
 import MerchantExploreTopNavigation from 'grabbit/src/components/navigation/MerchantExploreTopNavigation';
 
@@ -68,7 +69,7 @@ const BottomTabNavigation = ({userType}) => {
         />
         <Scene
           key="notifications"
-          navBar={null}
+          navBar={BasicTopNavigationBar}
           component={NotificationsView}
           title="Notifications"
           hideNavBar={false}
@@ -78,7 +79,7 @@ const BottomTabNavigation = ({userType}) => {
         />
         <Scene
           key="editUserProfile"
-          navBar={BasicTopNavigationBar}
+          navBar={AccountSettingsTopNavigationBar}
           component={EditUserProfileView}
           title="Edit User Profile"
           hideNavBar={false}
@@ -131,7 +132,7 @@ const BottomTabNavigation = ({userType}) => {
       />
       <Scene
         key="editMerchantProfile"
-        navBar={BasicTopNavigationBar}
+        navBar={AccountSettingsTopNavigationBar}
         component={EditMerchantProfileView}
         title="Edit User Profile"
         hideNavBar={false}

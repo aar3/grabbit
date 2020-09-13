@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, TextInput, StyleSheet} from 'react-native';
 
 import Icon from 'react-native-vector-icons/Feather';
-import {Color, Font} from 'grabbit/src/const';
+import {Color} from 'grabbit/src/const';
 
 export class BasicTextInput extends React.Component {
   constructor(props) {
@@ -48,6 +48,31 @@ export class SearchTextInput extends React.Component {
           value={value}
           onChangeText={(text) => this.setState({text})}
           style={styles.SearchTextInput__Container__Input}
+        />
+      </View>
+    );
+  }
+}
+
+export class BasicTextAreaInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      text: '',
+    };
+  }
+
+  render() {
+    let {value, label, labelStyle, inputStyle} = this.props;
+    value = this.state.text === '' && value ? value : this.state.text;
+    return (
+      <View style={styles.BasicTextAreaInput__Container}>
+        <Text style={labelStyle || styles.TextInput__Label}>{label || 'Unlabeled'}</Text>
+        <TextInput
+          multiline={true}
+          value={value}
+          onChangeText={(text) => this.setState({text})}
+          style={inputStyle || styles.BasicTextAreaInput__Container__Input}
         />
       </View>
     );
@@ -101,5 +126,24 @@ const styles = StyleSheet.create({
     fontSize: 12,
     paddingBottom: 5,
     // fontFamily: Font.Default,
+  },
+  BasicTextAreaInput__Container: {
+    // borderWidth: 1,
+    // borderColor: 'blue',
+    width: 300,
+    height: 100,
+    marginBottom: 10,
+  },
+  BasicTextAreaInput__Container__Input: {
+    borderWidth: 1,
+    borderColor: Color.LightGrey,
+    padding: 10,
+    paddingTop: 10,
+    fontSize: 12,
+    fontFamily: 'Arial',
+    width: '100%',
+    height: 100,
+    borderRadius: 5,
+    backgroundColor: Color.White,
   },
 });
