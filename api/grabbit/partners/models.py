@@ -43,16 +43,7 @@ class User(BaseModel):
     secret = models.CharField(max_length=255)
     salt = models.IntegerField()
     session_token_key = models.CharField(max_length=255)
-    user_meta = models.JSONField(
-        default=dict(
-            {
-                "pantSize": "32x32",
-                "shirtSize": "m",
-                "shoeSize": "12.5",
-                "sizeCountry": "US",
-            }
-        )
-    )
+    user_meta = models.JSONField(default=dict)
     type = models.CharField(max_length=255)
     profile_image_url = models.CharField(max_length=255, default=DEFAULT_PROFILE_IMAGE,)
 

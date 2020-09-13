@@ -10,16 +10,10 @@ class BaseTopNavigationBar extends React.Component {
 
     return (
       <View style={styles.BasicTopNavigation__ContentContainer}>
-        <View style={styles.BasicTopNavigation__ContentContainer__LeftContent}>
-          {null}
-        </View>
-        <View
-          style={styles.BasicTopNavigation__ContentContainer__CenterContent}>
-          {null}
-        </View>
-        <View style={styles.BasicTopNavigation__ContentContainer__RightContent}>
-          {null}
-        </View>
+        <View style={styles.BasicTopNavigation__ContentContainer__LeftContent}>{null}</View>
+        <View style={styles.BasicTopNavigation__ContentContainer__CenterContent}>{null}</View>
+        <View style={styles.BasicTopNavigation__ContentContainer__RightContent}>{null}</View>
+        <View style={styles.BasicTopNavigation__ContentContainer__RightContent}>{null}</View>
       </View>
     );
   }
@@ -37,8 +31,8 @@ export default connect(mapStateToProps)(BaseTopNavigationBar);
 
 export const styles = StyleSheet.create({
   BasicTopNavigation__ContentContainer: {
-    borderWidth: 1,
-    borderColor: 'orange',
+    // borderWidth: 1,
+    // borderColor: 'orange',
     flexDirection: 'row',
     height: 90,
     padding: 10,
@@ -48,8 +42,8 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   BasicTopNavigation__ContentContainer__LeftContent: {
-    borderWidth: 1,
-    borderColor: 'green',
+    // borderWidth: 1,
+    // borderColor: 'green',
     top: 40,
     height: 40,
     width: 40,
@@ -60,8 +54,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   BasicTopNavigation__ContentContainer__CenterContent: {
-    borderWidth: 1,
-    borderColor: 'black',
+    // borderWidth: 1,
+    // borderColor: 'black',
     top: 30,
     height: 40,
     width: 40,
@@ -72,8 +66,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   BasicTopNavigation__ContentContainer__RightContent: {
-    borderWidth: 1,
-    borderColor: 'red',
+    // borderWidth: 1,
+    // borderColor: 'red',
     top: 30,
     borderRadius: 50,
     height: 40,

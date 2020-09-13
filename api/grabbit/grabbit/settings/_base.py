@@ -176,12 +176,12 @@ LOGGING = {
             "filename": os.path.join(LOGS_DIR, "grabbit.log"),
             "formatter": "standard",
         },
-        "logdna": {
-            "class": "logdna.LogDNAHandler",
-            "key": os.environ["LOGDNA_INGESTION_KEY"],
-            "filters": ["require_debug_false"],
-            "options": {"hostname": "your-website-name", "index_meta": True},
-        },
+        # "logdna": {
+        #     "class": "logdna.LogDNAHandler",
+        #     "key": os.environ["LOGDNA_INGESTION_KEY"],
+        #     "filters": ["require_debug_false"],
+        #     "options": {"hostname": "your-website-name", "index_meta": True},
+        # },
     },
     "loggers": {
         "django": {"handlers": ["console"], "level": "DEBUG", "propagate": True,},

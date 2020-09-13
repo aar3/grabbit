@@ -1,5 +1,4 @@
 # pylint: disable=unused-argument
-
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -133,10 +132,45 @@ def LoginView(request):
 
 @api_view(["GET"])
 @authentication_classes([TokenAuthentication])
-def UserExploreView(request, pk=None):
+def UserExploreRecentView(request, pk=None):
     _ = get_object_or_404(User, pk=pk)
 
-    # TODO: use chronological ordering of recommended merchants products/services
+    # use chronological ordering of merchants products/services
+    products = Product.objects.filter("-created_at")[:10]
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@authentication_classes([TokenAuthentication])
+def UserExploreRecommendedView(request, pk=None):
+    _ = get_object_or_404(User, pk=pk)
+
+    # use some algorithm to determine the most relevant products/services
+    # for this user but for now just use the same as UserExploreRecentView
+    products = Product.objects.filter("-created_at")[:10]
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@authentication_classes([TokenAuthentication])
+def MerchantExploreRecentView(request, pk=None):
+    _ = get_object_or_404(User, pk=pk)
+
+    # use chronological ordering of merchants products/services
+    products = Product.objects.filter("-created_at")[:10]
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@authentication_classes([TokenAuthentication])
+def MerchantExploreRecommendedView(request, pk=None):
+    _ = get_object_or_404(User, pk=pk)
+
+    # use some algorithm to determine the most relevant products/services
+    # for this user but for now just use the same as UserExploreRecentView
     products = Product.objects.filter("-created_at")[:10]
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
@@ -145,9 +179,9 @@ def UserExploreView(request, pk=None):
 @api_view(["POST"])
 @authentication_classes([TokenAuthentication])
 def UploadImageView(request, pk=None):
+    # pylint: disable=unused-variable
     params = request.data
     user = get_object_or_404(User, pk=pk)
-
     # TODO: verify photo, format, and send to gcloud (create task)
     # return full url from gcloud and store it in user instance
 

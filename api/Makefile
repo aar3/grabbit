@@ -1,8 +1,3 @@
-# NOTE
-#
-# Very copy-pasta for the first iteration. Since we're only working with dev/prod-latest
-# then we can just use a {CMD}_dev and {CMD}_prod. If we ever start versioning things
-# we will need to come back and make this more dynamic
 SOURCE = .
 PWD = $(shell pwd)
 PROJECT = $(SOURCE)/grabbit
@@ -27,12 +22,11 @@ CMD_DJANGO_SHOW_MIGRATIONS = $(PROJECT)/manage.py showmigrations
 CMD_DJANGO_MAKE_MIGRATIONS = $(PROJECT)/manage.py makemigrations
 CMD_DJANGO_MIGRATE = $(PROJECT)/manage.py migrate
 
-# start app
+# start app locally
 CMD_START_APP_DEV = cd $(PROJECT) && gunicorn grabbit.wsgi:application -w 1 -b 0.0.0.0:8000 --reload --log-level DEBUG
 CMD_START_APP_PROD = cd $(PROJECT) && gunicorn grabbit.wsgi:application -w 2 -b 0.0.0.0:8000 --log-level DEBUG
 
 # bootstrap environment
-# CMD_MAKE_VIRTUAL_ENV = /usr/local/bin/python3.8 -m venv $(SOURCE)/venv
 CMD_SOURCE_VIRTUAL_ENV = source $(SOURCE)/venv/bin/activate
 CMD_CREATE_LOGS = mkdir -pv $(PROJECT)/logs && touch $(PROJECT)/logs/grabbit.log
 
@@ -42,6 +36,12 @@ CMD_DOCKER_BUILD_PROD = docker build -t ralston3/grabbit_api:prod-latest -f Dock
 CMD_DOCKER_CLEAN_ALL = docker image prune && docker volume prune && docker container stop $(docker ps -aq) && docker container rm $(docker ps -aq)
 CMD_DOCKER_PUSH_DEV = docker push ralston3/grabbit_api:dev-latest
 CMD_DOCKER_PUSH_PROD = docker push ralston3/grabbit_api:prod-latest
+CMD_DOCKER_START_DEV = docker-compose -f docker-compose.dev.yml up
+CMD_DOCKER_START_PROD = docker-compose -f docker-compose.prod.yml up
+CMD_DOCKER_STOP_DEV = docker-compose -f docker-compose.dev.yml down -v
+CMD_DOCKER_STOP_PROD = docker-compose -f docker-compose.prod.yml down -v
+CMD_DOCKER_START_CI = docker-compose -f docker-compose.ci.yml up
+CMD_DOCKER_STOP_CI = docker-compose -f docker-compose.ci.yml down -v
 
 
 .PHONY: format \
@@ -60,7 +60,13 @@ docker_build_dev \
 docker_build_prod \
 docker_clean_all \
 docker_push_prod \
-docker_push_dev
+docker_push_dev \
+docker_start_dev \
+docker_start_prod \
+docker_start_ci \
+docker_stop_dev \
+docker_stop_prod \
+docker_stop_ci
 
 
 APPS = partners
@@ -79,7 +85,8 @@ migrate: make_migrations
 	$(foreach app,$(APPS), $(CMD_DJANGO_MIGRATE) $(app);)
 
 test: lint migrate
-	$(foreach app,$(merchant broker),cd $(PWD)/grabbit/$(app); $(CMD_PYTEST))
+	# TODO: foreach this instead of doing each app individually
+	cd $(PROJECT)/partners && $(CMD_PYTEST)
 
 install:
 	$(CMD_PIP_INSTALL)
@@ -102,9 +109,6 @@ show_migrations:
 create_logs:
 	$(CMD_CREATE_LOGS)
 
-# venv:
-# 	$(CMD_MAKE_VIRTUAL_ENV)
-
 bootstrap_env:
 	$(CMD_SOURCE_VIRTUAL_ENV) && $(CMD_PIP_INSTALL_LOCK)
 
@@ -122,3 +126,21 @@ docker_push_dev: docker_build_dev
 
 docker_push_prod: docker_build_prod
 	$(CMD_DOCKER_PUSH_PROD)
+
+docker_start_dev:
+	$(CMD_DOCKER_START_DEV)
+
+docker_start_prod:
+	$(CMD_DOCKER_START_PROD)
+
+docker_stop_dev:
+	$(CMD_DOCKER_STOP_DEV)
+
+docker_stop_prod:
+	$(CMD_DOCKER_STOP_PROD)
+
+docker_start_ci:
+	$(CMD_DOCKER_START_CI)
+
+docker_stop_ci:
+	$(CMD_DOCKER_STOP_CI)

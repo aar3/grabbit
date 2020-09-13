@@ -1,6 +1,4 @@
-from urllib.parse import urlparse
 import subprocess
-import collections
 import os
 
 import httpx

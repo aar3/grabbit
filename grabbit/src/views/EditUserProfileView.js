@@ -1,15 +1,8 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  KeyboardAvoidingView,
-  ScrollView,
-} from 'react-native';
+import {StyleSheet, Text, View, Image, KeyboardAvoidingView, ScrollView} from 'react-native';
 
-import {FakeImage, Color} from 'grabbit/src/const';
-import {BasicTextInput} from 'grabbit/src/components/text-input';
+import {FakeImage, Color, Font} from 'grabbit/src/const';
+import {BasicTextInput} from 'grabbit/src/components/TextInput';
 import {BasicButton} from 'grabbit/src/components/buttons';
 
 export default class EditUserProfile extends React.Component {
@@ -19,32 +12,24 @@ export default class EditUserProfile extends React.Component {
         <View style={styles.container}>
           <View style={styles.EditUserProfile__ContentContainer}>
             <View style={styles.EditUserProfile__ContentContainer__Image}>
-              <Image
-                source={{uri: FakeImage}}
-                style={{height: 150, width: 150}}
-              />
+              <Image source={{uri: FakeImage}} style={{height: 150, width: 150}} />
             </View>
             <View style={styles.EditUserProfile__ContentContainer__Stats}>
-              <View
-                style={styles.EditUserProfile__ContentContainer__Stats__Left}>
+              <View style={styles.EditUserProfile__ContentContainer__Stats__All}>
                 <Text style={styles.Stats__Text__Value}>{'252'}</Text>
                 <Text style={styles.Stats__Text__Key}>{'LIKED'}</Text>
               </View>
-              <View
-                style={styles.EditUserProfile__ContentContainer__Stats__Center}>
+              <View style={styles.EditUserProfile__ContentContainer__Stats__All}>
                 <Text style={styles.Stats__Text__Value}>{'57'}</Text>
                 <Text style={styles.Stats__Text__Key}>{'MATCHED'}</Text>
               </View>
-              <View
-                style={styles.EditUserProfile__ContentContainer__Stats__Right}>
+              <View style={styles.EditUserProfile__ContentContainer__Stats__All}>
                 <Text style={styles.Stats__Text__Value}>{'34'}</Text>
                 <Text style={styles.Stats__Text__Key}>{'GRABBED'}</Text>
               </View>
             </View>
-            <KeyboardAvoidingView
-              behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-              <View
-                style={styles.EditUserProfile__ContentContainer__EditContainer}>
+            <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
+              <View style={styles.EditUserProfile__ContentContainer__EditContainer}>
                 <BasicTextInput label="Name" />
                 <BasicTextInput label="Email" />
                 <BasicTextInput label="Phone" />
@@ -53,32 +38,24 @@ export default class EditUserProfile extends React.Component {
                 <BasicTextInput label="Address 2" />
                 <BasicTextInput label="Shoe Size" />
                 <BasicTextInput label="Shirt Size (US)" />
-                <View
-                  style={
-                    styles.EditUserProfile__ContentContainer__EditContainer__Sizes
-                  }>
-                  <View
-                    style={
-                      styles.EditUserProfile__ContentContainer__EditContainer__Sizes__Left
-                    }>
-                    <Text style={styles.Stats__Text__Key}>{'Shoe Size'}</Text>
-                    <Text style={styles.Stats__Text__Value}>{'12.5'}</Text>
-                  </View>
-                  <View
-                    style={
-                      styles.EditUserProfile__ContentContainer__EditContainer__Sizes__Center
-                    }>
-                    <Text style={styles.Stats__Text__Key}>{'Top Size'}</Text>
-                    <Text style={styles.Stats__Text__Value}>{'L'}</Text>
-                  </View>
-                  <View
-                    style={
-                      styles.EditUserProfile__ContentContainer__EditContainer__Sizes__Right
-                    }>
-                    <Text style={styles.Stats__Text__Key}>{'Bottom Size'}</Text>
-                    <Text style={styles.Stats__Text__Value}>{'33 M'}</Text>
-                  </View>
-                </View>
+                <BasicButton
+                  title="Save"
+                  buttonStyle={{
+                    width: 300,
+                    height: 50,
+                    justifyContent: 'center',
+                    backgroundColor: Color.Pink2,
+                    alignItems: 'center',
+                    borderRadius: 40,
+                    marginTop: 10,
+                    marginBottom: 10,
+                  }}
+                  titleStyle={{
+                    color: Color.White,
+                    fontWeight: 'bold',
+                  }}
+                  onPress={() => {}}
+                />
               </View>
             </KeyboardAvoidingView>
           </View>
@@ -95,54 +72,42 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   EditUserProfile__ContentContainer: {
-    borderWidth: 1,
-    borderColor: 'green',
+    // borderWidth: 1,
+    // borderColor: 'green',
     width: '90%',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingBottom: 10,
   },
   EditUserProfile__ContentContainer__Image: {
-    borderWidth: 1,
-    borderColor: 'blue',
+    // borderWidth: 1,
+    // borderColor: 'blue',
     marginBottom: 20,
     borderRadius: 100,
     height: 150,
     width: 150,
     overflow: 'hidden',
+    marginTop: 20,
   },
   EditUserProfile__ContentContainer__Stats: {
-    borderWidth: 1,
-    borderColor: 'orange',
+    // borderWidth: 1,
+    // borderColor: 'orange',
     height: 50,
     width: '90%',
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     marginBottom: 20,
   },
-  EditUserProfile__ContentContainer__Stats__Left: {
-    borderWidth: 1,
-    borderColor: 'red',
-    width: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  EditUserProfile__ContentContainer__Stats__Center: {
-    borderWidth: 1,
-    borderColor: 'red',
-    width: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  EditUserProfile__ContentContainer__Stats__Right: {
-    borderWidth: 1,
-    borderColor: 'red',
+  EditUserProfile__ContentContainer__Stats__All: {
+    // borderWidth: 1,
+    // borderColor: 'red',
     width: 100,
     justifyContent: 'center',
     alignItems: 'center',
   },
   EditUserProfile__ContentContainer__EditContainer: {
-    borderWidth: 1,
-    borderColor: 'blue',
+    // borderWidth: 1,
+    // borderColor: 'blue',
     width: '90%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -154,35 +119,5 @@ const styles = StyleSheet.create({
   Stats__Text__Value: {
     fontWeight: 'bold',
     marginBottom: 5,
-  },
-  EditUserProfile__ContentContainer__EditContainer__Sizes: {
-    borderWidth: 1,
-    borderColor: 'red',
-    width: '100%',
-    height: 50,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-  },
-  EditUserProfile__ContentContainer__EditContainer__Sizes__Left: {
-    borderWidth: 1,
-    borderColor: 'blue',
-    width: 100,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  EditUserProfile__ContentContainer__EditContainer__Sizes__Center: {
-    borderWidth: 1,
-    borderColor: 'blue',
-    width: 100,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  EditUserProfile__ContentContainer__EditContainer__Sizes__Right: {
-    borderWidth: 1,
-    borderColor: 'blue',
-    width: 100,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });

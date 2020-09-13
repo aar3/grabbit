@@ -1,7 +1,4 @@
-import os
-
 from ._base import *
-
 
 DATABASES = {
     "default": {

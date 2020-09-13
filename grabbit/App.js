@@ -5,13 +5,32 @@ import {createStore, applyMiddleware} from 'redux';
 
 import AppRouter from 'grabbit/src/router';
 import reducer from 'grabbit/src/reducers/root';
+import {SplashView} from 'grabbit/src/views';
 
 const store = createStore(reducer, applyMiddleware(thunk));
 
-export default App = () => {
-  return (
-    <Provider store={store}>
-      <AppRouter />
-    </Provider>
-  );
-};
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: false,
+    };
+  }
+
+  componentDidMount() {
+    // TODO: bootstrap app here
+    this.setState({isLoading: false});
+  }
+
+  render() {
+    if (this.state.isLoading) {
+      return <SplashView />;
+    }
+
+    return (
+      <Provider store={store}>
+        <AppRouter />
+      </Provider>
+    );
+  }
+}

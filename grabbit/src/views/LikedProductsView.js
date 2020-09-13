@@ -1,16 +1,9 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, Text, View, FlatList, Image, TouchableOpacity} from 'react-native';
 
 import {Actions} from 'react-native-router-flux';
 
-import {FakeImage} from 'grabbit/src/const';
+import {FakeImage, Color, Font} from 'grabbit/src/const';
 
 const data = [
   {
@@ -94,11 +87,7 @@ export default class LikedProductsView extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <FlatList
-          data={data}
-          renderItem={this._renderItem}
-          keyExtractor={(_item, index) => index.toString()}
-        />
+        <FlatList data={data} renderItem={this._renderItem} keyExtractor={(_item, index) => index.toString()} />
       </View>
     );
   }
@@ -111,18 +100,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   FlatListRow: {
-    borderWidth: 1,
-    borderColor: 'red',
+    // borderWidth: 1,
+    // borderColor: 'red',
     padding: 10,
     width: 400,
     flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: Color.LightGrey,
     justifyContent: 'space-around',
-  },
-  DiscoverView__ContentContainer: {
-    borderWidth: 1,
-    borderColor: 'blue',
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });

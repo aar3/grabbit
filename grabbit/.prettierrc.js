@@ -6,6 +6,6 @@ module.exports = {
   trailingComma: 'all',
   tabWidth: 2,
   useTabs: false,
-  printWidth: 80,
+  printWidth: 120,
   quoteProps: 'consistent',
 };
