@@ -9,10 +9,10 @@ import {
   BrokerLoginView,
   BrokerSignupView,
   EntryView,
-  BrokerDiscoverViewerView,
+  BrokerDiscoverView,
   BrokerActivityView,
   NotificationsView,
-  BrokerEditProfileViewew,
+  BrokerEditProfileView,
   BrokerFurtherDetailsView,
   ProductInfoView,
   LikedProductsView,
@@ -27,7 +27,7 @@ import {
   BrokerFeedbackView,
   BrokerEntryView,
   MerchantEntryView,
-  BrokerGrabItemViewemView,
+  BrokerGrabItemView,
   OffersView,
   GeneralInfoView,
 } from 'grabbit/src/views';
@@ -51,7 +51,7 @@ const BottomTabNavigation = ({userType}) => {
         lazy>
         <Scene
           key="discover"
-          component={BrokerDiscoverViewerView}
+          component={BrokerDiscoverView}
           navBar={MerchantExploreTopNavigation}
           title="Discover"
           hideNavBar={false}
@@ -80,9 +80,9 @@ const BottomTabNavigation = ({userType}) => {
           )}
         />
         <Scene
-          key="editUserProfile"
+          key="editBrokokerProfile"
           navBar={AccountSettingsTopNavigationBar}
-          component={BrokerEditProfileViewew}
+          component={BrokerEditProfileView}
           title="Edit User Profile"
           hideNavBar={false}
           icon={({focused}) => (
@@ -177,7 +177,7 @@ class AppRouter extends React.Component {
           <Scene
             key="grabItem"
             navBar={BackOnlyTopNavigationBar}
-            component={BrokerGrabItemViewemView}
+            component={BrokerGrabItemView}
             title={null}
             hideNavBar={false}
             renderBackButton={() => <View />}
