@@ -9,10 +9,10 @@ import {
   BrokerLoginView,
   BrokerSignupView,
   EntryView,
-  DiscoverView,
+  BrokerDiscoverViewerView,
   BrokerActivityView,
   NotificationsView,
-  EditUserProfileView,
+  BrokerEditProfileViewew,
   BrokerFurtherDetailsView,
   ProductInfoView,
   LikedProductsView,
@@ -23,12 +23,13 @@ import {
   MerchantExploreView,
   MerchantProductsView,
   MerchantAddProductView,
-  EditMerchantProfileView,
+  MerchantEditProfileView,
   BrokerFeedbackView,
   BrokerEntryView,
   MerchantEntryView,
-  GrabItemView,
+  BrokerGrabItemViewemView,
   OffersView,
+  GeneralInfoView,
 } from 'grabbit/src/views';
 import {TabIconSize, Color, UserType} from 'grabbit/src/const';
 import BasicTopNavigationBar from 'grabbit/src/components/navigation/BasicTopNavigation';
@@ -41,6 +42,7 @@ const BottomTabNavigation = ({userType}) => {
   if (userType === UserType.Broker) {
     return (
       <Tabs
+        animationEnabled={false}
         key="tabStart"
         hideNavBar={true}
         showLabel={false}
@@ -49,7 +51,7 @@ const BottomTabNavigation = ({userType}) => {
         lazy>
         <Scene
           key="discover"
-          component={DiscoverView}
+          component={BrokerDiscoverViewerView}
           navBar={MerchantExploreTopNavigation}
           title="Discover"
           hideNavBar={false}
@@ -80,7 +82,7 @@ const BottomTabNavigation = ({userType}) => {
         <Scene
           key="editUserProfile"
           navBar={AccountSettingsTopNavigationBar}
-          component={EditUserProfileView}
+          component={BrokerEditProfileViewew}
           title="Edit User Profile"
           hideNavBar={false}
           icon={({focused}) => (
@@ -91,7 +93,14 @@ const BottomTabNavigation = ({userType}) => {
     );
   }
   return (
-    <Tabs key="tabStart" hideNavBar={true} showLabel={false} tabBarPosition="bottom" activeBackgroundColor="white" lazy>
+    <Tabs
+      animationEnabled={false}
+      key="tabStart"
+      hideNavBar={true}
+      showLabel={false}
+      tabBarPosition="bottom"
+      activeBackgroundColor="white"
+      lazy>
       <Scene
         key="merchantDashboard"
         component={MerchantExploreView}
@@ -105,7 +114,7 @@ const BottomTabNavigation = ({userType}) => {
       <Scene
         key="merchantProducts"
         component={MerchantProductsView}
-        navBar={BasicTopNavigationBar}
+        navBar={ActivityTopNavigationBar}
         title="Merchant Products"
         hideNavBar={false}
         icon={({focused}) => <Icon name={'grid'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />}
@@ -133,7 +142,7 @@ const BottomTabNavigation = ({userType}) => {
       <Scene
         key="editMerchantProfile"
         navBar={AccountSettingsTopNavigationBar}
-        component={EditMerchantProfileView}
+        component={MerchantEditProfileView}
         title="Edit User Profile"
         hideNavBar={false}
         icon={({focused}) => <Icon name={'user'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />}
@@ -168,7 +177,7 @@ class AppRouter extends React.Component {
           <Scene
             key="grabItem"
             navBar={BackOnlyTopNavigationBar}
-            component={GrabItemView}
+            component={BrokerGrabItemViewemView}
             title={null}
             hideNavBar={false}
             renderBackButton={() => <View />}
@@ -247,6 +256,14 @@ class AppRouter extends React.Component {
             key="brokerFeedback"
             navBar={BasicTopNavigationBar}
             component={BrokerFeedbackView}
+            title={null}
+            hideNavBar={false}
+            renderBackButton={() => <View />}
+          />
+          <Scene
+            key="generalInfo"
+            navBar={BackOnlyTopNavigationBar}
+            component={GeneralInfoView}
             title={null}
             hideNavBar={false}
             renderBackButton={() => <View />}

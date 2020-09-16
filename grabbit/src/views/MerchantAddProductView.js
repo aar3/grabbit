@@ -58,9 +58,8 @@ export default class MerchantAddProductView extends React.Component {
 
   renderRowItem({imagePositionKey}) {
     if (this.state.imageSources[imagePositionKey]) {
-      const imageURI = this.state.imageSources[imagePositionKey];
-      console.log('>>>> image uri: ', imageURI);
-      return <Image source={imageURI} style={{flex: 1, height: undefined, width: undefined}} />;
+      const imageURI = this.state.imageSources[imagePositionKey].uri;
+      return <Image source={{uri: imageURI}} style={{height: 140, width: 140}} />;
     }
 
     return <Icon name="plus-circle" size={30} color={Color.GreyText} />;
@@ -78,28 +77,28 @@ export default class MerchantAddProductView extends React.Component {
           <View style={styles.MerchantAddProduct__ContentContainer__ImageContainer}>
             <Text style={styles.MerchantAddProductView__ContentContainer__Label}>{'Upload Product Images'}</Text>
             <View style={styles.MerchantAddProduct__ContentContainer__ImageContainer__Row}>
-              <View style={styles.MerchantAddProduct__ContentContainer__ImageContainer__Row__Item}>
-                <TouchableOpacity onPress={() => this._updateSelectedImage({imagePositionKey: '1'})}>
+              <TouchableOpacity onPress={() => this._updateSelectedImage({imagePositionKey: '1'})}>
+                <View style={styles.MerchantAddProduct__ContentContainer__ImageContainer__Row__Item}>
                   {this.renderRowItem({imagePositionKey: '1'})}
-                </TouchableOpacity>
-              </View>
-              <View style={styles.MerchantAddProduct__ContentContainer__ImageContainer__Row__Item}>
-                <TouchableOpacity onPress={() => this._updateSelectedImage({imagePositionKey: '2'})}>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this._updateSelectedImage({imagePositionKey: '2'})}>
+                <View style={styles.MerchantAddProduct__ContentContainer__ImageContainer__Row__Item}>
                   {this.renderRowItem({imagePositionKey: '2'})}
-                </TouchableOpacity>
-              </View>
+                </View>
+              </TouchableOpacity>
             </View>
             <View style={styles.MerchantAddProduct__ContentContainer__ImageContainer__Row}>
-              <View style={styles.MerchantAddProduct__ContentContainer__ImageContainer__Row__Item}>
-                <TouchableOpacity onPress={() => this._updateSelectedImage({imagePositionKey: '3'})}>
+              <TouchableOpacity onPress={() => this._updateSelectedImage({imagePositionKey: '3'})}>
+                <View style={styles.MerchantAddProduct__ContentContainer__ImageContainer__Row__Item}>
                   {this.renderRowItem({imagePositionKey: '3'})}
-                </TouchableOpacity>
-              </View>
-              <View style={styles.MerchantAddProduct__ContentContainer__ImageContainer__Row__Item}>
-                <TouchableOpacity onPress={() => this._updateSelectedImage({imagePositionKey: '4'})}>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this._updateSelectedImage({imagePositionKey: '4'})}>
+                <View style={styles.MerchantAddProduct__ContentContainer__ImageContainer__Row__Item}>
                   {this.renderRowItem({imagePositionKey: '4'})}
-                </TouchableOpacity>
-              </View>
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
           <Text style={styles.MerchantAddProductView__ContentContainer__Label}>{'Designate Attribution'}</Text>
@@ -224,10 +223,11 @@ const styles = StyleSheet.create({
     borderColor: Color.GreyText,
     opacity: 0.5,
     height: 140,
+    width: 140,
     justifyContent: 'center',
     alignItems: 'center',
-    width: 140,
     borderRadius: 20,
+    overflow: 'hidden',
   },
   MerchantAddProduct__ContentContainer__Checkbox: {
     // borderWidth: 1,

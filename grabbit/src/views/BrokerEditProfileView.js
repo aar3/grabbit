@@ -5,52 +5,39 @@ import {FakeImage, Color, Font} from 'grabbit/src/const';
 import {BasicTextInput} from 'grabbit/src/components/text-input';
 import {BasicButton} from 'grabbit/src/components/buttons';
 
-export default class EditMerchantProfileView extends React.Component {
+export default class BrokerEditProfileView extends React.Component {
   render() {
     return (
       <ScrollView>
-        <View style={styles.container}>
-          <View style={styles.EditMerchantProfile__ContentContainer}>
-            <View style={styles.EditMerchantProfile__ContentContainer__Image}>
+        <View style={styles.BrokerEditProfileView}>
+          <View style={styles.BrokerEditProfileView__ContentContainer}>
+            <View style={styles.BrokerEditProfileView__ContentContainer__Image}>
               <Image source={{uri: FakeImage}} style={{height: 150, width: 150}} />
             </View>
-            <View style={styles.EditMerchantProfile__ContentContainer__Stats}>
-              <View style={styles.EditMerchantProfile__ContentContainer__Stats__Left}>
+            <View style={styles.BrokerEditProfileView__ContentContainer__Stats}>
+              <View style={styles.BrokerEditProfileView__ContentContainer__Stats__All}>
                 <Text style={styles.Stats__Text__Value}>{'252'}</Text>
-                <Text style={styles.Stats__Text__Key}>{'LIKES'}</Text>
+                <Text style={styles.Stats__Text__Key}>{'LIKED'}</Text>
               </View>
-              <View style={styles.EditMerchantProfile__ContentContainer__Stats__Center}>
+              <View style={styles.BrokerEditProfileView__ContentContainer__Stats__All}>
                 <Text style={styles.Stats__Text__Value}>{'57'}</Text>
                 <Text style={styles.Stats__Text__Key}>{'MATCHED'}</Text>
               </View>
-              <View style={styles.EditMerchantProfile__ContentContainer__Stats__Right}>
+              <View style={styles.BrokerEditProfileView__ContentContainer__Stats__All}>
                 <Text style={styles.Stats__Text__Value}>{'34'}</Text>
-                <Text style={styles.Stats__Text__Key}>{'SHIPPED'}</Text>
-              </View>
-            </View>
-            <View style={styles.EditMerchantProfile__ContentContainer__Stats}>
-              <View style={styles.EditMerchantProfile__ContentContainer__Stats__Left}>
-                <Text style={styles.Stats__Text__Value}>{'18'}</Text>
-                <Text style={styles.Stats__Text__Key}>{'PRODUCT'}</Text>
-              </View>
-              <View style={styles.EditMerchantProfile__ContentContainer__Stats__Center}>
-                <Text style={styles.Stats__Text__Value}>{'13, 817'}</Text>
-                <Text style={styles.Stats__Text__Key}>{'VIEWS'}</Text>
-              </View>
-              <View style={styles.EditMerchantProfile__ContentContainer__Stats__Right}>
-                <Text style={styles.Stats__Text__Value}>{'247'}</Text>
                 <Text style={styles.Stats__Text__Key}>{'GRABBED'}</Text>
               </View>
             </View>
             <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-              <View style={styles.EditMerchantProfile__ContentContainer__EditContainer}>
-                <BasicTextInput label="Company Name" />
+              <View style={styles.BrokerEditProfileView__ContentContainer__EditContainer}>
+                <BasicTextInput label="Name" />
                 <BasicTextInput label="Email" />
                 <BasicTextInput label="Phone" />
 
                 <BasicTextInput label="Address 1" />
                 <BasicTextInput label="Address 2" />
-
+                <BasicTextInput label="Shoe Size" />
+                <BasicTextInput label="Shirt Size (US)" />
                 <BasicButton
                   title="Save"
                   buttonStyle={{
@@ -79,30 +66,30 @@ export default class EditMerchantProfileView extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  BrokerEditProfileView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 30,
   },
-  EditMerchantProfile__ContentContainer: {
+  BrokerEditProfileView__ContentContainer: {
     // borderWidth: 1,
     // borderColor: 'green',
     width: '90%',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingBottom: 10,
   },
-  EditMerchantProfile__ContentContainer__Image: {
+  BrokerEditProfileView__ContentContainer__Image: {
     // borderWidth: 1,
     // borderColor: 'blue',
-    marginTop: 10,
     marginBottom: 20,
     borderRadius: 100,
     height: 150,
     width: 150,
     overflow: 'hidden',
+    marginTop: 20,
   },
-  EditMerchantProfile__ContentContainer__Stats: {
+  BrokerEditProfileView__ContentContainer__Stats: {
     // borderWidth: 1,
     // borderColor: 'orange',
     height: 50,
@@ -111,28 +98,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     marginBottom: 20,
   },
-  EditMerchantProfile__ContentContainer__Stats__Left: {
+  BrokerEditProfileView__ContentContainer__Stats__All: {
     // borderWidth: 1,
     // borderColor: 'red',
     width: 100,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  EditMerchantProfile__ContentContainer__Stats__Center: {
-    // borderWidth: 1,
-    // borderColor: 'red',
-    width: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  EditMerchantProfile__ContentContainer__Stats__Right: {
-    // borderWidth: 1,
-    // borderColor: 'red',
-    width: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  EditMerchantProfile__ContentContainer__EditContainer: {
+  BrokerEditProfileView__ContentContainer__EditContainer: {
     // borderWidth: 1,
     // borderColor: 'blue',
     width: '90%',
@@ -142,11 +115,9 @@ const styles = StyleSheet.create({
   Stats__Text__Key: {
     fontWeight: 'bold',
     color: Color.DarkerGrey,
-    fontFamily: Font.Default,
   },
   Stats__Text__Value: {
     fontWeight: 'bold',
     marginBottom: 5,
-    fontFamily: Font.Default,
   },
 });

@@ -202,15 +202,15 @@ class FlatListRow extends React.Component {
   }
 }
 
-export default class DiscoverView extends React.Component {
+export default class BrokerDiscoverView extends React.Component {
   _renderItem({index, item}) {
     return <FlatListRow data={item} />;
   }
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.DiscoverView__ContentContainer}>
+      <View style={styles.BrokerDiscoverView}>
+        <View style={styles.BrokerDiscoverView__ContentContainer}>
           <FlatList data={data} renderItem={this._renderItem} keyExtractor={(_item, index) => index.toString()} />
         </View>
       </View>
@@ -219,7 +219,7 @@ export default class DiscoverView extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  BrokerDiscoverView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  DiscoverView__ContentContainer: {
+  BrokerDiscoverView__ContentContainer: {
     // borderWidth: 1,
     // borderColor: 'blue',
     width: '100%',

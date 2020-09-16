@@ -14,7 +14,7 @@ const data = {
   },
 };
 
-export default class GrabItemView extends React.Component {
+export default class BrokerGrabItemView extends React.Component {
   render() {
     return (
       <ScrollView contentContainerStyle={styles.GrabItem}>

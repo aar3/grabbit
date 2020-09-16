@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, Linking} from 'react-native';
 
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
@@ -26,14 +26,24 @@ class EntryView extends React.Component {
           </View>
           <Text style={styles.EntryView__ContentContainer__HeaderLabel}>{'Products. For. Promo.'}</Text>
 
-          <Text
+          <View
             style={{
-              color: Color.White,
-              marginBottom: 20,
-              fontWeight: 'bold',
+              width: '80%',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}>
-            {'I am a...'}
-          </Text>
+            <Text
+              style={{
+                marginBottom: 20,
+                color: Color.White,
+                textAlign: 'center',
+                fontSize: 10,
+              }}>
+              {
+                'By tapping Create Account or Sign In, you agree to our Terms. Learn how we process your data in Privacy Policy'
+              }
+            </Text>
+          </View>
 
           <View style={styles.EntryView__Actions__Container}>
             <BasicButton
