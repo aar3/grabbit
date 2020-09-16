@@ -1,6 +1,7 @@
 export const Color = {
   // https://htmlcolorcodes.com/
   LightGrey: '#d8d8d8',
+  DarkerLightGrey: '#999999',
   LightOrange: '#FC785B',
   DarkPurple: '#6400FF',
   White: '#FFF',

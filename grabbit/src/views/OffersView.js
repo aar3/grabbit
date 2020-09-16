@@ -149,25 +149,27 @@ class FlatListRow extends React.Component {
   render() {
     const {data} = this.props;
     return (
-      <TouchableOpacity onPress={() => Actions.brokerFeedback()}>
-        <View style={styles.FlatListRow__Container}>
-          <View style={styles.FlatListRow__Container__Image}>
-            <Image source={{uri: data.image_url}} style={{height: 75, width: 75}} />
-          </View>
-          <View style={styles.FlatListRow__Container__Info}>
-            <Text style={{marginBottom: 5}}>{data.product.name}</Text>
-            <Text style={{marginBottom: 5, color: Color.GreyText}}>{data.product.merchant.name}</Text>
-            <Text style={{marginBottom: 5, color: Color.Pink2}}>{data.shipping.expires}</Text>
-          </View>
+      <View style={styles.FlatListRow__Container}>
+        <View style={styles.FlatListRow__Container__Image}>
+          <Image source={{uri: data.image_url}} style={{height: 75, width: 75}} />
         </View>
-      </TouchableOpacity>
+        <View style={styles.FlatListRow__Container__Info}>
+          <Text style={{marginBottom: 5}}>{data.product.name}</Text>
+          <Text style={{marginBottom: 5, color: Color.GreyText}}>{data.product.merchant.name}</Text>
+          <Text style={{marginBottom: 5, color: Color.Pink2}}>{data.shipping.expires}</Text>
+        </View>
+      </View>
     );
   }
 }
 
 export default class OffersView extends React.Component {
   _renderItem({item, index}) {
-    return <FlatListRow data={item} />;
+    return (
+      <TouchableOpacity onPress={() => Actions.productInfo()}>
+        <FlatListRow data={item} />
+      </TouchableOpacity>
+    );
   }
 
   render() {

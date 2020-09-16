@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image, FlatList} from 'react-native';
+import {StyleSheet, Text, View, Image, FlatList, TouchableOpacity} from 'react-native';
 
 import {FakeImage, Color, Font} from 'grabbit/src/const';
 
@@ -11,6 +11,10 @@ const data = [
     user: {
       id: '1',
       image_url: FakeImage,
+    },
+    event: {
+      type: 'offer',
+      type_id: '1',
     },
   },
   {
@@ -108,7 +112,7 @@ class FlatListRow extends React.Component {
           <Text
             style={{
               fontSize: 12,
-              color: Color.GreyText,
+              color: Color.DarkerLightGrey,
             }}>
             {data.text}
           </Text>
@@ -120,7 +124,14 @@ class FlatListRow extends React.Component {
 
 export default class NotificationsView extends React.Component {
   _renderItem({index, item}) {
-    return <FlatListRow data={item} />;
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          console.log('notification pressed');
+        }}>
+        <FlatListRow data={item} />
+      </TouchableOpacity>
+    );
   }
 
   render() {

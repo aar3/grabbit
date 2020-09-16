@@ -20,7 +20,7 @@ class BrokerEntryView extends React.Component {
         <View style={styles.BrokerEntryView__ContentContainer}>
           <View style={styles.BrokerEntryView__ContentContainer__LogoContainer}>
             <Image
-              source={require('../../assets/imgs/placeholder.jpg')}
+              source={require('../../assets/imgs/Grabbit_White_G_300x300.png')}
               style={{flex: 1, height: undefined, width: undefined}}
             />
           </View>
@@ -76,8 +76,8 @@ const styles = StyleSheet.create({
   BrokerEntryView__ContentContainer__LogoContainer: {
     // borderWidth: 1,
     // borderColor: 'red',
-    width: 100,
-    height: 100,
+    width: 95,
+    height: 97,
     marginBottom: 300,
   },
   BrokerEntryView__Actions__Container: {
@@ -118,13 +118,5 @@ const styles = StyleSheet.create({
     fontSize: 22,
     textAlign: 'center',
     marginBottom: 200,
-  },
-  BrokerEntryView__ContentContainer__Continue: {
-    backgroundColor: Color.Pink2,
-    borderRadius: 30,
-    height: 40,
-    width: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });

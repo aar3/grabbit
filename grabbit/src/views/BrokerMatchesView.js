@@ -1,7 +1,8 @@
 import React from 'react';
-import {StyleSheet, Text, View, FlatList, Image} from 'react-native';
+import {StyleSheet, Text, View, FlatList, Image, TouchableOpacity} from 'react-native';
 
 import {FakeImage, Color, Font} from 'grabbit/src/const';
+import {Actions} from 'react-native-router-flux';
 
 const data = [
   {
@@ -146,7 +147,11 @@ class FlatListRow extends React.Component {
 
 export default class BrokerMatchesView extends React.Component {
   _renderItem({item, index}) {
-    return <FlatListRow data={item} />;
+    return (
+      <TouchableOpacity onPress={() => Actions.productInfo()}>
+        <FlatListRow data={item} />
+      </TouchableOpacity>
+    );
   }
 
   render() {
