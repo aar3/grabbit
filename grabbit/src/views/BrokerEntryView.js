@@ -6,11 +6,16 @@ import {Actions} from 'react-native-router-flux';
 
 import ACTIONS from 'grabbit/src/actions';
 import {BasicButton} from 'grabbit/src/components/buttons';
-import {Color} from 'grabbit/src/const';
+import {Color, UserType} from 'grabbit/src/const';
 
 class BrokerEntryView extends React.Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    const {setUserType} = this.props;
+    return setUserType({userType: UserType.Broker});
   }
 
   render() {

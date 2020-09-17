@@ -1,20 +1,17 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image, ImageBackground} from 'react-native';
 
-import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 
-import ACTIONS from 'grabbit/src/actions';
 import {BasicButton} from 'grabbit/src/components/buttons';
-import {Color, UserType} from 'grabbit/src/const';
+import {Color} from 'grabbit/src/const';
 
-class EntryView extends React.Component {
+export default class EntryView extends React.Component {
   constructor(props) {
     super(props);
   }
 
   render() {
-    const {userType, setUserType} = this.props;
     return (
       <View style={styles.EntryView}>
         <ImageBackground
@@ -53,22 +50,14 @@ class EntryView extends React.Component {
                 buttonStyle={styles.EntryView__Actions__Container__UserTypeButton__Broker}
                 titleStyle={styles.EntryView__Actions__Container__UserTypeButton__Title__Broker}
                 title="Grabber"
-                onPress={() => {
-                  setUserType({userType: UserType.Broker});
-
-                  return Actions.brokerEntry();
-                }}
+                onPress={() => Actions.brokerEntry()}
               />
 
               <BasicButton
                 buttonStyle={styles.EntryView__Actions__Container__UserTypeButton__Merchant}
                 titleStyle={styles.EntryView__Actions__Container__UserTypeButton__Title__Merchant}
                 title="Merchant"
-                onPress={() => {
-                  setUserType({userType: UserType.Merchant});
-
-                  return Actions.merchantEntry();
-                }}
+                onPress={() => Actions.merchantEntry()}
               />
             </View>
           </View>
@@ -77,26 +66,6 @@ class EntryView extends React.Component {
     );
   }
 }
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setUserType: ({userType}) => {
-      return dispatch({
-        type: ACTIONS.SET_USER_TYPE,
-        userType,
-      });
-    },
-  };
-};
-
-const mapStateToProps = (state) => {
-  const {userType} = state;
-  return {
-    userType,
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(EntryView);
 
 const styles = StyleSheet.create({
   EntryView: {

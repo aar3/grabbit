@@ -18,7 +18,7 @@ const detailSelections = [
             onPress: () => Actions.brokerDiscover(),
           },
           {
-            text: "Cancel",
+            text: 'Cancel',
             onPress: () => console.log('Cancel Pressed'),
             style: 'cancel',
           },
