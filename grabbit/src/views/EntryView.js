@@ -9,67 +9,67 @@ import {BasicButton} from 'grabbit/src/components/buttons';
 import {Color, UserType} from 'grabbit/src/const';
 
 class EntryView extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+  constructor(props) {}
 
   render() {
     const {userType, setUserType} = this.props;
     return (
       <View style={styles.EntryView}>
-        <ImageBackground source={{ uri: '../../assets/imgs/Gradient_Purple_Pink_Background_583x1258.png' }}>
-        <View style={styles.EntryView__ContentContainer}>
-          <View style={styles.EntryView__ContentContainer__LogoContainer}>
-            <Image
-              source={require('../../assets/imgs/Grabbit_White_Letters_222x1000.png')}
-              style={{flex: 1, height: undefined, width: undefined}}
-            />
-          </View>
-          <Text style={styles.EntryView__ContentContainer__HeaderLabel}>{'Products. For. Promo.'}</Text>
+        <ImageBackground
+          style={styles.EntryView__BackgroundImage}
+          source={require('../../assets/imgs/Gradient_Purple_Pink_Background_583x1258.png')}>
+          <View style={styles.EntryView__ContentContainer}>
+            <View style={styles.EntryView__ContentContainer__LogoContainer}>
+              <Image
+                source={require('../../assets/imgs/Grabbit_White_Letters_222x1000.png')}
+                style={{flex: 1, height: undefined, width: undefined}}
+              />
+            </View>
+            <Text style={styles.EntryView__ContentContainer__HeaderLabel}>{'Products. For. Promo.'}</Text>
 
-          <View
-            style={{
-              width: '80%',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Text
+            <View
               style={{
-                marginBottom: 20,
-                color: Color.White,
-                textAlign: 'center',
-                fontSize: 10,
+                width: '80%',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}>
-              {
-                'By tapping Create Account or Sign In, you agree to our Terms. Learn how we process your data in Privacy Policy'
-              }
-            </Text>
+              <Text
+                style={{
+                  marginBottom: 20,
+                  color: Color.White,
+                  textAlign: 'center',
+                  fontSize: 10,
+                }}>
+                {
+                  'By tapping Create Account or Sign In, you agree to our Terms. Learn how we process your data in Privacy Policy'
+                }
+              </Text>
+            </View>
+
+            <View style={styles.EntryView__Actions__Container}>
+              <BasicButton
+                buttonStyle={styles.EntryView__Actions__Container__UserTypeButton__Broker}
+                titleStyle={styles.EntryView__Actions__Container__UserTypeButton__Title__Broker}
+                title="Grabber"
+                onPress={() => {
+                  setUserType({userType: UserType.Broker});
+
+                  return Actions.brokerEntry();
+                }}
+              />
+
+              <BasicButton
+                buttonStyle={styles.EntryView__Actions__Container__UserTypeButton__Merchant}
+                titleStyle={styles.EntryView__Actions__Container__UserTypeButton__Title__Merchant}
+                title="Merchant"
+                onPress={() => {
+                  setUserType({userType: UserType.Merchant});
+
+                  return Actions.merchantEntry();
+                }}
+              />
+            </View>
           </View>
-
-          <View style={styles.EntryView__Actions__Container}>
-            <BasicButton
-              buttonStyle={styles.EntryView__Actions__Container__UserTypeButton__Broker}
-              titleStyle={styles.EntryView__Actions__Container__UserTypeButton__Title__Broker}
-              title="Grabber"
-              onPress={() => {
-                setUserType({userType: UserType.Broker});
-
-                return Actions.brokerEntry();
-              }}
-            />
-
-            <BasicButton
-              buttonStyle={styles.EntryView__Actions__Container__UserTypeButton__Merchant}
-              titleStyle={styles.EntryView__Actions__Container__UserTypeButton__Title__Merchant}
-              title="Merchant"
-              onPress={() => {
-                setUserType({userType: UserType.Merchant});
-
-                return Actions.merchantEntry();
-              }}
-            />
-          </View>
-        </View>
         </ImageBackground>
       </View>
     );
@@ -101,7 +101,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Color.Pink2,
+    // backgroundColor: Color.Pink2,
+  },
+  EntryView__BackgroundImage: {
+    flex: 1,
+    width: '100%',
+    resizeMode: 'cover',
+    justifyContent: 'center',
   },
   EntryView__ContentContainer: {
     // borderWidth: 1,
@@ -120,6 +126,8 @@ const styles = StyleSheet.create({
   EntryView__Actions__Container: {
     // borderColor: 'red',
     // borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     width: '100%',
   },
   EntryView__Actions__Container__UserTypeButton__Broker: {
@@ -149,30 +157,11 @@ const styles = StyleSheet.create({
     color: Color.White,
     fontWeight: 'bold',
   },
-  EntryView__Actions__Container__UserTypeButton__Tapped: {
-    width: 150,
-    height: 40,
-    borderWidth: 3,
-    borderColor: Color.White,
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontWeight: 'bold',
-    borderRadius: 30,
-    backgroundColor: Color.DarkPurple,
-  },
   EntryView__ContentContainer__HeaderLabel: {
     color: Color.White,
     fontWeight: 'bold',
     fontSize: 22,
     textAlign: 'center',
     marginBottom: 200,
-  },
-  EntryView__ContentContainer__Continue: {
-    backgroundColor: Color.Pink2,
-    borderRadius: 30,
-    height: 40,
-    width: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
