@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image, Linking} from 'react-native';
+import {StyleSheet, Text, View, Image, ImageBackground} from 'react-native';
 
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
@@ -17,6 +17,7 @@ class EntryView extends React.Component {
     const {userType, setUserType} = this.props;
     return (
       <View style={styles.EntryView}>
+        <ImageBackground source={{ uri: '../../assets/imgs/Gradient_Purple_Pink_Background_583x1258.png' }}>
         <View style={styles.EntryView__ContentContainer}>
           <View style={styles.EntryView__ContentContainer__LogoContainer}>
             <Image
@@ -69,6 +70,7 @@ class EntryView extends React.Component {
             />
           </View>
         </View>
+        </ImageBackground>
       </View>
     );
   }

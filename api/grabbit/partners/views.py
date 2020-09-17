@@ -115,6 +115,11 @@ class MatchViewSet(BaseModelViewSet):
     serializer = MatchSerializer
 
 
+class MessageViewSet(BaseModelViewSet):
+    model = Message
+    serializer = MessageSerializer
+
+
 @api_view(["POST"])
 def LoginView(request):
     params = request.data

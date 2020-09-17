@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from grabbit.utils import random_string
 from grabbit.redis import SessionToken, RedisClient
 from partners.managers import *
 
@@ -39,12 +40,15 @@ class User(BaseModel):
     email = models.CharField(max_length=255, unique=True)
     name = models.CharField(max_length=255, null=True)
     username = models.CharField(max_length=255)
+    address_line1 = models.CharField(max_length=255, null=True)
+    address_line2 = models.CharField(max_length=255, null=True)
     phone = models.CharField(max_length=255, null=True)
     secret = models.CharField(max_length=255)
     salt = models.IntegerField()
     session_token_key = models.CharField(max_length=255)
     user_meta = models.JSONField(default=dict)
     type = models.CharField(max_length=255)
+    site_url = models.CharField(max_length=255, null=True)
     profile_image_url = models.CharField(max_length=255, default=DEFAULT_PROFILE_IMAGE,)
 
     def matches_secret(self, other):
@@ -95,12 +99,27 @@ class Product(BaseModel):
 
     name = models.CharField(max_length=255)
     description = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    merchant = models.ForeignKey(User, on_delete=models.CASCADE)
+    terms = models.TextField()
 
     image_url_1 = models.CharField(max_length=255, null=True)
     image_url_2 = models.CharField(max_length=255, null=True)
     image_url_3 = models.CharField(max_length=255, null=True)
     image_url_4 = models.CharField(max_length=255, null=True)
+
+
+class NotificationItemType:
+    NewProduct = 0
+    NewOffer = 1
+    NewMatch = 2
+    GeneralInfo = 3
+    NewProduct = 4
+    GrabbedItem = 5
+    LikedItem = 6
+    NewReview = 7
+    AccountInfoChange = 8
+    ProductShipped = 9
+    ProductReceived = 10
 
 
 class Notification(BaseModel):
@@ -110,6 +129,9 @@ class Notification(BaseModel):
     text = models.CharField(max_length=255)
     seen = models.BooleanField(default=False)
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    item_type = models.IntegerField()  #  NotificationItemType
+    item_route_key = models.CharField(max_length=255)
+    item_route_meta = models.JSONField(default=dict)
 
 
 class Interest(BaseModel):
@@ -119,63 +141,40 @@ class Interest(BaseModel):
     email = models.CharField(max_length=255, primary_key=True)
 
 
-class LikeFor:
-    Merchant = 0
-    Product = 1
-    Broker = 2
-
-
 class Like(BaseModel):
     class Meta:
         db_table = "likes"
 
     objects = LikeManager()
 
-    liked_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    like_for = models.IntegerField()
-    merchant = models.ForeignKey(
-        User, null=True, on_delete=models.CASCADE, related_name="merchant"
-    )
-    product = models.ForeignKey(
-        Product, null=True, on_delete=models.CASCADE, related_name="product"
-    )
-    broker = models.ForeignKey(
-        User, null=True, on_delete=models.CASCADE, related_name="broken"
-    )
+    broker = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, null=True, on_delete=models.CASCADE)
 
 
 @receiver(post_save, sender=Like)
 def notify_new_like(sender, instance, created, **kwargs):
-    def format_like_msg(like):
-        if like.like_for == LikeFor.Merchant:
-            return f"{like.liked_by.username} liked your merchant store {like.merchant.name}"
-
-        if like.like_for == LikeFor.Product:
-            return f"{like.liked_by.username} liked your product {like.product.name}"
-
-        return f"{like.liked_by.name} liked your Grabber profile"
-
     if created:
-        text = format_like_msg(instance)
-        _ = Notification.objects.create(text=text, user=instance.liked_by)
+        text = instance.broker.username + " liked your product: " + instance.product.name
+        _ = Notification.objects.create(text=text, user=instance.broker)
 
 
 class Offer(BaseModel):
     class Meta:
         db_table = "offers"
 
-    # broker
+    uid = models.CharField(max_length=255)
     offeree = models.ForeignKey(User, on_delete=models.CASCADE, related_name="offeree")
-    # merchant
     offerer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="offerer")
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    terms = models.TextField()
+
+    def set_uid(self):
+        self.uid = random_string(10)
 
 
 @receiver(post_save, sender=Offer)
-def notify_new_offer(sender, instance, created, **kwargs):
+def notify_new_offer_to_offeree(sender, instance, created, **kwargs):
     if created:
-        text = f"{instance.offerer.username} has extended an offer to you for {instance.product.name}. <a href='#'>Click here to view the offer terms</a>"
+        text = instance.offerer.username + " is offering to match with you for product: " + instance.product.name
         _ = Notification.objects.create(text=text, user=instance.offeree)
 
 
@@ -187,16 +186,16 @@ class Match(BaseModel):
 
 
 @receiver(post_save, sender=Offer)
-def notify_new_offer_to_offeree(sender, instance, created, **kwargs):
+def notify_new_match_to_offeree(sender, instance, created, **kwargs):
     if created:
-        text = f"You've been matched with {instance.offer.offerer} for Offer #{instance.offer.id}"
+        text = "You've been matched with " + instance.offer.offerer + " for Offer #" + instance.offer.uid
         _ = Notification.objects.create(text=text, user=instance.offeree)
 
 
 @receiver(post_save, sender=Offer)
-def notify_new_offer_to_offerer(sender, instance, created, **kwargs):
+def notify_new_match_to_offerer(sender, instance, created, **kwargs):
     if created:
-        text = f"{instance.offer.offeree.username} has accepted your offer for {instance.offer.product.name}"
+        text = instance.offer.offeree.username + " has accepted your offer for product " + instance.offer.product.name
         _ = Notification.objects.create(text=text, user=instance.offerer)
 
 
@@ -205,14 +204,23 @@ class Message(BaseModel):
         db_table = "messages"
 
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sender")
-    recipient = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="recipient"
-    )
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recipient")
     text = models.TextField()
 
 
 @receiver(post_save, sender=Offer)
 def notify_new_message(sender, instance, created, **kwargs):
     if created:
-        text = f"{instance.sender.username} sent you a new message"
+        text = instance.sender.username + " sent you a new message."
         _ = Notification.objects.create(text=text, user=instance.sender)
+
+
+
+class AttributionStat(BaseModel):
+    class Meta:
+        db_table = "attribution_stats"
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    broker = models.ForeignKey(User, on_delete=models.CASCADE, related_name='broker')
+    merchant = models.ForeignKey(User, on_delete=models.CASCADE, related_name='merchant')
+    metric_json = models.JSONField(default=dict)

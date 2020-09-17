@@ -5,8 +5,8 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "grabbit_dev",
         "USER": "postgres",
-        "PASSWORD": "password",
-        "HOST": "postgresql",
+        "PASSWORD": "",
+        "HOST": "localhost",
         "PORT": 5432,
     },
 }
