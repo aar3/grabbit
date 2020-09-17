@@ -17,7 +17,7 @@ const data = {
   },
   name: 'Flamingo Hat LTD III',
   description: 'This is a product description',
-  liked: {
+  like: {
     id: '1',
   },
   terms:
@@ -26,6 +26,9 @@ const data = {
   image2_url: FakeImage,
   image3_url: FakeImage,
   image4_url: FakeImage,
+  offer: {
+    match: {},
+  },
 };
 
 class DetailsItem extends React.Component {
@@ -50,7 +53,7 @@ class ProductInfoView extends React.Component {
       hasLike: false,
     };
 
-    this.modal = React.createRef();
+    this.detailsModal = React.createRef();
   }
 
   componentDidMount() {
@@ -61,17 +64,33 @@ class ProductInfoView extends React.Component {
     return <DetailsItem data={item} />;
   }
 
+  _grabbitIcon() {
+    if (!null) {
+    }
+
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          return Actions.grabItem();
+        }}>
+        <Icon name="shopping-bag" size={20} color={Color.GreyText} />
+      </TouchableOpacity>
+    );
+  }
+
   render() {
     const {userType} = this.props;
 
-    const color = this.state.hasLike ? Color.Pink2 : Color.GreyText;
-    const likeIcon = userType === UserType.Broker ? <Icon name="heart" size={20} color={color} /> : null;
+    const likeColor = this.state.hasLike ? Color.Pink2 : Color.GreyText;
+    const likeIcon = userType === UserType.Broker ? <Icon name="heart" size={20} color={likeColor} /> : null;
     const modal =
       userType === UserType.Broker ? (
-        <BrokerProductInfoDetails ref={this.modal} />
+        <BrokerProductInfoDetails ref={this.detailsModal} />
       ) : (
-        <MerchantProductInfoDetails ref={this.modal} />
+        <MerchantProductInfoDetails ref={this.detailsModal} />
       );
+
+    const grabbitIcon = this._grabbitIcon();
 
     return (
       <View style={styles.ProductInfoView}>
@@ -118,19 +137,11 @@ class ProductInfoView extends React.Component {
                     {likeIcon}
                   </TouchableOpacity>
                 </View>
-                <View style={styles.ProductInfoView__ContentContainer__Info__Upper__Button}>
-                  {/* TODO: if item is grabbed, it's grey, else pink */}
-                  <TouchableOpacity
-                    onPress={() => {
-                      return Actions.grabItem();
-                    }}>
-                    <Icon name="shopping-bag" size={20} color={Color.GreyText} />
-                  </TouchableOpacity>
-                </View>
+                <View style={styles.ProductInfoView__ContentContainer__Info__Upper__Button}>{grabbitIcon}</View>
                 <View style={styles.ProductInfoView__ContentContainer__Info__Upper__Button}>
                   <TouchableOpacity
                     onPress={() => {
-                      this.modal.current.show();
+                      this.detailsModal.current.show();
                     }}>
                     <Icon name="more-vertical" size={20} color={Color.GreyText} />
                   </TouchableOpacity>

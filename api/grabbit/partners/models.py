@@ -2,6 +2,7 @@
 
 import hashlib
 import random
+import datetime as dt
 
 from django.db import models
 from django.utils import timezone
@@ -101,11 +102,15 @@ class Product(BaseModel):
     description = models.TextField()
     merchant = models.ForeignKey(User, on_delete=models.CASCADE)
     terms = models.TextField()
+    offer_expiry = models.DateTimeField()
 
     image_url_1 = models.CharField(max_length=255, null=True)
     image_url_2 = models.CharField(max_length=255, null=True)
     image_url_3 = models.CharField(max_length=255, null=True)
     image_url_4 = models.CharField(max_length=255, null=True)
+
+    def has_expired(self):
+        return self.expiry > dt.datetime.now()
 
 
 class NotificationItemType:
@@ -215,7 +220,6 @@ def notify_new_message(sender, instance, created, **kwargs):
         _ = Notification.objects.create(text=text, user=instance.sender)
 
 
-
 class AttributionStat(BaseModel):
     class Meta:
         db_table = "attribution_stats"
@@ -224,3 +228,33 @@ class AttributionStat(BaseModel):
     broker = models.ForeignKey(User, on_delete=models.CASCADE, related_name='broker')
     merchant = models.ForeignKey(User, on_delete=models.CASCADE, related_name='merchant')
     metric_json = models.JSONField(default=dict)
+
+
+class GrabbedItem(BaseModel):
+    class Meta:
+        db_table = "grabbed_items"
+
+    match = models.ForeignKey(Match, on_delete=models.CASCADE)
+    expiry = models.DateTimeField()
+
+    def has_expired(self):
+        return self.expiry > dt.datetime.now()
+
+
+class Carriers:
+    UPS = 0
+    USPS = 1
+    FedEx = 2
+    DHL = 3
+    Amazon = 4
+
+class ShippedItem(BaseModel):
+    class Meta:
+        db_table = "shipped_items"
+
+    grabbed_item = models.ForeignKey(GrabbedItem, on_delete=models.CASCADE)
+    carrier = models.IntegerField()
+    tracking_number = models.CharField(max_length=255)
+    expected_delivery_date = models.DateTimeField()
+
+    

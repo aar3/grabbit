@@ -4,6 +4,7 @@ import {Text, View, TouchableOpacity, StyleSheet, ScrollView, Image} from 'react
 import ImagePicker from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/Feather';
 import CheckBox from '@react-native-community/checkbox';
+import DatePicker from 'react-native-datepicker';
 
 import {Color, FakeImage} from 'grabbit/src/const';
 import {BasicTextInput, BasicTextAreaInput} from 'grabbit/src/components/text-input';
@@ -28,6 +29,7 @@ export default class MerchantAddProductView extends React.Component {
         3: null,
         4: null,
       },
+      date: null,
       conversionAttribution: null,
       impressionAttribution: null,
     };
@@ -154,6 +156,42 @@ export default class MerchantAddProductView extends React.Component {
               }
             </Text>
           </View>
+          <View style={styles.MerchantAddProduct__ContentContainer__Expiry}>
+            <Text style={styles.MerchantAddProductView__ContentContainer__Label}>{'Set Expiration'}</Text>
+            <DatePicker
+              style={{ 
+                width: 200,
+                marginTop: 20,
+                // borderWidth: 1,
+                // borderColor: 'red',
+              }}
+              date={this.state.date}
+              mode="date"
+              placeholder="Select Expiry"
+              format="YYYY-MM-DD"
+              minDate={new Date()}
+              maxDate={new Date(Date.now() + (1000 * 60 * 60 * 24 * 30))}
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0,
+                },
+                dateInput: {
+                  marginLeft: 36,
+                  borderWidth: 1,
+                  borderColor: Color.LightGrey,
+                },
+                // ... You can check the source to find the other keys.
+              }}
+              onDateChange={(date) => {
+                this.setState({date: date});
+              }}
+            />
+          </View>
           <BasicButton
             title="Add"
             buttonStyle={{
@@ -165,7 +203,7 @@ export default class MerchantAddProductView extends React.Component {
               backgroundColor: Color.White,
               alignItems: 'center',
               borderRadius: 40,
-              marginTop: 20,
+              marginTop: 40,
               marginBottom: 30,
             }}
             titleStyle={{
@@ -252,5 +290,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 20,
     textAlign: 'center',
+  },
+  MerchantAddProduct__ContentContainer__Expiry: {
+    // borderWidth: 1,
+    // borderColor: 'blue',
+    marginTop: 20,
+    width: 350,
+    borderTopWidth: 1,
+    borderTopColor: Color.LightGrey,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

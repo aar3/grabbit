@@ -35,3 +35,4 @@
 
 - React Native
     - [currentlyFocusedField is deprecated and will be removed in a future release](https://github.com/aksonov/react-native-router-flux/issues/3691)
+    - [Resolve React Native 0.62.0 useNativeDriver warning](https://github.com/xgfe/react-native-datepicker/pull/411/files)
