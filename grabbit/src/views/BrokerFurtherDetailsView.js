@@ -45,7 +45,7 @@ export default class BrokerFurtherDetails extends React.Component {
               color: Color.White,
               fontWeight: 'bold',
             }}
-            onPress={() => Actions.discover()}
+            onPress={() => Actions.brokerDiscover()}
           />
 
           <BasicButton
@@ -73,7 +73,7 @@ export default class BrokerFurtherDetails extends React.Component {
                 [
                   {
                     text: 'I understand',
-                    onPress: () => Actions.discover(),
+                    onPress: () => Actions.brokerDiscover(),
                   },
                   {
                     text: "I'll do this now",

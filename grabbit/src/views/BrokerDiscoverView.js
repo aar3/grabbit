@@ -13,7 +13,7 @@ const data = [
     image_url: FakeImage,
     link: 'https://google.com',
     name: 'Air Jordan 12 IV',
-    likeCount: 312,
+    like_count: 312,
     views: 1281,
     grabs: 13,
     interest: 58,
@@ -29,8 +29,8 @@ const data = [
     image_url: FakeImage,
     link: 'https://google.com',
     name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    likeCount: 312,
-    likeCount: 312,
+    like_count: 312,
+    like_count: 312,
     views: 1281,
     grabs: 13,
     interest: 58,
@@ -46,7 +46,7 @@ const data = [
     image_url: FakeImage,
     link: 'https://google.com',
     name: 'Air Jordan 12 IV',
-    likeCount: 312,
+    like_count: 312,
     views: 1281,
     grabs: 13,
     interest: 58,
@@ -62,7 +62,7 @@ const data = [
     image_url: FakeImage,
     link: 'https://google.com',
     name: 'Air Jordan 12 IV',
-    likeCount: 312,
+    like_count: 312,
     views: 1281,
     grabs: 13,
     interest: 58,
@@ -77,7 +77,7 @@ const data = [
     id: '5',
     image_url: FakeImage,
     link: 'https://google.com',
-    likeCount: 312,
+    like_count: 312,
     views: 1281,
     grabs: 13,
     interest: 58,
@@ -92,7 +92,7 @@ const data = [
   {
     id: '6',
     image_url: FakeImage,
-    likeCount: 312,
+    like_count: 312,
     views: 1281,
     interest: 58,
     grabs: 13,
@@ -108,7 +108,7 @@ const data = [
   {
     id: '7',
     image_url: FakeImage,
-    likeCount: 312,
+    like_count: 312,
     views: 1281,
     grabs: 13,
     interest: 58,
@@ -124,7 +124,7 @@ const data = [
   {
     id: '8',
     image_url: FakeImage,
-    likeCount: 312,
+    like_count: 312,
     views: 1281,
     interest: 58,
     grabs: 13,
@@ -169,7 +169,7 @@ class FlatListRowImage extends React.Component {
                 size={20}
                 color={Color.GreyText}
               />
-              <Text style={styles.FlatListRowImage__Container__Info__Number}>{data.likeCount}</Text>
+              <Text style={styles.FlatListRowImage__Container__Info__Number}>{data.like_count}</Text>
               <Icon
                 style={styles.FlatListRowImage__Container__Info__Icon}
                 name="shopping-bag"

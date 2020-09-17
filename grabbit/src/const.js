@@ -30,3 +30,9 @@ export const TestUX = UserType.Broker;
 //   'https://images.squarespace-cdn.com/content/v1/59d2bea58a02c78793a95114/1589398875141-QL8O2W7QS3B4MZPFWHJV/ke17ZwdGBToddI8pDm48kBVDUY_ojHUJPbTAKvjNhBl7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QHyNOqBUUEtDDsRWrJLTmmV5_8-bAHr7cY_ioNsJS_wbCc47fY_dUiPbsewqOAk2CqqlDyATm2OxkJ1_5B47U/image-asset.jpeg';
 
 export const FakeImage = 'https://cel.ac/wp-content/uploads/2016/02/placeholder-img-1.jpg';
+
+export const MerchantExploreItem = {
+  Broker: 'B',
+  Merchant: 'M',
+  Product: 'P',
+};

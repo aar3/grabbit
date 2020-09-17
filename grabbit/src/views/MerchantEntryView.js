@@ -22,10 +22,10 @@ class MerchantEntryView extends React.Component {
           source={require('../../assets/imgs/Gradient_Purple_Pink_Background_583x1258.png')}>
           <View style={styles.MerchantEntryView__ContentContainer}>
             <View style={styles.MerchantEntryView__ContentContainer__LogoContainer}>
-            <Image
-              source={require('../../assets/imgs/Grabbit_White_G_300x300.png')}
-              style={{flex: 1, height: undefined, width: undefined}}
-            />
+              <Image
+                source={require('../../assets/imgs/Grabbit_White_G_300x300.png')}
+                style={{flex: 1, height: undefined, width: undefined}}
+              />
             </View>
             <Text style={styles.MerchantEntryView__ContentContainer__HeaderLabel}>{'For Brands'}</Text>
 
@@ -75,8 +75,7 @@ class MerchantEntryView extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-  };
+  return {};
 };
 
 const mapStateToProps = (state) => {
@@ -97,7 +96,7 @@ const styles = StyleSheet.create({
   },
   MerchantEntryView__BackgroundImage: {
     flex: 1,
-    width: '100%',
+    width: '110%',
     resizeMode: 'cover',
     justifyContent: 'center',
   },

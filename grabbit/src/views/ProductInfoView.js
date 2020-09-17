@@ -1,14 +1,13 @@
 import React from 'react';
-import {StyleSheet, Text, Modal, View, TouchableOpacity, Image, FlatList} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 
 import Icon from 'react-native-vector-icons/Feather';
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 
 import {Color, UserType, FakeImage} from 'grabbit/src/const';
-import {BasicButton} from 'grabbit/src/components/buttons';
-import BrokerModal from 'grabbit/src/components/modals/BrokerProductInfoDetails';
-import MerchantModal from 'grabbit/src/components/modals/MerchantProductInfoDetails';
+import BrokerProductInfoDetails from 'grabbit/src/components/modals/BrokerProductInfoDetails';
+import MerchantProductInfoDetails from 'grabbit/src/components/modals/MerchantProductInfoDetails';
 
 const data = {
   id: '1',
@@ -49,7 +48,6 @@ class ProductInfoView extends React.Component {
     this.state = {
       renderDetailsIcon: false,
       hasLike: false,
-      showDetailsModal: false,
     };
 
     this.modal = React.createRef();
@@ -68,7 +66,12 @@ class ProductInfoView extends React.Component {
 
     const color = this.state.hasLike ? Color.Pink2 : Color.GreyText;
     const likeIcon = userType === UserType.Broker ? <Icon name="heart" size={20} color={color} /> : null;
-    const modal = userType === UserType.Broker ? <BrokerModal ref={this.modal} /> : <MerchantModal ref={this.modal} />;
+    const modal =
+      userType === UserType.Broker ? (
+        <BrokerProductInfoDetails ref={this.modal} />
+      ) : (
+        <MerchantProductInfoDetails ref={this.modal} />
+      );
 
     return (
       <View style={styles.ProductInfoView}>

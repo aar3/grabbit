@@ -9,7 +9,9 @@ import {BasicButton} from 'grabbit/src/components/buttons';
 import {Color} from 'grabbit/src/const';
 
 class BrokerEntryView extends React.Component {
-  constructor(props) {}
+  constructor(props) {
+    super(props);
+  }
 
   render() {
     const {userType} = this.props;
@@ -20,10 +22,10 @@ class BrokerEntryView extends React.Component {
           source={require('../../assets/imgs/Gradient_Purple_Pink_Background_583x1258.png')}>
           <View style={styles.BrokerEntryView__ContentContainer}>
             <View style={styles.BrokerEntryView__ContentContainer__LogoContainer}>
-            <Image
-              source={require('../../assets/imgs/Grabbit_White_G_300x300.png')}
-              style={{flex: 1, height: undefined, width: undefined}}
-            />
+              <Image
+                source={require('../../assets/imgs/Grabbit_White_G_300x300.png')}
+                style={{flex: 1, height: undefined, width: undefined}}
+              />
             </View>
             <Text style={styles.BrokerEntryView__ContentContainer__HeaderLabel}>{'For Grabbers'}</Text>
 
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
   },
   BrokerEntryView__BackgroundImage: {
     flex: 1,
-    width: '100%',
+    width: '110%',
     resizeMode: 'cover',
     justifyContent: 'center',
   },

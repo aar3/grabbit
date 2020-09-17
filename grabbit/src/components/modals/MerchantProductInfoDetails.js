@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Modal, TouchableOpacity, Text, Image, StyleSheet, FlatList} from 'react-native';
+import {View, Modal, TouchableOpacity, Text, Image, StyleSheet, Alert, FlatList} from 'react-native';
 
 import {Color} from 'grabbit/src/const';
 import Icon from 'react-native-vector-icons/Feather';
@@ -8,7 +8,24 @@ const detailSelections = [
   {
     id: '0',
     title: 'Remove Product',
-    onPress: () => console.log('Product Removed'),
+    onPress: () => {
+      Alert.alert(
+        'Are you sure you want to remove this product?',
+        'This action cannot be undone.',
+        [
+          {
+            text: 'Yes, remove it',
+            onPress: () => Actions.brokerDiscover(),
+          },
+          {
+            text: "Cancel",
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+        ],
+        {cancelable: false},
+      );
+    },
   },
   {
     id: '1',
@@ -40,16 +57,16 @@ export default class M extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showDetailsModal: false,
+      showModal: false,
     };
   }
 
   show() {
-    this.setState({showDetailsModal: true});
+    this.setState({showModal: true});
   }
 
   hide() {
-    this.setState({showDetailsModal: false});
+    this.setState({showModal: false});
   }
 
   _renderDetailItem({item, index}) {
@@ -61,14 +78,14 @@ export default class M extends React.Component {
       <Modal
         animation={'fade'}
         transparent={true}
-        visible={this.state.showDetailsModal}
+        visible={this.state.showModal}
         onRequestClose={() => {
           console.log('modal closed');
-          this.setState({showDetailsModal: false});
+          this.setState({showModal: false});
         }}>
         <View style={styles.ProductInfoView__ModalContainer}>
           <View style={styles.ProductInfoView__ModalContainer__TopBar}>
-            <TouchableOpacity onPress={() => this.setState({showDetailsModal: false})}>
+            <TouchableOpacity onPress={() => this.setState({showModal: false})}>
               <Icon name="x" size={15} color={Color.GreyText} />
             </TouchableOpacity>
           </View>
@@ -100,7 +117,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     // alignItems: 'center',
     marginTop: 300,
-    marginBottom: 300,
+    marginBottom: 350,
     marginLeft: 50,
     marginRight: 50,
     backgroundColor: 'white',

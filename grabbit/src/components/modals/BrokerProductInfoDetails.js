@@ -45,16 +45,16 @@ export default class M extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showDetailsModal: false,
+      showModal: false,
     };
   }
 
   show() {
-    this.setState({showDetailsModal: true});
+    this.setState({showModal: true});
   }
 
   hide() {
-    this.setState({showDetailsModal: false});
+    this.setState({showModal: false});
   }
 
   _renderDetailItem({item, index}) {
@@ -66,14 +66,14 @@ export default class M extends React.Component {
       <Modal
         animation={'fade'}
         transparent={true}
-        visible={this.state.showDetailsModal}
+        visible={this.state.showModal}
         onRequestClose={() => {
           console.log('modal closed');
-          this.setState({showDetailsModal: false});
+          this.setState({showModal: false});
         }}>
         <View style={styles.ProductInfoView__ModalContainer}>
           <View style={styles.ProductInfoView__ModalContainer__TopBar}>
-            <TouchableOpacity onPress={() => this.setState({showDetailsModal: false})}>
+            <TouchableOpacity onPress={() => this.setState({showModal: false})}>
               <Icon name="x" size={15} color={Color.GreyText} />
             </TouchableOpacity>
           </View>

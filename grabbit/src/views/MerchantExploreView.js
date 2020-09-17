@@ -1,9 +1,11 @@
 import React from 'react';
-import {StyleSheet, Text, View, FlatList, Image} from 'react-native';
+import {StyleSheet, Text, View, FlatList, Image, TouchableOpacity} from 'react-native';
 
 import Emoji from 'react-native-emoji';
+import Icon from 'react-native-vector-icons/Feather';
 
-import {FakeImage, Color} from 'grabbit/src/const';
+import BrokerProfileModal from 'grabbit/src/components/modals/BrokerProfile';
+import {FakeImage, Color, MerchantExploreItem} from 'grabbit/src/const';
 // import {SearchTextInput} from 'grabbit/src/components/text-input';
 
 // emoji list https://unicodey.com/emoji-data/table.htm
@@ -124,17 +126,18 @@ class FlatListRow extends React.Component {
         </View>
         <View style={styles.FlatListRow__Container__Info}>
           <Text style={{marginBottom: 5}}>{data.name}</Text>
-          <Text style={{marginBottom: 5, fontSize: 10, fontWeight: 'bold'}}>{data.label}</Text>
+          {/* <Text style={{marginBottom: 5, fontSize: 10, fontWeight: 'bold'}}>{data.label}</Text> */}
           <View style={{flexDirection: 'row'}}>
             <Text
               style={{
                 marginBottom: 5,
                 color: Color.Pink2,
                 marginRight: 20,
+                fontSize: 12,
               }}>{`${data.metric}: ${data.rating}`}</Text>
             {emoji}
           </View>
-          <Text style={{color: Color.LightGrey, fontSize: 10}}>{data.period}</Text>
+          <Text style={{color: Color.GreyText, fontSize: 10}}>{data.period}</Text>
         </View>
       </View>
     );
@@ -142,19 +145,31 @@ class FlatListRow extends React.Component {
 }
 
 export default class MerchantExploreView extends React.Component {
-  _renderItem({item, index}) {
-    return <FlatListRow data={item} />;
+  constructor(props) {
+    super(props);
+    this.brokerProfileModal = React.createRef();
   }
 
   render() {
     return (
-      <View style={styles.container}>
-        {/* TODO: Not including searchable expore yet
-        <SearchTextInput /> */}
+      <View style={styles.MerchantExploreView}>
+        <BrokerProfileModal ref={this.brokerProfileModal} />
         <FlatList
           style={styles.MerchantExploreView__FlatList}
           data={data}
-          renderItem={this._renderItem}
+          renderItem={({item, index}) => {
+            if (item.label === MerchantExploreItem.Broker) {
+              return (
+                <TouchableOpacity
+                  onPress={() => {
+                    this.brokerProfileModal.current.show();
+                  }}>
+                  <FlatListRow data={item} />
+                </TouchableOpacity>
+              );
+            }
+            return <FlatListRow data={item} />;
+          }}
           keyExtractor={(_item, index) => index.toString()}
         />
       </View>
@@ -163,7 +178,7 @@ export default class MerchantExploreView extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  MerchantExploreView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

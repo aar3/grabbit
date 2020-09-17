@@ -9,7 +9,9 @@ import {BasicButton} from 'grabbit/src/components/buttons';
 import {Color, UserType} from 'grabbit/src/const';
 
 class EntryView extends React.Component {
-  constructor(props) {}
+  constructor(props) {
+    super(props);
+  }
 
   render() {
     const {userType, setUserType} = this.props;
@@ -105,7 +107,7 @@ const styles = StyleSheet.create({
   },
   EntryView__BackgroundImage: {
     flex: 1,
-    width: '100%',
+    width: '110%',
     resizeMode: 'cover',
     justifyContent: 'center',
   },

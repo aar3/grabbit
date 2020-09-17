@@ -42,6 +42,7 @@ const BottomTabNavigation = ({userType}) => {
   if (userType === UserType.Broker) {
     return (
       <Tabs
+        duration={0}
         animationEnabled={false}
         key="tabStart"
         hideNavBar={true}
@@ -50,7 +51,7 @@ const BottomTabNavigation = ({userType}) => {
         activeBackgroundColor="white"
         lazy>
         <Scene
-          key="discover"
+          key="brokerDiscoverscover"
           component={BrokerDiscoverView}
           navBar={MerchantExploreTopNavigation}
           title="Discover"

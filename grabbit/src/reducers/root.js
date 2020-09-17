@@ -17,7 +17,7 @@ const defaultState = {
       error: null,
     },
     currScreen: null,
-    discover: {
+    brokerDiscover: {
       content: [],
       error: null,
       pending: false,

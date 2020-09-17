@@ -39,7 +39,7 @@ export default class BrokerLoginView extends React.Component {
               color: Color.Pink2,
               fontWeight: 'bold',
             }}
-            onPress={() => Actions.discover()}
+            onPress={() => Actions.brokerDiscover()}
           />
         </View>
       </KeyboardAvoidingView>
