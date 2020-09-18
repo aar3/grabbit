@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/Feather';
 
 import BrokerProfileModal from 'grabbit/src/components/modals/BrokerProfile';
 import {FakeImage, Color, MerchantExploreItem} from 'grabbit/src/const';
+import {Actions} from 'react-native-router-flux';
 // import {SearchTextInput} from 'grabbit/src/components/text-input';
 
 // emoji list https://unicodey.com/emoji-data/table.htm
@@ -163,6 +164,15 @@ export default class MerchantExploreView extends React.Component {
                 <TouchableOpacity
                   onPress={() => {
                     this.brokerProfileModal.current.show();
+                  }}>
+                  <FlatListRow data={item} />
+                </TouchableOpacity>
+              );
+            } else if (item.label === MerchantExploreItem.Product) {
+              return (
+                <TouchableOpacity
+                  onPress={() => {
+                    Actions.productInfo();
                   }}>
                   <FlatListRow data={item} />
                 </TouchableOpacity>

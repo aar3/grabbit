@@ -31,6 +31,9 @@ import {
   BrokerGrabItemView,
   OffersView,
   GeneralInfoView,
+  ChatView,
+  ConversationsView,
+  BrokerSuccessfulGrabView,
 } from 'grabbit/src/views';
 import {TabIconSize, Color, UserType} from 'grabbit/src/const';
 import BasicTopNavigationBar from 'grabbit/src/components/navigation/BasicTopNavigation';
@@ -266,6 +269,30 @@ class AppRouter extends React.Component {
             key="generalInfo"
             navBar={BackOnlyTopNavigationBar}
             component={GeneralInfoView}
+            title={null}
+            hideNavBar={false}
+            renderBackButton={() => <View />}
+          />
+          <Scene
+            key="chat"
+            navBar={BackOnlyTopNavigationBar}
+            component={ChatView}
+            title={null}
+            hideNavBar={false}
+            renderBackButton={() => <View />}
+          />
+          <Scene
+            key="conversations"
+            navBar={BackOnlyTopNavigationBar}
+            component={ConversationsView}
+            title={null}
+            hideNavBar={false}
+            renderBackButton={() => <View />}
+          />
+          <Scene
+            key="brokerSuccessfulGrab"
+            navBar={BasicTopNavigationBar}
+            component={BrokerSuccessfulGrabView}
             title={null}
             hideNavBar={false}
             renderBackButton={() => <View />}

@@ -148,7 +148,7 @@ class FlatListRow extends React.Component {
 export default class BrokerMatchesView extends React.Component {
   _renderItem({item, index}) {
     return (
-      <TouchableOpacity onPress={() => Actions.productInfo()}>
+      <TouchableOpacity onPress={() => Actions.grabItem()}>
         <FlatListRow data={item} />
       </TouchableOpacity>
     );

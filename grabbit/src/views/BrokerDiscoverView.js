@@ -177,7 +177,12 @@ class FlatListRowImage extends React.Component {
                 color={Color.GreyText}
               />
               <Text style={styles.FlatListRowImage__Container__Info__Number}>{data.grabs}</Text>
-              <Icon style={styles.FlatListRowImage__Container__Info__Icon} name="zap" size={20} color={Color.Pink2} />
+              <Icon
+                style={styles.FlatListRowImage__Container__Info__Icon}
+                name="zap"
+                size={20}
+                color={Color.GreyText}
+              />
               <Text style={styles.FlatListRowImage__Container__Info__Number}>{data.interest}</Text>
               <Icon style={styles.FlatListRowImage__Container__Info__Icon} name="tv" size={20} color={Color.GreyText} />
               <Text style={styles.FlatListRowImage__Container__Info__Number}>{data.views}</Text>

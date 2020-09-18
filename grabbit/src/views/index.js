@@ -15,6 +15,7 @@ import BrokerFeedbackView from 'grabbit/src/views/BrokerFeedbackView';
 import BrokerEntryView from 'grabbit/src/views/BrokerEntryView';
 import BrokerGrabItemView from 'grabbit/src/views/BrokerGrabItemView';
 import OffersView from 'grabbit/src/views/OffersView';
+import BrokerSuccessfulGrabView from 'grabbit/src/views/BrokerSuccessfulGrabView';
 
 // merchant
 import MerchantSignupView from 'grabbit/src/views/MerchantSignupView';
@@ -28,6 +29,8 @@ import MerchantEntryView from 'grabbit/src/views/MerchantEntryView';
 import GeneralInfoView from 'grabbit/src/views/GeneralInfoView';
 import AboutGrabbitView from 'grabbit/src/views/AboutGrabbitView';
 import PrivacyPolicyView from 'grabbit/src/views/PrivacyPolicyView';
+import ChatView from 'grabbit/src/views/ChatView';
+import ConversationsView from 'grabbit/src/views/ConversationsView';
 
 import SplashView from 'grabbit/src/views/SplashView';
 
@@ -42,6 +45,7 @@ module.exports = {
   BrokerFeedbackView,
   BrokerEntryView,
   BrokerGrabItemView,
+  BrokerSuccessfulGrabView,
 
   MerchantSignupView,
   MerchantExploreView,
@@ -60,5 +64,8 @@ module.exports = {
   AboutGrabbitView,
   NotificationsView,
   PrivacyPolicyView,
+  ChatView,
+  ConversationsView,
+
   SplashView,
 };

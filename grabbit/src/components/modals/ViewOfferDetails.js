@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Modal, TouchableOpacity, Text, Image, StyleSheet} from 'react-native';
+import {View, Modal, TouchableOpacity, Text, Image, StyleSheet, Alert} from 'react-native';
 
 import Icon from 'react-native-vector-icons/Feather';
 import {Actions} from 'react-native-router-flux';
@@ -7,16 +7,10 @@ import {Actions} from 'react-native-router-flux';
 import {Color, FakeImage} from 'grabbit/src/const';
 import {IconLeftButton} from 'grabbit/src/components/buttons';
 
-const user = {
-  id: '6',
-  image_url: FakeImage,
-  like_count: 312,
-  views: 1281,
-  interest: 58,
-  grabs: 13,
-  link: 'https://google.com',
-  name: 'Ava Jah Morant',
-  bio:
+const product = {
+  id: '1',
+  name: 'Depends Diapers 4-pack Green',
+  description:
     'Donec dignissim ligula non dolor euismod tincidunt. Etiam pulvinar interdum ligula, vitae luctus odio rutrum vel. Mauris ultricies augue erat, sed luctus ipsum dictum non. Sed eu tincidunt ligula, ac maximus sapien.',
 };
 
@@ -74,40 +68,8 @@ export default class M extends React.Component {
                     fontWeight: 'bold',
                     color: Color.Pink2,
                   }}>
-                  {user.name}
+                  {product.name}
                 </Text>
-              </View>
-              <View
-                style={{
-                  // borderWidth: 1,
-                  // borderColor: 'blue',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginBottom: 10,
-                }}>
-                <Icon
-                  style={styles.FlatListRowImage__Container__Info__Icon}
-                  name="heart"
-                  size={20}
-                  color={Color.GreyText}
-                />
-                <Text style={styles.FlatListRowImage__Container__Info__Number}>{user.like_count}</Text>
-                <Icon
-                  style={styles.FlatListRowImage__Container__Info__Icon}
-                  name="shopping-bag"
-                  size={20}
-                  color={Color.GreyText}
-                />
-                <Text style={styles.FlatListRowImage__Container__Info__Number}>{user.grabs}</Text>
-                <Icon style={styles.FlatListRowImage__Container__Info__Icon} name="zap" size={20} color={Color.Pink2} />
-                <Text style={styles.FlatListRowImage__Container__Info__Number}>{user.interest}</Text>
-                <Icon
-                  style={styles.FlatListRowImage__Container__Info__Icon}
-                  name="tv"
-                  size={20}
-                  color={Color.GreyText}
-                />
-                <Text style={styles.FlatListRowImage__Container__Info__Number}>{user.views}</Text>
               </View>
               <View
                 style={{
@@ -123,36 +85,88 @@ export default class M extends React.Component {
                     color: Color.GreyText,
                     fontSize: 12,
                   }}>
-                  {user.bio}
+                  {product.description}
                 </Text>
 
-                <IconLeftButton
-                  title="Message"
-                  buttonStyle={{
-                    width: 150,
-                    height: 40,
-                    borderColor: Color.Pink2,
+                <View
+                  style={{
                     borderWidth: 1,
-                    backgroundColor: Color.Pink2,
-                    alignItems: 'center',
+                    borderColor: 'red',
                     flexDirection: 'row',
-                    alignItems: 'center',
-                    borderRadius: 40,
-                    marginTop: 20,
-                    marginBottom: 10,
-                  }}
-                  iconColor={Color.White}
-                  iconName={'send'}
-                  titleStyle={{
-                    color: Color.White,
-                    fontWeight: 'bold',
-                    marginLeft: 10,
-                  }}
-                  onPress={() => {
-                    this.hide();
-                    Actions.chat();
-                  }}
-                />
+                  }}>
+                  <IconLeftButton
+                    title="View"
+                    buttonStyle={{
+                      width: 120,
+                      height: 40,
+                      borderColor: Color.Pink2,
+                      borderWidth: 1,
+                      backgroundColor: Color.Pink2,
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      borderRadius: 40,
+                      marginTop: 20,
+                      marginBottom: 10,
+                    }}
+                    iconColor={Color.White}
+                    iconName={'tv'}
+                    titleStyle={{
+                      color: Color.White,
+                      fontWeight: 'bold',
+                      marginLeft: 10,
+                    }}
+                    onPress={() => {
+                      this.hide();
+                      Actions.productInfo();
+                    }}
+                  />
+                  <IconLeftButton
+                    title="Accept"
+                    buttonStyle={{
+                      width: 120,
+                      height: 40,
+                      marginLeft: 30,
+                      borderColor: Color.Pink2,
+                      borderWidth: 1,
+                      backgroundColor: Color.Pink2,
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      borderRadius: 40,
+                      marginTop: 20,
+                      marginBottom: 10,
+                    }}
+                    iconColor={Color.White}
+                    iconName={'plus'}
+                    titleStyle={{
+                      color: Color.White,
+                      fontWeight: 'bold',
+                      marginLeft: 10,
+                    }}
+                    onPress={() => {
+                      Alert.alert(
+                        'Accept Offer?',
+                        'Are you sure you want to accept this offer?',
+                        [
+                          {
+                            text: 'Yes',
+                            onPress: () => {
+                              this.hide();
+                              Actions.grabItem();
+                            },
+                          },
+                          {
+                            text: 'No',
+                            onPress: () => console.log('Cancel Pressed'),
+                            style: 'cancel',
+                          },
+                        ],
+                        {cancelable: false},
+                      );
+                    }}
+                  />
+                </View>
               </View>
             </View>
           </View>

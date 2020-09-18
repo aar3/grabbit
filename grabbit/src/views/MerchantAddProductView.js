@@ -159,7 +159,7 @@ export default class MerchantAddProductView extends React.Component {
           <View style={styles.MerchantAddProduct__ContentContainer__Expiry}>
             <Text style={styles.MerchantAddProductView__ContentContainer__Label}>{'Set Expiration'}</Text>
             <DatePicker
-              style={{ 
+              style={{
                 width: 200,
                 marginTop: 20,
                 // borderWidth: 1,
@@ -170,7 +170,7 @@ export default class MerchantAddProductView extends React.Component {
               placeholder="Select Expiry"
               format="YYYY-MM-DD"
               minDate={new Date()}
-              maxDate={new Date(Date.now() + (1000 * 60 * 60 * 24 * 30))}
+              maxDate={new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)}
               confirmBtnText="Confirm"
               cancelBtnText="Cancel"
               customStyles={{

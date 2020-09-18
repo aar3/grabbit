@@ -26,8 +26,13 @@ const data = {
   image2_url: FakeImage,
   image3_url: FakeImage,
   image4_url: FakeImage,
-  offer: {
-    match: {},
+  userHasMatch: true,
+  stats: {
+    grabs: 11,
+    like_count: '1.1K',
+    offers: 123,
+    views: '11.5K',
+    interest: 0.42,
   },
 };
 
@@ -65,7 +70,10 @@ class ProductInfoView extends React.Component {
   }
 
   _grabbitIcon() {
-    if (!null) {
+    // if user has outstanding match for this product then
+    // they can grab it using icon, else they see nothing
+    if (!data.userHasMatch) {
+      return null;
     }
 
     return (
@@ -147,6 +155,43 @@ class ProductInfoView extends React.Component {
                   </TouchableOpacity>
                 </View>
               </View>
+            </View>
+            <View
+              style={{
+                // borderWidth: 1,
+                // borderColor: 'blue',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Icon
+                style={styles.ProductInfoView__ContentContainer__Info__StatIcon}
+                name="heart"
+                size={20}
+                color={Color.GreyText}
+              />
+              <Text style={styles.ProductInfoView__ContentContainer__Info__StatValue}>{data.stats.like_count}</Text>
+              <Icon
+                style={styles.ProductInfoView__ContentContainer__Info__StatIcon}
+                name="shopping-bag"
+                size={20}
+                color={Color.GreyText}
+              />
+              <Text style={styles.ProductInfoView__ContentContainer__Info__StatValue}>{data.stats.grabs}</Text>
+              <Icon
+                style={styles.ProductInfoView__ContentContainer__Info__StatIcon}
+                name="zap"
+                size={20}
+                color={Color.GreyText}
+              />
+              <Text style={styles.ProductInfoView__ContentContainer__Info__StatValue}>{data.stats.interest}</Text>
+              <Icon
+                style={styles.ProductInfoView__ContentContainer__Info__StatIcon}
+                name="tv"
+                size={20}
+                color={Color.GreyText}
+              />
+              <Text style={styles.ProductInfoView__ContentContainer__Info__StatValue}>{data.stats.views}</Text>
             </View>
             <View style={styles.ProductInfoView__ContentContainer__Info__Description}>
               <Text style={{color: Color.DarkerGrey}}>{data.terms}</Text>
@@ -287,5 +332,12 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: 'red',
     padding: 10,
+    marginTop: 10,
+  },
+  ProductInfoView__ContentContainer__Info__StatIcon: {
+    marginLeft: 10,
+  },
+  ProductInfoView__ContentContainer__Info__StatValue: {
+    marginLeft: 5,
   },
 });

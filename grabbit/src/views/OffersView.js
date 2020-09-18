@@ -1,10 +1,11 @@
 import React from 'react';
 import {StyleSheet, Text, View, FlatList, Image, TouchableOpacity} from 'react-native';
 
-import {FakeImage, Color, Font} from 'grabbit/src/const';
-
-import {BasicButton} from 'grabbit/src/components/buttons';
 import {Actions} from 'react-native-router-flux';
+
+import {FakeImage, Color, Font} from 'grabbit/src/const';
+import {BasicButton} from 'grabbit/src/components/buttons';
+import ViewOfferDetailsModal from 'grabbit/src/components/modals/ViewOfferDetails';
 
 const data = [
   {
@@ -164,21 +165,28 @@ class FlatListRow extends React.Component {
 }
 
 export default class OffersView extends React.Component {
-  _renderItem({item, index}) {
-    return (
-      <TouchableOpacity onPress={() => Actions.productInfo()}>
-        <FlatListRow data={item} />
-      </TouchableOpacity>
-    );
+  constructor(props) {
+    super(props);
+    this.state = {};
+
+    this.viewOfferDetailsModal = React.createRef();
   }
 
   render() {
+    const modal = <ViewOfferDetailsModal ref={this.viewOfferDetailsModal} />;
     return (
       <View style={styles.OffersView}>
+        {modal}
         <FlatList
           style={styles.OffersView__FlatList}
           data={data}
-          renderItem={this._renderItem}
+          renderItem={({item, index}) => {
+            return (
+              <TouchableOpacity onPress={() => this.viewOfferDetailsModal.current.show()}>
+                <FlatListRow data={item} />
+              </TouchableOpacity>
+            );
+          }}
           keyExtractor={(_item, index) => index.toString()}
         />
       </View>
