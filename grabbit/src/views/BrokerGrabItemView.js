@@ -30,7 +30,6 @@ export default class BrokerGrabItemView extends React.Component {
           <View style={styles.GrabItem__ContentContainer__Sectional}>
             <Text
               style={{
-                marginBottom: 10,
                 fontSize: 18,
                 color: Color.Pink2,
                 fontWeight: 'bold',
@@ -53,10 +52,15 @@ export default class BrokerGrabItemView extends React.Component {
               </View>
             </View>
           </View>
+          <View
+            style={{
+              borderLeftWidth: 1,
+              borderLeftColor: Color.LightGrey,
+              height: 50,
+            }}></View>
           <View style={styles.GrabItem__ContentContainer__Sectional}>
             <Text
               style={{
-                marginBottom: 10,
                 fontSize: 18,
                 color: Color.Pink2,
                 fontWeight: 'bold',
@@ -79,6 +83,12 @@ export default class BrokerGrabItemView extends React.Component {
               </View>
             </View>
           </View>
+          <View
+            style={{
+              borderLeftWidth: 1,
+              borderLeftColor: Color.LightGrey,
+              height: 50,
+            }}></View>
           <View style={styles.GrabItem__ContentContainer__Sectional}>
             <Text
               style={{
@@ -90,49 +100,67 @@ export default class BrokerGrabItemView extends React.Component {
             </Text>
             <View style={styles.GrabItem__ContentContainer__Sectional__ProductInfo}>
               <View
-                style={{
-                  // borderWidth: 1,
-                  // borderColor: 'red',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Icon name={'truck'} size={30} color={Color.DarkerLightGrey} />
-              </View>
-              <View style={styles.GrabItem__ContentContainer__Sectional__Text}>
-                <Text
+                style={
+                  {
+                    // borderWidth: 1,
+                    // borderColor: 'purple'
+                  }
+                }>
+                <View
                   style={{
-                    fontWeight: 'bold',
-                    marginBottom: 7,
-                    color: Color.DarkerLightGrey,
+                    // borderWidth: 1,
+                    // borderColor: 'red',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                   }}>
-                  {'Expires On'}
-                </Text>
-                <Text
-                  style={{
-                    fontWeight: 'bold',
-                    marginBottom: 7,
-                  }}>
-                  {data.product.expiry}
-                </Text>
-                <Text
-                  style={{
-                    fontWeight: 'bold',
-                    color: Color.DarkerLightGrey,
-                    marginBottom: 7,
-                  }}>
-                  {'Expected Delivery'}
-                </Text>
-                <Text
-                  style={{
-                    fontWeight: 'bold',
-                    marginBottom: 7,
-                  }}>
-                  {data.product.delivery_estimate}
-                </Text>
+                  <Icon name={'truck'} size={30} color={Color.DarkerLightGrey} />
+                </View>
+                <View style={styles.GrabItem__ContentContainer__Sectional__Text}>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      marginBottom: 7,
+                      color: Color.DarkerLightGrey,
+                      textAlign: 'center',
+                    }}>
+                    {'Expires On'}
+                  </Text>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      marginBottom: 7,
+                      textAlign: 'center',
+                    }}>
+                    {data.product.expiry}
+                  </Text>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      color: Color.DarkerLightGrey,
+                      marginBottom: 7,
+                      textAlign: 'center',
+                    }}>
+                    {'Expected Delivery'}
+                  </Text>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      marginBottom: 7,
+                      textAlign: 'center',
+                    }}>
+                    {data.product.delivery_estimate}
+                  </Text>
+                </View>
               </View>
             </View>
           </View>
-          <View style={styles.GrabItem__ContentContainer__Sectional_Terms}>
+          <View
+            style={{
+              borderLeftWidth: 1,
+              borderLeftColor: Color.LightGrey,
+              height: 50,
+            }}></View>
+          <View style={styles.GrabItem__ContentContainer__Sectional__Terms}>
             <View style={styles.GrabItem__ContentContainer__Sectional__Terms}>
               <Text
                 style={{
@@ -153,6 +181,12 @@ export default class BrokerGrabItemView extends React.Component {
               </Text>
             </View>
           </View>
+          <View
+            style={{
+              borderLeftWidth: 1,
+              borderLeftColor: Color.LightGrey,
+              height: 50,
+            }}></View>
           <View style={styles.GrabItem__ContentContainer__Sectional}>
             <Text
               style={{
@@ -179,6 +213,12 @@ export default class BrokerGrabItemView extends React.Component {
               </View>
             </View>
           </View>
+          <View
+            style={{
+              borderLeftWidth: 1,
+              borderLeftColor: Color.LightGrey,
+              height: 50,
+            }}></View>
           <BasicButton
             title="Grabbit"
             buttonStyle={{
@@ -187,13 +227,12 @@ export default class BrokerGrabItemView extends React.Component {
               justifyContent: 'center',
               borderColor: Color.Pink2,
               borderWidth: 1,
-              backgroundColor: Color.White,
+              backgroundColor: Color.Pink2,
               alignItems: 'center',
               borderRadius: 40,
-              marginTop: 30,
             }}
             titleStyle={{
-              color: Color.Pink2,
+              color: Color.White,
               fontWeight: 'bold',
             }}
             onPress={() => {
@@ -215,7 +254,6 @@ export default class BrokerGrabItemView extends React.Component {
               );
             }}
           />
-
           <BasicButton
             title="Not Now"
             buttonStyle={{
@@ -224,13 +262,13 @@ export default class BrokerGrabItemView extends React.Component {
               justifyContent: 'center',
               borderColor: Color.Pink2,
               borderWidth: 1,
-              backgroundColor: Color.White,
+              backgroundColor: Color.Pink2,
               alignItems: 'center',
               borderRadius: 40,
               marginTop: 10,
             }}
             titleStyle={{
-              color: Color.Pink2,
+              color: Color.White,
               fontWeight: 'bold',
             }}
             onPress={() => Actions.matches()}
@@ -254,16 +292,17 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   GrabItem__ContentContainer__Sectional: {
-    // borderWidth: 1,
-    // borderColor: 'green',
+    borderWidth: 1,
+    borderColor: Color.LightGrey,
+    borderRadius: 10,
     minWidth: '95%',
-    marginTop: 20,
+    alignItems: 'center',
+    paddingTop: 10,
     justifyContent: 'center',
     // borderBottomColor: Color.LightGrey,
     // borderBottomWidth: 1,
-    borderTopColor: Color.LightGrey,
-    borderTopWidth: 1,
-    padding: 10,
+    // borderTopColor: Color.LightGrey,
+    // borderTopWidth: 1,
   },
   GrabItem__ContentContainer__Sectional_Terms: {
     // borderWidth: 1,
@@ -275,6 +314,7 @@ const styles = StyleSheet.create({
     // borderTopColor: Color.LightGrey,
     // borderTopWidth: 1,
     padding: 10,
+    borderRadius: 10,
   },
   GrabItem__ContentContainer__Sectional__Image: {
     height: 75,
@@ -285,15 +325,14 @@ const styles = StyleSheet.create({
   GrabItem__ContentContainer__Sectional__Text: {
     // borderWidth: 1,
     // borderColor: 'red',
-    width: 250,
+    width: 200,
     padding: 10,
-    marginLeft: 20,
   },
   GrabItem__ContentContainer__Sectional__ProductInfo: {
     // borderWidth: 1,
     // borderColor: 'blue',
-    width: 350,
-    marginLeft: 20,
+    width: 300,
+    marginTop: 20,
     flexDirection: 'row',
     justifyContent: 'center',
   },

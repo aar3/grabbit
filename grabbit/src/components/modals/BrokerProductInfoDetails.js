@@ -1,29 +1,31 @@
 import React from 'react';
 import {View, Modal, TouchableOpacity, Text, Image, StyleSheet, FlatList} from 'react-native';
 
-import {Color} from 'grabbit/src/const';
+import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
+
+import {Color} from 'grabbit/src/const';
 
 const detailSelections = [
   {
     id: '0',
     title: 'Leave Feedback',
-    onPress: () => console.log('Feedback left'),
+    onPress: () => Actions.feedback(),
   },
   {
     id: '1',
     title: 'Report a problem with this Product',
-    onPress: () => console.log('Product problem reported'),
+    onPress: () => Actions.feedback(),
   },
   {
     id: '2',
     title: 'Report a problem with this Merchant',
-    onPress: () => console.log('Merchant problem reported'),
+    onPress: () => Actions.feedback(),
   },
   {
     id: '3',
     title: 'Report another problem',
-    onPress: () => console.log('Another problem reported'),
+    onPress: () => Actions.feedback(),
   },
 ];
 
@@ -31,12 +33,10 @@ class DetailsItem extends React.Component {
   render() {
     const {data} = this.props;
     return (
-      <TouchableOpacity onPress={data.onPress}>
-        <View style={styles.DetailsItem}>
-          <Text>{data.title}</Text>
-          <Icon style={{position: 'absolute', right: 10}} name="chevron-right" size={15} color={Color.GreyText} />
-        </View>
-      </TouchableOpacity>
+      <View style={styles.DetailsItem}>
+        <Text>{data.title}</Text>
+        <Icon style={{position: 'absolute', right: 10}} name="chevron-right" size={15} color={Color.GreyText} />
+      </View>
     );
   }
 }
@@ -47,6 +47,8 @@ export default class M extends React.Component {
     this.state = {
       showModal: false,
     };
+
+    this._renderDetailItem = this._renderDetailItem.bind(this);
   }
 
   show() {
@@ -58,7 +60,15 @@ export default class M extends React.Component {
   }
 
   _renderDetailItem({item, index}) {
-    return <DetailsItem data={item} />;
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          this.hide();
+          Actions.feedback();
+        }}>
+        <DetailsItem data={item} />
+      </TouchableOpacity>
+    );
   }
 
   render() {
@@ -105,12 +115,11 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     // alignItems: 'center',
     marginTop: 300,
-    marginBottom: 300,
+    marginBottom: 315,
     marginLeft: 50,
     marginRight: 50,
     backgroundColor: 'white',
     borderRadius: 5,
-    padding: 10,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -125,10 +134,12 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: 'green',
     width: '100%',
+    padding: 5,
   },
   ProductInfoView__ModalContainer__ContentContainer: {
     // borderWidth: 1,
-    // borderColor: 'red',
+    // borderColor: 'green',
+    marginTop: -5,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -163,7 +174,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     alignItems: 'center',
     height: 50,
-    borderBottomColor: Color.LightGrey,
-    borderBottomWidth: 1,
+    borderTopColor: Color.LightGrey,
+    borderTopWidth: 1,
   },
 });

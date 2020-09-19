@@ -1,8 +1,10 @@
 import React from 'react';
 import {View, Modal, TouchableOpacity, Text, Image, StyleSheet, Alert, FlatList} from 'react-native';
 
-import {Color} from 'grabbit/src/const';
 import Icon from 'react-native-vector-icons/Feather';
+import {Actions} from 'react-native-router-flux';
+
+import {Color} from 'grabbit/src/const';
 
 const detailSelections = [
   {
@@ -30,12 +32,12 @@ const detailSelections = [
   {
     id: '1',
     title: 'Report a problem with this Product',
-    onPress: () => console.log('Product problem reported'),
+    onPress: () => Actions.feedback(),
   },
   {
     id: '3',
     title: 'Report another problem',
-    onPress: () => console.log('Another problem reported'),
+    onPress: () => Actions.feedback(),
   },
 ];
 

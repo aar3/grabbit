@@ -28,9 +28,11 @@ import MerchantEntryView from 'grabbit/src/views/MerchantEntryView';
 
 import GeneralInfoView from 'grabbit/src/views/GeneralInfoView';
 import AboutGrabbitView from 'grabbit/src/views/AboutGrabbitView';
+import TermsAndConditionsView from 'grabbit/src/views/TermsAndConditionsView';
 import PrivacyPolicyView from 'grabbit/src/views/PrivacyPolicyView';
 import ChatView from 'grabbit/src/views/ChatView';
 import ConversationsView from 'grabbit/src/views/ConversationsView';
+import FeedbackView from 'grabbit/src/views/FeedbackView';
 
 import SplashView from 'grabbit/src/views/SplashView';
 
@@ -63,9 +65,13 @@ module.exports = {
   GeneralInfoView,
   AboutGrabbitView,
   NotificationsView,
-  PrivacyPolicyView,
   ChatView,
   ConversationsView,
+
+  FeedbackView,
+  PrivacyPolicyView,
+  TermsAndConditionsView,
+  AboutGrabbitView,
 
   SplashView,
 };

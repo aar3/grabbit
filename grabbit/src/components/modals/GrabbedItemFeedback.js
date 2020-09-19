@@ -7,11 +7,18 @@ import {Actions} from 'react-native-router-flux';
 import {Color, FakeImage} from 'grabbit/src/const';
 import {IconLeftButton} from 'grabbit/src/components/buttons';
 
-const product = {
-  id: '1',
-  name: 'Depends Diapers 4-pack Green',
-  description:
-    'Donec dignissim ligula non dolor euismod tincidunt. Etiam pulvinar interdum ligula, vitae luctus odio rutrum vel. Mauris ultricies augue erat, sed luctus ipsum dictum non. Sed eu tincidunt ligula, ac maximus sapien.',
+const user = {
+  name: 'Rashad Alston',
+  bio: 'It is what it is.',
+  image_url: FakeImage,
+};
+
+const grab = {
+  grabbed_on: '09/12/2021',
+  expected_delivery: '10/10/2021',
+  match: {
+    matched_on: '01/20/2020',
+  },
 };
 
 export default class M extends React.Component {
@@ -68,24 +75,40 @@ export default class M extends React.Component {
                     fontWeight: 'bold',
                     color: Color.Pink2,
                   }}>
-                  {product.name}
+                  {user.name}
                 </Text>
               </View>
               <View
                 style={{
-                  // borderWidth: 1,
-                  // borderColor: 'orange',
+                  //   borderWidth: 1,
+                  //   borderColor: 'orange',
                   padding: 5,
-                  height: 150,
                   justifyContent: 'center',
-                  alignItems: 'center',
+                  //   alignItems: 'center',
                 }}>
                 <Text
                   style={{
-                    color: Color.GreyText,
+                    color: Color.Black,
                     fontSize: 12,
+                    marginBottom: 5,
                   }}>
-                  {product.description}
+                  {'Matched On: '} {grab.match.matched_on}
+                </Text>
+                <Text
+                  style={{
+                    color: Color.Black,
+                    fontSize: 12,
+                    marginBottom: 5,
+                  }}>
+                  {'Grabbed On: '} {grab.grabbed_on}
+                </Text>
+                <Text
+                  style={{
+                    color: Color.Black,
+                    fontSize: 12,
+                    marginBottom: 5,
+                  }}>
+                  {'Expected Delivery: '} {grab.expected_delivery}
                 </Text>
 
                 <View
@@ -95,9 +118,9 @@ export default class M extends React.Component {
                     flexDirection: 'row',
                   }}>
                   <IconLeftButton
-                    title="View"
+                    title="Leave Feedback"
                     buttonStyle={{
-                      width: 120,
+                      width: 200,
                       height: 40,
                       borderColor: Color.Pink2,
                       borderWidth: 1,
@@ -110,7 +133,7 @@ export default class M extends React.Component {
                       marginBottom: 10,
                     }}
                     iconColor={Color.White}
-                    iconName={'tv'}
+                    iconName={'smile'}
                     titleStyle={{
                       color: Color.White,
                       fontWeight: 'bold',
@@ -119,51 +142,6 @@ export default class M extends React.Component {
                     onPress={() => {
                       this.hide();
                       Actions.productInfo();
-                    }}
-                  />
-                  <IconLeftButton
-                    title="Accept"
-                    buttonStyle={{
-                      width: 120,
-                      height: 40,
-                      marginLeft: 30,
-                      borderColor: Color.Pink2,
-                      borderWidth: 1,
-                      backgroundColor: Color.Pink2,
-                      alignItems: 'center',
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      borderRadius: 40,
-                      marginTop: 20,
-                      marginBottom: 10,
-                    }}
-                    iconColor={Color.White}
-                    iconName={'plus'}
-                    titleStyle={{
-                      color: Color.White,
-                      fontWeight: 'bold',
-                      marginLeft: 10,
-                    }}
-                    onPress={() => {
-                      Alert.alert(
-                        'Accept Offer?',
-                        'Are you sure you want to accept this offer?',
-                        [
-                          {
-                            text: 'Yes',
-                            onPress: () => {
-                              this.hide();
-                              Actions.grabItem();
-                            },
-                          },
-                          {
-                            text: 'No',
-                            onPress: () => console.log('Cancel Pressed'),
-                            style: 'cancel',
-                          },
-                        ],
-                        {cancelable: false},
-                      );
                     }}
                   />
                 </View>
@@ -182,7 +160,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     // alignItems: 'center',
     marginTop: 250,
-    marginBottom: 315,
+    marginBottom: 325,
     marginLeft: 50,
     marginRight: 50,
     backgroundColor: 'white',

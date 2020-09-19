@@ -34,6 +34,10 @@ import {
   ChatView,
   ConversationsView,
   BrokerSuccessfulGrabView,
+  FeedbackView,
+  PrivacyPolicyView,
+  TermsAndConditionsView,
+  AboutGrabbitView,
 } from 'grabbit/src/views';
 import {TabIconSize, Color, UserType} from 'grabbit/src/const';
 import BasicTopNavigationBar from 'grabbit/src/components/navigation/BasicTopNavigation';
@@ -257,14 +261,14 @@ class AppRouter extends React.Component {
             hideNavBar={false}
             renderBackButton={() => <View />}
           />
-          <Scene
+          {/* <Scene
             key="brokerFeedback"
             navBar={BasicTopNavigationBar}
             component={BrokerFeedbackView}
             title={null}
             hideNavBar={false}
             renderBackButton={() => <View />}
-          />
+          /> */}
           <Scene
             key="generalInfo"
             navBar={BackOnlyTopNavigationBar}
@@ -289,10 +293,42 @@ class AppRouter extends React.Component {
             hideNavBar={false}
             renderBackButton={() => <View />}
           />
-          <Scene
+          {/* <Scene
             key="brokerSuccessfulGrab"
             navBar={BasicTopNavigationBar}
             component={BrokerSuccessfulGrabView}
+            title={null}
+            hideNavBar={false}
+            renderBackButton={() => <View />}
+          /> */}
+          <Scene
+            key="feedback"
+            navBar={BackOnlyTopNavigationBar}
+            component={FeedbackView}
+            title={null}
+            hideNavBar={false}
+            renderBackButton={() => <View />}
+          />
+          <Scene
+            key="termsAndConditions"
+            navBar={BackOnlyTopNavigationBar}
+            component={TermsAndConditionsView}
+            title={null}
+            hideNavBar={false}
+            renderBackButton={() => <View />}
+          />
+          <Scene
+            key="privacyPolicy"
+            navBar={BackOnlyTopNavigationBar}
+            component={PrivacyPolicyView}
+            title={null}
+            hideNavBar={false}
+            renderBackButton={() => <View />}
+          />
+          <Scene
+            key="aboutGrabbit"
+            navBar={BackOnlyTopNavigationBar}
+            component={AboutGrabbitView}
             title={null}
             hideNavBar={false}
             renderBackButton={() => <View />}

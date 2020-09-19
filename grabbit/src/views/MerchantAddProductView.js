@@ -9,6 +9,7 @@ import DatePicker from 'react-native-datepicker';
 import {Color, FakeImage} from 'grabbit/src/const';
 import {BasicTextInput, BasicTextAreaInput} from 'grabbit/src/components/text-input';
 import {BasicButton} from 'grabbit/src/components/buttons';
+import {Actions} from 'react-native-router-flux';
 
 const options = {
   title: 'Choose Image',
@@ -210,6 +211,7 @@ export default class MerchantAddProductView extends React.Component {
               color: Color.Pink2,
               fontWeight: 'bold',
             }}
+            onPress={() => Actions.merchantProducts()}
           />
         </View>
       </ScrollView>

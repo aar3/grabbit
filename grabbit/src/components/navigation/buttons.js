@@ -18,7 +18,7 @@ export const BackButton = () => {
 
 export const AccountSettingsButton = () => {
   return (
-    <TouchableOpacity onPress={() => {}}>
+    <TouchableOpacity onPress={() => Actions.generalInfo()}>
       <View style={styles.BaseTopNavigationBar__Button}>
         <Icon name={'settings'} size={TabIconSize} color={Color.GreyText} />
       </View>

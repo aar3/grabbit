@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image, KeyboardAvoidingView, ScrollView} from 'react-native';
 
-import {FakeImage, Color, Font} from 'grabbit/src/const';
+import {FakeImage, Color} from 'grabbit/src/const';
 import {BasicTextInput} from 'grabbit/src/components/text-input';
 import {BasicButton} from 'grabbit/src/components/buttons';
 
