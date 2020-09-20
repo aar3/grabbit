@@ -59,7 +59,7 @@ class BrokerEntryView extends React.Component {
                 titleStyle={styles.BrokerEntryView__Actions__Container__UserTypeButton__Title__Broker}
                 title="Login"
                 onPress={() => {
-                  return Actions.notifications();
+                  return Actions.brokerLogin();
                 }}
               />
 

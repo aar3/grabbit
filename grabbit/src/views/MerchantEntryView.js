@@ -59,7 +59,7 @@ class MerchantEntryView extends React.Component {
                 titleStyle={styles.MerchantEntryView__Actions__Container__UserTypeButton__Title__Broker}
                 title="Login"
                 onPress={() => {
-                  return Actions.notifications();
+                  return Actions.merchantLogin();
                 }}
               />
 

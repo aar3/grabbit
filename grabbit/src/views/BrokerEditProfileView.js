@@ -44,14 +44,16 @@ export default class BrokerEditProfileView extends React.Component {
                     width: 300,
                     height: 50,
                     justifyContent: 'center',
-                    backgroundColor: Color.Pink2,
+                    backgroundColor: Color.White,
+                    borderColor: Color.Pink2,
+                    borderWidth: 1,
                     alignItems: 'center',
                     borderRadius: 40,
                     marginTop: 10,
                     marginBottom: 10,
                   }}
                   titleStyle={{
-                    color: Color.White,
+                    color: Color.Pink2,
                     fontWeight: 'bold',
                   }}
                   onPress={() => {}}

@@ -59,7 +59,7 @@ const BottomTabNavigation = ({userType}) => {
         activeBackgroundColor="white"
         lazy>
         <Scene
-          key="brokerDiscoverscover"
+          key="brokerDiscover"
           component={BrokerDiscoverView}
           navBar={MerchantExploreTopNavigation}
           title="Discover"
