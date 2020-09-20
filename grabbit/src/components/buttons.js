@@ -32,12 +32,7 @@ export class IconLeftButton extends React.Component {
     return (
       <TouchableOpacity onPress={onPress || this._baseOnPress}>
         <View style={buttonStyle || styles.IconLeftButton}>
-          <Icon
-            style={{marginLeft: 20}}
-            name={iconName || 'align-justify'}
-            size={20}
-            color={iconColor || Color.Pink2}
-          />
+          <Icon name={iconName || 'align-justify'} size={15} color={iconColor || Color.Pink2} />
           <Text style={titleStyle}>{title || 'Basic Button'}</Text>
         </View>
       </TouchableOpacity>

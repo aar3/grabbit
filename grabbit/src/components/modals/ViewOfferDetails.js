@@ -105,6 +105,7 @@ export default class M extends React.Component {
                       alignItems: 'center',
                       flexDirection: 'row',
                       alignItems: 'center',
+                      justifyContent: 'center',
                       borderRadius: 40,
                       marginTop: 20,
                       marginBottom: 10,
@@ -114,7 +115,6 @@ export default class M extends React.Component {
                     titleStyle={{
                       color: Color.White,
                       fontWeight: 'bold',
-                      marginLeft: 10,
                     }}
                     onPress={() => {
                       this.hide();
@@ -132,6 +132,7 @@ export default class M extends React.Component {
                       backgroundColor: Color.Pink2,
                       alignItems: 'center',
                       flexDirection: 'row',
+                      justifyContent: 'center',
                       alignItems: 'center',
                       borderRadius: 40,
                       marginTop: 20,
@@ -142,7 +143,6 @@ export default class M extends React.Component {
                     titleStyle={{
                       color: Color.White,
                       fontWeight: 'bold',
-                      marginLeft: 10,
                     }}
                     onPress={() => {
                       Alert.alert(

@@ -1,17 +1,17 @@
 import React from 'react';
-import {StyleSheet, Image, Text, View, KeyboardAvoidingView} from 'react-native';
+import {StyleSheet, Image, View, KeyboardAvoidingView} from 'react-native';
 
-import {BasicTextInput} from 'grabbit/src/components/text-input';
+import {BasicTextInput, PasswordInput} from 'grabbit/src/components/text-input';
 import {BasicButton} from 'grabbit/src/components/buttons';
 import {Actions} from 'react-native-router-flux';
 
-import {Color, Font} from 'grabbit/src/const';
+import {Color} from 'grabbit/src/const';
 
 export default class BrokerLoginView extends React.Component {
   render() {
     return (
-      <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} style={styles.container}>
-        <View style={styles.container}>
+      <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} style={styles.BrokerLoginView}>
+        <View style={styles.BrokerLoginView}>
           <View style={styles.LogoContainer}>
             <Image
               source={require('../../assets/imgs/Grabbit_Gradient_G_300x300.png')}
@@ -19,7 +19,7 @@ export default class BrokerLoginView extends React.Component {
             />
           </View>
           <BasicTextInput label="Phone" />
-          <BasicTextInput label="Password" />
+          <PasswordInput label="Password" />
 
           <BasicButton
             title="Login"
@@ -48,7 +48,7 @@ export default class BrokerLoginView extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  BrokerLoginView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

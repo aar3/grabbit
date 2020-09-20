@@ -11,6 +11,16 @@ const defaultState = {
     currentScene: null,
   },
   currentSceneKey: null,
+  session: {},
+  chat: {
+    hasNewMessage: true,
+  },
+  notifications: {
+    hasNewNotification: true,
+  },
+
+  // -----------------------
+
   broker: {
     session: {
       user: null,
@@ -51,11 +61,11 @@ const defaultState = {
       acceptingFrom: null,
     },
   },
-  notifications: {
-    pending: false,
-    error: null,
-    content: [],
-  },
+  // notifications: {
+  //   pending: false,
+  //   error: null,
+  //   content: [],
+  // },
 };
 
 export const postUserAuth = ({options}) => {

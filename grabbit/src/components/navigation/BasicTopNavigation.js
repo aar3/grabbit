@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 
 import {Color} from 'grabbit/src/const';
@@ -48,7 +48,7 @@ export const styles = StyleSheet.create({
     height: 40,
     width: 40,
     position: 'absolute',
-    left: 10,
+    left: 20,
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
@@ -72,7 +72,7 @@ export const styles = StyleSheet.create({
     borderRadius: 50,
     height: 40,
     width: 40,
-    left: 320,
+    left: 310,
     alignItems: 'center',
     justifyContent: 'center',
   },

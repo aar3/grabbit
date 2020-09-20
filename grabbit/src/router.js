@@ -44,9 +44,11 @@ import BasicTopNavigationBar from 'grabbit/src/components/navigation/BasicTopNav
 import BackOnlyTopNavigationBar from 'grabbit/src/components/navigation/BackOnlyTopNavigation';
 import AccountSettingsTopNavigationBar from 'grabbit/src/components/navigation/AccountSettingsTopNavigation';
 import ActivityTopNavigationBar from 'grabbit/src/components/navigation/ActivityTopNavigation';
-import MerchantExploreTopNavigation from 'grabbit/src/components/navigation/MerchantExploreTopNavigation';
+import DiscoverTopNvigationBar from 'grabbit/src/components/navigation/DiscoverTopNavigation';
+import ImageAndBackTopNavigationBar from 'grabbit/src/components/navigation/ImageAndBackTopNavigation';
 
-const BottomTabNavigation = ({userType}) => {
+const BottomTabNavigation = ({userType, hasNewNotification}) => {
+  console.log(hasNewNotification);
   if (userType === UserType.Broker) {
     return (
       <Tabs
@@ -61,7 +63,7 @@ const BottomTabNavigation = ({userType}) => {
         <Scene
           key="brokerDiscover"
           component={BrokerDiscoverView}
-          navBar={MerchantExploreTopNavigation}
+          navBar={DiscoverTopNvigationBar}
           title="Discover"
           hideNavBar={false}
           icon={({focused}) => (
@@ -85,7 +87,11 @@ const BottomTabNavigation = ({userType}) => {
           title="Notifications"
           hideNavBar={false}
           icon={({focused}) => (
-            <Icon name={'message-square'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
+            <Icon
+              name={'message-square'}
+              size={TabIconSize}
+              color={hasNewNotification ? Color.Pink2 : focused ? Color.Black : Color.LightGrey}
+            />
           )}
         />
         <Scene
@@ -113,7 +119,7 @@ const BottomTabNavigation = ({userType}) => {
       <Scene
         key="merchantDashboard"
         component={MerchantExploreView}
-        navBar={MerchantExploreTopNavigation}
+        navBar={DiscoverTopNvigationBar}
         title="Merchant Dashboard"
         hideNavBar={false}
         icon={({focused}) => (
@@ -145,7 +151,11 @@ const BottomTabNavigation = ({userType}) => {
         title="Notifications"
         hideNavBar={false}
         icon={({focused}) => (
-          <Icon name={'message-square'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
+          <Icon
+            name={'message-square'}
+            size={TabIconSize}
+            color={hasNewNotification ? Color.Pink2 : focused ? Color.Black : Color.LightGrey}
+          />
         )}
       />
       <Scene
@@ -162,7 +172,7 @@ const BottomTabNavigation = ({userType}) => {
 
 class AppRouter extends React.Component {
   render() {
-    const {userType} = this.props;
+    const {userType, hasNewNotification} = this.props;
     return (
       <Router>
         <Stack key="root" transitionConfig={transitionConfig}>
@@ -279,7 +289,7 @@ class AppRouter extends React.Component {
           />
           <Scene
             key="chat"
-            navBar={BackOnlyTopNavigationBar}
+            navBar={ImageAndBackTopNavigationBar}
             component={ChatView}
             title={null}
             hideNavBar={false}
@@ -333,7 +343,7 @@ class AppRouter extends React.Component {
             hideNavBar={false}
             renderBackButton={() => <View />}
           />
-          {BottomTabNavigation({userType})}
+          {BottomTabNavigation({userType, hasNewNotification})}
         </Stack>
       </Router>
     );
@@ -403,9 +413,10 @@ const transitionConfig = () => ({
 });
 
 const mapStateToProps = (state) => {
-  const {userType} = state;
+  const {userType, notifications} = state;
   return {
     userType,
+    hasNewNotification: notifications.hasNewNotification,
   };
 };
 

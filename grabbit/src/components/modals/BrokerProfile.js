@@ -146,7 +146,6 @@ export default class M extends React.Component {
                   titleStyle={{
                     color: Color.White,
                     fontWeight: 'bold',
-                    marginLeft: 10,
                   }}
                   onPress={() => {
                     this.hide();

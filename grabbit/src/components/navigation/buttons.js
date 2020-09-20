@@ -26,6 +26,17 @@ export const AccountSettingsButton = () => {
   );
 };
 
+export const ImageButton = () => {
+  const {onPress, imageURI} = this.props;
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <View style={styles.FlatListRow__Container__Image}>
+        <Image source={{uri: imageURI}} style={{height: 40, width: 40}} />
+      </View>
+    </TouchableOpacity>
+  );
+};
+
 const styles = StyleSheet.create({
   BaseTopNavigationBar__Button: {
     // borderWidth: 1,
@@ -34,5 +45,6 @@ const styles = StyleSheet.create({
     width: 40,
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
   },
 });

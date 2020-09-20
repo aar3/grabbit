@@ -127,6 +127,7 @@ export default class M extends React.Component {
                       backgroundColor: Color.Pink2,
                       alignItems: 'center',
                       flexDirection: 'row',
+                      justifyContent: 'center',
                       alignItems: 'center',
                       borderRadius: 40,
                       marginTop: 20,
@@ -137,11 +138,10 @@ export default class M extends React.Component {
                     titleStyle={{
                       color: Color.White,
                       fontWeight: 'bold',
-                      marginLeft: 10,
                     }}
                     onPress={() => {
                       this.hide();
-                      Actions.productInfo();
+                      Actions.feedback();
                     }}
                   />
                 </View>

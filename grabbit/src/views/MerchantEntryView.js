@@ -165,6 +165,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     textAlign: 'center',
-    marginBottom: 200,
+    marginBottom: 160,
   },
 });

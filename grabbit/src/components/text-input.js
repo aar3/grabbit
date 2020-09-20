@@ -28,6 +28,31 @@ export class BasicTextInput extends React.Component {
   }
 }
 
+export class PasswordInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      text: '',
+    };
+  }
+
+  render() {
+    let {value, label, labelStyle, inputStyle} = this.props;
+    value = this.state.text === '' && value ? value : this.state.text;
+    return (
+      <View style={styles.TextInput__Container}>
+        <Text style={labelStyle || styles.TextInput__Label}>{label || 'Unlabeled'}</Text>
+        <TextInput
+          secureTextEntry={true}
+          value={value}
+          onChangeText={(text) => this.setState({text})}
+          style={inputStyle || styles.TextInput__Container__Input}
+        />
+      </View>
+    );
+  }
+}
+
 export class SearchTextInput extends React.Component {
   constructor(props) {
     super(props);
