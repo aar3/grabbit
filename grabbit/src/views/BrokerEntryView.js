@@ -4,7 +4,7 @@ import {StyleSheet, Text, View, Image, ImageBackground} from 'react-native';
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 
-import ACTIONS from 'grabbit/src/actions';
+import REDUX_ACTIONS from 'grabbit/src/actions';
 import {BasicButton} from 'grabbit/src/components/buttons';
 import {Color, UserType} from 'grabbit/src/const';
 
@@ -83,7 +83,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setUserType: ({userType}) => {
       return dispatch({
-        type: ACTIONS.SET_USER_TYPE,
+        type: REDUX_ACTIONS.SET_USER_TYPE,
         userType,
       });
     },

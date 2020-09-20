@@ -2,7 +2,7 @@ import {Alert} from 'react-native';
 
 import {Actions} from 'react-native-router-flux';
 
-import ACTIONS from 'grabbit/src/actions';
+import REDUX_ACTIONS from 'grabbit/src/actions';
 import {httpRequestAsync} from 'grabbit/src/utils';
 
 const defaultState = {
@@ -10,6 +10,7 @@ const defaultState = {
   navigation: {
     currentScene: null,
   },
+  currentSceneKey: null,
   broker: {
     session: {
       user: null,
@@ -60,7 +61,7 @@ const defaultState = {
 export const postUserAuth = ({options}) => {
   return async (dispatch) => {
     dispatch({
-      type: ACTIONS.SESSION_PENDING,
+      type: REDUX_ACTIONS.SESSION_PENDING,
       data: null,
       error: null,
       pending: true,
@@ -78,7 +79,7 @@ export const postUserAuth = ({options}) => {
               text: 'No',
               onPress: () => {
                 dispatch({
-                  type: ACTIONS.CREATE_ACCT_CANCELLED,
+                  type: REDUX_ACTIONS.CREATE_ACCT_CANCELLED,
                   user: null,
                   error: null,
                   pending: false,
@@ -98,7 +99,7 @@ export const postUserAuth = ({options}) => {
 
                 if (error) {
                   return dispatch({
-                    type: ACTIONS.SESSION_ERROR,
+                    type: REDUX_ACTIONS.SESSION_ERROR,
                     user: null,
                     error: {details: 'Something went wrong on our end'},
                     pending: false,
@@ -106,7 +107,7 @@ export const postUserAuth = ({options}) => {
                 }
 
                 dispatch({
-                  type: ACTIONS.SESSION_SUCCESS,
+                  type: REDUX_ACTIONS.SESSION_SUCCESS,
                   user: data,
                   error: null,
                   pending: false,
@@ -120,14 +121,14 @@ export const postUserAuth = ({options}) => {
         return;
       } else if (error.details.includes('401')) {
         return dispatch({
-          type: ACTIONS.SESSION_ERROR,
+          type: REDUX_ACTIONS.SESSION_ERROR,
           user: null,
           error: {details: 'Wrong password for that email'},
           pending: false,
         });
       } else {
         return dispatch({
-          type: ACTIONS.SESSION_ERROR,
+          type: REDUX_ACTIONS.SESSION_ERROR,
           user: null,
           error: {details: 'Something went wrong on our end'},
           pending: false,
@@ -136,7 +137,7 @@ export const postUserAuth = ({options}) => {
     }
 
     dispatch({
-      type: ACTIONS.SESSION_SUCCESS,
+      type: REDUX_ACTIONS.SESSION_SUCCESS,
       user: data,
       error: null,
       pending: false,
@@ -148,18 +149,19 @@ export const postUserAuth = ({options}) => {
 
 export default mainReducer = (state = defaultState, action) => {
   switch (action.type) {
-    case ACTIONS.SET_USER_TYPE: {
+    case REDUX_ACTIONS.SET_CURRENT_SCENE_KEY:
+    case REDUX_ACTIONS.SET_USER_TYPE: {
       return {...state, ...action};
     }
-    case ACTIONS.SESSION_PENDING:
-    case ACTIONS.SESSION_SUCCESS:
-    case ACTIONS.SESSION_ERROR:
-    case ACTIONS.CREATE_ACCT_CANCELLED:
+    case REDUX_ACTIONS.SESSION_PENDING:
+    case REDUX_ACTIONS.SESSION_SUCCESS:
+    case REDUX_ACTIONS.SESSION_ERROR:
+    case REDUX_ACTIONS.CREATE_ACCT_CANCELLED:
       return {
         ...state,
         session: {...state.session, ...action},
       };
-    case ACTIONS.CLEAR_CURRENT_TITLE:
+    case REDUX_ACTIONS.CLEAR_CURRENT_TITLE:
       return {
         ...state,
         input: {
@@ -167,17 +169,17 @@ export default mainReducer = (state = defaultState, action) => {
           error: null,
         },
       };
-    case ACTIONS.POST_TITLE_SUCCESS:
-    case ACTIONS.POST_TITLE_ERROR:
-    case ACTIONS.POST_TITLE_PENDING:
+    case REDUX_ACTIONS.POST_TITLE_SUCCESS:
+    case REDUX_ACTIONS.POST_TITLE_ERROR:
+    case REDUX_ACTIONS.POST_TITLE_PENDING:
       return {
         ...state,
         input: {...state.input, ...action},
       };
-    case ACTIONS.GET_USER_TITLE_HISTORY_PENDING:
-    case ACTIONS.GET_USER_TITLE_HISTORY_SUCCESS:
-    case ACTIONS.GET_USER_TITLE_HISTORY_ERROR:
-    case ACTIONS.SET_CURRENT_HISTORY_TITLE:
+    case REDUX_ACTIONS.GET_USER_TITLE_HISTORY_PENDING:
+    case REDUX_ACTIONS.GET_USER_TITLE_HISTORY_SUCCESS:
+    case REDUX_ACTIONS.GET_USER_TITLE_HISTORY_ERROR:
+    case REDUX_ACTIONS.SET_CURRENT_HISTORY_TITLE:
       return {
         ...state,
         history: {...state.history, ...action},

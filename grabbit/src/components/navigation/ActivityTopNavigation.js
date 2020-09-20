@@ -1,37 +1,71 @@
 import React from 'react';
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {connect} from 'react-redux';
 
+import {connect} from 'react-redux';
+import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
 
-import {Color} from 'grabbit/src/const';
-import {Actions} from 'react-native-router-flux';
+import {Color, UserType} from 'grabbit/src/const';
+import REDUX_ACTIONS from 'grabbit/src/actions';
 
 class ActivityTopNavigation extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  _deriveIconColor({sceneKey}) {
+    const {currentSceneKey} = this.props;
+    if (sceneKey === 'likedProducts|merchantProducts') {
+      if (currentSceneKey === 'likedProducts' || currentSceneKey === 'merchantProducts') {
+        return Color.Pink2;
+      }
+    }
+
+    return currentSceneKey === sceneKey ? Color.Pink2 : Color.LightGrey;
+  }
+
   render() {
-    const {user} = this.props;
-    // TODO: depends on which button is clicked, save that state in the reducer
-    // then give the buttons a color depending on which one is in the reducer
+    const {userType, setCurrentSceneKey} = this.props;
     return (
       <View style={styles.ActivityTopNavigation__ContentContainer}>
         <View style={styles.ActivityTopNavigation__ContentContainer__First}>
-          <TouchableOpacity onPress={() => Actions.likedProducts()}>
-            <Icon name="heart" size={20} color={Color.LightGrey} />
+          <TouchableOpacity
+            onPress={() => {
+              if (userType === UserType.Broker) {
+                setCurrentSceneKey({currentSceneKey: 'likedProducts'});
+                return Actions.likedProducts();
+              }
+              setCurrentSceneKey({currentSceneKey: 'merchantProducts'});
+              return Actions.merchantProducts();
+            }}>
+            <Icon name="heart" size={20} color={this._deriveIconColor({sceneKey: 'likedProducts|merchantProducts'})} />
           </TouchableOpacity>
         </View>
         <View style={styles.ActivityTopNavigation__ContentContainer__Second}>
-          <TouchableOpacity onPress={() => Actions.brokerMatches()}>
-            <Icon name="users" size={20} color={Color.LightGrey} />
+          <TouchableOpacity
+            onPress={() => {
+              setCurrentSceneKey({currentSceneKey: 'matches'});
+              return Actions.matches();
+            }}>
+            <Icon name="users" size={20} color={this._deriveIconColor({sceneKey: 'matches'})} />
           </TouchableOpacity>
         </View>
         <View style={styles.ActivityTopNavigation__ContentContainer__Third}>
-          <TouchableOpacity onPress={() => Actions.offers()}>
-            <Icon name="clock" size={20} color={Color.LightGrey} />
+          <TouchableOpacity
+            onPress={() => {
+              setCurrentSceneKey({currentSceneKey: 'offers'});
+              return Actions.offers();
+            }}>
+            <Icon name="clock" size={20} color={this._deriveIconColor({sceneKey: 'offers'})} />
           </TouchableOpacity>
         </View>
         <View style={styles.ActivityTopNavigation__ContentContainer__Fourth}>
-          <TouchableOpacity onPress={() => Actions.grabbed()}>
-            <Icon name="check-circle" size={20} color={Color.LightGrey} />
+          <TouchableOpacity
+            onPress={() => {
+              setCurrentSceneKey({currentSceneKey: 'grabbed'});
+              return Actions.grabbed();
+            }}>
+            <Icon name="check-circle" size={20} color={this._deriveIconColor({sceneKey: 'grabbed'})} />
           </TouchableOpacity>
         </View>
       </View>
@@ -39,17 +73,28 @@ class ActivityTopNavigation extends React.Component {
   }
 }
 
-export const mapStateToProps = (state) => {
-  const {session} = state;
+const mapDispatchToProps = (dispatch) => {
   return {
-    // user: session.user,
-    user: null,
+    setCurrentSceneKey: ({currentSceneKey}) => {
+      return dispatch({
+        type: REDUX_ACTIONS.SET_CURRENT_SCENE_KEY,
+        currentSceneKey,
+      });
+    },
   };
 };
 
-export default connect(mapStateToProps)(ActivityTopNavigation);
+const mapStateToProps = (state) => {
+  const {userType, currentSceneKey} = state;
+  return {
+    userType,
+    currentSceneKey,
+  };
+};
 
-export const styles = StyleSheet.create({
+export default connect(mapStateToProps, mapDispatchToProps)(ActivityTopNavigation);
+
+const styles = StyleSheet.create({
   ActivityTopNavigation__ContentContainer: {
     // borderWidth: 1,
     // borderColor: 'orange',

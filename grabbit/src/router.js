@@ -17,7 +17,7 @@ import {
   BrokerFurtherDetailsView,
   ProductInfoView,
   LikedProductsView,
-  BrokerMatchesView,
+  MatchesView,
   GrabbedView,
   MerchantSignupView,
   MerchantLoginView,
@@ -238,9 +238,9 @@ class AppRouter extends React.Component {
             renderBackButton={() => <View />}
           />
           <Scene
-            key="brokerMatches"
+            key="matches"
             navBar={ActivityTopNavigationBar}
-            component={BrokerMatchesView}
+            component={MatchesView}
             title={null}
             hideNavBar={false}
             renderBackButton={() => <View />}

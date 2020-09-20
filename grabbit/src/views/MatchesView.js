@@ -145,7 +145,7 @@ class FlatListRow extends React.Component {
   }
 }
 
-export default class BrokerMatchesView extends React.Component {
+export default class MatchesView extends React.Component {
   _renderItem({item, index}) {
     return (
       <TouchableOpacity onPress={() => Actions.grabItem()}>
@@ -158,7 +158,7 @@ export default class BrokerMatchesView extends React.Component {
     return (
       <View style={styles.container}>
         <FlatList
-          style={styles.BrokerMatchesView__FlatList}
+          style={styles.MatchesView__FlatList}
           data={data}
           renderItem={this._renderItem}
           keyExtractor={(_item, index) => index.toString()}
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     width: '70%',
     padding: 10,
   },
-  BrokerMatchesView__FlatList: {
+  MatchesView__FlatList: {
     width: '100%',
   },
 });

@@ -1,3 +1,4 @@
 export default {
   SET_USER_TYPE: 'SET_USER_TYPE',
+  SET_CURRENT_SCENE_KEY: 'SET_CURRENT_SCENE_KEY',
 };

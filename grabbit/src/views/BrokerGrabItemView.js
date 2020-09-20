@@ -262,13 +262,13 @@ export default class BrokerGrabItemView extends React.Component {
               justifyContent: 'center',
               borderColor: Color.Pink2,
               borderWidth: 1,
-              backgroundColor: Color.Pink2,
+              backgroundColor: Color.White,
               alignItems: 'center',
               borderRadius: 40,
               marginTop: 10,
             }}
             titleStyle={{
-              color: Color.White,
+              color: Color.Pink2,
               fontWeight: 'bold',
             }}
             onPress={() => Actions.matches()}
@@ -283,6 +283,7 @@ const styles = StyleSheet.create({
   GrabItem: {
     flexGrow: 1,
     alignItems: 'center',
+    paddingTop: 30,
   },
   GrabItem__ContentContainer: {
     // borderWidth: 1,
