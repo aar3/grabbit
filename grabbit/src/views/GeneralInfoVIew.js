@@ -24,7 +24,7 @@ data = [
   },
 ];
 
-export default class GeneralInfoView extends React.Component {
+export default class V extends React.Component {
   _renderItem({item, index}) {
     return (
       <TouchableOpacity onPress={() => Actions[item.routeKey]()}>

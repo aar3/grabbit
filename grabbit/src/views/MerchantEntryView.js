@@ -84,7 +84,7 @@ const mapDispatchToProps = (dispatch) => {
     setUserType: ({userType}) => {
       return dispatch({
         type: REDUX_ACTIONS.SET_USER_TYPE,
-        userType,
+        payload: {userType},
       });
     },
   };

@@ -207,7 +207,7 @@ class FlatListRow extends React.Component {
   }
 }
 
-export default class BrokerDiscoverView extends React.Component {
+export default class V extends React.Component {
   _renderItem({index, item}) {
     return <FlatListRow data={item} />;
   }

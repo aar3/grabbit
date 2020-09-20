@@ -5,10 +5,9 @@ import {Actions} from 'react-native-router-flux';
 
 import {BasicTextInput} from 'grabbit/src/components/text-input';
 import {BasicButton} from 'grabbit/src/components/buttons';
-// import {StatePicker} from 'grabbit/src/components/Picker';
-import {Color, Font} from 'grabbit/src/const';
+import {Color} from 'grabbit/src/const';
 
-export default class MerchantSignupView extends React.Component {
+export default class V extends React.Component {
   render() {
     return (
       <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} style={styles.container}>

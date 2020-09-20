@@ -230,12 +230,13 @@ class AttributionStat(BaseModel):
     metric_json = models.JSONField(default=dict)
 
 
-class GrabbedItem(BaseModel):
+class Grab(BaseModel):
     class Meta:
-        db_table = "grabbed_items"
+        db_table = "grabs"
 
     match = models.ForeignKey(Match, on_delete=models.CASCADE)
     expiry = models.DateTimeField()
+    additional_comments = models.TextField()
 
     def has_expired(self):
         return self.expiry > dt.datetime.now()
@@ -252,7 +253,7 @@ class ShippedItem(BaseModel):
     class Meta:
         db_table = "shipped_items"
 
-    grabbed_item = models.ForeignKey(GrabbedItem, on_delete=models.CASCADE)
+    grabbed_item = models.ForeignKey(Grab, on_delete=models.CASCADE)
     carrier = models.IntegerField()
     tracking_number = models.CharField(max_length=255)
     expected_delivery_date = models.DateTimeField()

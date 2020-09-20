@@ -48,7 +48,6 @@ import DiscoverTopNvigationBar from 'grabbit/src/components/navigation/DiscoverT
 import ImageAndBackTopNavigationBar from 'grabbit/src/components/navigation/ImageAndBackTopNavigation';
 
 const BottomTabNavigation = ({userType, hasNewNotification}) => {
-  console.log(hasNewNotification);
   if (userType === UserType.Broker) {
     return (
       <Tabs

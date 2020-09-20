@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View, Image, FlatList, TouchableOpacity} from 'react-native';
 
-import {FakeImage, Color, Font} from 'grabbit/src/const';
+import {FakeImage, Color} from 'grabbit/src/const';
 
 const data = [
   {
@@ -122,7 +122,7 @@ class FlatListRow extends React.Component {
   }
 }
 
-export default class NotificationsView extends React.Component {
+export default class V extends React.Component {
   _renderItem({index, item}) {
     return (
       <TouchableOpacity

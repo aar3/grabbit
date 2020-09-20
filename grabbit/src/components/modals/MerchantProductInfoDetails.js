@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import {Actions} from 'react-native-router-flux';
 
 import {Color} from 'grabbit/src/const';
+import REDUX_ACTIONS from 'grabbit/src/actions';
 
 const detailSelections = [
   {

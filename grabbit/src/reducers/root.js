@@ -7,16 +7,31 @@ import {httpRequestAsync} from 'grabbit/src/utils';
 
 const defaultState = {
   userType: null,
+
   navigation: {
     currentScene: null,
   },
+
   currentSceneKey: null,
-  session: {},
+
+  session: {
+    user: null,
+  },
+
   chat: {
     hasNewMessage: true,
   },
+
   notifications: {
     hasNewNotification: true,
+  },
+
+  productInfo: {
+    currentProduct: null,
+    currentProductHasLike: false,
+    showDetailsModalForBroker: false,
+    showDetailsModalForMerchant: false,
+    canGrabCurrentProduct: false,
   },
 
   // -----------------------
@@ -158,18 +173,29 @@ export const postUserAuth = ({options}) => {
 };
 
 export default mainReducer = (state = defaultState, action) => {
+  console.log(action);
   switch (action.type) {
     case REDUX_ACTIONS.SET_CURRENT_SCENE_KEY:
     case REDUX_ACTIONS.SET_USER_TYPE: {
-      return {...state, ...action};
+      return {...state, ...action.payload};
     }
+    case REDUX_ACTIONS.PRODUCT_INFO_LIKE:
+      return {
+        ...state,
+        productInfo: {...state.productInfo, currentProductHasLike: !state.productInfo.currentProductHasLike},
+      };
+    case REDUX_ACTIONS.TOGGLE_BROKER_PRODUCT_DETAILS_MODAL:
+      return {
+        ...state,
+        productInfo: {...state.productInfo, showDetailsModalForBroker: !state.productInfo.showDetailsModalForBroker},
+      };
     case REDUX_ACTIONS.SESSION_PENDING:
     case REDUX_ACTIONS.SESSION_SUCCESS:
     case REDUX_ACTIONS.SESSION_ERROR:
     case REDUX_ACTIONS.CREATE_ACCT_CANCELLED:
       return {
         ...state,
-        session: {...state.session, ...action},
+        session: {...state.session, ...action.payload},
       };
     case REDUX_ACTIONS.CLEAR_CURRENT_TITLE:
       return {
@@ -184,7 +210,7 @@ export default mainReducer = (state = defaultState, action) => {
     case REDUX_ACTIONS.POST_TITLE_PENDING:
       return {
         ...state,
-        input: {...state.input, ...action},
+        input: {...state.input, ...action.payload},
       };
     case REDUX_ACTIONS.GET_USER_TITLE_HISTORY_PENDING:
     case REDUX_ACTIONS.GET_USER_TITLE_HISTORY_SUCCESS:
@@ -192,7 +218,7 @@ export default mainReducer = (state = defaultState, action) => {
     case REDUX_ACTIONS.SET_CURRENT_HISTORY_TITLE:
       return {
         ...state,
-        history: {...state.history, ...action},
+        history: {...state.history, ...action.payload},
       };
     default:
       return state;

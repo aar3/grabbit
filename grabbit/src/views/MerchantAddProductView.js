@@ -20,7 +20,7 @@ const options = {
   },
 };
 
-export default class MerchantAddProductView extends React.Component {
+export default class V extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

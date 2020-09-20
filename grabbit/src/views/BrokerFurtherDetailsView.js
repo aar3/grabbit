@@ -7,7 +7,7 @@ import {BasicTextInput} from 'grabbit/src/components/text-input';
 import {BasicButton} from 'grabbit/src/components/buttons';
 import {Color} from 'grabbit/src/const';
 
-export default class BrokerFurtherDetails extends React.Component {
+export default class V extends React.Component {
   render() {
     return (
       <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} style={styles.container}>

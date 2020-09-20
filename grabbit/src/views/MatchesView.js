@@ -145,7 +145,7 @@ class FlatListRow extends React.Component {
   }
 }
 
-export default class MatchesView extends React.Component {
+export default class V extends React.Component {
   _renderItem({item, index}) {
     return (
       <TouchableOpacity onPress={() => Actions.grabItem()}>

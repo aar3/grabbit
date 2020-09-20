@@ -119,7 +119,7 @@ class FlatListRow extends React.Component {
   }
 }
 
-export default class ChatView extends React.Component {
+export default class V extends React.Component {
   constructor(props) {
     super(props);
   }

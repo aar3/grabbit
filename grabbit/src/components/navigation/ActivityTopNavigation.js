@@ -78,7 +78,7 @@ const mapDispatchToProps = (dispatch) => {
     setCurrentSceneKey: ({currentSceneKey}) => {
       return dispatch({
         type: REDUX_ACTIONS.SET_CURRENT_SCENE_KEY,
-        currentSceneKey,
+        payload: {currentSceneKey},
       });
     },
   };

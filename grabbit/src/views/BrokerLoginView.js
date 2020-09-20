@@ -7,7 +7,7 @@ import {Actions} from 'react-native-router-flux';
 
 import {Color} from 'grabbit/src/const';
 
-export default class BrokerLoginView extends React.Component {
+export default class V extends React.Component {
   render() {
     return (
       <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} style={styles.BrokerLoginView}>

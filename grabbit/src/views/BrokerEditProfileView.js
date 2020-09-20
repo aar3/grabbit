@@ -5,7 +5,7 @@ import {FakeImage, Color} from 'grabbit/src/const';
 import {BasicTextInput} from 'grabbit/src/components/text-input';
 import {BasicButton} from 'grabbit/src/components/buttons';
 
-export default class BrokerEditProfileView extends React.Component {
+export default class V extends React.Component {
   render() {
     return (
       <ScrollView>

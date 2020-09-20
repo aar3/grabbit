@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 
+import REDUX_ACTIONS from 'grabbit/src/actions';
 import {Color, UserType, FakeImage} from 'grabbit/src/const';
 import BrokerProductInfoDetails from 'grabbit/src/components/modals/BrokerProductInfoDetails';
 import MerchantProductInfoDetails from 'grabbit/src/components/modals/MerchantProductInfoDetails';
@@ -54,51 +55,41 @@ class ProductInfoView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      renderDetailsIcon: false,
       hasLike: false,
     };
 
     this.detailsModal = React.createRef();
   }
 
-  componentDidMount() {
-    this.setState({renderDetailsIcon: true});
-  }
-
-  _renderDetailItem({item, index}) {
-    return <DetailsItem data={item} />;
-  }
-
-  _grabbitIcon() {
-    // if user has outstanding match for this product then
-    // they can grab it using icon, else they see nothing
-    if (!data.userHasMatch) {
+  _deriveGrabbitIconVisibility() {
+    const {canGrabCurrentProduct} = this.props;
+    if (!canGrabCurrentProduct) {
       return null;
     }
 
     return (
-      <TouchableOpacity
-        onPress={() => {
-          return Actions.grabItem();
-        }}>
+      <TouchableOpacity onPress={() => Actions.grabItem()}>
         <Icon name="shopping-bag" size={20} color={Color.GreyText} />
       </TouchableOpacity>
     );
   }
 
+  _deriveModal({userType}) {
+    if (userType === UserType.Broker) {
+      return <BrokerProductInfoDetails ref={this.detailsModal} />;
+    }
+
+    return <MerchantProductInfoDetails ref={this.detailsModal} />;
+  }
+
   render() {
-    const {userType} = this.props;
+    const {userType, currentProductHasLike, likeProduct, toggleDetailsModalForBroker} = this.props;
 
-    const likeColor = this.state.hasLike ? Color.Pink2 : Color.GreyText;
+    const likeColor = currentProductHasLike ? Color.Pink2 : Color.GreyText;
     const likeIcon = userType === UserType.Broker ? <Icon name="heart" size={20} color={likeColor} /> : null;
-    const modal =
-      userType === UserType.Broker ? (
-        <BrokerProductInfoDetails ref={this.detailsModal} />
-      ) : (
-        <MerchantProductInfoDetails ref={this.detailsModal} />
-      );
 
-    const grabbitIcon = this._grabbitIcon();
+    const modal = this._deriveModal({userType});
+    const grabbitIcon = this._deriveGrabbitIconVisibility();
 
     return (
       <View style={styles.ProductInfoView}>
@@ -141,16 +132,11 @@ class ProductInfoView extends React.Component {
                   width: 100,
                 }}>
                 <View style={styles.ProductInfoView__ContentContainer__Info__Upper__Button}>
-                  <TouchableOpacity onPress={() => this.setState({hasLike: !this.state.hasLike})}>
-                    {likeIcon}
-                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => likeProduct()}>{likeIcon}</TouchableOpacity>
                 </View>
                 <View style={styles.ProductInfoView__ContentContainer__Info__Upper__Button}>{grabbitIcon}</View>
                 <View style={styles.ProductInfoView__ContentContainer__Info__Upper__Button}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      this.detailsModal.current.show();
-                    }}>
+                  <TouchableOpacity onPress={() => toggleDetailsModalForBroker()}>
                     <Icon name="more-vertical" size={20} color={Color.GreyText} />
                   </TouchableOpacity>
                 </View>
@@ -204,13 +190,32 @@ class ProductInfoView extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const {userType} = state;
+  const {userType, productInfo} = state;
   return {
     userType,
+    canGrabCurrentProduct: productInfo.canGrabCurrentProduct,
+    showDetailsModalForBroker: productInfo.showDetailsModalForBroker,
+    showDetailsModalForMerchant: productInfo.showDetailsModalForMerchant,
+    currentProductHasLike: productInfo.currentProductHasLike,
   };
 };
 
-export default connect(mapStateToProps)(ProductInfoView);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleDetailsModalForBroker: () => {
+      return dispatch({
+        type: REDUX_ACTIONS.TOGGLE_BROKER_PRODUCT_DETAILS_MODAL,
+      });
+    },
+    likeProduct: () => {
+      return dispatch({
+        type: REDUX_ACTIONS.PRODUCT_INFO_LIKE,
+      });
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductInfoView);
 
 const styles = StyleSheet.create({
   ProductInfoView: {

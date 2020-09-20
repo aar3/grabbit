@@ -17,7 +17,9 @@ export class BasicTextInput extends React.Component {
     value = this.state.text === '' && value ? value : this.state.text;
     return (
       <View style={styles.TextInput__Container}>
-        <Text style={labelStyle || styles.TextInput__Label}>{label || 'Unlabeled'}</Text>
+        <Text style={labelStyle || styles.TextInput__Label}>
+          {label === undefined ? undefined : label || 'Unlabeled'}
+        </Text>
         <TextInput
           value={value}
           onChangeText={(text) => this.setState({text})}
@@ -41,7 +43,9 @@ export class PasswordInput extends React.Component {
     value = this.state.text === '' && value ? value : this.state.text;
     return (
       <View style={styles.TextInput__Container}>
-        <Text style={labelStyle || styles.TextInput__Label}>{label || 'Unlabeled'}</Text>
+        <Text style={labelStyle || styles.TextInput__Label}>
+          {label === undefined ? undefined : label || 'Unlabeled'}
+        </Text>
         <TextInput
           secureTextEntry={true}
           value={value}
@@ -92,7 +96,9 @@ export class BasicTextAreaInput extends React.Component {
     value = this.state.text === '' && value ? value : this.state.text;
     return (
       <View style={styles.BasicTextAreaInput__Container}>
-        <Text style={labelStyle || styles.TextInput__Label}>{label || 'Unlabeled'}</Text>
+        <Text style={labelStyle || styles.TextInput__Label}>
+          {label === undefined ? undefined : label || 'Unlabeled'}
+        </Text>
         <TextInput
           multiline={true}
           value={value}

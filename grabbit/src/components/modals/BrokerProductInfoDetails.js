@@ -2,30 +2,36 @@ import React from 'react';
 import {View, Modal, TouchableOpacity, Text, Image, StyleSheet, FlatList} from 'react-native';
 
 import {Actions} from 'react-native-router-flux';
+import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 
 import {Color} from 'grabbit/src/const';
+import REDUX_ACTIONS from 'grabbit/src/actions';
 
 const detailSelections = [
   {
     id: '0',
     title: 'Leave Feedback',
     onPress: () => Actions.feedback(),
+    payload: 'leave_feedback',
   },
   {
     id: '1',
     title: 'Report a problem with this Product',
     onPress: () => Actions.feedback(),
+    payload: 'problem_with_product',
   },
   {
     id: '2',
     title: 'Report a problem with this Merchant',
     onPress: () => Actions.feedback(),
+    payload: 'problem_with_merchant',
   },
   {
     id: '3',
     title: 'Report another problem',
     onPress: () => Actions.feedback(),
+    payload: 'another_problem',
   },
 ];
 
@@ -41,49 +47,23 @@ class DetailsItem extends React.Component {
   }
 }
 
-export default class M extends React.Component {
+class M extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      showModal: false,
-    };
-
-    this._renderDetailItem = this._renderDetailItem.bind(this);
-  }
-
-  show() {
-    this.setState({showModal: true});
-  }
-
-  hide() {
-    this.setState({showModal: false});
-  }
-
-  _renderDetailItem({item, index}) {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          this.hide();
-          Actions.feedback();
-        }}>
-        <DetailsItem data={item} />
-      </TouchableOpacity>
-    );
+    // this._renderDetailItem = this._renderDetailItem.bind(this);
   }
 
   render() {
+    const {toggleDetailsModalForBroker, showDetailsModalForBroker} = this.props;
     return (
       <Modal
         animation={'fade'}
         transparent={true}
-        visible={this.state.showModal}
-        onRequestClose={() => {
-          console.log('modal closed');
-          this.setState({showModal: false});
-        }}>
+        visible={showDetailsModalForBroker}
+        onRequestClose={() => toggleDetailsModalForBroker()}>
         <View style={styles.ProductInfoView__ModalContainer}>
           <View style={styles.ProductInfoView__ModalContainer__TopBar}>
-            <TouchableOpacity onPress={() => this.setState({showModal: false})}>
+            <TouchableOpacity onPress={() => toggleDetailsModalForBroker()}>
               <Icon name="x" size={15} color={Color.GreyText} />
             </TouchableOpacity>
           </View>
@@ -98,7 +78,18 @@ export default class M extends React.Component {
               <FlatList
                 style={styles.ProductInfoView__ModalContainer__ContentContainer__Selections__FlatList}
                 data={detailSelections}
-                renderItem={this._renderDetailItem}
+                renderItem={({item, index}) => {
+                  return (
+                    <TouchableOpacity
+                      onPress={() => {
+                        toggleDetailsModalForBroker();
+
+                        Actions.feedback();
+                      }}>
+                      <DetailsItem data={item} />
+                    </TouchableOpacity>
+                  );
+                }}
                 keyExtractor={(_item, index) => index.toString()}
               />
             </View>
@@ -108,6 +99,31 @@ export default class M extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  const {productInfo} = state;
+  return {
+    showDetailsModalForBroker: productInfo.showDetailsModalForBroker,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setFeedbackTopic: ({feedbackTopic}) => {
+      return dispatch({
+        type: REDUX_ACTIONS.SET_FEEDBACK_TOPIC,
+        payload: {feedbackTopic},
+      });
+    },
+    toggleDetailsModalForBroker: () => {
+      return dispatch({
+        type: REDUX_ACTIONS.TOGGLE_BROKER_PRODUCT_DETAILS_MODAL,
+      });
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(M);
 
 const styles = StyleSheet.create({
   ProductInfoView__ModalContainer: {

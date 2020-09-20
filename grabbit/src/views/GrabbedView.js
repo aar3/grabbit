@@ -144,7 +144,7 @@ const data = [
   },
 ];
 
-export default class GrabbedView extends React.Component {
+export default class V extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};

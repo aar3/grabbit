@@ -8,7 +8,7 @@ import {IconLeftButton} from 'grabbit/src/components/buttons';
 
 import {Color} from 'grabbit/src/const';
 
-export default class FeedbackView extends React.Component {
+export default class V extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

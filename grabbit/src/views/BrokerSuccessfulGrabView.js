@@ -3,7 +3,7 @@ import {StyleSheet, Text, View} from 'react-native';
 
 import {BasicButton} from 'grabbit/src/components/buttons';
 
-export default class BrokerSuccessfulGrabView extends React.Component {
+export default class V extends React.Component {
   render() {
     return (
       <View style={styles.BrokerSuccessfulGrabView}>
