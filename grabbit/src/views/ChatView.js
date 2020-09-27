@@ -1,5 +1,14 @@
 import React from 'react';
-import {StyleSheet, Text, View, FlatList, TextInput, KeyboardAvoidingView, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TextInput,
+  KeyboardAvoidingView,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
 
 import Icon from 'react-native-vector-icons/Feather';
 import {connect} from 'react-redux';
@@ -112,33 +121,32 @@ class V extends React.Component {
     const {updateCurrentMessageText, currentMessageText} = this.props;
     return (
       <KeyboardAvoidingView
+        keyboardVerticalOffset={90}
+        behavior={Platform.OS == 'ios' ? 'position' : 'height'}
         style={{
-          paddingBottom: 100,
+          flex: 1,
         }}>
         <FlatList
           style={{
             width: '100%',
             // borderWidth: 1,
             // borderColor: 'red',
-            height: '95%',
           }}
           data={conversation.messages}
           renderItem={({item, index}) => {
             const isActingUser = item.sender === '1';
-            const styling = isActingUser
+            const containerStyling = isActingUser
               ? styles.FlatListRow__Container__ToUser
               : styles.FlatListRow__Container__FromUser;
 
+            const textStyling = isActingUser
+              ? styles.FlatListRow__Container__ToUser__Text
+              : styles.FlatListRow__Container__FromUser__Text;
+
             return (
               <TouchableOpacity>
-                <View style={styling}>
-                  <Text
-                    style={{
-                      fontSize: 11,
-                      color: Color.DarkerLightGrey,
-                    }}>
-                    {item.text}
-                  </Text>
+                <View style={containerStyling}>
+                  <Text style={textStyling}>{item.text}</Text>
                 </View>
               </TouchableOpacity>
             );
@@ -147,21 +155,25 @@ class V extends React.Component {
         />
         <View
           style={{
-            borderWidth: 1,
-            borderColor: 'green',
+            // borderWidth: 1,
+            // borderColor: 'purple',
             width: '100%',
+            padding: 10,
             borderTopWidth: 1,
             borderTopColor: Color.LightGrey,
-            minHeight: 40,
-            alignItems: 'center',
             flexDirection: 'row',
+            position: 'absolute',
+            justifyContent: 'center',
+            alignItems: 'center',
+            bottom: 0,
+            backgroundColor: Color.White,
           }}>
           <View
             style={{
               // borderWidth: 1,
               // borderColor: 'blue',
-              width: 300,
-              minHeight: 40,
+              width: 320,
+              marginBottom: 10,
             }}>
             <TextInput
               multiline={true}
@@ -175,13 +187,23 @@ class V extends React.Component {
                 fontSize: 12,
                 fontFamily: 'Arial',
                 width: '100%',
-                minHeight: 40,
                 borderRadius: 5,
                 backgroundColor: Color.White,
               }}
             />
           </View>
-          <Button title={'Send'} icon={<Icon name="send" size={15} color="white" />} />
+          <Button
+            buttonStyle={{
+              backgroundColor: Color.Pink2,
+            }}
+            containerStyle={{
+              marginLeft: 10,
+              width: 50,
+              marginBottom: 10,
+            }}
+            title={''}
+            icon={<Icon name="send" size={15} color="white" />}
+          />
         </View>
       </KeyboardAvoidingView>
     );
@@ -210,28 +232,34 @@ export default connect(mapStateToProps, mapDispatchToProps)(V);
 
 const styles = StyleSheet.create({
   FlatListRow__Container__FromUser: {
-    borderWidth: 1,
-    borderColor: 'blue',
+    // borderWidth: 1,
+    // borderColor: 'blue',
     flexDirection: 'row',
-    padding: 10,
+    padding: 13,
     borderRadius: 10,
     // width: '90%',
     position: 'relative',
     left: 100,
     width: 300,
-    height: 75,
-    marginTop: 20,
+    marginTop: 10,
+    backgroundColor: Color.ChatGrey,
   },
   FlatListRow__Container__ToUser: {
-    borderWidth: 1,
-    borderColor: 'green',
+    // borderWidth: 1,
+    // borderColor: 'green',
+    backgroundColor: Color.Pink2,
     flexDirection: 'row',
-    padding: 10,
+    padding: 13,
     width: 300,
     borderRadius: 10,
     // width: '90%',
-    marginTop: 20,
+    marginTop: 10,
     marginLeft: 20,
-    height: 75,
+  },
+  FlatListRow__Container__ToUser__Text: {
+    color: Color.White,
+  },
+  FlatListRow__Container__FromUser__Text: {
+    color: Color.Black,
   },
 });

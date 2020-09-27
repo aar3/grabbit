@@ -15,6 +15,7 @@ export const Color = {
   CherryRed: '#d62d2d',
   ForestGreen: '#2da01a',
   Black: '#000',
+  ChatGrey: '#e0e0e0',
 };
 
 export const Font = {

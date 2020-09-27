@@ -91,11 +91,7 @@ const BottomTabNavigation = ({userType, hasNewNotification}) => {
           title="Notifications"
           hideNavBar={false}
           icon={({focused}) => (
-            <Icon
-              name={'message-square'}
-              size={TabIconSize}
-              color={focused ? Color.Black : Color.LightGrey}
-            />
+            <Icon name={'message-square'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
           )}
         />
         {/* <Scene
