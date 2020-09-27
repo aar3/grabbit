@@ -38,6 +38,7 @@ import {
   PrivacyPolicyView,
   TermsAndConditionsView,
   AboutGrabbitView,
+  BrokerHistoryView,
 } from 'grabbit/src/views';
 import {TabIconSize, Color, UserType} from 'grabbit/src/const';
 import BasicTopNavigationBar from 'grabbit/src/components/navigation/BasicTopNavigation';
@@ -46,6 +47,7 @@ import AccountSettingsTopNavigationBar from 'grabbit/src/components/navigation/A
 import ActivityTopNavigationBar from 'grabbit/src/components/navigation/ActivityTopNavigation';
 import DiscoverTopNvigationBar from 'grabbit/src/components/navigation/DiscoverTopNavigation';
 import ImageAndBackTopNavigationBar from 'grabbit/src/components/navigation/ImageAndBackTopNavigation';
+import ImageCenterTopNavigation from 'grabbit/src/components/navigation/ImageCenterTopNavigation';
 
 const BottomTabNavigation = ({userType, hasNewNotification}) => {
   if (userType === UserType.Broker) {
@@ -70,13 +72,13 @@ const BottomTabNavigation = ({userType, hasNewNotification}) => {
           )}
         />
         <Scene
-          key="likedProducts"
-          component={LikedProductsView}
-          navBar={ActivityTopNavigationBar}
-          title="Liked Products"
+          key="brokerHistory"
+          component={BrokerHistoryView}
+          navBar={ImageCenterTopNavigation}
+          title="Broker History"
           hideNavBar={false}
           icon={({focused}) => (
-            <Icon name={'grid'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
+            <Icon name={'align-justify'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
           )}
         />
         <Scene

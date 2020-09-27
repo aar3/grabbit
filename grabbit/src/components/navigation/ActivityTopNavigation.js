@@ -15,8 +15,8 @@ class ActivityTopNavigation extends React.Component {
 
   _deriveIconColor({sceneKey}) {
     const {currentSceneKey} = this.props;
-    if (sceneKey === 'likedProducts|merchantProducts') {
-      if (currentSceneKey === 'likedProducts' || currentSceneKey === 'merchantProducts') {
+    if (sceneKey === 'brokerHistory|merchantProducts') {
+      if (currentSceneKey === 'brokerHistory' || currentSceneKey === 'merchantProducts') {
         return Color.Pink2;
       }
     }
@@ -32,13 +32,13 @@ class ActivityTopNavigation extends React.Component {
           <TouchableOpacity
             onPress={() => {
               if (userType === UserType.Broker) {
-                setCurrentSceneKey({currentSceneKey: 'likedProducts'});
-                return Actions.likedProducts();
+                setCurrentSceneKey({currentSceneKey: 'brokerHistory'});
+                return Actions.brokerHistory();
               }
               setCurrentSceneKey({currentSceneKey: 'merchantProducts'});
               return Actions.merchantProducts();
             }}>
-            <Icon name="heart" size={20} color={this._deriveIconColor({sceneKey: 'likedProducts|merchantProducts'})} />
+            <Icon name="heart" size={20} color={this._deriveIconColor({sceneKey: 'brokerHistory|merchantProducts'})} />
           </TouchableOpacity>
         </View>
         <View style={styles.ActivityTopNavigation__ContentContainer__Second}>

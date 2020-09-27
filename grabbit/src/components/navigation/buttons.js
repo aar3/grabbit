@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
 
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
 
-import {TabIconSize, Color} from 'grabbit/src/const';
+import {TabIconSize, Color, FakeImage} from 'grabbit/src/const';
 
 export const BackButton = () => {
   return (
@@ -27,11 +27,10 @@ export const AccountSettingsButton = () => {
 };
 
 export const ImageButton = () => {
-  const {onPress, imageURI} = this.props;
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={styles.FlatListRow__Container__Image}>
-        <Image source={{uri: imageURI}} style={{height: 40, width: 40}} />
+    <TouchableOpacity onPress={() => console.log('image button clicked')}>
+      <View style={styles.BaseTopNavigationBar__Button}>
+        <Image source={{uri: FakeImage}} style={{height: 40, width: 40}} />
       </View>
     </TouchableOpacity>
   );

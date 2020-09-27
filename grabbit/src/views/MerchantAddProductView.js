@@ -189,7 +189,7 @@ export default class V extends React.Component {
                 // ... You can check the source to find the other keys.
               }}
               onDateChange={(date) => {
-                this.setState({date: date});
+                this.setState({date});
               }}
             />
           </View>

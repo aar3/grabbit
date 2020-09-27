@@ -14,6 +14,7 @@ import BrokerEntryView from 'grabbit/src/views/BrokerEntryView';
 import BrokerGrabItemView from 'grabbit/src/views/BrokerGrabItemView';
 import OffersView from 'grabbit/src/views/OffersView';
 import BrokerSuccessfulGrabView from 'grabbit/src/views/BrokerSuccessfulGrabView';
+import BrokerHistoryView from 'grabbit/src/views/BrokerHistoryView';
 
 // merchant
 import MerchantSignupView from 'grabbit/src/views/MerchantSignupView';
@@ -47,6 +48,7 @@ module.exports = {
   BrokerEntryView,
   BrokerGrabItemView,
   BrokerSuccessfulGrabView,
+  BrokerHistoryView,
 
   MerchantSignupView,
   MerchantExploreView,

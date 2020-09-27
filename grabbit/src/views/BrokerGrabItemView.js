@@ -3,10 +3,12 @@ import {StyleSheet, Text, Image, View, Alert, ScrollView, KeyboardAvoidingView} 
 
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
+import {connect} from 'react-redux';
 
 import {FakeImage, Color} from 'grabbit/src/const';
 import {BasicButton} from 'grabbit/src/components/buttons';
 import {BasicTextAreaInput} from 'grabbit/src/components/text-input';
+import REDUX_ACTIONS from 'grabbit/src/actions';
 
 const data = {
   merchant: {
@@ -23,8 +25,9 @@ const data = {
   },
 };
 
-export default class BrokerGrabItemView extends React.Component {
+class BrokerGrabItemView extends React.Component {
   render() {
+    const {setCurrentScene} = this.props;
     return (
       <ScrollView contentContainerStyle={styles.GrabItem}>
         <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} style={styles.GrabItem}>
@@ -247,7 +250,10 @@ export default class BrokerGrabItemView extends React.Component {
                   [
                     {
                       text: 'Grabbit',
-                      onPress: () => Actions.grabbed(),
+                      onPress: () => {
+                        setCurrentScene({currentSceneKey: 'grabbed'});
+                        Actions.grabbed();
+                      },
                     },
                     {
                       text: 'Cancel',
@@ -284,6 +290,19 @@ export default class BrokerGrabItemView extends React.Component {
     );
   }
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCurrentScene: ({currentSceneKey}) => {
+      return dispatch({
+        type: REDUX_ACTIONS.SET_USER_TYPE,
+        payload: {currentSceneKey},
+      });
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(BrokerGrabItemView);
 
 const styles = StyleSheet.create({
   GrabItem: {

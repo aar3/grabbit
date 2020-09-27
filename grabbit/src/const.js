@@ -10,7 +10,10 @@ export const Color = {
   Pink2: '#E20086',
   DarkerGrey: '#a4a4a4',
   DefaultFont: 'Futura, Helvetica',
+  ReadableGreyText: '#808080',
   GreyText: '#B9B9B9',
+  CherryRed: '#d62d2d',
+  ForestGreen: '#2da01a',
 };
 
 export const Font = {

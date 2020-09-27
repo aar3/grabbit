@@ -1,125 +1,17 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image, KeyboardAvoidingView, ScrollView} from 'react-native';
-
-import {FakeImage, Color} from 'grabbit/src/const';
-import {BasicTextInput} from 'grabbit/src/components/text-input';
-import {BasicButton} from 'grabbit/src/components/buttons';
+import {Text, View} from 'react-native';
 
 export default class V extends React.Component {
   render() {
     return (
-      <ScrollView>
-        <View style={styles.BrokerEditProfileView}>
-          <View style={styles.BrokerEditProfileView__ContentContainer}>
-            <View style={styles.BrokerEditProfileView__ContentContainer__Image}>
-              <Image source={{uri: FakeImage}} style={{height: 150, width: 150}} />
-            </View>
-            <View style={styles.BrokerEditProfileView__ContentContainer__Stats}>
-              <View style={styles.BrokerEditProfileView__ContentContainer__Stats__All}>
-                <Text style={styles.Stats__Text__Value}>{'252'}</Text>
-                <Text style={styles.Stats__Text__Key}>{'LIKED'}</Text>
-              </View>
-              <View style={styles.BrokerEditProfileView__ContentContainer__Stats__All}>
-                <Text style={styles.Stats__Text__Value}>{'57'}</Text>
-                <Text style={styles.Stats__Text__Key}>{'MATCHED'}</Text>
-              </View>
-              <View style={styles.BrokerEditProfileView__ContentContainer__Stats__All}>
-                <Text style={styles.Stats__Text__Value}>{'34'}</Text>
-                <Text style={styles.Stats__Text__Key}>{'GRABBED'}</Text>
-              </View>
-            </View>
-            <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-              <View style={styles.BrokerEditProfileView__ContentContainer__EditContainer}>
-                <BasicTextInput label="Name" />
-                <BasicTextInput label="Email" />
-                <BasicTextInput label="Phone" />
-
-                <BasicTextInput label="Address 1" />
-                <BasicTextInput label="Address 2" />
-                <BasicTextInput label="Shoe Size" />
-                <BasicTextInput label="Shirt Size (US)" />
-                <BasicButton
-                  title="Save"
-                  buttonStyle={{
-                    width: 300,
-                    height: 50,
-                    justifyContent: 'center',
-                    backgroundColor: Color.White,
-                    borderColor: Color.Pink2,
-                    borderWidth: 1,
-                    alignItems: 'center',
-                    borderRadius: 40,
-                    marginTop: 10,
-                    marginBottom: 10,
-                  }}
-                  titleStyle={{
-                    color: Color.Pink2,
-                    fontWeight: 'bold',
-                  }}
-                  onPress={() => {}}
-                />
-              </View>
-            </KeyboardAvoidingView>
-          </View>
-        </View>
-      </ScrollView>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Text>{'BrokerEditProfile Screen'}</Text>
+      </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  BrokerEditProfileView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  BrokerEditProfileView__ContentContainer: {
-    // borderWidth: 1,
-    // borderColor: 'green',
-    width: '90%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingBottom: 10,
-  },
-  BrokerEditProfileView__ContentContainer__Image: {
-    // borderWidth: 1,
-    // borderColor: 'blue',
-    marginBottom: 20,
-    borderRadius: 100,
-    height: 150,
-    width: 150,
-    overflow: 'hidden',
-    marginTop: 20,
-  },
-  BrokerEditProfileView__ContentContainer__Stats: {
-    // borderWidth: 1,
-    // borderColor: 'orange',
-    height: 50,
-    width: '90%',
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    marginBottom: 20,
-  },
-  BrokerEditProfileView__ContentContainer__Stats__All: {
-    // borderWidth: 1,
-    // borderColor: 'red',
-    width: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  BrokerEditProfileView__ContentContainer__EditContainer: {
-    // borderWidth: 1,
-    // borderColor: 'blue',
-    width: '90%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  Stats__Text__Key: {
-    fontWeight: 'bold',
-    color: Color.DarkerGrey,
-  },
-  Stats__Text__Value: {
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-});
