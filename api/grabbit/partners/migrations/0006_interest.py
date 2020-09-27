@@ -14,16 +14,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Interest",
             fields=[
-                (
-                    "created_at",
-                    models.DateTimeField(default=django.utils.timezone.now, null=True),
-                ),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now, null=True),),
                 ("updated_at", models.DateTimeField(null=True)),
                 ("deleted_at", models.DateTimeField(null=True)),
-                (
-                    "email",
-                    models.CharField(max_length=255, primary_key=True, serialize=False),
-                ),
+                ("email", models.CharField(max_length=255, primary_key=True, serialize=False),),
             ],
             options={"db_table": "interests",},
         ),

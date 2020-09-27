@@ -10,9 +10,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name="user",
-            name="email",
-            field=models.CharField(max_length=255, unique=True),
-        ),
+        migrations.AlterField(model_name="user", name="email", field=models.CharField(max_length=255, unique=True),),
     ]

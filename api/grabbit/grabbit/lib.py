@@ -24,9 +24,7 @@ class GoogleCloudService:
         return os.path.join(GOOGLE_STORAGE_URL, path)
 
     @staticmethod
-    async def upload_asset_to_bucket_async(
-        acting_user_id, user_type, image_name, image_data
-    ):
+    async def upload_asset_to_bucket_async(acting_user_id, user_type, image_name, image_data):
         # https://cloud.google.com/storage/docs/json_api/v1/objects/insert
         proc = subprocess.Popen(
             [

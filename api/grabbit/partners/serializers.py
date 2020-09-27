@@ -56,26 +56,8 @@ class NotificationSerializer(BaseModelSerializer):
             "text",
             "seen",
             "user",
-        ]
-
-
-class LikeSerializer(BaseModelSerializer):
-    liked_by = UserSerializer(read_only=True)
-    merchant = UserSerializer(read_only=True)
-    product = ProductSerializer(read_only=True)
-    broker = UserSerializer(read_only=True)
-
-    class Meta:
-        model = Like
-        fields = [
-            "id",
-            "created_at",
-            "updated_at",
-            "liked_by",
-            "like_for",
-            "merchant",
-            "product",
-            "broker",
+            "item_type",
+            "item",
         ]
 
 
@@ -97,19 +79,6 @@ class OfferSerializer(BaseModelSerializer):
         ]
 
 
-class MatchSerializer(BaseModelSerializer):
-    offer = OfferSerializer(read_only=True)
-
-    class Meta:
-        model = Match
-        fields = [
-            "id",
-            "created_at",
-            "updated_at",
-            "offer",
-        ]
-
-
 class MessageSerializer(BaseModelSerializer):
     recipient = UserSerializer(read_only=True)
     sender = UserSerializer(read_only=True)
@@ -123,15 +92,4 @@ class MessageSerializer(BaseModelSerializer):
             "recipient",
             "sender",
             "text",
-        ]
-
-
-class InterestSerializer(BaseModelSerializer):
-    class Meta:
-        model = Interest
-        fields = [
-            "id",
-            "created_at",
-            "updated_at",
-            "email",
         ]

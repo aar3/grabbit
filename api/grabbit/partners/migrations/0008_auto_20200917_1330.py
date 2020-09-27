@@ -8,100 +8,74 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('partners', '0007_auto_20200905_0118'),
+        ("partners", "0007_auto_20200905_0118"),
     ]
 
     operations = [
-        migrations.RenameField(
-            model_name='product',
-            old_name='user',
-            new_name='merchant',
+        migrations.RenameField(model_name="product", old_name="user", new_name="merchant",),
+        migrations.RemoveField(model_name="like", name="like_for",),
+        migrations.RemoveField(model_name="like", name="liked_by",),
+        migrations.RemoveField(model_name="like", name="merchant",),
+        migrations.RemoveField(model_name="offer", name="terms",),
+        migrations.AddField(
+            model_name="notification",
+            name="item_route_key",
+            field=models.CharField(default="default", max_length=255),
+            preserve_default=False,
         ),
-        migrations.RemoveField(
-            model_name='like',
-            name='like_for',
-        ),
-        migrations.RemoveField(
-            model_name='like',
-            name='liked_by',
-        ),
-        migrations.RemoveField(
-            model_name='like',
-            name='merchant',
-        ),
-        migrations.RemoveField(
-            model_name='offer',
-            name='terms',
+        migrations.AddField(model_name="notification", name="item_route_meta", field=models.JSONField(default=dict),),
+        migrations.AddField(
+            model_name="notification", name="item_type", field=models.IntegerField(default=1), preserve_default=False,
         ),
         migrations.AddField(
-            model_name='notification',
-            name='item_route_key',
-            field=models.CharField(default='default', max_length=255),
+            model_name="offer",
+            name="uid",
+            field=models.CharField(default="change-me", max_length=255),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='notification',
-            name='item_route_meta',
-            field=models.JSONField(default=dict),
+            model_name="product", name="terms", field=models.TextField(default="change-me"), preserve_default=False,
         ),
         migrations.AddField(
-            model_name='notification',
-            name='item_type',
-            field=models.IntegerField(default=1),
-            preserve_default=False,
+            model_name="user", name="address_line1", field=models.CharField(max_length=255, null=True),
         ),
         migrations.AddField(
-            model_name='offer',
-            name='uid',
-            field=models.CharField(default='change-me', max_length=255),
-            preserve_default=False,
+            model_name="user", name="address_line2", field=models.CharField(max_length=255, null=True),
         ),
-        migrations.AddField(
-            model_name='product',
-            name='terms',
-            field=models.TextField(default='change-me'),
-            preserve_default=False,
-        ),
-        migrations.AddField(
-            model_name='user',
-            name='address_line1',
-            field=models.CharField(max_length=255, null=True),
-        ),
-        migrations.AddField(
-            model_name='user',
-            name='address_line2',
-            field=models.CharField(max_length=255, null=True),
-        ),
-        migrations.AddField(
-            model_name='user',
-            name='site_url',
-            field=models.CharField(max_length=255, null=True),
-        ),
+        migrations.AddField(model_name="user", name="site_url", field=models.CharField(max_length=255, null=True),),
         migrations.AlterField(
-            model_name='like',
-            name='broker',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='partners.user'),
+            model_name="like",
+            name="broker",
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to="partners.user"),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='like',
-            name='product',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='partners.product'),
+            model_name="like",
+            name="product",
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to="partners.product"),
         ),
         migrations.CreateModel(
-            name='AttributionStat',
+            name="AttributionStat",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now, null=True)),
-                ('updated_at', models.DateTimeField(null=True)),
-                ('deleted_at', models.DateTimeField(null=True)),
-                ('metric_json', models.JSONField(default=dict)),
-                ('broker', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='broker', to='partners.user')),
-                ('merchant', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='merchant', to='partners.user')),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='partners.product')),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now, null=True)),
+                ("updated_at", models.DateTimeField(null=True)),
+                ("deleted_at", models.DateTimeField(null=True)),
+                ("metric_json", models.JSONField(default=dict)),
+                (
+                    "broker",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, related_name="broker", to="partners.user"
+                    ),
+                ),
+                (
+                    "merchant",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, related_name="merchant", to="partners.user"
+                    ),
+                ),
+                ("product", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="partners.product")),
             ],
-            options={
-                'db_table': 'attribution_stats',
-            },
+            options={"db_table": "attribution_stats",},
         ),
     ]

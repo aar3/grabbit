@@ -105,16 +105,6 @@ class OfferViewSet(BaseModelViewSet):
     serializer = OfferSerializer
 
 
-class LikeViewSet(BaseModelViewSet):
-    model = Like
-    serializer = LikeSerializer
-
-
-class MatchViewSet(BaseModelViewSet):
-    model = Match
-    serializer = MatchSerializer
-
-
 class MessageViewSet(BaseModelViewSet):
     model = Message
     serializer = MessageSerializer
@@ -137,7 +127,7 @@ def LoginView(request):
 
 @api_view(["GET"])
 @authentication_classes([TokenAuthentication])
-def UserExploreRecentView(request, pk=None):
+def BrokerExploreView(request, pk=None):
     _ = get_object_or_404(User, pk=pk)
 
     # use chronological ordering of merchants products/services
@@ -148,34 +138,10 @@ def UserExploreRecentView(request, pk=None):
 
 @api_view(["GET"])
 @authentication_classes([TokenAuthentication])
-def UserExploreRecommendedView(request, pk=None):
-    _ = get_object_or_404(User, pk=pk)
-
-    # use some algorithm to determine the most relevant products/services
-    # for this user but for now just use the same as UserExploreRecentView
-    products = Product.objects.filter("-created_at")[:10]
-    serializer = ProductSerializer(products, many=True)
-    return Response(serializer.data)
-
-
-@api_view(["GET"])
-@authentication_classes([TokenAuthentication])
-def MerchantExploreRecentView(request, pk=None):
+def MerchantExploreView(request, pk=None):
     _ = get_object_or_404(User, pk=pk)
 
     # use chronological ordering of merchants products/services
-    products = Product.objects.filter("-created_at")[:10]
-    serializer = ProductSerializer(products, many=True)
-    return Response(serializer.data)
-
-
-@api_view(["GET"])
-@authentication_classes([TokenAuthentication])
-def MerchantExploreRecommendedView(request, pk=None):
-    _ = get_object_or_404(User, pk=pk)
-
-    # use some algorithm to determine the most relevant products/services
-    # for this user but for now just use the same as UserExploreRecentView
     products = Product.objects.filter("-created_at")[:10]
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
@@ -191,9 +157,12 @@ def UploadImageView(request, pk=None):
     # return full url from gcloud and store it in user instance
 
 
-@api_view(["POST"])
-def InterestView(request):
-    params = request.data
-    interest = Interest.objects.create(email=params["email"])
-    serializer = InterestSerializer(interest)
+@api_view(["GET"])
+@authentication_classes([TokenAuthentication])
+def BrokerHistoryView(request, pk=None):
+    _ = get_object_or_404(User, pk=pk)
+
+    # use chronological ordering of merchants products/services
+    products = Product.objects.filter("-created_at")[:10]
+    serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)

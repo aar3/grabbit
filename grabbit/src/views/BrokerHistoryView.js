@@ -21,7 +21,7 @@ const data = [
     id: '2',
     type: 'Offer',
     product: {
-      name: 'Some product name 123',
+      name: 'Function components cannot be given refs. Attempts to access',
       merchant: {
         name: 'Hello Fresh Brands, LLC',
       },
@@ -32,9 +32,9 @@ const data = [
     id: '3',
     type: 'Offer',
     product: {
-      name: 'Some product name 123',
+      name: 'Function components cannot be given refs. Attempts to access',
       merchant: {
-        name: 'Hello Fresh Brands, LLC',
+        name: 'Function components cannot be given refs. Attempts to access',
       },
     },
     status: 'Declined',
@@ -66,7 +66,7 @@ const data = [
     id: '5',
     type: 'Shipment',
     product: {
-      name: 'Some product name 123',
+      name: 'Function components cannot be given refs. Attempts to access',
       merchant: {
         name: 'Hello Fresh Brands, LLC',
       },
@@ -144,7 +144,7 @@ export default class V extends React.Component {
                       borderBottomColor: Color.LightGrey,
                       borderBottomWidth: 1,
                       justifyContent: 'center',
-                      // padding: 2,
+                      padding: 10,
                       width: '100%',
                     }}>
                     <View
@@ -152,7 +152,7 @@ export default class V extends React.Component {
                         // borderWidth: 1,
                         // borderColor: 'red',
                         flexDirection: 'row',
-                        justifyContent: 'center',
+                        // justifyContent: 'center',
                         alignItems: 'center',
                       }}>
                       <View
@@ -169,18 +169,9 @@ export default class V extends React.Component {
                           // borderWidth: 1,
                           // borderColor: 'green',
                           marginLeft: 20,
-                          width: 250,
+                          maxWidth: 250,
                           padding: 5,
                         }}>
-                        <Text
-                          style={{
-                            fontSize: 11,
-                            fontWeight: 'bold',
-                            marginBottom: 5,
-                            color: Color.Pink2,
-                          }}>
-                          {item.type}
-                        </Text>
                         <Text>{item.product.name}</Text>
                         <Text
                           style={{

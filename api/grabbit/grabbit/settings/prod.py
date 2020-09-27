@@ -19,9 +19,7 @@ PGSQL_USER = DATABASES["default"]["USER"]
 PGSQL_HOST = DATABASES["default"]["HOST"]
 PGSQL_ENVIRONMENT = "prod"
 
-SOURCE_DIR = os.path.dirname(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-)
+SOURCE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 LOGS_DIR = pathlib.Path(os.path.join(SOURCE_DIR, "grabbit", "logs"))
 LOGS_DIR.mkdir(exist_ok=True)
 
@@ -29,9 +27,7 @@ LOGS_DIR.mkdir(exist_ok=True)
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,
-    "formatters": {
-        "standard": {"format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s"},
-    },
+    "formatters": {"standard": {"format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s"},},
     "filters": {
         "require_debug_false": {"()": "django.utils.log.RequireDebugFalse",},
         "require_debug_true": {"()": "django.utils.log.RequireDebugTrue",},
@@ -60,16 +56,8 @@ LOGGING = {
     },
     "loggers": {
         "django": {"handlers": ["console"], "level": "DEBUG", "propagate": True,},
-        "django.request": {
-            "handlers": ["console", "file"],
-            "level": "DEBUG",
-            "propagate": False,
-        },
+        "django.request": {"handlers": ["console", "file"], "level": "DEBUG", "propagate": False,},
         "gunicorn": {"handlers": ["file", "console"], "level": "DEBUG",},
-        "django.db.backends": {
-            "handlers": ["console", "file"],
-            "level": "WARNING",
-            "propagate": False,
-        },
+        "django.db.backends": {"handlers": ["console", "file"], "level": "WARNING", "propagate": False,},
     },
 }

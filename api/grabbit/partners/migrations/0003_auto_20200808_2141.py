@@ -12,90 +12,46 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RenameField(
-            model_name="like", old_name="liked", new_name="like_for",
-        ),
+        migrations.RenameField(model_name="like", old_name="liked", new_name="like_for",),
         migrations.AlterField(
             model_name="user",
             name="user_meta",
             field=models.JSONField(
-                default={
-                    "pantSize": "32x32",
-                    "shirtSize": "m",
-                    "shoeSize": "12.5",
-                    "sizeCountry": "US",
-                }
+                default={"pantSize": "32x32", "shirtSize": "m", "shoeSize": "12.5", "sizeCountry": "US",}
             ),
         ),
         migrations.CreateModel(
             name="Offer",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                (
-                    "created_at",
-                    models.DateTimeField(default=django.utils.timezone.now, null=True),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now, null=True),),
                 ("updated_at", models.DateTimeField(null=True)),
                 ("deleted_at", models.DateTimeField(null=True)),
                 ("terms", models.TextField()),
                 (
                     "offeree",
                     models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        related_name="offeree",
-                        to="partners.user",
+                        on_delete=django.db.models.deletion.CASCADE, related_name="offeree", to="partners.user",
                     ),
                 ),
                 (
                     "offerer",
                     models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        related_name="offerer",
-                        to="partners.user",
+                        on_delete=django.db.models.deletion.CASCADE, related_name="offerer", to="partners.user",
                     ),
                 ),
-                (
-                    "product",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        to="partners.product",
-                    ),
-                ),
+                ("product", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="partners.product",),),
             ],
             options={"db_table": "offers",},
         ),
         migrations.CreateModel(
             name="Match",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                (
-                    "created_at",
-                    models.DateTimeField(default=django.utils.timezone.now, null=True),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now, null=True),),
                 ("updated_at", models.DateTimeField(null=True)),
                 ("deleted_at", models.DateTimeField(null=True)),
-                (
-                    "offer",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE, to="partners.offer"
-                    ),
-                ),
+                ("offer", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="partners.offer"),),
             ],
             options={"db_table": "matches",},
         ),

@@ -16,9 +16,7 @@ def download_app_secrets(rootdir):
         "gcloud-compute.json": "GOOGLE_COMPUTE_API_JSON",
     }
 
-    client = storage.Client.from_service_account_json(
-        os.environ["GOOGLE_STORAGE_API_JSON"]
-    )
+    client = storage.Client.from_service_account_json(os.environ["GOOGLE_STORAGE_API_JSON"])
     bucket = client.bucket(os.environ["GOOGLE_STORAGE_SECRET_BUCKET"])
     secretdir = os.path.join(rootdir, "secrets")
 

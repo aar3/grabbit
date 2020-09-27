@@ -21,9 +21,7 @@ PGSQL_ENVIRONMENT = "dev"
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,
-    "formatters": {
-        "standard": {"format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s"},
-    },
+    "formatters": {"standard": {"format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s"},},
     "filters": {
         "require_debug_false": {"()": "django.utils.log.RequireDebugFalse",},
         "require_debug_true": {"()": "django.utils.log.RequireDebugTrue",},
@@ -39,16 +37,8 @@ LOGGING = {
     },
     "loggers": {
         "django": {"handlers": ["console"], "level": "DEBUG", "propagate": True,},
-        "django.request": {
-            "handlers": ["console"],
-            "level": "DEBUG",
-            "propagate": False,
-        },
+        "django.request": {"handlers": ["console"], "level": "DEBUG", "propagate": False,},
         "gunicorn": {"handlers": ["console"], "level": "DEBUG",},
-        "django.db.backends": {
-            "handlers": ["console"],
-            "level": "WARNING",
-            "propagate": False,
-        },
+        "django.db.backends": {"handlers": ["console"], "level": "WARNING", "propagate": False,},
     },
 }

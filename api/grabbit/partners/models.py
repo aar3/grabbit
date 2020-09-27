@@ -79,7 +79,9 @@ def create_session_for_new_user(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def notify_new_account(sender, instance, created, **kwargs):
     if created:
-        _ = Notification.objects.create(text="Welcome to Grabbit!", user=instance)
+        _ = Notification.objects.create(
+            text="Welcome to Grabbit!", user=instance, item_type=NotificationItemType.General
+        )
 
 
 class Login(BaseModel):
@@ -102,65 +104,11 @@ class Product(BaseModel):
     description = models.TextField()
     merchant = models.ForeignKey(User, on_delete=models.CASCADE)
     terms = models.TextField()
-    offer_expiry = models.DateTimeField()
 
     image_url_1 = models.CharField(max_length=255, null=True)
     image_url_2 = models.CharField(max_length=255, null=True)
     image_url_3 = models.CharField(max_length=255, null=True)
     image_url_4 = models.CharField(max_length=255, null=True)
-
-    def has_expired(self):
-        return self.expiry > dt.datetime.now()
-
-
-class NotificationItemType:
-    NewProduct = 0
-    NewOffer = 1
-    NewMatch = 2
-    GeneralInfo = 3
-    NewProduct = 4
-    GrabbedItem = 5
-    LikedItem = 6
-    NewReview = 7
-    AccountInfoChange = 8
-    ProductShipped = 9
-    ProductReceived = 10
-
-
-class Notification(BaseModel):
-    class Meta:
-        db_table = "notifications"
-
-    text = models.CharField(max_length=255)
-    seen = models.BooleanField(default=False)
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-    item_type = models.IntegerField()  #  NotificationItemType
-    item_route_key = models.CharField(max_length=255)
-    item_route_meta = models.JSONField(default=dict)
-
-
-class Interest(BaseModel):
-    class Meta:
-        db_table = "interests"
-
-    email = models.CharField(max_length=255, primary_key=True)
-
-
-class Like(BaseModel):
-    class Meta:
-        db_table = "likes"
-
-    objects = LikeManager()
-
-    broker = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, null=True, on_delete=models.CASCADE)
-
-
-@receiver(post_save, sender=Like)
-def notify_new_like(sender, instance, created, **kwargs):
-    if created:
-        text = instance.broker.username + " liked your product: " + instance.product.name
-        _ = Notification.objects.create(text=text, user=instance.broker)
 
 
 class Offer(BaseModel):
@@ -180,28 +128,18 @@ class Offer(BaseModel):
 def notify_new_offer_to_offeree(sender, instance, created, **kwargs):
     if created:
         text = instance.offerer.username + " is offering to match with you for product: " + instance.product.name
-        _ = Notification.objects.create(text=text, user=instance.offeree)
-
-
-class Match(BaseModel):
-    class Meta:
-        db_table = "matches"
-
-    offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
+        _ = Notification.objects.create(
+            text=text, user=instance.offeree, item_type=NotificationItemType.Offer, item=instance
+        )
 
 
 @receiver(post_save, sender=Offer)
-def notify_new_match_to_offeree(sender, instance, created, **kwargs):
-    if created:
-        text = "You've been matched with " + instance.offer.offerer + " for Offer #" + instance.offer.uid
-        _ = Notification.objects.create(text=text, user=instance.offeree)
-
-
-@receiver(post_save, sender=Offer)
-def notify_new_match_to_offerer(sender, instance, created, **kwargs):
+def notify_new_offer_to_offerer(sender, instance, created, **kwargs):
     if created:
         text = instance.offer.offeree.username + " has accepted your offer for product " + instance.offer.product.name
-        _ = Notification.objects.create(text=text, user=instance.offerer)
+        _ = Notification.objects.create(
+            text=text, user=instance.offerer, item_type=NotificationItemType.Offer, item=instance
+        )
 
 
 class Message(BaseModel):
@@ -214,27 +152,19 @@ class Message(BaseModel):
 
 
 @receiver(post_save, sender=Offer)
-def notify_new_message(sender, instance, created, **kwargs):
+def notify_new_message_to_recipient(sender, instance, created, **kwargs):
     if created:
         text = instance.sender.username + " sent you a new message."
-        _ = Notification.objects.create(text=text, user=instance.sender)
-
-
-class AttributionStat(BaseModel):
-    class Meta:
-        db_table = "attribution_stats"
-
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    broker = models.ForeignKey(User, on_delete=models.CASCADE, related_name='broker')
-    merchant = models.ForeignKey(User, on_delete=models.CASCADE, related_name='merchant')
-    metric_json = models.JSONField(default=dict)
+        _ = Notification.objects.create(
+            text=text, user=instance.recipient, item_type=NotificationItemType.Message, item=instance
+        )
 
 
 class Grab(BaseModel):
     class Meta:
         db_table = "grabs"
 
-    match = models.ForeignKey(Match, on_delete=models.CASCADE)
+    offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
     expiry = models.DateTimeField()
     additional_comments = models.TextField()
 
@@ -249,13 +179,62 @@ class Carriers:
     DHL = 3
     Amazon = 4
 
-class ShippedItem(BaseModel):
+
+class Shipment(BaseModel):
     class Meta:
-        db_table = "shipped_items"
+        db_table = "shipments"
 
-    grabbed_item = models.ForeignKey(Grab, on_delete=models.CASCADE)
-    carrier = models.IntegerField()
+    grab = models.ForeignKey(Grab, on_delete=models.CASCADE)
+    carrier = models.IntegerField()  # Carriers
     tracking_number = models.CharField(max_length=255)
-    expected_delivery_date = models.DateTimeField()
+    expected_delivery = models.DateTimeField()
 
-    
+
+class NotificationItemType:
+    Offer = 1
+    General = 3
+    AddedProduct = 4
+    Grab = 5
+    Feedback = 7
+    Shipped = 9
+    ShipmentReceived = 10
+    Message = 11
+
+
+ItemRouteKeyMap = {
+    1: "offer",
+    2: "acctSettings",
+    3: "productInfo",
+    5: "productInfo",
+    7: "feedback",
+    9: "history",
+    10: "history",
+    11: "chat",
+}
+
+
+class Notification(BaseModel):
+    class Meta:
+        db_table = "notifications"
+
+    text = models.CharField(max_length=255)
+    seen = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    item_type = models.IntegerField()  #  NotificationItemType
+    _item_route_key = models.CharField(max_length=255, db_column="item_route_key")
+    item = models.JSONField(default=dict)
+
+    def set_meta(self, item_type, item):
+        route_key = ItemRouteKeyMap[item_type]
+        self._item_route_key = route_key
+        self.item = item or dict
+
+
+class AttributionStat(BaseModel):
+    class Meta:
+        db_table = "attribution_stats"
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    broker = models.ForeignKey(User, on_delete=models.CASCADE, related_name="broker")
+    merchant = models.ForeignKey(User, on_delete=models.CASCADE, related_name="merchant")
+    metric_json = models.JSONField(default=dict)

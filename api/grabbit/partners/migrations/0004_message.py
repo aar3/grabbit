@@ -15,36 +15,21 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="Message",
             fields=[
-                (
-                    "id",
-                    models.AutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
-                    ),
-                ),
-                (
-                    "created_at",
-                    models.DateTimeField(default=django.utils.timezone.now, null=True),
-                ),
+                ("id", models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID",),),
+                ("created_at", models.DateTimeField(default=django.utils.timezone.now, null=True),),
                 ("updated_at", models.DateTimeField(null=True)),
                 ("deleted_at", models.DateTimeField(null=True)),
                 ("text", models.TextField()),
                 (
                     "recipient",
                     models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        related_name="recipient",
-                        to="partners.user",
+                        on_delete=django.db.models.deletion.CASCADE, related_name="recipient", to="partners.user",
                     ),
                 ),
                 (
                     "sender",
                     models.ForeignKey(
-                        on_delete=django.db.models.deletion.CASCADE,
-                        related_name="sender",
-                        to="partners.user",
+                        on_delete=django.db.models.deletion.CASCADE, related_name="sender", to="partners.user",
                     ),
                 ),
             ],

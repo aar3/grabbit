@@ -10,7 +10,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name="user", name="user_meta", field=models.JSONField(default=dict),
-        ),
+        migrations.AlterField(model_name="user", name="user_meta", field=models.JSONField(default=dict),),
     ]

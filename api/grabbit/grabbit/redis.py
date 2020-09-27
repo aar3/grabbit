@@ -7,9 +7,7 @@ from django.conf import settings
 from grabbit.utils import random_string
 
 
-RedisClient = redis.Redis(
-    host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=settings.REDIS_DB
-)
+RedisClient = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=settings.REDIS_DB)
 
 
 class SessionToken:
