@@ -20,6 +20,7 @@ const defaultState = {
 
   chat: {
     hasNewMessage: true,
+    currentMessageText: null,
   },
 
   notifications: {
@@ -173,8 +174,12 @@ export const postUserAuth = ({options}) => {
 };
 
 export default mainReducer = (state = defaultState, action) => {
-  console.log(action);
   switch (action.type) {
+    case REDUX_ACTIONS.UPDATE_CURRENT_MESSAGE_TEXT:
+      return {
+        ...state,
+        chat: {...state.chat, currentMessageText: action.payload},
+      };
     case REDUX_ACTIONS.SET_CURRENT_SCENE_KEY:
     case REDUX_ACTIONS.SET_USER_TYPE: {
       return {...state, ...action.payload};

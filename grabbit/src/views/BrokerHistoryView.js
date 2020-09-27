@@ -169,7 +169,7 @@ export default class V extends React.Component {
                           // borderWidth: 1,
                           // borderColor: 'green',
                           marginLeft: 20,
-                          maxWidth: 250,
+                          width: 250,
                           padding: 5,
                         }}>
                         <Text>{item.product.name}</Text>

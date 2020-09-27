@@ -14,8 +14,8 @@ class DiscoverTopNavigation extends React.Component {
   }
 
   render() {
-    const {hasNewMessage} = this.props;
-    const messageIconColor = hasNewMessage ? Color.Pink2 : Color.LightGrey;
+    // const {hasNewMessage} = this.props;
+    // const messageIconColor = hasNewMessage ? Color.Pink2 : Color.LightGrey;
     return (
       <View style={styles.BasicTopNavigation__ContentContainer}>
         <View style={styles.BasicTopNavigation__ContentContainer__LeftContent}>{null}</View>
@@ -26,7 +26,7 @@ class DiscoverTopNavigation extends React.Component {
         </View>
         <View style={styles.BasicTopNavigation__ContentContainer__RightContent}>
           <TouchableOpacity onPress={() => Actions.conversations()}>
-            <Icon name="send" size={20} color={messageIconColor} />
+            <Icon name="send" size={20} color={Color.LightGrey} />
           </TouchableOpacity>
         </View>
       </View>

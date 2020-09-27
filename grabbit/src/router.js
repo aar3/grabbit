@@ -53,6 +53,9 @@ const BottomTabNavigation = ({userType, hasNewNotification}) => {
   if (userType === UserType.Broker) {
     return (
       <Tabs
+        style={{
+          activeBackgroundColor: Color.Black,
+        }}
         duration={0}
         animationEnabled={false}
         key="tabStart"
@@ -91,11 +94,11 @@ const BottomTabNavigation = ({userType, hasNewNotification}) => {
             <Icon
               name={'message-square'}
               size={TabIconSize}
-              color={hasNewNotification ? Color.Pink2 : focused ? Color.Black : Color.LightGrey}
+              color={focused ? Color.Black : Color.LightGrey}
             />
           )}
         />
-        <Scene
+        {/* <Scene
           key="editBrokokerProfile"
           navBar={AccountSettingsTopNavigationBar}
           component={BrokerEditProfileView}
@@ -104,7 +107,7 @@ const BottomTabNavigation = ({userType, hasNewNotification}) => {
           icon={({focused}) => (
             <Icon name={'user'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
           )}
-        />
+        /> */}
       </Tabs>
     );
   }
@@ -159,14 +162,14 @@ const BottomTabNavigation = ({userType, hasNewNotification}) => {
           />
         )}
       />
-      <Scene
+      {/* <Scene
         key="editMerchantProfile"
         navBar={AccountSettingsTopNavigationBar}
         component={MerchantEditProfileView}
         title="Edit User Profile"
         hideNavBar={false}
         icon={({focused}) => <Icon name={'user'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />}
-      />
+      /> */}
     </Tabs>
   );
 };

@@ -110,6 +110,33 @@ export class BasicTextAreaInput extends React.Component {
   }
 }
 
+export class GrowableTextAreaInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      text: '',
+    };
+  }
+
+  render() {
+    let {value, label, labelStyle, containerStyle, inputStyle} = this.props;
+    value = this.state.text === '' && value ? value : this.state.text;
+    return (
+      <View style={containerStyle || styles.GrowableTextAreaInput__Container}>
+        <Text style={labelStyle || styles.TextInput__Label}>
+          {label === undefined ? undefined : label || 'Unlabeled'}
+        </Text>
+        <TextInput
+          multiline={true}
+          value={value}
+          onChangeText={(text) => this.setState({text})}
+          style={inputStyle || styles.GrowableTextAreaInput__Container__Input}
+        />
+      </View>
+    );
+  }
+}
+
 const styles = StyleSheet.create({
   TextInput__Container: {
     // borderWidth: 1,
@@ -174,6 +201,25 @@ const styles = StyleSheet.create({
     fontFamily: 'Arial',
     width: '100%',
     height: 100,
+    borderRadius: 5,
+    backgroundColor: Color.White,
+  },
+  GrowableTextAreaInput__Container: {
+    // borderWidth: 1,
+    // borderColor: 'blue',
+    width: 300,
+    minHeight: 40,
+    marginBottom: 10,
+  },
+  GrowableTextAreaInput__Container__Input: {
+    borderWidth: 1,
+    borderColor: Color.LightGrey,
+    padding: 10,
+    paddingTop: 10,
+    fontSize: 12,
+    fontFamily: 'Arial',
+    width: '100%',
+    minHeight: 40,
     borderRadius: 5,
     backgroundColor: Color.White,
   },

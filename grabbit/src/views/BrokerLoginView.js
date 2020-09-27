@@ -10,9 +10,28 @@ import {Color} from 'grabbit/src/const';
 export default class V extends React.Component {
   render() {
     return (
-      <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} style={styles.BrokerLoginView}>
-        <View style={styles.BrokerLoginView}>
-          <View style={styles.LogoContainer}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              // borderWidth: 1,
+              // borderColor: 'red',
+              width: 100,
+              height: 100,
+              marginBottom: 20,
+              marginTop: 20,
+            }}>
             <Image
               source={require('../../assets/imgs/Grabbit_Gradient_G_300x300.png')}
               style={{flex: 1, height: undefined, width: undefined}}
@@ -46,19 +65,3 @@ export default class V extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  BrokerLoginView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  LogoContainer: {
-    // borderWidth: 1,
-    // borderColor: 'red',
-    width: 100,
-    height: 100,
-    marginBottom: 20,
-    marginTop: 20,
-  },
-});

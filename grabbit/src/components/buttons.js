@@ -28,12 +28,12 @@ export class IconLeftButton extends React.Component {
   };
 
   render() {
-    const {buttonStyle, titleStyle, title, iconColor, onPress, iconName} = this.props;
+    const {buttonStyle, titleStyle, iconSize, title, iconColor, onPress, iconName} = this.props;
     return (
       <TouchableOpacity onPress={onPress || this._baseOnPress}>
         <View style={buttonStyle || styles.IconLeftButton}>
-          <Icon name={iconName || 'align-justify'} size={15} color={iconColor || Color.Pink2} />
-          <Text style={titleStyle}>{title || 'Basic Button'}</Text>
+          <Icon name={iconName || 'align-justify'} size={iconSize || 15} color={iconColor || Color.Pink2} />
+          <Text style={titleStyle}>{title === undefined ? undefined : title || 'Basic Button'}</Text>
         </View>
       </TouchableOpacity>
     );

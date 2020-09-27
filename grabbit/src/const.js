@@ -14,6 +14,7 @@ export const Color = {
   GreyText: '#B9B9B9',
   CherryRed: '#d62d2d',
   ForestGreen: '#2da01a',
+  Black: '#000',
 };
 
 export const Font = {
