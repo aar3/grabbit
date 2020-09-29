@@ -96,6 +96,40 @@ const data = [
     },
     status: 'Declined',
   },
+  {
+    id: '5',
+    type: 'Shipment',
+    product: {
+      name: 'Function components cannot be given refs. Attempts to access',
+      merchant: {
+        name: 'Hello Fresh Brands, LLC',
+      },
+    },
+    status: 'Shipped',
+    expected_delivery: '12/12/2020',
+  },
+  {
+    id: '3',
+    type: 'Offer',
+    product: {
+      name: 'Some product name 123',
+      merchant: {
+        name: 'Hello Fresh Brands, LLC',
+      },
+    },
+    status: 'Declined',
+  },
+  {
+    id: '3',
+    type: 'Offer',
+    product: {
+      name: 'Some product name 123',
+      merchant: {
+        name: 'Hello Fresh Brands, LLC',
+      },
+    },
+    status: 'Declined',
+  },
 ];
 
 export default class V extends React.Component {
@@ -187,7 +221,7 @@ export default class V extends React.Component {
                             style={{
                               fontSize: 11,
                               marginTop: 5,
-                              color: Color.ReadableGreyText,
+                              color: Color.Pink2,
                             }}>
                             Expected Delivery: {item.expected_delivery}
                           </Text>

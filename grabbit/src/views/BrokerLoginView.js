@@ -1,14 +1,41 @@
 import React from 'react';
-import {StyleSheet, Image, View, KeyboardAvoidingView} from 'react-native';
+import {Image, View, Text, TextInput, KeyboardAvoidingView, StyleSheet} from 'react-native';
 
-import {BasicTextInput, PasswordInput} from 'grabbit/src/components/text-input';
-import {BasicButton} from 'grabbit/src/components/buttons';
 import {Actions} from 'react-native-router-flux';
+import {Button} from 'react-native-elements';
+import {connect} from 'react-redux';
 
+import REDUX_ACTIONS from 'grabbit/src/actions';
 import {Color} from 'grabbit/src/const';
+import {httpRequestAsync} from 'grabbit/src/utils';
 
-export default class V extends React.Component {
+class V extends React.Component {
+  _renderErrorLabel() {
+    const {error} = this.props;
+    if (!error) {
+      return null;
+    }
+
+    return (
+      <View
+        style={{
+          // borderWidth: 1,
+          // borderColor: 'red',
+          width: 200,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Text
+          style={{
+            color: Color.CherryRed,
+          }}>
+          {error.details}
+        </Text>
+      </View>
+    );
+  }
   render() {
+    const {emailValue, clearLoginError, postLogin, passwordValue, updatePasswordValue, updateEmailValue} = this.props;
     return (
       <KeyboardAvoidingView
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
@@ -37,10 +64,31 @@ export default class V extends React.Component {
               style={{flex: 1, height: undefined, width: undefined}}
             />
           </View>
-          <BasicTextInput label="Phone" />
-          <PasswordInput label="Password" />
 
-          <BasicButton
+          {this._renderErrorLabel()}
+
+          <View style={styles.TextInput__Container}>
+            <Text style={styles.TextInput__Label}>Email</Text>
+            <TextInput
+              autoCapitalize={'none'}
+              value={emailValue}
+              onChangeText={(text) => updateEmailValue({text, key: 'emailValue'})}
+              style={styles.TextInput__Container__Input}
+            />
+          </View>
+
+          <View style={styles.TextInput__Container}>
+            <Text style={styles.TextInput__Label}>Password</Text>
+            <TextInput
+              autoCapitalize={'none'}
+              value={passwordValue}
+              secureTextEntry
+              onChangeText={(text) => updatePasswordValue({text, key: 'passwordValue'})}
+              style={styles.TextInput__Container__Input}
+            />
+          </View>
+
+          <Button
             title="Login"
             buttonStyle={{
               width: 300,
@@ -56,12 +104,109 @@ export default class V extends React.Component {
             }}
             titleStyle={{
               color: Color.Pink2,
+              fontSize: 13,
               fontWeight: 'bold',
             }}
-            onPress={() => Actions.brokerDiscover()}
+            onPress={postLogin({
+              options: {
+                endpoint: '/login/',
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json;charset-utf8',
+                },
+                data: {
+                  email: emailValue,
+                  secret: passwordValue,
+                },
+              },
+            })}
           />
         </View>
       </KeyboardAvoidingView>
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  const {login} = state;
+  return {
+    emailValue: login.emailValue,
+    passwordValue: login.passwordValue,
+    error: login.error,
+    pending: login.pending,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updatePasswordValue: ({text, key}) => {
+      return dispatch({
+        type: REDUX_ACTIONS.UPDATE_LOGIN_PASSWORD,
+        payload: {text, key},
+      });
+    },
+    updateEmailValue: ({text, key}) => {
+      return dispatch({
+        type: REDUX_ACTIONS.UPDATE_LOGIN_EMAIL,
+        payload: {key, text},
+      });
+    },
+    postLogin: ({options}) => {
+      return async () => {
+        dispatch({
+          type: REDUX_ACTIONS.CLEAR_POST_LOGIN_ERROR,
+        });
+
+        dispatch({
+          type: REDUX_ACTIONS.POST_USER_LOGIN_PENDING,
+        });
+
+        const {data, error} = await httpRequestAsync({options});
+
+        if (error) {
+          console.log(error);
+          dispatch({
+            type: REDUX_ACTIONS.POST_USER_LOGIN_ERROR,
+            pending: false,
+            payload: error,
+          });
+        }
+
+        dispatch({
+          type: REDUX_ACTIONS.POST_USER_LOGIN_SUCCESS,
+          payload: data,
+        });
+
+        return Actions.brokerDiscover();
+      };
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(V);
+
+const styles = StyleSheet.create({
+  TextInput__Container: {
+    // borderWidth: 1,
+    // borderColor: 'blue',
+    width: 300,
+    marginBottom: 10,
+  },
+  TextInput__Container__Input: {
+    borderWidth: 1,
+    borderColor: Color.LightGrey,
+    padding: 5,
+    paddingLeft: 10,
+    fontSize: 12,
+    fontFamily: 'Arial',
+    width: '100%',
+    height: 40,
+    borderRadius: 5,
+    backgroundColor: Color.White,
+  },
+  TextInput__Label: {
+    fontSize: 12,
+    paddingBottom: 5,
+    // fontFamily: Font.Default,
+  },
+});

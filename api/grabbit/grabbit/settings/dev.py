@@ -42,3 +42,6 @@ LOGGING = {
         "django.db.backends": {"handlers": ["console"], "level": "WARNING", "propagate": False,},
     },
 }
+
+
+REDIS_HOST = "localhost"

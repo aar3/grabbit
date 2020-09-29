@@ -1,6 +1,7 @@
 # pylint: disable=unused-argument
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, authentication_classes
 from django.shortcuts import get_object_or_404
@@ -73,7 +74,7 @@ class UserViewSet(viewsets.ViewSet):
 
     def create(self, request):
         params = request.data
-        instance = self.model.objects.filter(**params)
+        instance = self.model.objects.filter(email=params["email"])
         if instance:
             return Response(status=400, data={"detail": "exists"})
         instance = self.model.objects.create(**params)

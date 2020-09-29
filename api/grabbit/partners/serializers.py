@@ -17,6 +17,8 @@ class UserSerializer(BaseModelSerializer):
             "deleted_at",
             "name",
             "email",
+            "address_line1",
+            "address_line1",
             "session_token_key",
             "phone",
             "profile_image_url",

@@ -3,7 +3,7 @@ import Config from 'grabbit/config';
 
 export const httpRequestAsync = async ({options}) => {
   try {
-    options.url = Config.Hostname + `/api/${Config.Version}` + options.url;
+    options.url = Config.Hostname + `/api/${Config.Version}` + options.endpoint;
     const {data, status, headers} = await axios(options);
     if (status === 200) {
       return {data};

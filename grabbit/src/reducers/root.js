@@ -8,6 +8,15 @@ import {httpRequestAsync} from 'grabbit/src/utils';
 const defaultState = {
   userType: null,
 
+  login: {
+    // TDOO: in the future we can validate on a per-input basis
+    error: false,
+    pending: false,
+    emailValue: null,
+    user: null,
+    passwordValue: null,
+  },
+
   navigation: {
     currentScene: null,
   },
@@ -174,16 +183,45 @@ export const postUserAuth = ({options}) => {
 };
 
 export default mainReducer = (state = defaultState, action) => {
+  console.log(state);
   switch (action.type) {
+    case REDUX_ACTIONS.CLEAR_POST_LOGIN_ERROR:
+      return {
+        ...state,
+        login: {...state.login, error: null},
+      };
+    case REDUX_ACTIONS.POST_USER_LOGIN_PENDING:
+      return {
+        ...state,
+        login: {...state.login, pending: true},
+      };
+    case REDUX_ACTIONS.POST_USER_LOGIN_ERROR:
+      return {
+        ...state,
+        login: {...state.login, pending: false, error: action.payload},
+      };
+    case REDUX_ACTIONS.POST_USER_LOGIN_SUCCESS:
+      return {
+        ...state,
+        login: {...state.login, pending: false, user: action.payload},
+      };
+    case REDUX_ACTIONS.UPDATE_LOGIN_EMAIL:
+    case REDUX_ACTIONS.UPDATE_LOGIN_PASSWORD:
+      return {
+        ...state,
+        login: {...state.login, [action.payload.key]: action.payload.text},
+      };
     case REDUX_ACTIONS.UPDATE_CURRENT_MESSAGE_TEXT:
       return {
         ...state,
         chat: {...state.chat, currentMessageText: action.payload},
       };
     case REDUX_ACTIONS.SET_CURRENT_SCENE_KEY:
-    case REDUX_ACTIONS.SET_USER_TYPE: {
-      return {...state, ...action.payload};
-    }
+    case REDUX_ACTIONS.SET_USER_TYPE:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case REDUX_ACTIONS.PRODUCT_INFO_LIKE:
       return {
         ...state,
