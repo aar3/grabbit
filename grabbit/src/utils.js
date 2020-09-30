@@ -8,18 +8,20 @@ export const httpRequestAsync = async ({options}) => {
     if (status === 200) {
       return {data};
     } else {
-      console.log(`Returned non-200 (${status}) ` + JSON.stringify(headers));
+      console.log('Returned non-200: ' + String(status) + JSON.stringify(headers));
       return {
         error: {
-          details: `Returned non-200: ${status}`,
+          details: 'Returned non-200: ' + String(status),
+          statusCode: status,
         },
       };
     }
   } catch (e) {
-    console.log('Network error: ' + e.toString());
+    console.log('httpRequestAsync error: ' + e.toString());
     return {
       error: {
-        details: 'Network error',
+        statusCode: e.response.status,
+        details: 'Something unexpected happened :(',
       },
     };
   }

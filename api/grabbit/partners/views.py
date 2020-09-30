@@ -100,6 +100,12 @@ class NotificationViewSet(BaseModelViewSet):
     model = Notification
     serializer = NotificationSerializer
 
+    def retrieve(self, request, pk=None):
+        user = get_object_or_404(User, pk=pk)
+
+        instances = self.model.objects.filter(user__id=user.id)
+        serializer = self.serializer(instances, many=True)
+        return Response(serializer.data)
 
 class OfferViewSet(BaseModelViewSet):
     model = Offer
@@ -163,7 +169,11 @@ def UploadImageView(request, pk=None):
 def BrokerHistoryView(request, pk=None):
     _ = get_object_or_404(User, pk=pk)
 
-    # use chronological ordering of merchants products/services
-    products = Product.objects.filter("-created_at")[:10]
-    serializer = ProductSerializer(products, many=True)
+    offers = Offer.objects.filter(offeree__id=pk)
+    grabs = Grab.objects.filter(offer__offeree__id=pk)
+    shipments = Shipment.objects.filter(grab__offer__offeree__id=pk)
+
+    items = offers + grabs + shipments
+
+    serializer = BrokerHistorySerializer(items, many=True)
     return Response(serializer.data)

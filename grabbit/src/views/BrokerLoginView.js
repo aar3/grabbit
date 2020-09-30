@@ -10,10 +10,27 @@ import {Color} from 'grabbit/src/const';
 import {httpRequestAsync} from 'grabbit/src/utils';
 
 class V extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   _renderErrorLabel() {
-    const {error} = this.props;
+    const {error, invalidEmailValue, invalidPasswordValue} = this.props;
+
+    let errorMsg = error ? error.details : invalidEmailValue ? 'Invalid email' : 'Invalid password';
     if (!error) {
-      return null;
+      return (
+        <View
+          style={{
+            // borderWidth: 1,
+            // borderColor: 'red',
+            width: 300,
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 15,
+            marginBottom: 10,
+          }}></View>
+      );
     }
 
     return (
@@ -21,21 +38,38 @@ class V extends React.Component {
         style={{
           // borderWidth: 1,
           // borderColor: 'red',
-          width: 200,
+          width: 300,
           justifyContent: 'center',
           alignItems: 'center',
+          marginBottom: 10,
         }}>
         <Text
           style={{
             color: Color.CherryRed,
           }}>
-          {error.details}
+          {errorMsg}
         </Text>
       </View>
     );
   }
+
+  _disableLoginButton() {
+    const {emailValue, passwordValue} = this.props;
+    // TODO: validate for a proper email and password
+    if (!emailValue) {
+      return true;
+    }
+
+    if (emailValue.indexOf('@') >= 1) {
+      return false;
+    }
+
+    return true;
+  }
+
   render() {
-    const {emailValue, clearLoginError, postLogin, passwordValue, updatePasswordValue, updateEmailValue} = this.props;
+    const {emailValue, postLogin, passwordValue, updatePasswordValue, updateEmailValue} = this.props;
+    const disableLoginButton = this._disableLoginButton();
     return (
       <KeyboardAvoidingView
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
@@ -89,7 +123,25 @@ class V extends React.Component {
           </View>
 
           <Button
+            disabled={disableLoginButton}
             title="Login"
+            disabledStyle={{
+              width: 300,
+              height: 50,
+              justifyContent: 'center',
+              borderColor: Color.ReadableGreyText,
+              borderWidth: 1,
+              backgroundColor: Color.White,
+              alignItems: 'center',
+              borderRadius: 40,
+              marginTop: 10,
+              marginBottom: 10,
+            }}
+            disabledTitleStyle={{
+              color: Color.ReadableGreyText,
+              fontSize: 13,
+              fontWeight: 'bold',
+            }}
             buttonStyle={{
               width: 300,
               height: 50,
@@ -164,8 +216,13 @@ const mapDispatchToProps = (dispatch) => {
         const {data, error} = await httpRequestAsync({options});
 
         if (error) {
-          console.log(error);
-          dispatch({
+          if (error.statusCode === 404) {
+            error.details = "That user doesn't exist.";
+          } else if (error.statusCode === 401) {
+            error.details = "That's not the right password.";
+          }
+
+          return dispatch({
             type: REDUX_ACTIONS.POST_USER_LOGIN_ERROR,
             pending: false,
             payload: error,
