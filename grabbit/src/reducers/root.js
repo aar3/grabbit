@@ -28,9 +28,20 @@ const defaultState = {
     user: null,
   },
 
-  chat: {
+  messages: {
     hasNewMessage: true,
-    currentMessageText: null,
+    unsentMessages: [],
+    currentConversation: null,
+    currentMessages: [],
+    postMessagePending: false,
+    postMessageError: null,
+    getMessagesPending: false,
+    getMessagesError: null,
+  },
+
+  conversations: {
+    currentConversation: null,
+    conversations: [],
   },
 
   notifications: {
@@ -51,6 +62,40 @@ const defaultState = {
 
 export default mainReducer = (state = defaultState, action) => {
   switch (action.type) {
+    case REDUX_ACTIONS.CLEAR_GET_CONVERSATIONS_ERROR:
+      return {
+        ...state,
+        conversations: {
+          ...state.conversations,
+          getConversationsError: null,
+        },
+      };
+    case REDUX_ACTIONS.GET_CONVERSATIONS_SUCCESS:
+      return {
+        ...state,
+        conversations: {
+          ...state.conversations,
+          getConversationsPending: false,
+          conversations: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.GET_CONVERSATIONS_ERROR:
+      return {
+        ...state,
+        conversations: {
+          ...state.conversations,
+          getConversationsPending: false,
+          getConversationsError: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.GET_CONVERSATIONS_PENDING:
+      return {
+        ...state,
+        conversations: {
+          ...state.conversations,
+          getConversationsPending: true,
+        },
+      };
     case REDUX_ACTIONS.GET_NOTIFICATIONS_PENDING:
       return {
         ...state,

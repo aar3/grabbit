@@ -3,7 +3,10 @@ import {StyleSheet, Text, View, FlatList, Image, TouchableOpacity} from 'react-n
 
 import Icon from 'react-native-vector-icons/Feather';
 import {Actions} from 'react-native-router-flux';
+import {connect} from 'react-redux';
 
+import {httpRequestAsync} from 'grabbit/src/utils';
+import REDUX_ACTIONS from 'grabbit/src/actions';
 import {Color, FakeImage} from 'grabbit/src/const';
 
 const data = [
@@ -48,12 +51,25 @@ const data = [
   },
 ];
 
-export default class V extends React.Component {
+class V extends React.Component {
   constructor(props) {
     super(props);
   }
 
+  get options() {
+    const {user} = this.props;
+    return {
+      endpoint: `/users/${user.id}/conversations/`,
+      method: 'GET',
+      headers: {
+        'X-Grabbit-Token': user.session_token_key,
+        'Content-Type': 'application/json;charset-utf8',
+      },
+    };
+  }
+
   render() {
+    const {getConversations, conversations} = this.props;
     return (
       <View
         style={{
@@ -63,7 +79,7 @@ export default class V extends React.Component {
         }}>
         <FlatList
           style={{width: '100%'}}
-          data={data}
+          data={conversations}
           renderItem={({item, index}) => {
             const shortMessage = item.text.length > 120 ? item.text.substr(0, 120) + '...' : item.text;
             return (
@@ -124,3 +140,46 @@ export default class V extends React.Component {
     );
   }
 }
+
+
+const mapStateToProps = (state) => {
+  const {conversations, auth} = state;
+  return {
+    user: auth.user,
+    conversations: conversations.conversations,
+  };
+};
+
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getConversations: ({ options }) => {
+      return async () => {
+
+        dispatch({
+          type: REDUX_ACTIONS.CLEAR_GET_CONVERSATIONS_ERROR,
+        });
+
+        dispatch({
+          type: REDUX_ACTIONS.GET_CONVERSATIONS_PENDING,
+        });
+
+        const {data, error} = await httpRequestAsync({ options });
+
+        if (error) {
+          return dispatch({
+            type: REDUX_ACTIONS.GET_CONVERSATIONS_ERROR,
+            payload: error,
+          });
+        }
+
+        return dispatch({
+          type: REDUX_ACTIONS.GET_CONVERSATIONS_SUCCESS,
+          payload: data,
+        });
+      }
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(V);

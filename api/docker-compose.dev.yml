@@ -21,7 +21,7 @@ services:
       GOOGLE_PROJECT: grabbit-1
       GOOGLE_STORAGE_SECRET_BUCKET: gsecret
       GOOGLE_STORAGE_DEFAULT_BUCKET: grabbit
-      DJANGO_SETTINGS_MODULE: grabbit.settings.dev
+      DJANGO_SETTINGS_MODULE: settings.dev
     depends_on:
       - redis
       - postgresql

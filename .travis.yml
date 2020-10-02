@@ -18,7 +18,7 @@ jobs:
           GOOGLE_PROJECT=grabbit-1
           GOOGLE_STORAGE_SECRET_BUCKET=gsecret
           GOOGLE_STORAGE_DEFAULT_BUCKET=grabbit
-          DJANGO_SETTINGS_MODULE=grabbit.settings.ci
+          DJANGO_SETTINGS_MODULE=settings.ci
       before_script:
         - cd $TRAVIS_BUILD_DIR/api && make lint
         - 'psql -c "create database grabbit_dev;" -U postgres'

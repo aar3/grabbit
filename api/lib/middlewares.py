@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import authentication
 from rest_framework import exceptions
-from partners.models import User
+from core.models import User
 
 
 class TokenAuthentication(authentication.BaseAuthentication):

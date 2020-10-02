@@ -39,7 +39,7 @@ class ProductManager(BaseManager):
         self, name, description, user, image_url_1=None, image_url_2=None, image_url_3=None, image_url_4=None,
     ):
 
-        from partners.models import User
+        from core.models import User
 
         user = get_object_or_404(User, pk=user)
 

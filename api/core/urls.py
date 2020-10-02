@@ -1,7 +1,7 @@
 from django.urls import path, include, re_path
 from rest_framework import routers
 
-from partners.views import *
+from core.views import *
 
 
 router = routers.DefaultRouter()
@@ -15,4 +15,5 @@ urlpatterns = [
     re_path(r"explore/brokers/(\d+)", BrokerExploreView),
     re_path(r"explore/merchants/(\d+)", MerchantExploreView),
     re_path(r"history/brokers/(\d+)", BrokerHistoryView),
+    re_path(r"users/(\d+)/conversations", ConversationsView),
 ]

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from partners.models import *
+from core.models import *
 
 
 class BaseModelSerializer(serializers.ModelSerializer):
@@ -103,3 +103,17 @@ class MessageSerializer(BaseModelSerializer):
 
 class BrokerHistorySerializer(BasicSerializer):
     pass
+
+
+class ConversationSerializer(BaseModelSerializer):
+    person_a = UserSerializer(read_only=True)
+    person_b = UserSerializer(read_only=True)
+
+    class Meta:
+        fields = [
+            "id",
+            "created_at",
+            "updated_at",
+            "person_a",
+            "person_b",
+        ]

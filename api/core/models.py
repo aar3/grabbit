@@ -9,9 +9,9 @@ from django.utils import timezone
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from grabbit.utils import random_string
-from grabbit.redis import SessionToken, RedisClient
-from partners.managers import *
+from lib.utils import random_string
+from lib.gredis import SessionToken, RedisClient
+from core.managers import *
 
 
 DEFAULT_PROFILE_IMAGE = "https://www.teamunhcr.org.au/images/empty-profile-image.jpg"
@@ -142,10 +142,19 @@ def notify_new_offer_to_offerer(sender, instance, created, **kwargs):
         )
 
 
+class Conversation(BaseModel):
+    class Meta:
+        db_table = "conversations"
+
+    person_a = models.ForeignKey(User, on_delete=models.CASCADE, related_name="person_a")
+    person_b = models.ForeignKey(User, on_delete=models.CASCADE, related_name="person_b")
+
+
 class Message(BaseModel):
     class Meta:
         db_table = "messages"
 
+    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sender")
     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recipient")
     text = models.TextField()

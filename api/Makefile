@@ -1,6 +1,5 @@
 SOURCE = .
 PWD = $(shell pwd)
-PROJECT = $(SOURCE)/grabbit
 REQUIREMENTS_DIR = $(PWD)/requirements
 
 # pip requirements
@@ -11,24 +10,24 @@ CMD_PIP_INSTALL = $(foreach file, $(wildcard $(REQUIREMENTS_DIR)/*), pip install
 CMD_PIP_FREEZE = pip freeze > $(REQUIREMENTS_DIR)/requirements.lock
 
 # code style, linting, and formatting
-CMD_BLACK_FORMAT = find $(PROJECT) -type f -name "*.py" | xargs black -l 120
-CMD_PYLINT = find $(PROJECT) -type f -name "*.py" | xargs pylint --rcfile $(SOURCE)/.pylintrc
+CMD_BLACK_FORMAT = find ./core -type f -name "*.py" | xargs black -l 120
+CMD_PYLINT = find ./core -type f -name "*.py" | xargs pylint --rcfile $(SOURCE)/.pylintrc
 
 # test suite
 CMD_PYTEST = python -m pytest --cov=./ -s -v -rxs tests/*.py
 
 # django migrations
-CMD_DJANGO_SHOW_MIGRATIONS = $(PROJECT)/manage.py showmigrations
-CMD_DJANGO_MAKE_MIGRATIONS = $(PROJECT)/manage.py makemigrations
-CMD_DJANGO_MIGRATE = $(PROJECT)/manage.py migrate
+CMD_DJANGO_SHOW_MIGRATIONS = ./manage.py showmigrations
+CMD_DJANGO_MAKE_MIGRATIONS = ./manage.py makemigrations
+CMD_DJANGO_MIGRATE = ./manage.py migrate
 
 # start app locally
-CMD_START_APP_DEV = cd $(PROJECT) && gunicorn grabbit.wsgi:application -w 1 -b 0.0.0.0:8000 --reload --log-level DEBUG
-CMD_START_APP_PROD = cd $(PROJECT) && gunicorn grabbit.wsgi:application -w 2 -b 0.0.0.0:8000 --log-level DEBUG
+CMD_START_APP_DEV = cd . && gunicorn grabbit.wsgi:application -w 1 -b 0.0.0.0:8000 --reload --log-level DEBUG
+CMD_START_APP_PROD = cd . && gunicorn grabbit.wsgi:application -w 2 -b 0.0.0.0:8000 --log-level DEBUG
 
 # bootstrap environment
 CMD_SOURCE_VIRTUAL_ENV = source $(SOURCE)/venv/bin/activate
-CMD_CREATE_LOGS = mkdir -pv $(PROJECT)/logs && touch $(PROJECT)/logs/grabbit.log
+CMD_CREATE_LOGS = mkdir -pv ./logs && touch ./logs/grabbit.log
 
 # docker
 CMD_DOCKER_BUILD_DEV = docker build -t ralston3/grabbit_api:dev-latest -f Dockerfile.dev .
@@ -69,7 +68,7 @@ docker_stop_prod \
 docker_stop_ci
 
 
-APPS = partners
+APPS = core
 
 
 format:
@@ -86,7 +85,7 @@ migrate: make_migrations
 
 test: lint migrate
 	# TODO: foreach this instead of doing each app individually
-	cd $(PROJECT)/partners && $(CMD_PYTEST)
+	cd ./core && $(CMD_PYTEST)
 
 install:
 	$(CMD_PIP_INSTALL)

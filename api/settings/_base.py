@@ -31,7 +31,7 @@ DEBUG = True
 # Application definition
 
 INSTALLED_APPS = [
-    "partners",
+    "core",
     "corsheaders",
     "rest_framework",
     "django.contrib.admin",
@@ -53,7 +53,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "grabbit.urls"
+ROOT_URLCONF = "core.urls"
 
 TEMPLATES = [
     {

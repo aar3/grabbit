@@ -5,10 +5,11 @@ from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, authentication_classes
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
-from partners.models import *
-from partners.serializers import *
-from grabbit.middlewares import TokenAuthentication
+from core.models import *
+from core.serializers import *
+from lib.middlewares import TokenAuthentication
 
 
 class BaseAPIView(APIView):
@@ -107,6 +108,7 @@ class NotificationViewSet(BaseModelViewSet):
         serializer = self.serializer(instances, many=True)
         return Response(serializer.data)
 
+
 class OfferViewSet(BaseModelViewSet):
     model = Offer
     serializer = OfferSerializer
@@ -115,6 +117,15 @@ class OfferViewSet(BaseModelViewSet):
 class MessageViewSet(BaseModelViewSet):
     model = Message
     serializer = MessageSerializer
+
+
+@api_view(["GET"])
+def ConversationsView(request, pk=None):
+    params = request.data
+    user = get_object_or_404(User, pk=pk)
+    conversations = Conversation.objects.filter(Q(person_a__id=pk) | Q(person_b__id=pk))
+    serializer = ConversationSerializer(conversations, many=True)
+    return Response(serializer.data)
 
 
 @api_view(["POST"])

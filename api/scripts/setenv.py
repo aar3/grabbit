@@ -9,15 +9,12 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="set env vars for the project")
     parser.add_argument(
-        "-k",
-        "--key-file",
-        help="google cloud storage keyfile to be used",
-        required=True,
+        "-k", "--key-file", help="google cloud storage keyfile to be used", required=True,
     )
     args = vars(parser.parse_args())
 
     os.environ["GOOGLE_STORAGE_API_JSON"] = args.get("k") or args.get("key_file")
-    os.environ["DJANGO_SETTINGS_MODULE"] = "grabbit.settings.dev"
+    os.environ["DJANGO_SETTINGS_MODULE"] = "settings.dev"
 
     print("exporting .envrc to .env.prod and uploading .env.prod to google storage")
 
