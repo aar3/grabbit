@@ -11,12 +11,12 @@ GOOGLE_STORAGE_URL = "https://storage.googleapis.com"
 
 class GoogleCloudService:
     @staticmethod
-    def upload_asset_to_bucket(acting_user_id, user_type, image_name, image_data):
+    def upload_asset_to_bucket(user_id, user_type, image_name, image_data):
         oauth_creds_file = os.environ["GOOGLE_STORAGE_API_JSON"]
         client = storage.Client.from_service_account_json(oauth_creds_file)
 
         bucket = client.get_bucket(os.environ["GOOGLE_STORAGE_DEFAULT_BUCKET"])
-        path = user_type + acting_user_id + image_name
+        path = user_type + user_id + image_name
 
         blob = bucket.blob(path)
         blob.upload_from_string(image_data)
@@ -24,7 +24,7 @@ class GoogleCloudService:
         return os.path.join(GOOGLE_STORAGE_URL, path)
 
     @staticmethod
-    async def upload_asset_to_bucket_async(acting_user_id, user_type, image_name, image_data):
+    async def upload_asset_to_bucket_async(user_id, user_type, image_name, image_data):
         # https://cloud.google.com/storage/docs/json_api/v1/objects/insert
         proc = subprocess.Popen(
             [
@@ -39,7 +39,7 @@ class GoogleCloudService:
         service_key = proc.stdout.read().decode()[:-1]
 
         bucket = os.environ["GOOGLE_STORAGE_DEFAULT_BUCKET"]
-        path = user_type + acting_user_id + image_name
+        path = user_type + user_id + image_name
 
         async with httpx.AsyncClient() as client:
             response = await client.post(

@@ -9,7 +9,9 @@ from django.utils import timezone
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from lib.utils import random_string
+from lib.utils import random_string, make_qrcode
+from lib.const import UserType
+from lib.gcloud import GoogleCloudServices
 from lib.gredis import SessionToken, RedisClient
 from core.managers import *
 
@@ -49,6 +51,7 @@ class User(BaseModel):
     session_token_key = models.CharField(max_length=255)
     user_meta = models.JSONField(default=dict)
     type = models.CharField(max_length=255)
+    qr_code_url = models.CharField(max_length=255)
     site_url = models.CharField(max_length=255, null=True)
     profile_image_url = models.CharField(max_length=255, default=DEFAULT_PROFILE_IMAGE,)
 
@@ -73,6 +76,15 @@ def create_session_for_new_user(sender, instance, created, **kwargs):
         _ = RedisClient.set(key, session.serialize())
 
         instance.session_token_key = key
+        instance.save()
+
+
+@receiver(post_save, sender=User)
+def create_qr_code_for_new_user(sender, instance, created, **kwargs):
+    if created:
+        code = make_qrcode(instance.username)
+        img_path = GoogleCloudServices.upload_asset_to_bucket(instance.id, instance.username, UserType.BROKER, code)
+        instance.qr_code_url = img_path
         instance.save()
 
 
