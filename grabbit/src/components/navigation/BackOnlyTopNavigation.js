@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {View} from 'react-native';
 
 import {styles} from 'grabbit/src/components/navigation/BasicTopNavigation';
 import {BackButton} from 'grabbit/src/components/navigation/buttons';

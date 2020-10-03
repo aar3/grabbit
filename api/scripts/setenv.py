@@ -9,10 +9,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="set env vars for the project")
     parser.add_argument(
-        "-k",
-        "--key-file",
-        help="google cloud storage keyfile to be used",
-        required=True,
+        "-k", "--key-file", help="google cloud storage keyfile to be used", required=True,
     )
     args = vars(parser.parse_args())
 

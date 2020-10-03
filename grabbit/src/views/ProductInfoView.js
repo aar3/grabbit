@@ -1,13 +1,14 @@
 import React from 'react';
-import {StyleSheet, Text, Modal, View, TouchableOpacity, Image, FlatList} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 
 import Icon from 'react-native-vector-icons/Feather';
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 
+import REDUX_ACTIONS from 'grabbit/src/actions';
 import {Color, UserType, FakeImage} from 'grabbit/src/const';
-import {BasicButton} from 'grabbit/src/components/buttons';
-import BrokerModal from 'grabbit/src/components/modals/BrokerProductInfoDetails';
+import BrokerProductInfoDetails from 'grabbit/src/components/modals/BrokerProductInfoDetails';
+import MerchantProductInfoDetails from 'grabbit/src/components/modals/MerchantProductInfoDetails';
 
 const data = {
   id: '1',
@@ -17,7 +18,7 @@ const data = {
   },
   name: 'Flamingo Hat LTD III',
   description: 'This is a product description',
-  liked: {
+  like: {
     id: '1',
   },
   terms:
@@ -26,30 +27,15 @@ const data = {
   image2_url: FakeImage,
   image3_url: FakeImage,
   image4_url: FakeImage,
+  userHasMatch: true,
+  stats: {
+    grabs: 11,
+    like_count: '1.1K',
+    offers: 123,
+    views: '11.5K',
+    interest: 0.42,
+  },
 };
-
-const detailSelections = [
-  {
-    id: '0',
-    title: 'Leave Feedback',
-    onPress: () => console.log('Feedback left'),
-  },
-  {
-    id: '1',
-    title: 'Report a problem with this Product',
-    onPress: () => console.log('Product problem reported'),
-  },
-  {
-    id: '2',
-    title: 'Report a problem with this Merchant',
-    onPress: () => console.log('Merchant problem reported'),
-  },
-  {
-    id: '3',
-    title: 'Report another problem',
-    onPress: () => console.log('Another problem reported'),
-  },
-];
 
 class DetailsItem extends React.Component {
   render() {
@@ -70,22 +56,40 @@ class ProductInfoView extends React.Component {
     super(props);
     this.state = {
       hasLike: false,
-      showDetailsModal: false,
     };
 
-    this.modal = React.createRef();
+    this.detailsModal = React.createRef();
   }
 
-  _renderDetailItem({item, index}) {
-    return <DetailsItem data={item} />;
+  _deriveGrabbitIconVisibility() {
+    const {canGrabCurrentProduct} = this.props;
+    if (!canGrabCurrentProduct) {
+      return null;
+    }
+
+    return (
+      <TouchableOpacity onPress={() => Actions.grabItem()}>
+        <Icon name="shopping-bag" size={20} color={Color.GreyText} />
+      </TouchableOpacity>
+    );
+  }
+
+  _deriveModal({userType}) {
+    if (userType === UserType.Broker) {
+      return <BrokerProductInfoDetails ref={this.detailsModal} />;
+    }
+
+    return <MerchantProductInfoDetails ref={this.detailsModal} />;
   }
 
   render() {
-    const {userType} = this.props;
+    const {userType, currentProductHasLike, likeProduct, toggleDetailsModalForBroker} = this.props;
 
-    const color = this.state.hasLike ? Color.Pink2 : Color.GreyText;
-    const likeIcon = userType === UserType.Broker ? <Icon name="heart" size={20} color={color} /> : null;
-    const modal = userType === UserType.Broker ? <BrokerModal ref={this.modal} /> : null;
+    const likeColor = currentProductHasLike ? Color.Pink2 : Color.GreyText;
+    const likeIcon = userType === UserType.Broker ? <Icon name="heart" size={20} color={likeColor} /> : null;
+
+    const modal = this._deriveModal({userType});
+    const grabbitIcon = this._deriveGrabbitIconVisibility();
 
     return (
       <View style={styles.ProductInfoView}>
@@ -128,28 +132,52 @@ class ProductInfoView extends React.Component {
                   width: 100,
                 }}>
                 <View style={styles.ProductInfoView__ContentContainer__Info__Upper__Button}>
-                  <TouchableOpacity onPress={() => this.setState({hasLike: !this.state.hasLike})}>
-                    {likeIcon}
-                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => likeProduct()}>{likeIcon}</TouchableOpacity>
                 </View>
+                <View style={styles.ProductInfoView__ContentContainer__Info__Upper__Button}>{grabbitIcon}</View>
                 <View style={styles.ProductInfoView__ContentContainer__Info__Upper__Button}>
-                  {/* TODO: if item is grabbed, it's grey, else pink */}
-                  <TouchableOpacity
-                    onPress={() => {
-                      return Actions.grabItem();
-                    }}>
-                    <Icon name="shopping-bag" size={20} color={Color.GreyText} />
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.ProductInfoView__ContentContainer__Info__Upper__Button}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      this.modal.current.show();
-                    }}>
+                  <TouchableOpacity onPress={() => toggleDetailsModalForBroker()}>
                     <Icon name="more-vertical" size={20} color={Color.GreyText} />
                   </TouchableOpacity>
                 </View>
               </View>
+            </View>
+            <View
+              style={{
+                // borderWidth: 1,
+                // borderColor: 'blue',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Icon
+                style={styles.ProductInfoView__ContentContainer__Info__StatIcon}
+                name="heart"
+                size={20}
+                color={Color.GreyText}
+              />
+              <Text style={styles.ProductInfoView__ContentContainer__Info__StatValue}>{data.stats.like_count}</Text>
+              <Icon
+                style={styles.ProductInfoView__ContentContainer__Info__StatIcon}
+                name="shopping-bag"
+                size={20}
+                color={Color.GreyText}
+              />
+              <Text style={styles.ProductInfoView__ContentContainer__Info__StatValue}>{data.stats.grabs}</Text>
+              <Icon
+                style={styles.ProductInfoView__ContentContainer__Info__StatIcon}
+                name="zap"
+                size={20}
+                color={Color.GreyText}
+              />
+              <Text style={styles.ProductInfoView__ContentContainer__Info__StatValue}>{data.stats.interest}</Text>
+              <Icon
+                style={styles.ProductInfoView__ContentContainer__Info__StatIcon}
+                name="tv"
+                size={20}
+                color={Color.GreyText}
+              />
+              <Text style={styles.ProductInfoView__ContentContainer__Info__StatValue}>{data.stats.views}</Text>
             </View>
             <View style={styles.ProductInfoView__ContentContainer__Info__Description}>
               <Text style={{color: Color.DarkerGrey}}>{data.terms}</Text>
@@ -162,13 +190,32 @@ class ProductInfoView extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const {userType} = state;
+  const {userType, productInfo} = state;
   return {
     userType,
+    canGrabCurrentProduct: productInfo.canGrabCurrentProduct,
+    showDetailsModalForBroker: productInfo.showDetailsModalForBroker,
+    showDetailsModalForMerchant: productInfo.showDetailsModalForMerchant,
+    currentProductHasLike: productInfo.currentProductHasLike,
   };
 };
 
-export default connect(mapStateToProps)(ProductInfoView);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleDetailsModalForBroker: () => {
+      return dispatch({
+        type: REDUX_ACTIONS.TOGGLE_BROKER_PRODUCT_DETAILS_MODAL,
+      });
+    },
+    likeProduct: () => {
+      return dispatch({
+        type: REDUX_ACTIONS.PRODUCT_INFO_LIKE,
+      });
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductInfoView);
 
 const styles = StyleSheet.create({
   ProductInfoView: {
@@ -290,5 +337,12 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     // borderColor: 'red',
     padding: 10,
+    marginTop: 10,
+  },
+  ProductInfoView__ContentContainer__Info__StatIcon: {
+    marginLeft: 10,
+  },
+  ProductInfoView__ContentContainer__Info__StatValue: {
+    marginLeft: 5,
   },
 });

@@ -1,10 +1,11 @@
 import React from 'react';
 import {StyleSheet, Text, View, FlatList, Image, TouchableOpacity} from 'react-native';
 
-import {FakeImage, Color, Font} from 'grabbit/src/const';
-
-import {BasicButton} from 'grabbit/src/components/buttons';
 import {Actions} from 'react-native-router-flux';
+
+import {FakeImage, Color, Font} from 'grabbit/src/const';
+import {BasicButton} from 'grabbit/src/components/buttons';
+import ViewOfferDetailsModal from 'grabbit/src/components/modals/ViewOfferDetails';
 
 const data = [
   {
@@ -149,34 +150,43 @@ class FlatListRow extends React.Component {
   render() {
     const {data} = this.props;
     return (
-      <TouchableOpacity onPress={() => Actions.brokerFeedback()}>
-        <View style={styles.FlatListRow__Container}>
-          <View style={styles.FlatListRow__Container__Image}>
-            <Image source={{uri: data.image_url}} style={{height: 75, width: 75}} />
-          </View>
-          <View style={styles.FlatListRow__Container__Info}>
-            <Text style={{marginBottom: 5}}>{data.product.name}</Text>
-            <Text style={{marginBottom: 5, color: Color.GreyText}}>{data.product.merchant.name}</Text>
-            <Text style={{marginBottom: 5, color: Color.Pink2}}>{data.shipping.expires}</Text>
-          </View>
+      <View style={styles.FlatListRow__Container}>
+        <View style={styles.FlatListRow__Container__Image}>
+          <Image source={{uri: data.image_url}} style={{height: 75, width: 75}} />
         </View>
-      </TouchableOpacity>
+        <View style={styles.FlatListRow__Container__Info}>
+          <Text style={{marginBottom: 5}}>{data.product.name}</Text>
+          <Text style={{marginBottom: 5, color: Color.GreyText}}>{data.product.merchant.name}</Text>
+          <Text style={{marginBottom: 5, color: Color.Pink2}}>{data.shipping.expires}</Text>
+        </View>
+      </View>
     );
   }
 }
 
-export default class OffersView extends React.Component {
-  _renderItem({item, index}) {
-    return <FlatListRow data={item} />;
+export default class V extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+
+    this.viewOfferDetailsModal = React.createRef();
   }
 
   render() {
+    const modal = <ViewOfferDetailsModal ref={this.viewOfferDetailsModal} />;
     return (
       <View style={styles.OffersView}>
+        {modal}
         <FlatList
           style={styles.OffersView__FlatList}
           data={data}
-          renderItem={this._renderItem}
+          renderItem={({item, index}) => {
+            return (
+              <TouchableOpacity onPress={() => this.viewOfferDetailsModal.current.show()}>
+                <FlatListRow data={item} />
+              </TouchableOpacity>
+            );
+          }}
           keyExtractor={(_item, index) => index.toString()}
         />
       </View>

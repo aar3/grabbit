@@ -1,6 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 
+import StackViewStyleInterpolator from 'react-navigation-stack';
 import {Router, Scene, Stack, Tabs} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
@@ -9,37 +10,54 @@ import {
   BrokerLoginView,
   BrokerSignupView,
   EntryView,
-  DiscoverView,
+  BrokerDiscoverView,
   BrokerActivityView,
   NotificationsView,
-  EditUserProfileView,
+  BrokerEditProfileView,
   BrokerFurtherDetailsView,
   ProductInfoView,
   LikedProductsView,
-  BrokerMatchesView,
+  MatchesView,
   GrabbedView,
   MerchantSignupView,
   MerchantLoginView,
   MerchantExploreView,
   MerchantProductsView,
   MerchantAddProductView,
-  EditMerchantProfileView,
+  MerchantEditProfileView,
   BrokerFeedbackView,
   BrokerEntryView,
   MerchantEntryView,
-  GrabItemView,
+  BrokerGrabItemView,
   OffersView,
+  GeneralInfoView,
+  ChatView,
+  ConversationsView,
+  BrokerSuccessfulGrabView,
+  FeedbackView,
+  PrivacyPolicyView,
+  TermsAndConditionsView,
+  AboutGrabbitView,
+  BrokerHistoryView,
 } from 'grabbit/src/views';
 import {TabIconSize, Color, UserType} from 'grabbit/src/const';
 import BasicTopNavigationBar from 'grabbit/src/components/navigation/BasicTopNavigation';
 import BackOnlyTopNavigationBar from 'grabbit/src/components/navigation/BackOnlyTopNavigation';
+import AccountSettingsTopNavigationBar from 'grabbit/src/components/navigation/AccountSettingsTopNavigation';
 import ActivityTopNavigationBar from 'grabbit/src/components/navigation/ActivityTopNavigation';
-import MerchantExploreTopNavigation from 'grabbit/src/components/navigation/MerchantExploreTopNavigation';
+import DiscoverTopNvigationBar from 'grabbit/src/components/navigation/DiscoverTopNavigation';
+import ImageAndBackTopNavigationBar from 'grabbit/src/components/navigation/ImageAndBackTopNavigation';
+import ImageCenterTopNavigation from 'grabbit/src/components/navigation/ImageCenterTopNavigation';
 
-const BottomTabNavigation = ({userType}) => {
+const BottomTabNavigation = ({userType, hasNewNotification}) => {
   if (userType === UserType.Broker) {
     return (
       <Tabs
+        style={{
+          activeBackgroundColor: Color.Black,
+        }}
+        duration={0}
+        animationEnabled={false}
         key="tabStart"
         hideNavBar={true}
         showLabel={false}
@@ -47,9 +65,9 @@ const BottomTabNavigation = ({userType}) => {
         activeBackgroundColor="white"
         lazy>
         <Scene
-          key="discover"
-          component={DiscoverView}
-          navBar={MerchantExploreTopNavigation}
+          key="brokerDiscover"
+          component={BrokerDiscoverView}
+          navBar={DiscoverTopNvigationBar}
           title="Discover"
           hideNavBar={false}
           icon={({focused}) => (
@@ -57,18 +75,18 @@ const BottomTabNavigation = ({userType}) => {
           )}
         />
         <Scene
-          key="likedProducts"
-          component={LikedProductsView}
-          navBar={ActivityTopNavigationBar}
-          title="Liked Products"
+          key="brokerHistory"
+          component={BrokerHistoryView}
+          navBar={ImageCenterTopNavigation}
+          title="Broker History"
           hideNavBar={false}
           icon={({focused}) => (
-            <Icon name={'grid'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
+            <Icon name={'align-justify'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
           )}
         />
         <Scene
           key="notifications"
-          navBar={null}
+          navBar={BasicTopNavigationBar}
           component={NotificationsView}
           title="Notifications"
           hideNavBar={false}
@@ -76,25 +94,32 @@ const BottomTabNavigation = ({userType}) => {
             <Icon name={'message-square'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
           )}
         />
-        <Scene
-          key="editUserProfile"
-          navBar={BasicTopNavigationBar}
-          component={EditUserProfileView}
+        {/* <Scene
+          key="editBrokokerProfile"
+          navBar={AccountSettingsTopNavigationBar}
+          component={BrokerEditProfileView}
           title="Edit User Profile"
           hideNavBar={false}
           icon={({focused}) => (
             <Icon name={'user'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
           )}
-        />
+        /> */}
       </Tabs>
     );
   }
   return (
-    <Tabs key="tabStart" hideNavBar={true} showLabel={false} tabBarPosition="bottom" activeBackgroundColor="white" lazy>
+    <Tabs
+      animationEnabled={false}
+      key="tabStart"
+      hideNavBar={true}
+      showLabel={false}
+      tabBarPosition="bottom"
+      activeBackgroundColor="white"
+      lazy>
       <Scene
         key="merchantDashboard"
         component={MerchantExploreView}
-        navBar={MerchantExploreTopNavigation}
+        navBar={DiscoverTopNvigationBar}
         title="Merchant Dashboard"
         hideNavBar={false}
         icon={({focused}) => (
@@ -104,7 +129,7 @@ const BottomTabNavigation = ({userType}) => {
       <Scene
         key="merchantProducts"
         component={MerchantProductsView}
-        navBar={BasicTopNavigationBar}
+        navBar={ActivityTopNavigationBar}
         title="Merchant Products"
         hideNavBar={false}
         icon={({focused}) => <Icon name={'grid'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />}
@@ -126,27 +151,31 @@ const BottomTabNavigation = ({userType}) => {
         title="Notifications"
         hideNavBar={false}
         icon={({focused}) => (
-          <Icon name={'message-square'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
+          <Icon
+            name={'message-square'}
+            size={TabIconSize}
+            color={hasNewNotification ? Color.Pink2 : focused ? Color.Black : Color.LightGrey}
+          />
         )}
       />
-      <Scene
+      {/* <Scene
         key="editMerchantProfile"
-        navBar={BasicTopNavigationBar}
-        component={EditMerchantProfileView}
+        navBar={AccountSettingsTopNavigationBar}
+        component={MerchantEditProfileView}
         title="Edit User Profile"
         hideNavBar={false}
         icon={({focused}) => <Icon name={'user'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />}
-      />
+      /> */}
     </Tabs>
   );
 };
 
 class AppRouter extends React.Component {
   render() {
-    const {userType} = this.props;
+    const {userType, hasNewNotification} = this.props;
     return (
       <Router>
-        <Stack key="root">
+        <Stack key="root" transitionConfig={transitionConfig}>
           <Scene key="entry" component={EntryView} title="Entry" hideNavBar={true} initial />
           <Scene
             key="brokerSignup"
@@ -167,7 +196,7 @@ class AppRouter extends React.Component {
           <Scene
             key="grabItem"
             navBar={BackOnlyTopNavigationBar}
-            component={GrabItemView}
+            component={BrokerGrabItemView}
             title={null}
             hideNavBar={false}
             renderBackButton={() => <View />}
@@ -219,9 +248,9 @@ class AppRouter extends React.Component {
             renderBackButton={() => <View />}
           />
           <Scene
-            key="brokerMatches"
+            key="matches"
             navBar={ActivityTopNavigationBar}
-            component={BrokerMatchesView}
+            component={MatchesView}
             title={null}
             hideNavBar={false}
             renderBackButton={() => <View />}
@@ -242,25 +271,152 @@ class AppRouter extends React.Component {
             hideNavBar={false}
             renderBackButton={() => <View />}
           />
-          <Scene
+          {/* <Scene
             key="brokerFeedback"
             navBar={BasicTopNavigationBar}
             component={BrokerFeedbackView}
             title={null}
             hideNavBar={false}
             renderBackButton={() => <View />}
+          /> */}
+          <Scene
+            key="generalInfo"
+            navBar={BackOnlyTopNavigationBar}
+            component={GeneralInfoView}
+            title={null}
+            hideNavBar={false}
+            renderBackButton={() => <View />}
           />
-          {BottomTabNavigation({userType})}
+          <Scene
+            key="chat"
+            navBar={ImageAndBackTopNavigationBar}
+            component={ChatView}
+            title={null}
+            hideNavBar={false}
+            renderBackButton={() => <View />}
+          />
+          <Scene
+            key="conversations"
+            navBar={BackOnlyTopNavigationBar}
+            component={ConversationsView}
+            title={null}
+            hideNavBar={false}
+            renderBackButton={() => <View />}
+          />
+          {/* <Scene
+            key="brokerSuccessfulGrab"
+            navBar={BasicTopNavigationBar}
+            component={BrokerSuccessfulGrabView}
+            title={null}
+            hideNavBar={false}
+            renderBackButton={() => <View />}
+          /> */}
+          <Scene
+            key="feedback"
+            navBar={BackOnlyTopNavigationBar}
+            component={FeedbackView}
+            title={null}
+            hideNavBar={false}
+            renderBackButton={() => <View />}
+          />
+          <Scene
+            key="termsAndConditions"
+            navBar={BackOnlyTopNavigationBar}
+            component={TermsAndConditionsView}
+            title={null}
+            hideNavBar={false}
+            renderBackButton={() => <View />}
+          />
+          <Scene
+            key="privacyPolicy"
+            navBar={BackOnlyTopNavigationBar}
+            component={PrivacyPolicyView}
+            title={null}
+            hideNavBar={false}
+            renderBackButton={() => <View />}
+          />
+          <Scene
+            key="aboutGrabbit"
+            navBar={BackOnlyTopNavigationBar}
+            component={AboutGrabbitView}
+            title={null}
+            hideNavBar={false}
+            renderBackButton={() => <View />}
+          />
+          {BottomTabNavigation({userType, hasNewNotification})}
         </Stack>
       </Router>
     );
   }
 }
 
+const MyTransitionSpec = {
+  duration: 0,
+  // easing: Easing.bezier(0.2833, 0.99, 0.31833, 0.99),
+  // timing: Animated.timing,
+};
+
+const transitionConfig = () => ({
+  transitionSpec: MyTransitionSpec,
+  // screenInterpolator: StackViewStyleInterpolator.forFadeFromBottomAndroid,
+  screenInterpolator: (sceneProps) => {
+    const {layout, position, scene} = sceneProps;
+    const {index} = scene;
+    const width = layout.initWidth;
+
+    //right to left by replacing bottom scene
+    // return {
+    //     transform: [{
+    //         translateX: position.interpolate({
+    //             inputRange: [index - 1, index, index + 1],
+    //             outputRange: [width, 0, -width],
+    //         }),
+    //     }]
+    // };
+
+    const inputRange = [index - 1, index, index + 1];
+
+    const opacity = position.interpolate({
+      inputRange,
+      outputRange: [0, 1, 0],
+    });
+
+    const translateX = position.interpolate({
+      inputRange,
+      outputRange: [width, 0, 0],
+    });
+
+    return {
+      opacity,
+      transform: [{translateX}],
+    };
+
+    //from center to corners
+    // const inputRange = [index - 1, index, index + 1];
+    // const opacity = position.interpolate({
+    //     inputRange,
+    //     outputRange: [0.8, 1, 1],
+    // });
+
+    // const scaleY = position.interpolate({
+    //     inputRange,
+    //     outputRange: ([0.8, 1, 1]),
+    // });
+
+    // return {
+    //     opacity,
+    //     transform: [
+    //         { scaleY }
+    //     ]
+    // };
+  },
+});
+
 const mapStateToProps = (state) => {
-  const {userType} = state;
+  const {userType, notifications} = state;
   return {
     userType,
+    hasNewNotification: notifications.hasNewNotification,
   };
 };
 

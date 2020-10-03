@@ -3,11 +3,11 @@ import {StyleSheet, Text, View, Alert, KeyboardAvoidingView} from 'react-native'
 
 import {Actions} from 'react-native-router-flux';
 
-import {BasicTextInput} from 'grabbit/src/components/TextInput';
+import {BasicTextInput} from 'grabbit/src/components/text-input';
 import {BasicButton} from 'grabbit/src/components/buttons';
 import {Color} from 'grabbit/src/const';
 
-export default class BrokerFurtherDetails extends React.Component {
+export default class V extends React.Component {
   render() {
     return (
       <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} style={styles.container}>
@@ -45,7 +45,7 @@ export default class BrokerFurtherDetails extends React.Component {
               color: Color.White,
               fontWeight: 'bold',
             }}
-            onPress={() => Actions.discover()}
+            onPress={() => Actions.brokerDiscover()}
           />
 
           <BasicButton
@@ -73,7 +73,7 @@ export default class BrokerFurtherDetails extends React.Component {
                 [
                   {
                     text: 'I understand',
-                    onPress: () => Actions.discover(),
+                    onPress: () => Actions.brokerDiscover(),
                   },
                   {
                     text: "I'll do this now",

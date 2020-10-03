@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 
 import {Color} from 'grabbit/src/const';
@@ -56,11 +56,12 @@ export const styles = StyleSheet.create({
   BasicTopNavigation__ContentContainer__CenterContent: {
     // borderWidth: 1,
     // borderColor: 'black',
-    top: 30,
+    top: 40,
     height: 40,
     width: 40,
     borderRadius: 50,
-    left: 170,
+    left: 180,
+    position: 'absolute',
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
@@ -68,11 +69,12 @@ export const styles = StyleSheet.create({
   BasicTopNavigation__ContentContainer__RightContent: {
     // borderWidth: 1,
     // borderColor: 'red',
-    top: 30,
+    top: 40,
     borderRadius: 50,
     height: 40,
     width: 40,
-    left: 290,
+    left: 330,
+    position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
   },

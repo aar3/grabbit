@@ -1,10 +1,9 @@
 import React from 'react';
 import {StyleSheet, Text, View, FlatList, Image, TouchableOpacity} from 'react-native';
 
-import {FakeImage, Color, Font} from 'grabbit/src/const';
+import {FakeImage, Color} from 'grabbit/src/const';
 
-import {BasicButton} from 'grabbit/src/components/buttons';
-import {Actions} from 'react-native-router-flux';
+import GrabbedItemFeedbackModal from 'grabbit/src/components/modals/GrabbedItemFeedback';
 
 const data = [
   {
@@ -145,38 +144,38 @@ const data = [
   },
 ];
 
-class FlatListRow extends React.Component {
-  render() {
-    const {data} = this.props;
-    return (
-      <TouchableOpacity onPress={() => Actions.brokerFeedback()}>
-        <View style={styles.FlatListRow__Container}>
-          <View style={styles.FlatListRow__Container__Image}>
-            <Image source={{uri: data.image_url}} style={{height: 75, width: 75}} />
-          </View>
-          <View style={styles.FlatListRow__Container__Info}>
-            <Text style={{marginBottom: 5}}>{data.product.name}</Text>
-            <Text style={{marginBottom: 5, color: Color.GreyText}}>{data.product.merchant.name}</Text>
-            <Text style={{marginBottom: 5, color: Color.Pink2}}>{data.shipping.shipped_on}</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-    );
-  }
-}
+export default class V extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
 
-export default class GrabbedView extends React.Component {
-  _renderItem({item, index}) {
-    return <FlatListRow data={item} />;
+    this.grabbedItemFeedbackModal = React.createRef();
   }
 
   render() {
+    const grabbedItemFeedbackModal = <GrabbedItemFeedbackModal ref={this.grabbedItemFeedbackModal} />;
     return (
       <View style={styles.GrabbedView}>
+        {grabbedItemFeedbackModal}
         <FlatList
           style={styles.GrabbedView__FlatList}
           data={data}
-          renderItem={this._renderItem}
+          renderItem={({item, index}) => {
+            return (
+              <TouchableOpacity onPress={() => this.grabbedItemFeedbackModal.current.show()}>
+                <View style={styles.FlatListRow__Container}>
+                  <View style={styles.FlatListRow__Container__Image}>
+                    <Image source={{uri: item.image_url}} style={{height: 75, width: 75}} />
+                  </View>
+                  <View style={styles.FlatListRow__Container__Info}>
+                    <Text style={{marginBottom: 5}}>{item.product.name}</Text>
+                    <Text style={{marginBottom: 5, color: Color.GreyText}}>{item.product.merchant.name}</Text>
+                    <Text style={{marginBottom: 5, color: Color.Pink2}}>{item.shipping.shipped_on}</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            );
+          }}
           keyExtractor={(_item, index) => index.toString()}
         />
       </View>

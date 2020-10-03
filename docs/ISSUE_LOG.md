@@ -32,3 +32,7 @@
     - [fastlane beta application password login info](https://stackoverflow.com/questions/54341690/sign-in-with-the-app-specific-password-you-generated-if-you-forgot-the-app-spec)
     - [fastlane ](https://stackoverflow.com/questions/46585809/error-itms-90717-invalid-app-store-icon)
 - [fastlane init failed. Unable to locate Xcode](https://github.com/fastlane/fastlane/issues/12662)
+
+- React Native
+    - [currentlyFocusedField is deprecated and will be removed in a future release](https://github.com/aksonov/react-native-router-flux/issues/3691)
+    - [Resolve React Native 0.62.0 useNativeDriver warning](https://github.com/xgfe/react-native-datepicker/pull/411/files)

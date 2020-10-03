@@ -1,53 +1,93 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, ImageBackground} from 'react-native';
 
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 
-import ACTIONS from 'grabbit/src/actions';
+import REDUX_ACTIONS from 'grabbit/src/actions';
 import {BasicButton} from 'grabbit/src/components/buttons';
-import {Color} from 'grabbit/src/const';
+import {Color, UserType} from 'grabbit/src/const';
 
 class MerchantEntryView extends React.Component {
   constructor(props) {
     super(props);
   }
 
+  componentDidMount() {
+    const {setUserType} = this.props;
+    return setUserType({userType: UserType.Merchant});
+  }
+
   render() {
     const {userType} = this.props;
     return (
       <View style={styles.MerchantEntryView}>
-        <View style={styles.MerchantEntryView__ContentContainer}>
-          <View style={styles.MerchantEntryView__ContentContainer__LogoContainer}>
-            <Image
-              source={require('../../assets/imgs/Grabbit_Gradient_G_300x300.png')}
-              style={{flex: 1, height: undefined, width: undefined}}
-            />
-          </View>
+        <ImageBackground
+          style={styles.MerchantEntryView__BackgroundImage}
+          source={require('../../assets/imgs/Gradient_Purple_Pink_Background_583x1258.png')}>
+          <View style={styles.MerchantEntryView__ContentContainer}>
+            <View style={styles.MerchantEntryView__ContentContainer__LogoContainer}>
+              <Image
+                source={require('../../assets/imgs/Grabbit_White_G_300x300.png')}
+                style={{flex: 1, height: undefined, width: undefined}}
+              />
+            </View>
+            <Text style={styles.MerchantEntryView__ContentContainer__HeaderLabel}>{'For Brands'}</Text>
 
-          <View style={styles.MerchantEntryView__Actions__Container}>
-            <BasicButton
-              buttonStyle={styles.MerchantEntryView__Actions__Container__UserTypeButton__Broker}
-              titleStyle={styles.MerchantEntryView__Actions__Container__UserTypeButton__Title__Broker}
-              title="Login"
-              onPress={() => Actions.merchantLogin()}
-            />
+            <View
+              style={{
+                width: '80%',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text
+                style={{
+                  marginBottom: 20,
+                  color: Color.White,
+                  textAlign: 'center',
+                  fontSize: 10,
+                }}>
+                {
+                  'By tapping Create Account or Sign In, you agree to our Terms. Learn how we process your data in Privacy Policy'
+                }
+              </Text>
+            </View>
 
-            <BasicButton
-              buttonStyle={styles.MerchantEntryView__Actions__Container__UserTypeButton__Merchant}
-              titleStyle={styles.MerchantEntryView__Actions__Container__UserTypeButton__Title__Merchant}
-              title="Sign Up"
-              onPress={() => Actions.merchantSignup()}
-            />
+            <View style={styles.MerchantEntryView__Actions__Container}>
+              <BasicButton
+                buttonStyle={styles.MerchantEntryView__Actions__Container__UserTypeButton__Broker}
+                titleStyle={styles.MerchantEntryView__Actions__Container__UserTypeButton__Title__Broker}
+                title="Login"
+                onPress={() => {
+                  return Actions.merchantLogin();
+                }}
+              />
+
+              <BasicButton
+                buttonStyle={styles.MerchantEntryView__Actions__Container__UserTypeButton__Merchant}
+                titleStyle={styles.MerchantEntryView__Actions__Container__UserTypeButton__Title__Merchant}
+                title="Sign Up"
+                onPress={() => {
+                  return Actions.merchantSignup();
+                }}
+              />
+            </View>
           </View>
-        </View>
+        </ImageBackground>
       </View>
     );
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    setUserType: ({userType}) => {
+      return dispatch({
+        type: REDUX_ACTIONS.SET_USER_TYPE,
+        payload: {userType},
+      });
+    },
+  };
 };
 
 const mapStateToProps = (state) => {
@@ -64,7 +104,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Color.White,
+    // backgroundColor: Color.Pink2,
+  },
+  MerchantEntryView__BackgroundImage: {
+    flex: 1,
+    width: '110%',
+    resizeMode: 'cover',
+    justifyContent: 'center',
   },
   MerchantEntryView__ContentContainer: {
     // borderWidth: 1,
@@ -76,20 +122,22 @@ const styles = StyleSheet.create({
   MerchantEntryView__ContentContainer__LogoContainer: {
     // borderWidth: 1,
     // borderColor: 'red',
-    width: 100,
+    width: 98,
     height: 100,
-    marginBottom: 300,
+    marginBottom: 30,
   },
   MerchantEntryView__Actions__Container: {
     // borderColor: 'red',
     // borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     width: '100%',
   },
   MerchantEntryView__Actions__Container__UserTypeButton__Broker: {
     width: 300,
     height: 50,
     justifyContent: 'center',
-    backgroundColor: Color.Pink2,
+    backgroundColor: Color.White,
     alignItems: 'center',
     borderRadius: 40,
     marginBottom: 10,
@@ -100,16 +148,23 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: Color.Pink2,
+    borderColor: Color.White,
     borderRadius: 40,
     marginBottom: 10,
   },
   MerchantEntryView__Actions__Container__UserTypeButton__Title__Broker: {
-    color: Color.White,
+    color: Color.Pink2,
     fontWeight: 'bold',
   },
   MerchantEntryView__Actions__Container__UserTypeButton__Title__Merchant: {
-    color: Color.Pink2,
+    color: Color.White,
     fontWeight: 'bold',
+  },
+  MerchantEntryView__ContentContainer__HeaderLabel: {
+    color: Color.White,
+    fontWeight: 'bold',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 160,
   },
 });

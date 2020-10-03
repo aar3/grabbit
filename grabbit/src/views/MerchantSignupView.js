@@ -3,12 +3,11 @@ import {StyleSheet, Text, View, KeyboardAvoidingView, Image, ScrollView} from 'r
 
 import {Actions} from 'react-native-router-flux';
 
-import {BasicTextInput} from 'grabbit/src/components/TextInput';
+import {BasicTextInput} from 'grabbit/src/components/text-input';
 import {BasicButton} from 'grabbit/src/components/buttons';
-// import {StatePicker} from 'grabbit/src/components/Picker';
-import {Color, Font} from 'grabbit/src/const';
+import {Color} from 'grabbit/src/const';
 
-export default class MerchantSignupView extends React.Component {
+export default class V extends React.Component {
   render() {
     return (
       <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} style={styles.container}>
@@ -20,17 +19,6 @@ export default class MerchantSignupView extends React.Component {
                 style={{flex: 1, height: undefined, width: undefined}}
               />
             </View>
-            <Text
-              style={{
-                color: Color.DarkPurple,
-                textAlign: 'center',
-                fontSize: 20,
-                fontWeight: 'bold',
-                marginBottom: 20,
-                marginTop: 5,
-              }}>
-              {'Merchant'}
-            </Text>
           </View>
           <View style={styles.container}>
             <BasicTextInput label="Company Name" />

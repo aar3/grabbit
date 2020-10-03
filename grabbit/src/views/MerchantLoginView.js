@@ -1,13 +1,13 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image, KeyboardAvoidingView} from 'react-native';
+import {StyleSheet, View, Image, KeyboardAvoidingView} from 'react-native';
 
 import {Actions} from 'react-native-router-flux';
 
-import {BasicTextInput} from 'grabbit/src/components/TextInput';
+import {BasicTextInput, PasswordInput} from 'grabbit/src/components/text-input';
 import {BasicButton} from 'grabbit/src/components/buttons';
-import {Color, Font} from 'grabbit/src/const';
+import {Color} from 'grabbit/src/const';
 
-export default class MerchantLoginView extends React.Component {
+export default class V extends React.Component {
   render() {
     return (
       <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} style={styles.container}>
@@ -22,8 +22,7 @@ export default class MerchantLoginView extends React.Component {
           </View>
 
           <BasicTextInput label="Email" />
-
-          <BasicTextInput label="Password" />
+          <PasswordInput label="Password" />
 
           <BasicButton
             title="Login"

@@ -5,18 +5,22 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start": "react-native start",
+    "start": "react-native start ios --reset-cache",
     "test": "jest",
     "lint": "eslint .",
     "format": "./node_modules/.bin/prettier --write '**/*.js'"
   },
   "dependencies": {
+    "@react-native-community/checkbox": "^0.5.3",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/native": "^5.7.3",
     "axios": "^0.19.2",
     "prettier": "^2.0.5",
     "react": "16.13.1",
     "react-native": "0.63.2",
+    "react-native-camera": "git+https://git@github.com/react-native-community/react-native-camera.git",
+    "react-native-datepicker": "^1.7.2",
+    "react-native-elements": "^2.3.2",
     "react-native-emoji": "^1.8.0",
     "react-native-gesture-handler": "^1.7.0",
     "react-native-image-picker": "^2.3.3",

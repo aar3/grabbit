@@ -31,7 +31,7 @@
 		00E356EE1AD99517003FC87E /* grabbitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = grabbitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* grabbitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = grabbitTests.m; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* grabbit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = grabbit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* Grabbit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Grabbit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = grabbit/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = grabbit/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = grabbit/Images.xcassets; sourceTree = "<group>"; };
@@ -143,7 +143,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* grabbit.app */,
+				13B07F961A680F5B00A75B9A /* Grabbit.app */,
 				00E356EE1AD99517003FC87E /* grabbitTests.xctest */,
 			);
 			name = Products;
@@ -205,7 +205,7 @@
 			);
 			name = grabbit;
 			productName = grabbit;
-			productReference = 13B07F961A680F5B00A75B9A /* grabbit.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* Grabbit.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -541,7 +541,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.grabbithq.grabbit;
-				PRODUCT_NAME = grabbit;
+				PRODUCT_NAME = Grabbit;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=*]" = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -569,7 +569,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.grabbithq.grabbit;
-				PRODUCT_NAME = grabbit;
+				PRODUCT_NAME = Grabbit;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=*]" = "";
 				SWIFT_VERSION = 5.0;

@@ -2,164 +2,216 @@ import {Alert} from 'react-native';
 
 import {Actions} from 'react-native-router-flux';
 
-import ACTIONS from 'grabbit/src/actions';
+import REDUX_ACTIONS from 'grabbit/src/actions';
 import {httpRequestAsync} from 'grabbit/src/utils';
 
 const defaultState = {
   userType: null,
+
+  login: {
+    // TDOO: in the future we can validate on a per-input basis
+    responseError: false,
+    invalidEmailValue: false,
+    invalidPasswordValue: false,
+    pending: false,
+    emailValue: null,
+    passwordValue: null,
+  },
+
   navigation: {
     currentScene: null,
   },
-  broker: {
-    session: {
-      user: null,
-      pending: false,
-      error: null,
-    },
-    currScreen: null,
-    discover: {
-      content: [],
-      error: null,
-      pending: false,
-    },
-    productBeingViewed: null,
-    merchantBeingViewed: null,
 
-    // if brokers can view other brokers' profiles
-    brokerBeingViewed: null,
+  currentSceneKey: null,
+
+  session: {
+    user: null,
   },
-  merchant: {
-    session: {
-      user: null,
-      pending: false,
-      error: null,
-    },
-    currScreen: null,
-    productBeingViewed: null,
-    brokerBeingViewed: null,
+
+  messages: {
+    hasNewMessage: true,
+    unsentMessages: [],
+    currentConversation: null,
+    currentMessages: [],
+    postMessagePending: false,
+    postMessageError: null,
+    getMessagesPending: false,
+    getMessagesError: null,
   },
-  match: {
-    proposition: {
-      error: null,
-      pending: false,
-      proposedTo: null,
-    },
-    acceptance: {
-      error: null,
-      pending: false,
-      acceptingFrom: null,
-    },
+
+  conversations: {
+    currentConversation: null,
+    conversations: [],
   },
+
   notifications: {
-    pending: false,
-    error: null,
-    content: [],
+    hasNewNotification: false,
+    notifications: [],
+    getNotificationsPending: true,
+    getNotificationsError: null,
   },
-};
 
-export const postUserAuth = ({options}) => {
-  return async (dispatch) => {
-    dispatch({
-      type: ACTIONS.SESSION_PENDING,
-      data: null,
-      error: null,
-      pending: true,
-    });
-
-    const {data, error} = await httpRequestAsync({options});
-
-    if (error) {
-      if (error.details.includes('404')) {
-        Alert.alert(
-          'Create Account?',
-          'No user was found for those credentials.\n\nWould you like to create an account now?',
-          [
-            {
-              text: 'No',
-              onPress: () => {
-                dispatch({
-                  type: ACTIONS.CREATE_ACCT_CANCELLED,
-                  user: null,
-                  error: null,
-                  pending: false,
-                });
-              },
-              style: 'cancel',
-            },
-            {
-              text: 'Yes',
-              onPress: async () => {
-                options = {
-                  ...options,
-                  url: 'http://localhost:8080/api/v1/users/',
-                };
-
-                const {data, error} = await httpRequestAsync({options});
-
-                if (error) {
-                  return dispatch({
-                    type: ACTIONS.SESSION_ERROR,
-                    user: null,
-                    error: {details: 'Something went wrong on our end'},
-                    pending: false,
-                  });
-                }
-
-                dispatch({
-                  type: ACTIONS.SESSION_SUCCESS,
-                  user: data,
-                  error: null,
-                  pending: false,
-                });
-                Actions.tabStart();
-              },
-            },
-          ],
-          {cancelable: false},
-        );
-        return;
-      } else if (error.details.includes('401')) {
-        return dispatch({
-          type: ACTIONS.SESSION_ERROR,
-          user: null,
-          error: {details: 'Wrong password for that email'},
-          pending: false,
-        });
-      } else {
-        return dispatch({
-          type: ACTIONS.SESSION_ERROR,
-          user: null,
-          error: {details: 'Something went wrong on our end'},
-          pending: false,
-        });
-      }
-    }
-
-    dispatch({
-      type: ACTIONS.SESSION_SUCCESS,
-      user: data,
-      error: null,
-      pending: false,
-    });
-
-    Actions.tabStart();
-  };
+  productInfo: {
+    currentProduct: null,
+    currentProductHasLike: false,
+    showDetailsModalForBroker: false,
+    showDetailsModalForMerchant: false,
+    canGrabCurrentProduct: false,
+  },
 };
 
 export default mainReducer = (state = defaultState, action) => {
   switch (action.type) {
-    case ACTIONS.SET_USER_TYPE: {
-      return {...state, ...action};
-    }
-    case ACTIONS.SESSION_PENDING:
-    case ACTIONS.SESSION_SUCCESS:
-    case ACTIONS.SESSION_ERROR:
-    case ACTIONS.CREATE_ACCT_CANCELLED:
+    case REDUX_ACTIONS.CLEAR_GET_CONVERSATIONS_ERROR:
       return {
         ...state,
-        session: {...state.session, ...action},
+        conversations: {
+          ...state.conversations,
+          getConversationsError: null,
+        },
       };
-    case ACTIONS.CLEAR_CURRENT_TITLE:
+    case REDUX_ACTIONS.GET_CONVERSATIONS_SUCCESS:
+      return {
+        ...state,
+        conversations: {
+          ...state.conversations,
+          getConversationsPending: false,
+          conversations: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.GET_CONVERSATIONS_ERROR:
+      return {
+        ...state,
+        conversations: {
+          ...state.conversations,
+          getConversationsPending: false,
+          getConversationsError: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.GET_CONVERSATIONS_PENDING:
+      return {
+        ...state,
+        conversations: {
+          ...state.conversations,
+          getConversationsPending: true,
+        },
+      };
+    case REDUX_ACTIONS.GET_NOTIFICATIONS_PENDING:
+      return {
+        ...state,
+        notifications: {
+          ...state.notifications,
+          getNotificationsPending: true,
+        },
+      };
+    case REDUX_ACTIONS.GET_NOTIFICATIONS_SUCCESS:
+      return {
+        ...state,
+        notifications: {
+          ...state.notifications,
+          getNotificationsError: null,
+          getNotificationsPending: false,
+          notifications: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.GET_NOTIFICATIONS_ERROR:
+      return {
+        ...state,
+        notifications: {
+          ...state.notifications,
+          getNotificationsPending: false,
+          getNotificationsError: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.CLEAR_POST_LOGIN_ERROR:
+      return {
+        ...state,
+        login: {
+          ...state.login,
+          error: null,
+        },
+      };
+    case REDUX_ACTIONS.POST_USER_LOGIN_PENDING:
+      return {
+        ...state,
+        login: {
+          ...state.login,
+          pending: true,
+        },
+      };
+    case REDUX_ACTIONS.POST_USER_LOGIN_ERROR:
+      // console.log(state.login);
+      return {
+        ...state,
+        login: {
+          ...state.login,
+          pending: false,
+          error: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.POST_USER_LOGIN_SUCCESS:
+      return {
+        ...state,
+        login: {
+          ...state.login,
+          pending: false,
+        },
+        auth: {
+          ...state.auth,
+          user: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.UPDATE_LOGIN_EMAIL:
+    case REDUX_ACTIONS.UPDATE_LOGIN_PASSWORD:
+      return {
+        ...state,
+        login: {
+          ...state.login,
+          [action.payload.key]: action.payload.text,
+        },
+      };
+    case REDUX_ACTIONS.UPDATE_CURRENT_MESSAGE_TEXT:
+      return {
+        ...state,
+        chat: {
+          ...state.chat,
+          currentMessageText: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.SET_CURRENT_SCENE_KEY:
+    case REDUX_ACTIONS.SET_USER_TYPE:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case REDUX_ACTIONS.PRODUCT_INFO_LIKE:
+      return {
+        ...state,
+        productInfo: {
+          ...state.productInfo,
+          currentProductHasLike: !state.productInfo.currentProductHasLike,
+        },
+      };
+    case REDUX_ACTIONS.TOGGLE_BROKER_PRODUCT_DETAILS_MODAL:
+      return {
+        ...state,
+        productInfo: {
+          ...state.productInfo,
+          showDetailsModalForBroker: !state.productInfo.showDetailsModalForBroker,
+        },
+      };
+    case REDUX_ACTIONS.SESSION_PENDING:
+    case REDUX_ACTIONS.SESSION_SUCCESS:
+    case REDUX_ACTIONS.SESSION_ERROR:
+    case REDUX_ACTIONS.CREATE_ACCT_CANCELLED:
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          ...action.payload,
+        },
+      };
+    case REDUX_ACTIONS.CLEAR_CURRENT_TITLE:
       return {
         ...state,
         input: {
@@ -167,20 +219,26 @@ export default mainReducer = (state = defaultState, action) => {
           error: null,
         },
       };
-    case ACTIONS.POST_TITLE_SUCCESS:
-    case ACTIONS.POST_TITLE_ERROR:
-    case ACTIONS.POST_TITLE_PENDING:
+    case REDUX_ACTIONS.POST_TITLE_SUCCESS:
+    case REDUX_ACTIONS.POST_TITLE_ERROR:
+    case REDUX_ACTIONS.POST_TITLE_PENDING:
       return {
         ...state,
-        input: {...state.input, ...action},
+        input: {
+          ...state.input,
+          ...action.payload,
+        },
       };
-    case ACTIONS.GET_USER_TITLE_HISTORY_PENDING:
-    case ACTIONS.GET_USER_TITLE_HISTORY_SUCCESS:
-    case ACTIONS.GET_USER_TITLE_HISTORY_ERROR:
-    case ACTIONS.SET_CURRENT_HISTORY_TITLE:
+    case REDUX_ACTIONS.GET_USER_TITLE_HISTORY_PENDING:
+    case REDUX_ACTIONS.GET_USER_TITLE_HISTORY_SUCCESS:
+    case REDUX_ACTIONS.GET_USER_TITLE_HISTORY_ERROR:
+    case REDUX_ACTIONS.SET_CURRENT_HISTORY_TITLE:
       return {
         ...state,
-        history: {...state.history, ...action},
+        history: {
+          ...state.history,
+          ...action.payload,
+        },
       };
     default:
       return state;
