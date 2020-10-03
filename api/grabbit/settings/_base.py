@@ -32,6 +32,7 @@ DEBUG = True
 
 INSTALLED_APPS = [
     "core",
+    "grabbit",
     "corsheaders",
     "rest_framework",
     "django.contrib.admin",
@@ -53,7 +54,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "core.urls"
+ROOT_URLCONF = "grabbit.urls"
 
 TEMPLATES = [
     {
@@ -71,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "grabbit.wsgi.application"
+WSGI_APPLICATION = "wsgi.application"
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators

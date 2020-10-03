@@ -11,7 +11,7 @@ from django.dispatch import receiver
 
 from lib.utils import random_string, make_qrcode
 from lib.const import UserType
-from lib.gcloud import GoogleCloudServices
+from lib.gcloud import GoogleCloudService
 from lib.gredis import SessionToken, RedisClient
 from core.managers import *
 
@@ -83,7 +83,7 @@ def create_session_for_new_user(sender, instance, created, **kwargs):
 def create_qr_code_for_new_user(sender, instance, created, **kwargs):
     if created:
         code = make_qrcode(instance.username)
-        img_path = GoogleCloudServices.upload_asset_to_bucket(instance.id, instance.username, UserType.BROKER, code)
+        img_path = GoogleCloudService.upload_asset_to_bucket(instance.id, instance.username, UserType.BROKER, code)
         instance.qr_code_url = img_path
         instance.save()
 

@@ -14,7 +14,7 @@ if __name__ == "__main__":
     args = vars(parser.parse_args())
 
     os.environ["GOOGLE_STORAGE_API_JSON"] = args.get("k") or args.get("key_file")
-    os.environ["DJANGO_SETTINGS_MODULE"] = "settings.dev"
+    os.environ["DJANGO_SETTINGS_MODULE"] = "grabbit.settings.dev"
 
     print("exporting .envrc to .env.prod and uploading .env.prod to google storage")
 

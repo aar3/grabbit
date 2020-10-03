@@ -2,7 +2,6 @@ import subprocess
 import os
 
 import httpx
-
 from google.cloud import storage
 
 
