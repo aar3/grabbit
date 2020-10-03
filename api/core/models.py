@@ -82,7 +82,7 @@ def create_session_for_new_user(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def create_qr_code_for_new_user(sender, instance, created, **kwargs):
     if created:
-        code = make_qrcode(instance.username)
+        code = make_qrcode(instance.username).tobytes()
         img_path = GoogleCloudService.upload_asset_to_bucket(instance.id, instance.username, UserType.BROKER, code)
         instance.qr_code_url = img_path
         instance.save()

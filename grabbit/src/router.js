@@ -39,6 +39,7 @@ import {
   TermsAndConditionsView,
   AboutGrabbitView,
   BrokerHistoryView,
+  BrokerAllBrandsView,
 } from 'grabbit/src/views';
 import {TabIconSize, Color, UserType} from 'grabbit/src/const';
 import BasicTopNavigationBar from 'grabbit/src/components/navigation/BasicTopNavigation';
@@ -339,6 +340,14 @@ class AppRouter extends React.Component {
             key="aboutGrabbit"
             navBar={BackOnlyTopNavigationBar}
             component={AboutGrabbitView}
+            title={null}
+            hideNavBar={false}
+            renderBackButton={() => <View />}
+          />
+          <Scene
+            key="brokerAllBrandsView"
+            navBar={BasicTopNavigationBar}
+            component={BrokerAllBrandsView}
             title={null}
             hideNavBar={false}
             renderBackButton={() => <View />}

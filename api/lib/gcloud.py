@@ -2,6 +2,7 @@ import subprocess
 import os
 
 import httpx
+from PIL import Image
 from google.cloud import storage
 
 
@@ -15,7 +16,7 @@ class GoogleCloudService:
         client = storage.Client.from_service_account_json(oauth_creds_file)
 
         bucket = client.get_bucket(os.environ["GOOGLE_STORAGE_DEFAULT_BUCKET"])
-        path = user_type + user_id + image_name
+        path = user_type + str(user_id) + image_name
 
         blob = bucket.blob(path)
         blob.upload_from_string(image_data)
