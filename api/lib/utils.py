@@ -11,12 +11,7 @@ def random_string(n=10):
 
 
 def make_qrcode(s):
-    qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=10,
-        border=4,
-    )
+    qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4,)
     qr.add_data(s)
     qr.make(fit=True)
 

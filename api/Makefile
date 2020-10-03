@@ -10,8 +10,8 @@ CMD_PIP_INSTALL = $(foreach file, $(wildcard $(REQUIREMENTS_DIR)/*), pip install
 CMD_PIP_FREEZE = pip freeze > $(REQUIREMENTS_DIR)/requirements.lock
 
 # code style, linting, and formatting
-CMD_BLACK_FORMAT = find ./core -type f -name "*.py" | xargs black -l 120
-CMD_PYLINT = find ./core -type f -name "*.py" | xargs pylint --rcfile $(SOURCE)/.pylintrc
+CMD_BLACK_FORMAT = find . -type d -path ./venv -prune -false -o -name "*.py" | xargs black -l 120
+CMD_PYLINT = find . -type d -path ./venv -prune -false -o -name "*.py" | xargs pylint --rcfile $(SOURCE)/.pylintrc
 
 # test suite
 CMD_PYTEST = python -m pytest --cov=./ -s -v -rxs tests/*.py
