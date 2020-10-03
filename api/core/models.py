@@ -106,109 +106,118 @@ class Login(BaseModel):
     ip_address = models.CharField(max_length=255)
 
 
-class Product(BaseModel):
-    class Meta:
-        db_table = "products"
+# class Product(BaseModel):
+#     class Meta:
+#         db_table = "products"
 
-    objects = ProductManager()
+#     objects = ProductManager()
+
+#     name = models.CharField(max_length=255)
+#     description = models.TextField()
+#     merchant = models.ForeignKey(User, on_delete=models.CASCADE)
+#     terms = models.TextField()
+
+#     image_url_1 = models.CharField(max_length=255, null=True)
+#     image_url_2 = models.CharField(max_length=255, null=True)
+#     image_url_3 = models.CharField(max_length=255, null=True)
+#     image_url_4 = models.CharField(max_length=255, null=True)
+
+
+class Brand(BaseModel):
+    class Meta:
+        db_table = "brands"
 
     name = models.CharField(max_length=255)
-    description = models.TextField()
-    merchant = models.ForeignKey(User, on_delete=models.CASCADE)
-    terms = models.TextField()
-
-    image_url_1 = models.CharField(max_length=255, null=True)
-    image_url_2 = models.CharField(max_length=255, null=True)
-    image_url_3 = models.CharField(max_length=255, null=True)
-    image_url_4 = models.CharField(max_length=255, null=True)
+    description = models.TextField(null=True)
+    image_url = models.CharField(max_length=255, default=DEFAULT_PROFILE_IMAGE)
 
 
-class Offer(BaseModel):
-    class Meta:
-        db_table = "offers"
+# class Offer(BaseModel):
+#     class Meta:
+#         db_table = "offers"
 
-    uid = models.CharField(max_length=255)
-    offeree = models.ForeignKey(User, on_delete=models.CASCADE, related_name="offeree")
-    offerer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="offerer")
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+#     uid = models.CharField(max_length=255)
+#     offeree = models.ForeignKey(User, on_delete=models.CASCADE, related_name="offeree")
+#     offerer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="offerer")
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
-    def set_uid(self):
-        self.uid = random_string(10)
-
-
-@receiver(post_save, sender=Offer)
-def notify_new_offer_to_offeree(sender, instance, created, **kwargs):
-    if created:
-        text = instance.offerer.username + " is offering to match with you for product: " + instance.product.name
-        _ = Notification.objects.create(
-            text=text, user=instance.offeree, item_type=NotificationItemType.Offer, item=instance
-        )
+#     def set_uid(self):
+#         self.uid = random_string(10)
 
 
-@receiver(post_save, sender=Offer)
-def notify_new_offer_to_offerer(sender, instance, created, **kwargs):
-    if created:
-        text = instance.offer.offeree.username + " has accepted your offer for product " + instance.offer.product.name
-        _ = Notification.objects.create(
-            text=text, user=instance.offerer, item_type=NotificationItemType.Offer, item=instance
-        )
+# @receiver(post_save, sender=Offer)
+# def notify_new_offer_to_offeree(sender, instance, created, **kwargs):
+#     if created:
+#         text = instance.offerer.username + " is offering to match with you for product: " + instance.product.name
+#         _ = Notification.objects.create(
+#             text=text, user=instance.offeree, item_type=NotificationItemType.Offer, item=instance
+#         )
 
 
-class Conversation(BaseModel):
-    class Meta:
-        db_table = "conversations"
-
-    person_a = models.ForeignKey(User, on_delete=models.CASCADE, related_name="person_a")
-    person_b = models.ForeignKey(User, on_delete=models.CASCADE, related_name="person_b")
-
-
-class Message(BaseModel):
-    class Meta:
-        db_table = "messages"
-
-    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sender")
-    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recipient")
-    text = models.TextField()
+# @receiver(post_save, sender=Offer)
+# def notify_new_offer_to_offerer(sender, instance, created, **kwargs):
+#     if created:
+#         text = instance.offer.offeree.username + " has accepted your offer for product " + instance.offer.product.name
+#         _ = Notification.objects.create(
+#             text=text, user=instance.offerer, item_type=NotificationItemType.Offer, item=instance
+#         )
 
 
-@receiver(post_save, sender=Offer)
-def notify_new_message_to_recipient(sender, instance, created, **kwargs):
-    if created:
-        text = instance.sender.username + " sent you a new message."
-        _ = Notification.objects.create(
-            text=text, user=instance.recipient, item_type=NotificationItemType.Message, item=instance
-        )
+# class Conversation(BaseModel):
+#     class Meta:
+#         db_table = "conversations"
+
+#     person_a = models.ForeignKey(User, on_delete=models.CASCADE, related_name="person_a")
+#     person_b = models.ForeignKey(User, on_delete=models.CASCADE, related_name="person_b")
 
 
-class Grab(BaseModel):
-    class Meta:
-        db_table = "grabs"
+# class Message(BaseModel):
+#     class Meta:
+#         db_table = "messages"
 
-    offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
-    expiry = models.DateTimeField()
-    additional_comments = models.TextField()
-
-    def has_expired(self):
-        return self.expiry > dt.datetime.now()
+#     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE)
+#     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sender")
+#     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="recipient")
+#     text = models.TextField()
 
 
-class Carriers:
-    UPS = 0
-    USPS = 1
-    FedEx = 2
-    DHL = 3
-    Amazon = 4
+# @receiver(post_save, sender=Offer)
+# def notify_new_message_to_recipient(sender, instance, created, **kwargs):
+#     if created:
+#         text = instance.sender.username + " sent you a new message."
+#         _ = Notification.objects.create(
+#             text=text, user=instance.recipient, item_type=NotificationItemType.Message, item=instance
+# #         )
 
 
-class Shipment(BaseModel):
-    class Meta:
-        db_table = "shipments"
+# class Grab(BaseModel):
+#     class Meta:
+#         db_table = "grabs"
 
-    grab = models.ForeignKey(Grab, on_delete=models.CASCADE)
-    carrier = models.IntegerField()  # Carriers
-    tracking_number = models.CharField(max_length=255)
-    expected_delivery = models.DateTimeField()
+#     offer = models.ForeignKey(Offer, on_delete=models.CASCADE)
+#     expiry = models.DateTimeField()
+#     additional_comments = models.TextField()
+
+#     def has_expired(self):
+#         return self.expiry > dt.datetime.now()
+
+
+# class Carriers:
+#     UPS = 0
+#     USPS = 1
+#     FedEx = 2
+#     DHL = 3
+#     Amazon = 4
+
+
+# class Shipment(BaseModel):
+#     class Meta:
+#         db_table = "shipments"
+
+#     grab = models.ForeignKey(Grab, on_delete=models.CASCADE)
+#     carrier = models.IntegerField()  # Carriers
+#     tracking_number = models.CharField(max_length=255)
+#     expected_delivery = models.DateTimeField()
 
 
 class NotificationItemType:
@@ -251,11 +260,11 @@ class Notification(BaseModel):
         self.item = item or dict
 
 
-class AttributionStat(BaseModel):
-    class Meta:
-        db_table = "attribution_stats"
+# class AttributionStat(BaseModel):
+#     class Meta:
+#         db_table = "attribution_stats"
 
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    broker = models.ForeignKey(User, on_delete=models.CASCADE, related_name="broker")
-    merchant = models.ForeignKey(User, on_delete=models.CASCADE, related_name="merchant")
-    metric_json = models.JSONField(default=dict)
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+#     broker = models.ForeignKey(User, on_delete=models.CASCADE, related_name="broker")
+#     merchant = models.ForeignKey(User, on_delete=models.CASCADE, related_name="merchant")
+#     metric_json = models.JSONField(default=dict)

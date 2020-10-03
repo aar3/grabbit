@@ -29,24 +29,24 @@ class UserSerializer(BaseModelSerializer):
         ]
 
 
-class ProductSerializer(BaseModelSerializer):
-    user = UserSerializer(read_only=True)
+# class ProductSerializer(BaseModelSerializer):
+#     user = UserSerializer(read_only=True)
 
-    class Meta:
-        model = Product
-        fields = [
-            "id",
-            "created_at",
-            "updated_at",
-            "deleted_at",
-            "name",
-            "description",
-            "user",
-            "image_url_1",
-            "image_url_2",
-            "image_url_3",
-            "image_url_4",
-        ]
+#     class Meta:
+#         model = Product
+#         fields = [
+#             "id",
+#             "created_at",
+#             "updated_at",
+#             "deleted_at",
+#             "name",
+#             "description",
+#             "user",
+#             "image_url_1",
+#             "image_url_2",
+#             "image_url_3",
+#             "image_url_4",
+#         ]
 
 
 class NotificationSerializer(BaseModelSerializer):
@@ -67,53 +67,66 @@ class NotificationSerializer(BaseModelSerializer):
         ]
 
 
-class OfferSerializer(BaseModelSerializer):
-    offeree = UserSerializer(read_only=True)
-    offerer = UserSerializer(read_only=True)
-    product = ProductSerializer(read_only=True)
+# class OfferSerializer(BaseModelSerializer):
+#     offeree = UserSerializer(read_only=True)
+#     offerer = UserSerializer(read_only=True)
+#     product = ProductSerializer(read_only=True)
 
+#     class Meta:
+#         model = Offer
+#         fields = [
+#             "id",
+#             "created_at",
+#             "updated_at",
+#             "offeree",
+#             "offerer",
+#             "product",
+#             "pending",
+#         ]
+
+
+# class MessageSerializer(BaseModelSerializer):
+#     recipient = UserSerializer(read_only=True)
+#     sender = UserSerializer(read_only=True)
+
+#     class Meta:
+#         model = Message
+#         fields = [
+#             "id",
+#             "created_at",
+#             "updated_at",
+#             "recipient",
+#             "sender",
+#             "text",
+#         ]
+
+
+# class BrokerHistorySerializer(BasicSerializer):
+#     pass
+
+
+# class ConversationSerializer(BaseModelSerializer):
+#     person_a = UserSerializer(read_only=True)
+#     person_b = UserSerializer(read_only=True)
+
+#     class Meta:
+#         fields = [
+#             "id",
+#             "created_at",
+#             "updated_at",
+#             "person_a",
+#             "person_b",
+#         ]
+
+
+class BrandSerializer(BaseModelSerializer):
     class Meta:
-        model = Offer
         fields = [
             "id",
             "created_at",
             "updated_at",
-            "offeree",
-            "offerer",
-            "product",
-            "pending",
-        ]
-
-
-class MessageSerializer(BaseModelSerializer):
-    recipient = UserSerializer(read_only=True)
-    sender = UserSerializer(read_only=True)
-
-    class Meta:
-        model = Message
-        fields = [
-            "id",
-            "created_at",
-            "updated_at",
-            "recipient",
-            "sender",
-            "text",
-        ]
-
-
-class BrokerHistorySerializer(BasicSerializer):
-    pass
-
-
-class ConversationSerializer(BaseModelSerializer):
-    person_a = UserSerializer(read_only=True)
-    person_b = UserSerializer(read_only=True)
-
-    class Meta:
-        fields = [
-            "id",
-            "created_at",
-            "updated_at",
-            "person_a",
-            "person_b",
+            "deleted_at",
+            "name",
+            "description",
+            "image_url",
         ]
