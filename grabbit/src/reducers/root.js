@@ -73,8 +73,8 @@ export default mainReducer = (state = defaultState, action) => {
         brokerDiscover: {
           ...state.brokerDiscover,
           brandViewSearchInput: null,
-        }
-      }
+        },
+      };
     case REDUX_ACTIONS.UPDATE_BROKER_BRAND_VIEW_SEARCH_INPUT:
       return {
         ...state,

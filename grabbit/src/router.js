@@ -66,23 +66,13 @@ const BottomTabNavigation = ({userType, hasNewNotification}) => {
         activeBackgroundColor="white"
         lazy>
         <Scene
-          key="brokerDiscover"
+          key="brokerDiscoverView"
           component={BrokerDiscoverView}
           navBar={DiscoverTopNvigationBar}
           title="Discover"
           hideNavBar={false}
           icon={({focused}) => (
             <Icon name={'search'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
-          )}
-        />
-        <Scene
-          key="brokerHistory"
-          component={BrokerHistoryView}
-          navBar={ImageCenterTopNavigation}
-          title="Broker History"
-          hideNavBar={false}
-          icon={({focused}) => (
-            <Icon name={'align-justify'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
           )}
         />
         <Scene
@@ -95,16 +85,6 @@ const BottomTabNavigation = ({userType, hasNewNotification}) => {
             <Icon name={'message-square'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
           )}
         />
-        {/* <Scene
-          key="editBrokokerProfile"
-          navBar={AccountSettingsTopNavigationBar}
-          component={BrokerEditProfileView}
-          title="Edit User Profile"
-          hideNavBar={false}
-          icon={({focused}) => (
-            <Icon name={'user'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
-          )}
-        /> */}
       </Tabs>
     );
   }
@@ -128,24 +108,6 @@ const BottomTabNavigation = ({userType, hasNewNotification}) => {
         )}
       />
       <Scene
-        key="merchantProducts"
-        component={MerchantProductsView}
-        navBar={ActivityTopNavigationBar}
-        title="Merchant Products"
-        hideNavBar={false}
-        icon={({focused}) => <Icon name={'grid'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />}
-      />
-      <Scene
-        key="merchantAddProduct"
-        component={MerchantAddProductView}
-        navBar={BasicTopNavigationBar}
-        title="Merchant Add Products"
-        hideNavBar={false}
-        icon={({focused}) => (
-          <Icon name={'plus-circle'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
-        )}
-      />
-      <Scene
         key="notifications"
         navBar={BasicTopNavigationBar}
         component={NotificationsView}
@@ -159,14 +121,6 @@ const BottomTabNavigation = ({userType, hasNewNotification}) => {
           />
         )}
       />
-      {/* <Scene
-        key="editMerchantProfile"
-        navBar={AccountSettingsTopNavigationBar}
-        component={MerchantEditProfileView}
-        title="Edit User Profile"
-        hideNavBar={false}
-        icon={({focused}) => <Icon name={'user'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />}
-      /> */}
     </Tabs>
   );
 };
@@ -177,9 +131,9 @@ class AppRouter extends React.Component {
     return (
       <Router>
         <Stack key="root" transitionConfig={transitionConfig}>
-          <Scene key="entry" component={EntryView} title="Entry" hideNavBar={true} initial />
+          <Scene key="entryView" component={EntryView} title="Entry" hideNavBar={true} initial />
           <Scene
-            key="brokerSignup"
+            key="brokerSignupView"
             navBar={BackOnlyTopNavigationBar}
             component={BrokerSignupView}
             title={null}
@@ -187,7 +141,7 @@ class AppRouter extends React.Component {
             renderBackButton={() => <View />}
           />
           <Scene
-            key="brokerEntry"
+            key="brokerEntryView"
             navBar={BackOnlyTopNavigationBar}
             component={BrokerEntryView}
             title={null}
@@ -195,15 +149,7 @@ class AppRouter extends React.Component {
             renderBackButton={() => <View />}
           />
           <Scene
-            key="grabItem"
-            navBar={BackOnlyTopNavigationBar}
-            component={BrokerGrabItemView}
-            title={null}
-            hideNavBar={false}
-            renderBackButton={() => <View />}
-          />
-          <Scene
-            key="merchantEntry"
+            key="merchantEntryView"
             navBar={BackOnlyTopNavigationBar}
             component={MerchantEntryView}
             title={null}
@@ -211,7 +157,7 @@ class AppRouter extends React.Component {
             renderBackButton={() => <View />}
           />
           <Scene
-            key="merchantSignup"
+            key="merchantSignupView"
             navBar={BackOnlyTopNavigationBar}
             component={MerchantSignupView}
             title={null}
@@ -219,7 +165,7 @@ class AppRouter extends React.Component {
             renderBackButton={() => <View />}
           />
           <Scene
-            key="brokerLogin"
+            key="brokerLoginView"
             navBar={BackOnlyTopNavigationBar}
             component={BrokerLoginView}
             title={null}
@@ -227,7 +173,7 @@ class AppRouter extends React.Component {
             renderBackButton={() => <View />}
           />
           <Scene
-            key="merchantLogin"
+            key="merchantLoginView"
             navBar={BackOnlyTopNavigationBar}
             component={MerchantLoginView}
             title={null}
@@ -235,53 +181,7 @@ class AppRouter extends React.Component {
             renderBackButton={() => <View />}
           />
           <Scene
-            key="brokerFurtherDetails"
-            component={BrokerFurtherDetailsView}
-            hideNavBar={true}
-            renderBackButton={() => <View />}
-          />
-          <Scene
-            key="productInfo"
-            navBar={BackOnlyTopNavigationBar}
-            component={ProductInfoView}
-            title={null}
-            hideNavBar={false}
-            renderBackButton={() => <View />}
-          />
-          <Scene
-            key="matches"
-            navBar={ActivityTopNavigationBar}
-            component={MatchesView}
-            title={null}
-            hideNavBar={false}
-            renderBackButton={() => <View />}
-          />
-          <Scene
-            key="offers"
-            navBar={ActivityTopNavigationBar}
-            component={OffersView}
-            title={null}
-            hideNavBar={false}
-            renderBackButton={() => <View />}
-          />
-          <Scene
-            key="grabbed"
-            navBar={ActivityTopNavigationBar}
-            component={GrabbedView}
-            title={null}
-            hideNavBar={false}
-            renderBackButton={() => <View />}
-          />
-          {/* <Scene
-            key="brokerFeedback"
-            navBar={BasicTopNavigationBar}
-            component={BrokerFeedbackView}
-            title={null}
-            hideNavBar={false}
-            renderBackButton={() => <View />}
-          /> */}
-          <Scene
-            key="generalInfo"
+            key="generalInfoView"
             navBar={BackOnlyTopNavigationBar}
             component={GeneralInfoView}
             title={null}
@@ -289,7 +189,7 @@ class AppRouter extends React.Component {
             renderBackButton={() => <View />}
           />
           <Scene
-            key="chat"
+            key="chatView"
             navBar={ImageAndBackTopNavigationBar}
             component={ChatView}
             title={null}
@@ -297,23 +197,15 @@ class AppRouter extends React.Component {
             renderBackButton={() => <View />}
           />
           <Scene
-            key="conversations"
+            key="conversationsView"
             navBar={BackOnlyTopNavigationBar}
             component={ConversationsView}
             title={null}
             hideNavBar={false}
             renderBackButton={() => <View />}
           />
-          {/* <Scene
-            key="brokerSuccessfulGrab"
-            navBar={BasicTopNavigationBar}
-            component={BrokerSuccessfulGrabView}
-            title={null}
-            hideNavBar={false}
-            renderBackButton={() => <View />}
-          /> */}
           <Scene
-            key="feedback"
+            key="feedbackView"
             navBar={BackOnlyTopNavigationBar}
             component={FeedbackView}
             title={null}
@@ -321,7 +213,7 @@ class AppRouter extends React.Component {
             renderBackButton={() => <View />}
           />
           <Scene
-            key="termsAndConditions"
+            key="termsAndConditionsView"
             navBar={BackOnlyTopNavigationBar}
             component={TermsAndConditionsView}
             title={null}
@@ -329,7 +221,7 @@ class AppRouter extends React.Component {
             renderBackButton={() => <View />}
           />
           <Scene
-            key="privacyPolicy"
+            key="privacyPolicyView"
             navBar={BackOnlyTopNavigationBar}
             component={PrivacyPolicyView}
             title={null}
@@ -337,7 +229,7 @@ class AppRouter extends React.Component {
             renderBackButton={() => <View />}
           />
           <Scene
-            key="aboutGrabbit"
+            key="aboutGrabbitView"
             navBar={BackOnlyTopNavigationBar}
             component={AboutGrabbitView}
             title={null}
@@ -346,7 +238,7 @@ class AppRouter extends React.Component {
           />
           <Scene
             key="brokerAllBrandsView"
-            navBar={BasicTopNavigationBar}
+            navBar={BackOnlyTopNavigationBar}
             component={BrokerAllBrandsView}
             title={null}
             hideNavBar={false}

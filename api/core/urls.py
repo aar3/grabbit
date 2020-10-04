@@ -8,7 +8,7 @@ router = routers.DefaultRouter()
 # router.register(r"products", ProductViewSet, basename="Product")
 router.register(r"users", UserViewSet, basename="User")
 router.register(r"notifications", NotificationViewSet, basename="Notification")
-router.register(r"brands", BrandsViewSet, basename="Brand")
+router.register(r"brands", BrandViewSet, basename="Brand")
 
 urlpatterns = [
     path("", include(router.urls)),

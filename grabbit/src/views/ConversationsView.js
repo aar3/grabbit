@@ -83,7 +83,7 @@ class V extends React.Component {
           renderItem={({item, index}) => {
             const shortMessage = item.text.length > 120 ? item.text.substr(0, 120) + '...' : item.text;
             return (
-              <TouchableOpacity onPress={() => Actions.chat()}>
+              <TouchableOpacity onPress={() => Actions.chatView()}>
                 <View
                   style={{
                     // borderWidth: 1,

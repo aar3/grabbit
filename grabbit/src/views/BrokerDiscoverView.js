@@ -133,10 +133,13 @@ class V extends React.Component {
               padding: 20,
               width: '100%',
             }}>
-            <Text style={{
-              fontWeight: 'bold',
-              fontSize: 42,
-            }}>Discover</Text>
+            <Text
+              style={{
+                fontWeight: 'bold',
+                fontSize: 42,
+              }}>
+              Discover
+            </Text>
           </View>
           {/* <View
             style={{
@@ -156,51 +159,52 @@ class V extends React.Component {
               borderColor: 'green',
               width: '100%',
             }}>
-              <View style={{
+            <View
+              style={{
                 justifyContent: 'center',
                 alignItems: 'center',
                 borderWidth: 1,
                 padding: 10,
                 borderColor: 'red',
               }}>
-                <SearchBar 
-                  containerStyle={{
-                    // height: 50,
-                    width: '80%',
-                    backgroundColor: Color.White,
-                    borderBottomColor: 'transparent',
-                    borderTopColor: 'transparent'
-                  }}
-                  inputContainerStyle={{
-                    height: 50,
-                    backgroundColor: Color.White,
-                    borderRadius: 30,
-                    borderWidth: 1,
-                    borderColor: Color.LightGrey,
-                    borderBottomWidth: 1,
-                  }}
-                  inputStyle={{
-                    fontSize: 12,
-                    color: Color.Black,
-                    // borderWidth: 1,
-                    // borderColor: Color.LightGrey,
-                  }}
-                  value={brandViewSearchInputValue}
-                  onChangeText={(text) => updateBrandViewSearchInput({ text })}
-                  lightTheme={true}
-                  clearIcon={
-                    <TouchableOpacity onPress={() => clearBrandViewSearchInput()}>
-                      <Icon name='x' size={20} color={Color.ReadableGreyText} />
-                    </TouchableOpacity>
-                  }
-                  searchIcon={
-                    <TouchableOpacity>
-                      <Icon name='search' size={20} color={Color.ReadableGreyText} />
-                    </TouchableOpacity>
-                  }
-                />
-              </View>
+              <SearchBar
+                containerStyle={{
+                  // height: 50,
+                  width: '80%',
+                  backgroundColor: Color.White,
+                  borderBottomColor: 'transparent',
+                  borderTopColor: 'transparent',
+                }}
+                inputContainerStyle={{
+                  height: 50,
+                  backgroundColor: Color.White,
+                  borderRadius: 30,
+                  borderWidth: 1,
+                  borderColor: Color.LightGrey,
+                  borderBottomWidth: 1,
+                }}
+                inputStyle={{
+                  fontSize: 12,
+                  color: Color.Black,
+                  // borderWidth: 1,
+                  // borderColor: Color.LightGrey,
+                }}
+                value={brandViewSearchInputValue}
+                onChangeText={(text) => updateBrandViewSearchInput({text})}
+                lightTheme={true}
+                clearIcon={
+                  <TouchableOpacity onPress={() => clearBrandViewSearchInput()}>
+                    <Icon name="x" size={20} color={Color.ReadableGreyText} />
+                  </TouchableOpacity>
+                }
+                searchIcon={
+                  <TouchableOpacity>
+                    <Icon name="search" size={20} color={Color.ReadableGreyText} />
+                  </TouchableOpacity>
+                }
+              />
             </View>
+          </View>
           <View
             style={{
               borderWidth: 1,
@@ -241,20 +245,24 @@ class V extends React.Component {
                 height: 50,
                 flexDirection: 'row',
               }}>
-              <View style={{
-                borderWidth: 1,
-                borderColor: 'blue'
-              }}><Text>All Brands</Text></View>
-              <View style={{
-                borderWidth: 1,
-                borderColor: 'red',
-                position: 'absolute',
-                right: 0,
-              }}>
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: 'blue',
+                }}>
+                <Text>All Brands</Text>
+              </View>
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: 'red',
+                  position: 'absolute',
+                  right: 0,
+                }}>
                 <TouchableOpacity onPress={() => Actions.brokerAllBrandsView()}>
                   <Text>View All</Text>
                 </TouchableOpacity>
-                </View>
+              </View>
             </View>
             <FlatList
               horizontal={true}
@@ -271,7 +279,6 @@ class V extends React.Component {
   }
 }
 
-
 const mapStateToProps = (state) => {
   const {brokerDiscover} = state;
   return {
@@ -279,10 +286,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateBrandViewSearchInput: ({ text }) => {
+    updateBrandViewSearchInput: ({text}) => {
       return dispatch({
         type: REDUX_ACTIONS.UPDATE_BROKER_BRAND_VIEW_SEARCH_INPUT,
         payload: text,

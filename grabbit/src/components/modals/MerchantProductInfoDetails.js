@@ -18,7 +18,7 @@ const detailSelections = [
         [
           {
             text: 'Yes, remove it',
-            onPress: () => Actions.brokerDiscover(),
+            onPress: () => Actions.brokerDiscoverView(),
           },
           {
             text: 'Cancel',
@@ -33,12 +33,12 @@ const detailSelections = [
   {
     id: '1',
     title: 'Report a problem with this Product',
-    onPress: () => Actions.feedback(),
+    onPress: () => Actions.feedbackView(),
   },
   {
     id: '3',
     title: 'Report another problem',
-    onPress: () => Actions.feedback(),
+    onPress: () => Actions.feedbackView(),
   },
 ];
 

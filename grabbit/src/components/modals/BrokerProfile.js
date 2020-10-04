@@ -149,7 +149,7 @@ export default class M extends React.Component {
                   }}
                   onPress={() => {
                     this.hide();
-                    Actions.chat();
+                    Actions.chatView();
                   }}
                 />
               </View>

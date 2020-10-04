@@ -50,14 +50,14 @@ export default class V extends React.Component {
                 buttonStyle={styles.EntryView__Actions__Container__UserTypeButton__Broker}
                 titleStyle={styles.EntryView__Actions__Container__UserTypeButton__Title__Broker}
                 title="Grabber"
-                onPress={() => Actions.brokerEntry()}
+                onPress={() => Actions.brokerEntryView()}
               />
 
               <BasicButton
                 buttonStyle={styles.EntryView__Actions__Container__UserTypeButton__Merchant}
                 titleStyle={styles.EntryView__Actions__Container__UserTypeButton__Title__Merchant}
                 title="Merchant"
-                onPress={() => Actions.merchantEntry()}
+                onPress={() => Actions.merchantEntryView()}
               />
             </View>
           </View>

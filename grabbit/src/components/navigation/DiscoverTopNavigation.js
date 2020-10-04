@@ -25,7 +25,7 @@ class DiscoverTopNavigation extends React.Component {
           </TouchableOpacity>
         </View>
         {/* <View style={styles.BasicTopNavigation__ContentContainer__RightContent}>
-          <TouchableOpacity onPress={() => Actions.conversations()}>
+          <TouchableOpacity onPress={() => Actions.conversationsView()}>
             <Icon name="send" size={20} color={Color.LightGrey} />
           </TouchableOpacity>
         </View> */}

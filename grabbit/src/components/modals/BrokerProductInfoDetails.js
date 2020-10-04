@@ -12,25 +12,25 @@ const detailSelections = [
   {
     id: '0',
     title: 'Leave Feedback',
-    onPress: () => Actions.feedback(),
+    onPress: () => Actions.feedbackView(),
     payload: 'leave_feedback',
   },
   {
     id: '1',
     title: 'Report a problem with this Product',
-    onPress: () => Actions.feedback(),
+    onPress: () => Actions.feedbackView(),
     payload: 'problem_with_product',
   },
   {
     id: '2',
     title: 'Report a problem with this Merchant',
-    onPress: () => Actions.feedback(),
+    onPress: () => Actions.feedbackView(),
     payload: 'problem_with_merchant',
   },
   {
     id: '3',
     title: 'Report another problem',
-    onPress: () => Actions.feedback(),
+    onPress: () => Actions.feedbackView(),
     payload: 'another_problem',
   },
 ];
@@ -84,7 +84,7 @@ class M extends React.Component {
                       onPress={() => {
                         toggleDetailsModalForBroker();
 
-                        Actions.feedback();
+                        Actions.feedbackView();
                       }}>
                       <DetailsItem data={item} />
                     </TouchableOpacity>

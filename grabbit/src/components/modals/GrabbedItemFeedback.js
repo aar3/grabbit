@@ -141,7 +141,7 @@ export default class M extends React.Component {
                     }}
                     onPress={() => {
                       this.hide();
-                      Actions.feedback();
+                      Actions.feedbackView();
                     }}
                   />
                 </View>
