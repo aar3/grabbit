@@ -19,6 +19,7 @@ class UserSerializer(BaseModelSerializer):
             "created_at",
             "updated_at",
             "deleted_at",
+            "qr_code_url",
             "name",
             "email",
             "address_line1",
@@ -26,26 +27,6 @@ class UserSerializer(BaseModelSerializer):
             "session_token_key",
             "phone",
             "profile_image_url",
-        ]
-
-
-class ProductSerializer(BaseModelSerializer):
-    user = UserSerializer(read_only=True)
-
-    class Meta:
-        model = Product
-        fields = [
-            "id",
-            "created_at",
-            "updated_at",
-            "deleted_at",
-            "name",
-            "description",
-            "user",
-            "image_url_1",
-            "image_url_2",
-            "image_url_3",
-            "image_url_4",
         ]
 
 
@@ -67,53 +48,30 @@ class NotificationSerializer(BaseModelSerializer):
         ]
 
 
-class OfferSerializer(BaseModelSerializer):
-    offeree = UserSerializer(read_only=True)
-    offerer = UserSerializer(read_only=True)
-    product = ProductSerializer(read_only=True)
-
+class BrandSerializer(BaseModelSerializer):
     class Meta:
-        model = Offer
+        model = Brand
         fields = [
             "id",
             "created_at",
             "updated_at",
-            "offeree",
-            "offerer",
-            "product",
-            "pending",
+            "deleted_at",
+            "name",
+            "description",
+            "image_url",
         ]
 
 
-class MessageSerializer(BaseModelSerializer):
-    recipient = UserSerializer(read_only=True)
-    sender = UserSerializer(read_only=True)
+class BrandCodeSerializer(BaseModelSerializer):
+    brand = BrandSerializer(read_only=True)
 
     class Meta:
-        model = Message
+        model = BrandCode
         fields = [
             "id",
             "created_at",
             "updated_at",
-            "recipient",
-            "sender",
-            "text",
-        ]
-
-
-class BrokerHistorySerializer(BasicSerializer):
-    pass
-
-
-class ConversationSerializer(BaseModelSerializer):
-    person_a = UserSerializer(read_only=True)
-    person_b = UserSerializer(read_only=True)
-
-    class Meta:
-        fields = [
-            "id",
-            "created_at",
-            "updated_at",
-            "person_a",
-            "person_b",
+            "deleted_at",
+            "brand",
+            "code",
         ]

@@ -65,7 +65,7 @@ export default class V extends React.Component {
                 fontWeight: 'bold',
               }}
               onPress={() => {
-                Actions.conversations();
+                Actions.conversationsView();
               }}
             />
           </View>

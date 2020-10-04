@@ -83,7 +83,7 @@ class V extends React.Component {
           renderItem={({item, index}) => {
             const shortMessage = item.text.length > 120 ? item.text.substr(0, 120) + '...' : item.text;
             return (
-              <TouchableOpacity onPress={() => Actions.chat()}>
+              <TouchableOpacity onPress={() => Actions.chatView()}>
                 <View
                   style={{
                     // borderWidth: 1,
@@ -141,7 +141,6 @@ class V extends React.Component {
   }
 }
 
-
 const mapStateToProps = (state) => {
   const {conversations, auth} = state;
   return {
@@ -150,12 +149,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-
 const mapDispatchToProps = (dispatch) => {
   return {
-    getConversations: ({ options }) => {
+    getConversations: ({options}) => {
       return async () => {
-
         dispatch({
           type: REDUX_ACTIONS.CLEAR_GET_CONVERSATIONS_ERROR,
         });
@@ -164,7 +161,7 @@ const mapDispatchToProps = (dispatch) => {
           type: REDUX_ACTIONS.GET_CONVERSATIONS_PENDING,
         });
 
-        const {data, error} = await httpRequestAsync({ options });
+        const {data, error} = await httpRequestAsync({options});
 
         if (error) {
           return dispatch({
@@ -177,9 +174,9 @@ const mapDispatchToProps = (dispatch) => {
           type: REDUX_ACTIONS.GET_CONVERSATIONS_SUCCESS,
           payload: data,
         });
-      }
-    }
-  }
-}
+      };
+    },
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(V);

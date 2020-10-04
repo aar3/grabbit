@@ -92,11 +92,6 @@ class UserViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 
-class ProductViewSet(BaseModelViewSet):
-    model = Product
-    serializer = ProductSerializer
-
-
 class NotificationViewSet(BaseModelViewSet):
     model = Notification
     serializer = NotificationSerializer
@@ -107,25 +102,6 @@ class NotificationViewSet(BaseModelViewSet):
         instances = self.model.objects.filter(user__id=user.id)
         serializer = self.serializer(instances, many=True)
         return Response(serializer.data)
-
-
-class OfferViewSet(BaseModelViewSet):
-    model = Offer
-    serializer = OfferSerializer
-
-
-class MessageViewSet(BaseModelViewSet):
-    model = Message
-    serializer = MessageSerializer
-
-
-@api_view(["GET"])
-def ConversationsView(request, pk=None):
-    params = request.data
-    user = get_object_or_404(User, pk=pk)
-    conversations = Conversation.objects.filter(Q(person_a__id=pk) | Q(person_b__id=pk))
-    serializer = ConversationSerializer(conversations, many=True)
-    return Response(serializer.data)
 
 
 @api_view(["POST"])
@@ -143,28 +119,6 @@ def LoginView(request):
     return Response(serializer.data)
 
 
-@api_view(["GET"])
-@authentication_classes([TokenAuthentication])
-def BrokerExploreView(request, pk=None):
-    _ = get_object_or_404(User, pk=pk)
-
-    # use chronological ordering of merchants products/services
-    products = Product.objects.filter("-created_at")[:10]
-    serializer = ProductSerializer(products, many=True)
-    return Response(serializer.data)
-
-
-@api_view(["GET"])
-@authentication_classes([TokenAuthentication])
-def MerchantExploreView(request, pk=None):
-    _ = get_object_or_404(User, pk=pk)
-
-    # use chronological ordering of merchants products/services
-    products = Product.objects.filter("-created_at")[:10]
-    serializer = ProductSerializer(products, many=True)
-    return Response(serializer.data)
-
-
 @api_view(["POST"])
 @authentication_classes([TokenAuthentication])
 def UploadImageView(request, pk=None):
@@ -175,16 +129,6 @@ def UploadImageView(request, pk=None):
     # return full url from gcloud and store it in user instance
 
 
-@api_view(["GET"])
-@authentication_classes([TokenAuthentication])
-def BrokerHistoryView(request, pk=None):
-    _ = get_object_or_404(User, pk=pk)
-
-    offers = Offer.objects.filter(offeree__id=pk)
-    grabs = Grab.objects.filter(offer__offeree__id=pk)
-    shipments = Shipment.objects.filter(grab__offer__offeree__id=pk)
-
-    items = offers + grabs + shipments
-
-    serializer = BrokerHistorySerializer(items, many=True)
-    return Response(serializer.data)
+class BrandViewSet(BaseModelViewSet):
+    model = Brand
+    serializer = BrandSerializer

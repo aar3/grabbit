@@ -1,265 +1,329 @@
 import React from 'react';
-import {StyleSheet, Text, View, FlatList, Image, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, FlatList, TextInput, Image, TouchableOpacity, TouchableHighlight} from 'react-native';
 
-import {connect} from 'redux';
+import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
+import {SearchBar} from 'react-native-elements';
 
+import REDUX_ACTIONS from 'grabbit/src/actions';
 import {FakeImage, Color} from 'grabbit/src/const';
 
-const data = [
-  {
-    id: '1',
-    image_url: FakeImage,
-    link: 'https://google.com',
-    name: 'Air Jordan 12 IV',
-    like_count: 312,
-    views: 1281,
-    grabs: 13,
-    interest: 58,
-    description:
-      'Donec dignissim ligula non dolor euismod tincidunt. Etiam pulvinar interdum ligula, vitae luctus odio rutrum vel. Mauris ultricies augue erat, sed luctus ipsum dictum non. Sed eu tincidunt ligula, ac maximus sapien.',
-    merchant: {
-      id: '1',
-      name: 'Lorem Ipsum – Generator, Origins and Meaning',
-    },
+const data = {
+  featured: {
+    row0: [
+      {
+        id: '1101',
+        image_url: FakeImage,
+        post_tag_id: '#SomeTagHere123',
+      },
+      {
+        id: '1102',
+        image_url: FakeImage,
+        post_tag_id: '#SomeTagHere123',
+      },
+      {
+        id: '1103',
+        image_url: FakeImage,
+        post_tag_id: '#SomeTagHere123',
+      },
+    ],
+    row1: [
+      {
+        id: '1105',
+        image_url: FakeImage,
+        post_tag_id: '#SomeTagHere123',
+      },
+      {
+        id: '1106',
+        image_url: FakeImage,
+        post_tag_id: '#SomeTagHere123',
+      },
+      {
+        id: '1107',
+        image_url: FakeImage,
+        post_tag_id: '#SomeTagHere123',
+      },
+    ],
   },
-  {
-    id: '2',
-    image_url: FakeImage,
-    link: 'https://google.com',
-    name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    like_count: 312,
-    like_count: 312,
-    views: 1281,
-    grabs: 13,
-    interest: 58,
-    description:
-      'Donec dignissim ligula non dolor euismod tincidunt. Etiam pulvinar interdum ligula, vitae luctus odio rutrum vel. Mauris ultricies augue erat, sed luctus ipsum dictum non. Sed eu tincidunt ligula, ac maximus sapien.',
-    merchant: {
+  all: [
+    {
       id: '1',
-      name: 'Quisque neque diam, semper',
+      image_url: FakeImage,
+      post_tag_id: '#SomeTagHere123',
     },
-  },
-  {
-    id: '3',
-    image_url: FakeImage,
-    link: 'https://google.com',
-    name: 'Air Jordan 12 IV',
-    like_count: 312,
-    views: 1281,
-    grabs: 13,
-    interest: 58,
-    description:
-      'Donec dignissim ligula non dolor euismod tincidunt. Etiam pulvinar interdum ligula, vitae luctus odio rutrum vel. Mauris ultricies augue erat, sed luctus ipsum dictum non. Sed eu tincidunt ligula, ac maximus sapien.',
-    merchant: {
+    {
       id: '1',
-      name: 'Quisque neque diam, semper',
+      image_url: FakeImage,
+      post_tag_id: '#SomeTagHere123',
     },
-  },
-  {
-    id: '4',
-    image_url: FakeImage,
-    link: 'https://google.com',
-    name: 'Air Jordan 12 IV',
-    like_count: 312,
-    views: 1281,
-    grabs: 13,
-    interest: 58,
-    description:
-      'Donec dignissim ligula non dolor euismod tincidunt. Etiam pulvinar interdum ligula, vitae luctus odio rutrum vel. Mauris ultricies augue erat, sed luctus ipsum dictum non. Sed eu tincidunt ligula, ac maximus sapien.',
-    merchant: {
+    {
       id: '1',
-      name: 'Finish Line Brands LLC',
+      image_url: FakeImage,
+      post_tag_id: '#SomeTagHere123',
     },
-  },
-  {
-    id: '5',
-    image_url: FakeImage,
-    link: 'https://google.com',
-    like_count: 312,
-    views: 1281,
-    grabs: 13,
-    interest: 58,
-    description:
-      'Donec dignissim ligula non dolor euismod tincidunt. Etiam pulvinar interdum ligula, vitae luctus odio rutrum vel. Mauris ultricies augue erat, sed luctus ipsum dictum non. Sed eu tincidunt ligula, ac maximus sapien.',
-    name: 'Air Jordan 12 IV',
-    merchant: {
+    {
       id: '1',
-      name: 'Finish Line Brands LLC',
+      image_url: FakeImage,
+      post_tag_id: '#SomeTagHere123',
     },
-  },
-  {
-    id: '6',
-    image_url: FakeImage,
-    like_count: 312,
-    views: 1281,
-    interest: 58,
-    grabs: 13,
-    link: 'https://google.com',
-    name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    description:
-      'Donec dignissim ligula non dolor euismod tincidunt. Etiam pulvinar interdum ligula, vitae luctus odio rutrum vel. Mauris ultricies augue erat, sed luctus ipsum dictum non. Sed eu tincidunt ligula, ac maximus sapien.',
-    merchant: {
+    {
       id: '1',
-      name: 'Lorem Ipsum – Generator, Origins and Meaning',
+      image_url: FakeImage,
+      post_tag_id: '#SomeTagHere123',
     },
-  },
-  {
-    id: '7',
-    image_url: FakeImage,
-    like_count: 312,
-    views: 1281,
-    grabs: 13,
-    interest: 58,
-    link: 'https://google.com',
-    name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    description:
-      'Donec dignissim ligula non dolor euismod tincidunt. Etiam pulvinar interdum ligula, vitae luctus odio rutrum vel. Mauris ultricies augue erat, sed luctus ipsum dictum non. Sed eu tincidunt ligula, ac maximus sapien.',
-    merchant: {
+    {
       id: '1',
-      name: 'Quisque neque diam, semper',
+      image_url: FakeImage,
+      post_tag_id: '#SomeTagHere123',
     },
-  },
-  {
-    id: '8',
-    image_url: FakeImage,
-    like_count: 312,
-    views: 1281,
-    interest: 58,
-    grabs: 13,
-    link: 'https://google.com',
-    description:
-      'Donec dignissim ligula non dolor euismod tincidunt. Etiam pulvinar interdum ligula, vitae luctus odio rutrum vel. Mauris ultricies augue erat, sed luctus ipsum dictum non. Sed eu tincidunt ligula, ac maximus sapien.',
-    name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    merchant: {
+    {
       id: '1',
-      name: 'Lorem Ipsum – Generator, Origins and Meaning',
+      image_url: FakeImage,
+      post_tag_id: '#SomeTagHere123',
     },
-  },
-];
+  ],
+};
 
-class FlatListRowImage extends React.Component {
-  render() {
-    const {data} = this.props;
+class V extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  brandListItem({item, index}) {
     return (
-      <View style={styles.FlatListRowImage__Container}>
-        <TouchableOpacity onPress={() => Actions.productInfo()}>
-          <Image source={{uri: data.image_url}} style={{height: 350, width: 350}} />
-        </TouchableOpacity>
-        <View style={styles.FlatListRowImage__Container__Info}>
+      <TouchableOpacity>
+        <View style={styles.BrandListItem__ContentContainer}>
+          <Image source={{uri: item.image_url}} style={{height: 120, width: 120}} />
+        </View>
+      </TouchableOpacity>
+    );
+  }
+
+  render() {
+    const {updateBrandViewSearchInput, clearBrandViewSearchInput, brandViewSearchInputValue} = this.props;
+    return (
+      <View
+        style={{
+          flex: 1,
+          // justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <View
+          style={{
+            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
           <View
             style={{
               // borderWidth: 1,
               // borderColor: 'red',
-              justifyContent: 'center',
-              marginBottom: 10,
+              height: 100,
+              padding: 20,
+              width: '100%',
             }}>
-            <Text style={{fontSize: 16, marginBottom: 10}}>{data.name}</Text>
+            <Text
+              style={{
+                fontWeight: 'bold',
+                fontSize: 42,
+              }}>
+              Discover
+            </Text>
+          </View>
+          <View
+            style={{
+              // borderWidth: 1,
+              // borderColor: 'green',
+              width: '100%',
+            }}>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                // borderWidth: 1,
+                // borderColor: 'red',
+                padding: 10,
+              }}>
+              <SearchBar
+                containerStyle={{
+                  height: 40,
+                  width: '80%',
+                  backgroundColor: Color.White,
+                  borderBottomColor: 'transparent',
+                  borderTopColor: 'transparent',
+                }}
+                inputContainerStyle={{
+                  height: 40,
+                  backgroundColor: Color.White,
+                  borderRadius: 30,
+                  borderWidth: 1,
+                  borderColor: Color.LightGrey,
+                  borderBottomWidth: 1,
+                }}
+                inputStyle={{
+                  fontSize: 12,
+                  height: 40,
+                  color: Color.Black,
+                  // borderWidth: 1,
+                  // borderColor: Color.LightGrey,
+                }}
+                value={brandViewSearchInputValue}
+                onChangeText={(text) => updateBrandViewSearchInput({text})}
+                lightTheme={true}
+                clearIcon={
+                  <TouchableOpacity onPress={() => clearBrandViewSearchInput()}>
+                    <Icon name="x" size={20} color={Color.ReadableGreyText} />
+                  </TouchableOpacity>
+                }
+                searchIcon={
+                  <TouchableOpacity>
+                    <Icon name="search" size={20} color={Color.ReadableGreyText} />
+                  </TouchableOpacity>
+                }
+              />
+            </View>
+          </View>
+          <View
+            style={{
+              // borderWidth: 1,
+              // borderColor: 'pink',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+            }}>
             <View
               style={{
                 // borderWidth: 1,
-                // borderColor: 'blue',
-                flexDirection: 'row',
-                alignItems: 'center',
+                // borderColor: 'red',
+                width: '100%',
+                padding: 20,
               }}>
-              <Icon
-                style={styles.FlatListRowImage__Container__Info__Icon}
-                name="heart"
-                size={20}
-                color={Color.GreyText}
-              />
-              <Text style={styles.FlatListRowImage__Container__Info__Number}>{data.like_count}</Text>
-              <Icon
-                style={styles.FlatListRowImage__Container__Info__Icon}
-                name="shopping-bag"
-                size={20}
-                color={Color.GreyText}
-              />
-              <Text style={styles.FlatListRowImage__Container__Info__Number}>{data.grabs}</Text>
-              <Icon
-                style={styles.FlatListRowImage__Container__Info__Icon}
-                name="zap"
-                size={20}
-                color={Color.GreyText}
-              />
-              <Text style={styles.FlatListRowImage__Container__Info__Number}>{data.interest}</Text>
-              <Icon style={styles.FlatListRowImage__Container__Info__Icon} name="tv" size={20} color={Color.GreyText} />
-              <Text style={styles.FlatListRowImage__Container__Info__Number}>{data.views}</Text>
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  fontSize: 14,
+                  color: Color.Black,
+                }}>
+                Popular Brands
+              </Text>
             </View>
+            <FlatList
+              contentContainerStyle={{
+                // borderWidth: 1,
+                // borderColor: 'red',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              horizontal={true}
+              data={data.featured.row0}
+              renderItem={({item, index}) => {
+                return this.brandListItem({item, index});
+              }}
+              keyExtractor={(_item, index) => index.toString()}
+            />
+            <FlatList
+              horizontal={true}
+              data={data.featured.row1}
+              renderItem={({item, index}) => {
+                return this.brandListItem({item, index});
+              }}
+              keyExtractor={(_item, index) => index.toString()}
+            />
+            <View
+              style={{
+                // borderWidth: 1,
+                // borderColor: 'red',
+                marginTop: 20,
+                marginBottom: 10,
+                padding: 10,
+                width: '100%',
+                flexDirection: 'row',
+              }}>
+              <View
+                style={{
+                  // borderWidth: 1,
+                  // borderColor: 'blue',
+                  padding: 10,
+                }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                  }}>
+                  All Brands
+                </Text>
+              </View>
+              <View
+                style={{
+                  // borderWidth: 1,
+                  // borderColor: 'red',
+                  position: 'absolute',
+                  right: 20,
+                }}>
+                <TouchableOpacity onPress={() => Actions.brokerAllBrandsView()}>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: Color.HyperLink,
+                    }}>
+                    View All
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <FlatList
+              contentContainerStyle={{
+                marginBottom: 20,
+              }}
+              horizontal={true}
+              data={data.all}
+              renderItem={({item, index}) => {
+                return this.brandListItem({item, index});
+              }}
+              keyExtractor={(_item, index) => index.toString()}
+            />
           </View>
-          <Text style={{fontSize: 13, fontWeight: 'bold', marginBottom: 10}}>{data.merchant.name}</Text>
-          <Text style={{fontSize: 12, marginBottom: 5, color: Color.DarkerGrey}}>{data.description}</Text>
         </View>
       </View>
     );
   }
 }
 
-class FlatListRow extends React.Component {
-  render() {
-    const {data} = this.props;
-    return (
-      <View style={styles.FlatListRow}>
-        <FlatListRowImage data={data} />
-      </View>
-    );
-  }
-}
+const mapStateToProps = (state) => {
+  const {brokerDiscover} = state;
+  return {
+    brandViewSearchInputValue: brokerDiscover.brandViewSearchInput,
+  };
+};
 
-export default class V extends React.Component {
-  _renderItem({index, item}) {
-    return <FlatListRow data={item} />;
-  }
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateBrandViewSearchInput: ({text}) => {
+      return dispatch({
+        type: REDUX_ACTIONS.UPDATE_BROKER_BRAND_VIEW_SEARCH_INPUT,
+        payload: text,
+      });
+    },
+    clearBrandViewSearchInput: () => {
+      return dispatch({
+        type: REDUX_ACTIONS.CLEAR_BROKER_BRAND_VIEW_SEARCH_INPUT,
+      });
+    },
+  };
+};
 
-  render() {
-    return (
-      <View style={styles.BrokerDiscoverView}>
-        <View style={styles.BrokerDiscoverView__ContentContainer}>
-          <FlatList data={data} renderItem={this._renderItem} keyExtractor={(_item, index) => index.toString()} />
-        </View>
-      </View>
-    );
-  }
-}
+export default connect(mapStateToProps, mapDispatchToProps)(V);
 
 const styles = StyleSheet.create({
-  BrokerDiscoverView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  FlatListRow: {
-    // borderWidth: 1,
-    // borderColor: 'red',
-    padding: 10,
-    width: 400,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  BrokerDiscoverView__ContentContainer: {
+  BrandListItem__ContentContainer: {
+    height: 120,
+    width: 120,
+    marginLeft: 6,
+    marginBottom: 10,
     // borderWidth: 1,
     // borderColor: 'blue',
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  FlatListRowImage__Container: {
-    borderWidth: 1,
-    borderColor: Color.LightGrey,
     borderRadius: 10,
     overflow: 'hidden',
-  },
-  FlatListRowImage__Container__Info: {
-    // borderWidth: 1,
-    // borderColor: 'red',
-    width: 350,
-    padding: 10,
-  },
-  FlatListRowImage__Container__Info__Icon: {
-    marginLeft: 10,
-  },
-  FlatListRowImage__Container__Info__Number: {
-    marginLeft: 5,
   },
 });

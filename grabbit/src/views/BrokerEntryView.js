@@ -59,7 +59,7 @@ class BrokerEntryView extends React.Component {
                 titleStyle={styles.BrokerEntryView__Actions__Container__UserTypeButton__Title__Broker}
                 title="Login"
                 onPress={() => {
-                  return Actions.brokerLogin();
+                  return Actions.brokerLoginView();
                 }}
               />
 
@@ -68,7 +68,7 @@ class BrokerEntryView extends React.Component {
                 titleStyle={styles.BrokerEntryView__Actions__Container__UserTypeButton__Title__Merchant}
                 title="Sign Up"
                 onPress={() => {
-                  return Actions.brokerSignup();
+                  return Actions.brokerSignupView();
                 }}
               />
             </View>

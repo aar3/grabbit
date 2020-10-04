@@ -1,7 +1,9 @@
 import random
+import io
 import string
 
 import qrcode
+from PIL import Image
 
 
 def random_string(n=10):
@@ -11,9 +13,12 @@ def random_string(n=10):
 
 
 def make_qrcode(s):
+    buff = io.BytesIO()
     qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4,)
     qr.add_data(s)
     qr.make(fit=True)
 
     img = qr.make_image(fill_color="black", back_color="white")
-    return img
+    img.save(buff, format="PNG")
+
+    return buff.getvalue()

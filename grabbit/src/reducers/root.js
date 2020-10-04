@@ -28,6 +28,11 @@ const defaultState = {
     user: null,
   },
 
+  brokerDiscover: {
+    currentBrand: null,
+    brandViewSearchInput: null,
+  },
+
   messages: {
     hasNewMessage: true,
     unsentMessages: [],
@@ -62,6 +67,22 @@ const defaultState = {
 
 export default mainReducer = (state = defaultState, action) => {
   switch (action.type) {
+    case REDUX_ACTIONS.CLEAR_BROKER_BRAND_VIEW_SEARCH_INPUT:
+      return {
+        ...state,
+        brokerDiscover: {
+          ...state.brokerDiscover,
+          brandViewSearchInput: null,
+        },
+      };
+    case REDUX_ACTIONS.UPDATE_BROKER_BRAND_VIEW_SEARCH_INPUT:
+      return {
+        ...state,
+        brokerDiscover: {
+          ...state.brokerDiscover,
+          brandViewSearchInput: action.payload,
+        },
+      };
     case REDUX_ACTIONS.CLEAR_GET_CONVERSATIONS_ERROR:
       return {
         ...state,

@@ -10,17 +10,17 @@ data = [
   {
     id: '1',
     name: 'About Grabbit',
-    routeKey: 'aboutGrabbit',
+    routeKey: 'aboutGrabbitView',
   },
   {
     id: '2',
     name: 'Terms & Conditions',
-    routeKey: 'termsAndConditions',
+    routeKey: 'termsAndConditionsView',
   },
   {
     id: '3',
     name: 'Privacy Policy',
-    routeKey: 'privacyPolicy',
+    routeKey: 'privacyPolicyView',
   },
 ];
 

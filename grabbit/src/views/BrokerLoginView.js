@@ -234,7 +234,7 @@ const mapDispatchToProps = (dispatch) => {
           payload: data,
         });
 
-        return Actions.brokerDiscover();
+        return Actions.brokerDiscoverView();
       };
     },
   };

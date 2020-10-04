@@ -45,7 +45,7 @@ export default class V extends React.Component {
               color: Color.White,
               fontWeight: 'bold',
             }}
-            onPress={() => Actions.brokerDiscover()}
+            onPress={() => Actions.brokerDiscoverView()}
           />
 
           <BasicButton
@@ -73,7 +73,7 @@ export default class V extends React.Component {
                 [
                   {
                     text: 'I understand',
-                    onPress: () => Actions.brokerDiscover(),
+                    onPress: () => Actions.brokerDiscoverView(),
                   },
                   {
                     text: "I'll do this now",

@@ -59,7 +59,7 @@ class MerchantEntryView extends React.Component {
                 titleStyle={styles.MerchantEntryView__Actions__Container__UserTypeButton__Title__Broker}
                 title="Login"
                 onPress={() => {
-                  return Actions.merchantLogin();
+                  return Actions.merchantLoginView();
                 }}
               />
 
@@ -68,7 +68,7 @@ class MerchantEntryView extends React.Component {
                 titleStyle={styles.MerchantEntryView__Actions__Container__UserTypeButton__Title__Merchant}
                 title="Sign Up"
                 onPress={() => {
-                  return Actions.merchantSignup();
+                  return Actions.merchantSignupView();
                 }}
               />
             </View>

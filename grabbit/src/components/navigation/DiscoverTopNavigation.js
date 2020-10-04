@@ -24,20 +24,20 @@ class DiscoverTopNavigation extends React.Component {
             <Icon name="map" size={20} color={Color.LightGrey} />
           </TouchableOpacity>
         </View>
-        <View style={styles.BasicTopNavigation__ContentContainer__RightContent}>
-          <TouchableOpacity onPress={() => Actions.conversations()}>
+        {/* <View style={styles.BasicTopNavigation__ContentContainer__RightContent}>
+          <TouchableOpacity onPress={() => Actions.conversationsView()}>
             <Icon name="send" size={20} color={Color.LightGrey} />
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
     );
   }
 }
 
 const mapStateToProps = (state) => {
-  const {chat} = state;
+  const {messages} = state;
   return {
-    hasNewMessage: chat.hasNewMessage,
+    hasNewMessage: messages.hasNewMessage,
   };
 };
 
