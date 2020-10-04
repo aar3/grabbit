@@ -16,6 +16,7 @@ export const Color = {
   ForestGreen: '#2da01a',
   Black: '#000',
   ChatGrey: '#e0e0e0',
+  HyperLink: '#258ec6',
 };
 
 export const Font = {

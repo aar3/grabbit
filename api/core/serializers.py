@@ -2,8 +2,10 @@ from rest_framework import serializers
 
 from core.models import *
 
+
 class BaseModelSerializer(serializers.ModelSerializer):
     pass
+
 
 class BasicSerializer(serializers.BaseSerializer):
     pass
@@ -17,6 +19,7 @@ class UserSerializer(BaseModelSerializer):
             "created_at",
             "updated_at",
             "deleted_at",
+            "qr_code_url",
             "name",
             "email",
             "address_line1",
@@ -61,6 +64,7 @@ class BrandSerializer(BaseModelSerializer):
 
 class BrandCodeSerializer(BaseModelSerializer):
     brand = BrandSerializer(read_only=True)
+
     class Meta:
         model = BrandCode
         fields = [

@@ -81,9 +81,10 @@ def create_session_for_new_user(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def create_qr_code_for_new_user(sender, instance, created, **kwargs):
+    # TODO: qr code should contain what exactly?
     if created:
-        code = make_qrcode(instance.username).tobytes()
-        img_path = GoogleCloudService.upload_asset_to_bucket(instance.id, instance.username, UserType.BROKER, code)
+        code = make_qrcode(instance.username)
+        img_path = GoogleCloudService.upload_asset_to_bucket(instance.email, UserType.BROKER, "qr_code", code)
         instance.qr_code_url = img_path
         instance.save()
 
@@ -113,7 +114,6 @@ class Brand(BaseModel):
     name = models.CharField(max_length=255)
     description = models.TextField(null=True)
     image_url = models.CharField(max_length=255, default=DEFAULT_PROFILE_IMAGE)
-
 
 
 class BrandCode(BaseModel):

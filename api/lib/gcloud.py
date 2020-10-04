@@ -3,6 +3,7 @@ import os
 
 import httpx
 from PIL import Image
+import requests
 from google.cloud import storage
 
 
@@ -11,17 +12,19 @@ GOOGLE_STORAGE_URL = "https://storage.googleapis.com"
 
 class GoogleCloudService:
     @staticmethod
-    def upload_asset_to_bucket(user_id, user_type, image_name, image_data):
+    def upload_asset_to_bucket(user_email, user_type, image_name, image_data):
         oauth_creds_file = os.environ["GOOGLE_STORAGE_API_JSON"]
         client = storage.Client.from_service_account_json(oauth_creds_file)
 
         bucket = client.get_bucket(os.environ["GOOGLE_STORAGE_DEFAULT_BUCKET"])
-        path = user_type + str(user_id) + image_name
+        path = os.path.join(user_type, user_email, image_name)
 
         blob = bucket.blob(path)
         blob.upload_from_string(image_data)
+        blob.acl.all().grant_read()
+        blob.acl.save()
 
-        return os.path.join(GOOGLE_STORAGE_URL, path)
+        return os.path.join(GOOGLE_STORAGE_URL, os.environ["GOOGLE_STORAGE_DEFAULT_BUCKET"], path)
 
     @staticmethod
     async def upload_asset_to_bucket_async(user_id, user_type, image_name, image_data):
