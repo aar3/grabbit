@@ -8,6 +8,7 @@ import {SearchBar} from 'react-native-elements';
 
 import REDUX_ACTIONS from 'grabbit/src/actions';
 import {FakeImage, Color} from 'grabbit/src/const';
+import BrandCampaignCode from 'grabbit/src/components/modals/BrandCampaignCode';
 
 const data = {
   featured: {
@@ -88,11 +89,28 @@ const data = {
 class V extends React.Component {
   constructor(props) {
     super(props);
+    this.brandCampaignsCodeModal = React.createRef();
+  }
+
+  componentDidMount() {
+    const {getBrands, user} = this.props;
+
+    return getBrands({
+      options: {
+        endpoint: '/brands/',
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json;charset-utf8',
+          'X-Grabbit-Token': user.session_token_key,
+        },
+      },
+    });
   }
 
   brandListItem({item, index}) {
+    const {toggleBrokerDiscoverBrandCampaignModal} = this.props;
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => Actions.toggleBrokerDiscoverBrandCampaignModal()}>
         <View style={styles.BrandListItem__ContentContainer}>
           <Image source={{uri: item.image_url}} style={{height: 120, width: 120}} />
         </View>
@@ -101,7 +119,13 @@ class V extends React.Component {
   }
 
   render() {
-    const {updateBrandViewSearchInput, clearBrandViewSearchInput, brandViewSearchInputValue} = this.props;
+    const {updateBrandViewSearchInput, brands, clearBrandViewSearchInput, brandViewSearchInputValue} = this.props;
+
+    const filteredBrands = !brandViewSearchInputValue
+      ? brands
+      : brands.filter((brandItem) => brandItem.name.startsWith(brandViewSearchInputValue));
+
+    const modal = <BrandCampaignCode ref={this.brandCampaignsCodeModal} />;
     return (
       <View
         style={{
@@ -109,6 +133,7 @@ class V extends React.Component {
           // justifyContent: 'center',
           alignItems: 'center',
         }}>
+        {modal}
         <View
           style={{
             width: '100%',
@@ -168,7 +193,7 @@ class V extends React.Component {
                   // borderWidth: 1,
                   // borderColor: Color.LightGrey,
                 }}
-                value={brandViewSearchInputValue}
+                value={filteredBrands}
                 onChangeText={(text) => updateBrandViewSearchInput({text})}
                 lightTheme={true}
                 clearIcon={
@@ -291,9 +316,11 @@ class V extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const {brokerDiscover} = state;
+  const {brokerDiscover, auth} = state;
   return {
+    user: auth.user,
     brandViewSearchInputValue: brokerDiscover.brandViewSearchInput,
+    brands: brokerDiscover.brands,
   };
 };
 
@@ -309,6 +336,36 @@ const mapDispatchToProps = (dispatch) => {
       return dispatch({
         type: REDUX_ACTIONS.CLEAR_BROKER_BRAND_VIEW_SEARCH_INPUT,
       });
+    },
+    toggleBrokerDiscoverBrandCampaignModal: () => {
+      return dispatch({
+        type: REDUX_ACTIONS.TOGGLE_BROKER_BRAND_CAMPAIGN_MODAL,
+      });
+    },
+    getBrands: ({options}) => {
+      return async () => {
+        dispatch({
+          type: REDUX_ACTIONS.CLEAR_BROKER_GET_BRANDS_ERROR,
+        });
+
+        dispatch({
+          type: REDUX_ACTIONS.BROKER_GET_BRANDS_PENDING,
+        });
+
+        const {error, data} = await httpRequestAsync({options});
+
+        if (error) {
+          return dispatch({
+            type: REDUX_ACTIONS.BROKER_GET_BRANDS_ERROR,
+            payload: error,
+          });
+        }
+
+        return dispatch({
+          type: REDUX_ACTIONS.BROKER_GET_BRANDS_SUCCESS,
+          payload: data,
+        });
+      };
     },
   };
 };

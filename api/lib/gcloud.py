@@ -13,6 +13,7 @@ GOOGLE_STORAGE_URL = "https://storage.googleapis.com"
 class GoogleCloudService:
     @staticmethod
     def upload_asset_to_bucket(user_email, user_type, image_name, image_data):
+        # https://googleapis.dev/python/storage/1.16.1/blobs.html
         oauth_creds_file = os.environ["GOOGLE_STORAGE_API_JSON"]
         client = storage.Client.from_service_account_json(oauth_creds_file)
 

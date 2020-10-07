@@ -41,6 +41,7 @@ import {
   BrokerHistoryView,
   BrokerAllBrandsView,
   BrokerWalletView,
+  BrokerWalletEntryView,
 } from 'grabbit/src/views';
 import {TabIconSize, Color, UserType} from 'grabbit/src/const';
 import BasicTopNavigationBar from 'grabbit/src/components/navigation/BasicTopNavigation';
@@ -251,6 +252,14 @@ class AppRouter extends React.Component {
             key="brokerAllBrandsView"
             navBar={BackOnlyTopNavigationBar}
             component={BrokerAllBrandsView}
+            title={null}
+            hideNavBar={false}
+            renderBackButton={() => <View />}
+          />
+          <Scene
+            key="brokerWalletEntryView"
+            navBar={BackOnlyTopNavigationBar}
+            component={BrokerWalletEntryView}
             title={null}
             hideNavBar={false}
             renderBackButton={() => <View />}

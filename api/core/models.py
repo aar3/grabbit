@@ -10,13 +10,10 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from lib.utils import random_string, make_qrcode
-from lib.const import UserType
+from lib.const import UserType, DEFAULT_PROFILE_IMAGE
 from lib.gcloud import GoogleCloudService
 from lib.gredis import SessionToken, RedisClient
 from core.managers import *
-
-
-DEFAULT_PROFILE_IMAGE = "https://www.teamunhcr.org.au/images/empty-profile-image.jpg"
 
 
 class BaseModel(models.Model):

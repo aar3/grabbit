@@ -1,9 +1,5 @@
-import {Alert} from 'react-native';
-
-import {Actions} from 'react-native-router-flux';
-
 import REDUX_ACTIONS from 'grabbit/src/actions';
-import {httpRequestAsync} from 'grabbit/src/utils';
+import actions from '../actions';
 
 const defaultState = {
   userType: null,
@@ -24,6 +20,57 @@ const defaultState = {
 
   currentSceneKey: null,
 
+  wallet: {
+    currentSearchInput: null,
+    brands: [
+      {
+        id: '1',
+        name: 'Acme Corporation',
+        amount: '45',
+      },
+      {
+        id: '2',
+        name: 'Globex Corporation',
+        amount: '25',
+      },
+      {
+        id: '3',
+        name: 'Soylent Corp',
+        amount: '5',
+      },
+      {
+        id: '4',
+        name: 'Initech',
+        amount: '12',
+      },
+      {
+        id: '6',
+        name: 'Umbrella Corporation ',
+        amount: '13',
+      },
+      {
+        id: '7',
+        name: 'Hooli',
+        amount: '21',
+      },
+      {
+        id: '8',
+        name: 'Initech',
+        amount: '33',
+      },
+      {
+        id: '9',
+        name: 'Umbrella Corporation ',
+        amount: '3',
+      },
+      {
+        id: '10',
+        name: 'Hooli',
+        amount: '10',
+      },
+    ],
+  },
+
   session: {
     user: null,
   },
@@ -31,6 +78,10 @@ const defaultState = {
   brokerDiscover: {
     currentBrand: null,
     brandViewSearchInput: null,
+    showBrandCampaignModal: false,
+    brands: [],
+    getBrandsPending: false,
+    getBrandsError: null,
   },
 
   messages: {
@@ -67,6 +118,64 @@ const defaultState = {
 
 export default mainReducer = (state = defaultState, action) => {
   switch (action.type) {
+    case REDUX_ACTIONS.CLEAR_BROKER_GET_BRANDS_ERROR:
+      return {
+        ...state,
+        brokerDiscover: {
+          ...state.brokerDiscover,
+          getBrandsError: null,
+        },
+      };
+    case REDUX_ACTIONS.BROKER_GET_BRANDS_PENDING:
+      return {
+        ...state,
+        brokerDiscover: {
+          ...state.brokerDiscover,
+          getBrandsPending: true,
+        },
+      };
+    case REDUX_ACTIONS.BROKER_GET_BRANDS_ERROR:
+      return {
+        ...state,
+        brokerDiscover: {
+          ...state.brokerDiscover,
+          getBrandsPending: false,
+          getBrandsError: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.BROKER_GET_BRANDS_SUCCESS:
+      return {
+        ...state,
+        brokerDiscover: {
+          ...state.brokerDiscover,
+          getBrandsPending: false,
+          brands: actions.payload,
+        },
+      };
+    case REDUX_ACTIONS.TOGGLE_BROKER_BRAND_CAMPAIGN_MODAL:
+      return {
+        ...state,
+        brokerDiscover: {
+          ...state.brokerDiscover,
+          showBrandCampaignModal: !state.brokerDiscover.showBrandCampaignModal,
+        },
+      };
+    case REDUX_ACTIONS.UPDATE_BROKER_WALLET_VIEW_SEARCH_INPUT:
+      return {
+        ...state,
+        wallet: {
+          ...state.wallet,
+          currentSearchInput: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.CLEAR_BROKER_WALLET_VIEW_SEARCH_INPUT:
+      return {
+        ...state,
+        wallet: {
+          ...state.wallet,
+          currentSearchInput: null,
+        },
+      };
     case REDUX_ACTIONS.CLEAR_BROKER_BRAND_VIEW_SEARCH_INPUT:
       return {
         ...state,
