@@ -121,9 +121,9 @@ class V extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const {notifications, auth} = state;
+  const {notifications, session} = state;
   return {
-    user: auth.user,
+    user: session.user,
     getNotificationsPending: notifications.getNotificationsPending,
     getNotificationsError: notifications.getNotificationsError,
     notifications: notifications.notifications,

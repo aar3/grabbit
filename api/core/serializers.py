@@ -71,3 +71,24 @@ class CampaignCodeSerializer(BaseModelSerializer):
             "brand",
             "code",
         ]
+
+
+class WalletSerializer(BaseModelSerializer):
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Wallet
+        fields = ["id", "created_at", "updated_at", "deleted_at", "user"]
+
+
+class WalletBrandSerializer(BaseModelSerializer):
+    brand = BrandSerializer(read_only=True)
+
+    class Meta:
+        model = WalletBrand
+        fields = ["id", "created_at", "updated_at", "deleted_at", "brand", "balance"]
+
+
+class WalletBrandSerializer(serializers.Serializer):
+    wallet = WalletSerializer(read_only=True)
+    wallet_brands = serializers.ListSerializer(child=WalletBrandSerializer())

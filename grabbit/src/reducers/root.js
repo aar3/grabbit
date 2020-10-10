@@ -23,6 +23,9 @@ const defaultState = {
   wallet: {
     currentSearchInput: null,
     brands: [],
+    getWalletBrandsPending: false,
+    getWalletBrandsError: null,
+    walletBrands: [],
   },
 
   session: {
@@ -43,6 +46,13 @@ const defaultState = {
     currentCampaignCode: {},
     getBrandsPending: false,
     getBrandsError: null,
+  },
+
+  accountLinking: {
+    showInstagramAccountLinkModal: false,
+    hasInstagramLinked: false,
+    instagramEmailInput: null,
+    instagramPasswordInput: null,
   },
 
   messages: {
@@ -79,6 +89,74 @@ const defaultState = {
 
 export default mainReducer = (state = defaultState, action) => {
   switch (action.type) {
+    case REDUX_ACTIONS.CLEAR_ALL_INSTAGRAM_LINK_INPUT:
+      return {
+        ...state,
+        accountLinking: {
+          ...state.accountLinking,
+          instagramPasswordInput: null,
+          instagramEmailInput: null,
+        },
+      };
+    case REDUX_ACTIONS.UPDATE_INSTAGRAM_LINK_PASSWORD_INPUT:
+    case REDUX_ACTIONS.UPDATE_INSTAGRAM_LINK_EMAIL_INPUT:
+      return {
+        ...state,
+        accountLinking: {
+          ...state.accountLinking,
+          [action.key]: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.TOGGLE_INSTAGRAM_LINK_ACCOUNT_MODAL:
+      return {
+        ...state,
+        accountLinking: {
+          ...state.accountLinking,
+          showInstagramAccountLinkModal: !state.accountLinking.showInstagramAccountLinkModal,
+        },
+      };
+    case REDUX_ACTIONS.SHOW_INSTAGRAM_LINK_ACCOUNT_MODAL:
+      return {
+        ...state,
+        accountLinking: {
+          ...state.accountLinking,
+          showInstagramAccountLinkModal: true,
+        },
+      };
+    case REDUX_ACTIONS.CLEAR_GET_WALLET_BRANDS_ERROR:
+      return {
+        ...state,
+        wallet: {
+          ...state.wallet,
+          getWalletBrandsError: null,
+        },
+      };
+    case REDUX_ACTIONS.GET_WALLET_BRANDS_SUCCESS:
+      return {
+        ...state,
+        wallet: {
+          ...state.wallet,
+          getWalletBrandsPending: false,
+          walletBrands: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.GET_WALLET_BRANDS_ERROR:
+      return {
+        ...state,
+        wallet: {
+          ...state.wallet,
+          getWalletBrandsPending: false,
+          getWalletBrandsError: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.GET_WALLET_BRANDS_PENDING:
+      return {
+        ...state,
+        wallet: {
+          ...state.wallet,
+          getWalletBrandsPending: true,
+        },
+      };
     case REDUX_ACTIONS.SET_CURRENT_CAMPAGIN_CODE:
       return {
         ...state,
@@ -263,8 +341,8 @@ export default mainReducer = (state = defaultState, action) => {
           ...state.login,
           pending: false,
         },
-        auth: {
-          ...state.auth,
+        session: {
+          ...state.session,
           user: action.payload,
         },
       };

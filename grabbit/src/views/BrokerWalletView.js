@@ -4,14 +4,29 @@ import {StyleSheet, Text, TouchableOpacity, FlatList, View, Image} from 'react-n
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import {SearchBar} from 'react-native-elements';
+import {Actions} from 'react-native-router-flux';
 
 import REDUX_ACTIONS from 'grabbit/src/actions';
 import {Color, FakeImage} from 'grabbit/src/const';
-import {Actions} from 'react-native-router-flux';
+import {httpRequestAsync} from 'grabbit/src/utils';
+import actions from '../actions';
 
 class V extends React.Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    const {user, getWalletBrands} = this.props;
+    return getWalletBrands({
+      options: {
+        endpoint: `/wallet-brands/${user.id}/`,
+        headers: {
+          'Accept': 'application/json;charset=utf8',
+          'X-Grabbit-Token': user.session_token_key,
+        },
+      },
+    });
   }
 
   render() {
@@ -20,12 +35,12 @@ class V extends React.Component {
       updateWalletViewSearchInput,
       clearWalletViewSearchInput,
       walletViewSearchInputValue,
-      brands,
+      walletBrands,
     } = this.props;
 
     const filteredBrands = !walletViewSearchInputValue
-      ? brands
-      : brands.filter((brandItem) => brandItem.name.startsWith(walletViewSearchInputValue));
+      ? walletBrands
+      : walletBrands.filter((item) => item.brand.name.startsWith(walletViewSearchInputValue));
 
     return (
       <View
@@ -66,6 +81,7 @@ class V extends React.Component {
                 borderBottomColor: 'transparent',
                 borderTopColor: 'transparent',
                 marginBottom: 20,
+                marginTop: 20,
               }}
               inputContainerStyle={{
                 height: 40,
@@ -114,6 +130,8 @@ class V extends React.Component {
                 }
                 data={filteredBrands}
                 renderItem={({item, index}) => {
+                  const brandShortName =
+                    item.brand.name.length > 20 ? `${item.brand.name.substr(0, 20)}...` : item.brand.name;
                   return (
                     <TouchableOpacity onPress={() => Actions.brokerWalletEntryView()}>
                       <View
@@ -153,7 +171,7 @@ class V extends React.Component {
                               fontSize: 14,
                               fontWeight: 'bold',
                             }}>
-                            {item.name}
+                            {brandShortName}
                           </Text>
                         </View>
                         <View
@@ -173,7 +191,7 @@ class V extends React.Component {
                               fontWeight: 'bold',
                               fontSize: 16,
                             }}>
-                            ${item.amount}
+                            ${item.balance.toFixed(0)}
                           </Text>
                         </View>
                         <Icon
@@ -200,11 +218,11 @@ class V extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const {auth, wallet} = state;
+  const {session, wallet} = state;
   return {
-    user: auth.user,
+    user: session.user,
     walletViewSearchInputValue: wallet.currentSearchInput,
-    brands: wallet.brands,
+    walletBrands: wallet.walletBrands.wallet_brands,
   };
 };
 
@@ -216,9 +234,34 @@ const mapDispatchToProps = (dispatch) => {
         payload: text,
       });
     },
+
     clearWalletViewSearchInput: () => {
       return dispatch({
         type: REDUX_ACTIONS.CLEAR_BROKER_WALLET_VIEW_SEARCH_INPUT,
+      });
+    },
+
+    getWalletBrands: async ({options}) => {
+      dispatch({
+        type: REDUX_ACTIONS.CLEAR_GET_WALLET_BRANDS_ERROR,
+      });
+
+      dispatch({
+        type: REDUX_ACTIONS.GET_WALLET_BRANDS_PENDING,
+      });
+
+      const {error, data} = await httpRequestAsync({options});
+
+      if (error) {
+        return dispatch({
+          type: REDUX_ACTIONS.GET_WALLET_BRANDS_ERROR,
+          payload: error,
+        });
+      }
+
+      return dispatch({
+        type: REDUX_ACTIONS.GET_WALLET_BRANDS_SUCCESS,
+        payload: data,
       });
     },
   };

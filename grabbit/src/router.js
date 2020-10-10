@@ -42,6 +42,7 @@ import {
   BrokerAllBrandsView,
   BrokerWalletView,
   BrokerWalletEntryView,
+  BrokerProfileView,
 } from 'grabbit/src/views';
 import {TabIconSize, Color, UserType} from 'grabbit/src/const';
 import BasicTopNavigationBar from 'grabbit/src/components/navigation/BasicTopNavigation';
@@ -95,6 +96,16 @@ const BottomTabNavigation = ({userType, hasNewNotification}) => {
           hideNavBar={false}
           icon={({focused}) => (
             <Icon name={'credit-card'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
+          )}
+        />
+        <Scene
+          key="brokerProfileView"
+          navBar={BasicTopNavigationBar}
+          component={BrokerProfileView}
+          title="Broker Profile View"
+          hideNavBar={false}
+          icon={({focused}) => (
+            <Icon name={'user'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
           )}
         />
       </Tabs>

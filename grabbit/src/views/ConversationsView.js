@@ -142,9 +142,9 @@ class V extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const {conversations, auth} = state;
+  const {conversations, session} = state;
   return {
-    user: auth.user,
+    user: session.user,
     conversations: conversations.conversations,
   };
 };

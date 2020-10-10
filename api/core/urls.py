@@ -14,4 +14,5 @@ urlpatterns = [
     path("", include(router.urls)),
     path(r"login/", LoginView),
     re_path(r"discover/(\d+)", BrokerDiscoverView),
+    re_path(r"wallet-brands/(\d+)", WalletBrandView),
 ]

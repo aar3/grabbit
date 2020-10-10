@@ -25,7 +25,7 @@ class V extends React.Component {
         endpoint: `/discover/${user.id}/`,
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json;charset-utf8',
+          'Accept': 'application/json;charset-utf8',
           'X-Grabbit-Token': user.session_token_key,
         },
       },
@@ -242,9 +242,9 @@ class V extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const {brokerDiscover, auth} = state;
+  const {brokerDiscover, session} = state;
   return {
-    user: auth.user,
+    user: session.user,
     brandViewSearchInputValue: brokerDiscover.brandViewSearchInput,
     brands: brokerDiscover.brands,
   };

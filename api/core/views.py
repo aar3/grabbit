@@ -98,10 +98,9 @@ class CampgaignCodeViewSet(BaseModelViewSet):
 @api_view(["GET"])
 @authentication_classes([TokenAuthentication])
 def BrokerDiscoverView(request, pk=None):
+    # TODO: this is ok for now but will need to be updated later
     _ = get_object_or_404(User, pk=pk)
     brands_data = Brand.objects.all().values()
-
-    print(brands_data)
 
     augmented_data = []
 
@@ -114,7 +113,6 @@ def BrokerDiscoverView(request, pk=None):
         brand_data["latest_campaign_code"] = latest_campaign_code[0] if latest_campaign_code else None
         augmented_data.append(brand_data)
 
-    # TODO: would need some way to sort/group/arrange the brands for the frontend
     featured_row0 = augmented_data[:4]
     featured_row1 = augmented_data[4:8]
 
@@ -162,3 +160,12 @@ def UploadImageView(request, pk=None):
 class BrandViewSet(BaseModelViewSet):
     model = Brand
     serializer = BrandSerializer
+
+
+@api_view(["GET"])
+@authentication_classes([TokenAuthentication])
+def WalletBrandView(request, pk=None):
+    wallet = get_object_or_404(Wallet, user__id=pk)
+    items = WalletBrand.objects.filter(wallet__id=wallet.id)
+    serializer = WalletBrandSerializer({"wallet": wallet, "wallet_brands": items})
+    return Response(serializer.data)
