@@ -5,6 +5,7 @@ import random
 import datetime as dt
 
 from django.db import migrations
+from django.utils import timezone
 from faker import Faker
 
 
@@ -16,23 +17,21 @@ def fake_code():
     return "".join([random.choice(chars) for _ in range(6)])
 
 
-def fill_campaign_code_data(apps, _):
+def seed_campaign_codes(apps, _):
     code_counts = 20
     Brand = apps.get_model("core", "Brand")
-    brands = Brand.objects.all()
 
-    for brand in brands:
-        for i in range(code_counts):
-            print("Creating campaign code %d for brand %s", i, brand.name)
+    for brand in Brand.objects.all():
+        for _ in range(code_counts):
             CampaignCode = apps.get_model("core", "CampaignCode")
-            expiry = dt.datetime.now() + dt.timedelta(days=7)
+            expiry = timezone.now() + timezone.timedelta(days=7)
             _ = CampaignCode.objects.create(brand=brand, code=fake_code(), expiry=expiry)
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("core", "0007_campaigncode_expiry"),
+        ("core", "0003_seed_brands"),
     ]
 
-    operations = [migrations.RunPython(fill_campaign_code_data)]
+    operations = [migrations.RunPython(seed_campaign_codes)]

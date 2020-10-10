@@ -120,6 +120,22 @@ class CampaignCode(BaseModel):
     expiry = models.DateTimeField()
 
 
+class Wallet(BaseModel):
+    class Meta:
+        db_table = "wallets"
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class WalletBrand(BaseModel):
+    class Meta:
+        db_table = "wallet_brands"
+
+    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
+    balance = models.FloatField()
+
+
 class NotificationItemType:
     Offer = 1
     General = 3
