@@ -2,14 +2,12 @@
 
 import hashlib
 import random
-import datetime as dt
-
 from django.db import models
 from django.utils import timezone
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from lib.utils import random_string, make_qrcode
+from lib.utils import make_qrcode
 from lib.const import UserType, DEFAULT_PROFILE_IMAGE
 from lib.gcloud import GoogleCloudService
 from lib.gredis import SessionToken, RedisClient

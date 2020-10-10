@@ -7,10 +7,6 @@ class BaseModelSerializer(serializers.ModelSerializer):
     pass
 
 
-class BasicSerializer(serializers.BaseSerializer):
-    pass
-
-
 class UserSerializer(BaseModelSerializer):
     class Meta:
         model = User

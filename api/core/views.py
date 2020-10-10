@@ -1,11 +1,9 @@
 # pylint: disable=unused-argument
 from rest_framework import viewsets
 from rest_framework.response import Response
-from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, authentication_classes
 from django.shortcuts import get_object_or_404
-from django.db.models import Q
 
 from core.models import *
 from core.serializers import *
@@ -107,10 +105,12 @@ def BrokerDiscoverView(request, pk=None):
 
     augmented_data = []
 
-    # without a custom serializer for this we have to manually 
+    # without a custom serializer for this we have to manually
     # augment the brand's with only their latest campaign codes
     for brand_data in brands_data:
-        latest_campaign_code = CampaignCode.objects.filter(brand__id=brand_data["id"]).order_by("-created_at")[:1].values()
+        latest_campaign_code = (
+            CampaignCode.objects.filter(brand__id=brand_data["id"]).order_by("-created_at")[:1].values()
+        )
         brand_data["latest_campaign_code"] = latest_campaign_code[0] if latest_campaign_code else None
         augmented_data.append(brand_data)
 

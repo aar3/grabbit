@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0006_auto_20201010_1649'),
+        ("core", "0006_auto_20201010_1649"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='campaigncode',
-            name='expiry',
-            field=models.DateTimeField(default='2020-10-03 10:18:43.811394-07'),
+            model_name="campaigncode",
+            name="expiry",
+            field=models.DateTimeField(default="2020-10-03 10:18:43.811394-07"),
             preserve_default=False,
         ),
     ]

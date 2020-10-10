@@ -8,7 +8,7 @@ from lib.const import DEFAULT_PROFILE_IMAGE
 fake = Faker()
 
 
-def fill_brand_data(apps, schema_editor):
+def fill_brand_data(apps, _):
     Brand = apps.get_model("core", "Brand")
     count = 20
     for i in range(count):

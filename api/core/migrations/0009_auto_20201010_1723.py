@@ -6,12 +6,9 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0008_seed_campaign_code'),
+        ("core", "0008_seed_campaign_code"),
     ]
 
     operations = [
-        migrations.AlterModelTable(
-            name='campaigncode',
-            table='campaign_codes',
-        ),
+        migrations.AlterModelTable(name="campaigncode", table="campaign_codes",),
     ]

@@ -3,7 +3,6 @@ import io
 import string
 
 import qrcode
-from PIL import Image
 
 
 def random_string(n=10):
