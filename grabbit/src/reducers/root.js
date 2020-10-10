@@ -40,6 +40,7 @@ const defaultState = {
       },
       all: [],
     },
+    currentCampaignCode: {},
     getBrandsPending: false,
     getBrandsError: null,
   },
@@ -78,6 +79,22 @@ const defaultState = {
 
 export default mainReducer = (state = defaultState, action) => {
   switch (action.type) {
+    case REDUX_ACTIONS.SET_CURRENT_CAMPAGIN_CODE:
+      return {
+        ...state,
+        brokerDiscover: {
+          ...state.brokerDiscover,
+          currentCampaignCode: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.CLEAR_CURRENT_CAMPAIGN_CODE:
+      return {
+        ...state,
+        brokerDiscover: {
+          ...state.brokerDiscover,
+          currentCampaignCode: null,
+        },
+      };
     case REDUX_ACTIONS.CLEAR_BROKER_GET_BRANDS_ERROR:
       return {
         ...state,

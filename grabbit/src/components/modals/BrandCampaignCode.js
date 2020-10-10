@@ -25,7 +25,7 @@ class M extends React.Component {
   }
 
   render() {
-    const {toggleBrokerDiscoverBrandCampaignModal, showBrandCampaignModal} = this.props;
+    const {toggleBrokerDiscoverBrandCampaignModal, currentCampaignCode, showBrandCampaignModal} = this.props;
     return (
       <Modal
         animation={'fade'}
@@ -66,6 +66,7 @@ class M extends React.Component {
             <TouchableOpacity onPress={() => toggleBrokerDiscoverBrandCampaignModal()}>
               <Icon name="x" size={15} color={Color.GreyText} />
             </TouchableOpacity>
+            <Text>{currentCampaignCode.code}</Text>
           </View>
         </View>
       </Modal>
@@ -77,6 +78,7 @@ const mapStateToProps = (state) => {
   const {brokerDiscover} = state;
   return {
     showBrandCampaignModal: brokerDiscover.showBrandCampaignModal,
+    currentCampaignCode: brokerDiscover.currentCampaignCode,
   };
 };
 

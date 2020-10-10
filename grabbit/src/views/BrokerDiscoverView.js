@@ -35,7 +35,8 @@ class V extends React.Component {
   brandListItem({item, index}) {
     const {toggleBrokerDiscoverBrandCampaignModal} = this.props;
     return (
-      <TouchableOpacity onPress={() => toggleBrokerDiscoverBrandCampaignModal()}>
+      <TouchableOpacity
+        onPress={() => toggleBrokerDiscoverBrandCampaignModal({campaignCode: item.latest_campaign_code})}>
         <View style={styles.BrandListItem__ContentContainer}>
           <Image source={{uri: item.image_url}} style={{height: 120, width: 120}} />
         </View>
@@ -264,9 +265,14 @@ const mapDispatchToProps = (dispatch) => {
       });
     },
 
-    toggleBrokerDiscoverBrandCampaignModal: () => {
-      return dispatch({
+    toggleBrokerDiscoverBrandCampaignModal: ({campaignCode}) => {
+      dispatch({
         type: REDUX_ACTIONS.TOGGLE_BROKER_BRAND_CAMPAIGN_MODAL,
+      });
+
+      dispatch({
+        type: REDUX_ACTIONS.SET_CURRENT_CAMPAGIN_CODE,
+        payload: campaignCode,
       });
     },
 

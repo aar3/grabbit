@@ -115,10 +115,11 @@ class Brand(BaseModel):
 
 class CampaignCode(BaseModel):
     class Meta:
-        db_table = "brand_codes"
+        db_table = "campaign_codes"
 
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     code = models.CharField(max_length=255)
+    expiry = models.DateTimeField()
 
 
 class NotificationItemType:

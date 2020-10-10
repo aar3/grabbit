@@ -101,12 +101,25 @@ class CampgaignCodeViewSet(BaseModelViewSet):
 @authentication_classes([TokenAuthentication])
 def BrokerDiscoverView(request, pk=None):
     _ = get_object_or_404(User, pk=pk)
-    brands = Brand.objects.all().values()
+    brands_data = Brand.objects.all().values()
+
+    print(brands_data)
+
+    augmented_data = []
+
+    # without a custom serializer for this we have to manually 
+    # augment the brand's with only their latest campaign codes
+    for brand_data in brands_data:
+        latest_campaign_code = CampaignCode.objects.filter(brand__id=brand_data["id"]).order_by("-created_at")[:1].values()
+        brand_data["latest_campaign_code"] = latest_campaign_code[0] if latest_campaign_code else None
+        augmented_data.append(brand_data)
+
     # TODO: would need some way to sort/group/arrange the brands for the frontend
-    featured_row0 = brands[:4]
-    featured_row1 = brands[4:8]
+    featured_row0 = augmented_data[:4]
+    featured_row1 = augmented_data[4:8]
+
     # TODO: add custom serializer for this
-    return Response({"featured": {"row0": featured_row0, "row1": featured_row1,}, "all": brands,})
+    return Response({"featured": {"row0": featured_row0, "row1": featured_row1,}, "all": augmented_data})
 
 
 class NotificationViewSet(BaseModelViewSet):
