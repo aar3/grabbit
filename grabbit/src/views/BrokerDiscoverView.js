@@ -8,83 +8,8 @@ import {SearchBar} from 'react-native-elements';
 
 import REDUX_ACTIONS from 'grabbit/src/actions';
 import {FakeImage, Color} from 'grabbit/src/const';
-import BrandCampaignCode from 'grabbit/src/components/modals/BrandCampaignCode';
-
-const data = {
-  featured: {
-    row0: [
-      {
-        id: '1101',
-        image_url: FakeImage,
-        post_tag_id: '#SomeTagHere123',
-      },
-      {
-        id: '1102',
-        image_url: FakeImage,
-        post_tag_id: '#SomeTagHere123',
-      },
-      {
-        id: '1103',
-        image_url: FakeImage,
-        post_tag_id: '#SomeTagHere123',
-      },
-    ],
-    row1: [
-      {
-        id: '1105',
-        image_url: FakeImage,
-        post_tag_id: '#SomeTagHere123',
-      },
-      {
-        id: '1106',
-        image_url: FakeImage,
-        post_tag_id: '#SomeTagHere123',
-      },
-      {
-        id: '1107',
-        image_url: FakeImage,
-        post_tag_id: '#SomeTagHere123',
-      },
-    ],
-  },
-  all: [
-    {
-      id: '1',
-      image_url: FakeImage,
-      post_tag_id: '#SomeTagHere123',
-    },
-    {
-      id: '1',
-      image_url: FakeImage,
-      post_tag_id: '#SomeTagHere123',
-    },
-    {
-      id: '1',
-      image_url: FakeImage,
-      post_tag_id: '#SomeTagHere123',
-    },
-    {
-      id: '1',
-      image_url: FakeImage,
-      post_tag_id: '#SomeTagHere123',
-    },
-    {
-      id: '1',
-      image_url: FakeImage,
-      post_tag_id: '#SomeTagHere123',
-    },
-    {
-      id: '1',
-      image_url: FakeImage,
-      post_tag_id: '#SomeTagHere123',
-    },
-    {
-      id: '1',
-      image_url: FakeImage,
-      post_tag_id: '#SomeTagHere123',
-    },
-  ],
-};
+import {httpRequestAsync} from 'grabbit/src/utils';
+import BrandCampaignCodeModal from 'grabbit/src/components/modals/BrandCampaignCode';
 
 class V extends React.Component {
   constructor(props) {
@@ -97,7 +22,7 @@ class V extends React.Component {
 
     return getBrands({
       options: {
-        endpoint: '/brands/',
+        endpoint: `/discover/${user.id}/`,
         method: 'GET',
         headers: {
           'Content-Type': 'application/json;charset-utf8',
@@ -110,7 +35,7 @@ class V extends React.Component {
   brandListItem({item, index}) {
     const {toggleBrokerDiscoverBrandCampaignModal} = this.props;
     return (
-      <TouchableOpacity onPress={() => Actions.toggleBrokerDiscoverBrandCampaignModal()}>
+      <TouchableOpacity onPress={() => toggleBrokerDiscoverBrandCampaignModal()}>
         <View style={styles.BrandListItem__ContentContainer}>
           <Image source={{uri: item.image_url}} style={{height: 120, width: 120}} />
         </View>
@@ -122,10 +47,10 @@ class V extends React.Component {
     const {updateBrandViewSearchInput, brands, clearBrandViewSearchInput, brandViewSearchInputValue} = this.props;
 
     const filteredBrands = !brandViewSearchInputValue
-      ? brands
-      : brands.filter((brandItem) => brandItem.name.startsWith(brandViewSearchInputValue));
+      ? brands.all
+      : brands.all.filter((brandItem) => brandItem.name.startsWith(brandViewSearchInputValue));
 
-    const modal = <BrandCampaignCode ref={this.brandCampaignsCodeModal} />;
+    const modal = <BrandCampaignCodeModal ref={this.brandCampaignsCodeModal} />;
     return (
       <View
         style={{
@@ -193,7 +118,7 @@ class V extends React.Component {
                   // borderWidth: 1,
                   // borderColor: Color.LightGrey,
                 }}
-                value={filteredBrands}
+                value={brandViewSearchInputValue}
                 onChangeText={(text) => updateBrandViewSearchInput({text})}
                 lightTheme={true}
                 clearIcon={
@@ -241,7 +166,7 @@ class V extends React.Component {
                 alignItems: 'center',
               }}
               horizontal={true}
-              data={data.featured.row0}
+              data={brands.featured.row0}
               renderItem={({item, index}) => {
                 return this.brandListItem({item, index});
               }}
@@ -249,7 +174,7 @@ class V extends React.Component {
             />
             <FlatList
               horizontal={true}
-              data={data.featured.row1}
+              data={brands.featured.row1}
               renderItem={({item, index}) => {
                 return this.brandListItem({item, index});
               }}
@@ -302,7 +227,7 @@ class V extends React.Component {
                 marginBottom: 20,
               }}
               horizontal={true}
-              data={data.all}
+              data={filteredBrands}
               renderItem={({item, index}) => {
                 return this.brandListItem({item, index});
               }}
@@ -332,40 +257,41 @@ const mapDispatchToProps = (dispatch) => {
         payload: text,
       });
     },
+
     clearBrandViewSearchInput: () => {
       return dispatch({
         type: REDUX_ACTIONS.CLEAR_BROKER_BRAND_VIEW_SEARCH_INPUT,
       });
     },
+
     toggleBrokerDiscoverBrandCampaignModal: () => {
       return dispatch({
         type: REDUX_ACTIONS.TOGGLE_BROKER_BRAND_CAMPAIGN_MODAL,
       });
     },
-    getBrands: ({options}) => {
-      return async () => {
-        dispatch({
-          type: REDUX_ACTIONS.CLEAR_BROKER_GET_BRANDS_ERROR,
-        });
 
-        dispatch({
-          type: REDUX_ACTIONS.BROKER_GET_BRANDS_PENDING,
-        });
+    getBrands: async ({options}) => {
+      dispatch({
+        type: REDUX_ACTIONS.CLEAR_BROKER_GET_BRANDS_ERROR,
+      });
 
-        const {error, data} = await httpRequestAsync({options});
+      dispatch({
+        type: REDUX_ACTIONS.BROKER_GET_BRANDS_PENDING,
+      });
 
-        if (error) {
-          return dispatch({
-            type: REDUX_ACTIONS.BROKER_GET_BRANDS_ERROR,
-            payload: error,
-          });
-        }
+      const {error, data} = await httpRequestAsync({options});
 
+      if (error) {
         return dispatch({
-          type: REDUX_ACTIONS.BROKER_GET_BRANDS_SUCCESS,
-          payload: data,
+          type: REDUX_ACTIONS.BROKER_GET_BRANDS_ERROR,
+          payload: error,
         });
-      };
+      }
+
+      return dispatch({
+        type: REDUX_ACTIONS.BROKER_GET_BRANDS_SUCCESS,
+        payload: data,
+      });
     },
   };
 };

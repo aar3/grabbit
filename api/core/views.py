@@ -92,6 +92,23 @@ class UserViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 
+class CampgaignCodeViewSet(BaseModelViewSet):
+    model = CampaignCode
+    serializer = CampaignCodeSerializer
+
+
+@api_view(["GET"])
+@authentication_classes([TokenAuthentication])
+def BrokerDiscoverView(request, pk=None):
+    _ = get_object_or_404(User, pk=pk)
+    brands = Brand.objects.all().values()
+    # TODO: would need some way to sort/group/arrange the brands for the frontend
+    featured_row0 = brands[:4]
+    featured_row1 = brands[4:8]
+    # TODO: add custom serializer for this
+    return Response({"featured": {"row0": featured_row0, "row1": featured_row1,}, "all": brands,})
+
+
 class NotificationViewSet(BaseModelViewSet):
     model = Notification
     serializer = NotificationSerializer

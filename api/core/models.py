@@ -113,7 +113,7 @@ class Brand(BaseModel):
     image_url = models.CharField(max_length=255, default=DEFAULT_PROFILE_IMAGE)
 
 
-class BrandCode(BaseModel):
+class CampaignCode(BaseModel):
     class Meta:
         db_table = "brand_codes"
 

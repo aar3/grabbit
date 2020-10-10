@@ -22,53 +22,7 @@ const defaultState = {
 
   wallet: {
     currentSearchInput: null,
-    brands: [
-      {
-        id: '1',
-        name: 'Acme Corporation',
-        amount: '45',
-      },
-      {
-        id: '2',
-        name: 'Globex Corporation',
-        amount: '25',
-      },
-      {
-        id: '3',
-        name: 'Soylent Corp',
-        amount: '5',
-      },
-      {
-        id: '4',
-        name: 'Initech',
-        amount: '12',
-      },
-      {
-        id: '6',
-        name: 'Umbrella Corporation ',
-        amount: '13',
-      },
-      {
-        id: '7',
-        name: 'Hooli',
-        amount: '21',
-      },
-      {
-        id: '8',
-        name: 'Initech',
-        amount: '33',
-      },
-      {
-        id: '9',
-        name: 'Umbrella Corporation ',
-        amount: '3',
-      },
-      {
-        id: '10',
-        name: 'Hooli',
-        amount: '10',
-      },
-    ],
+    brands: [],
   },
 
   session: {
@@ -79,7 +33,13 @@ const defaultState = {
     currentBrand: null,
     brandViewSearchInput: null,
     showBrandCampaignModal: false,
-    brands: [],
+    brands: {
+      featured: {
+        row0: [],
+        row1: [],
+      },
+      all: [],
+    },
     getBrandsPending: false,
     getBrandsError: null,
   },
@@ -149,7 +109,7 @@ export default mainReducer = (state = defaultState, action) => {
         brokerDiscover: {
           ...state.brokerDiscover,
           getBrandsPending: false,
-          brands: actions.payload,
+          brands: action.payload,
         },
       };
     case REDUX_ACTIONS.TOGGLE_BROKER_BRAND_CAMPAIGN_MODAL:

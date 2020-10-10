@@ -13,15 +13,15 @@ def fill_brand_data(apps, schema_editor):
     count = 20
     for i in range(count):
         print("creating brand profile %i/count", i)
-        _ = Brand.objects.create(name=fake.company(), description=fake.sentence(nb_words=30), image_url=DEFAULT_PROFILE_IMAGE)
+        _ = Brand.objects.create(
+            name=fake.company(), description=fake.sentence(nb_words=30), image_url=DEFAULT_PROFILE_IMAGE
+        )
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0003_auto_20201004_0105'),
+        ("core", "0003_auto_20201004_0105"),
     ]
 
-    operations = [
-        migrations.RunPython(fill_brand_data)
-    ]
+    operations = [migrations.RunPython(fill_brand_data)]

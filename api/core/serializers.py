@@ -62,11 +62,11 @@ class BrandSerializer(BaseModelSerializer):
         ]
 
 
-class BrandCodeSerializer(BaseModelSerializer):
+class CampaignCodeSerializer(BaseModelSerializer):
     brand = BrandSerializer(read_only=True)
 
     class Meta:
-        model = BrandCode
+        model = CampaignCode
         fields = [
             "id",
             "created_at",

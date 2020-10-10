@@ -6,18 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0004_seed_brand_data'),
+        ("core", "0004_seed_brand_data"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='brand',
-            name='image_url',
-            field=models.CharField(default='https://cel.ac/wp-content/uploads/2016/02/placeholder-img-1.jpg', max_length=255),
+            model_name="brand",
+            name="image_url",
+            field=models.CharField(
+                default="https://cel.ac/wp-content/uploads/2016/02/placeholder-img-1.jpg", max_length=255
+            ),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='profile_image_url',
-            field=models.CharField(default='https://cel.ac/wp-content/uploads/2016/02/placeholder-img-1.jpg', max_length=255),
+            model_name="user",
+            name="profile_image_url",
+            field=models.CharField(
+                default="https://cel.ac/wp-content/uploads/2016/02/placeholder-img-1.jpg", max_length=255
+            ),
         ),
     ]

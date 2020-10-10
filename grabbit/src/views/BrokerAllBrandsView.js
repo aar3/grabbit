@@ -1,10 +1,11 @@
 import React from 'react';
-import {StyleSheet, Text, View, FlatList, Image} from 'react-native';
+import {StyleSheet, Text, View, FlatList, Image, TouchableOpacity} from 'react-native';
 
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
 
+import {Color} from 'grabbit/src/const';
 import REDUX_ACTIONS from 'grabbit/src/actions';
 
 class V extends React.Component {
@@ -26,17 +27,51 @@ class V extends React.Component {
             width: '100%',
           }}>
           <FlatList
-            data={brands}
+            data={brands.all}
             keyExtractor={(_item, index) => index.toString()}
             renderItem={({item, index}) => {
               return (
-                <View
-                  style={{
-                    borderWidth: 1,
-                    borderColor: 'red',
-                    width: '100%',
-                    height: 60,
-                  }}></View>
+                <TouchableOpacity onPress={() => {}}>
+                  <View
+                    style={{
+                      // borderWidth: 1,
+                      // borderColor: 'red',
+                      width: '100%',
+                      height: 80,
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                      borderBottomWidth: 1,
+                      borderBottomColor: Color.LightGrey,
+                    }}>
+                    <View
+                      style={{
+                        height: 60,
+                        width: 60,
+                        marginLeft: 20,
+                        borderRadius: 100,
+                        overflow: 'hidden',
+                      }}>
+                      <Image source={{uri: item.image_url}} style={{height: 60, width: 60}} />
+                    </View>
+                    <View
+                      style={{
+                        // borderWidth: 1,
+                        // borderColor: 'green',
+                        marginLeft: 20,
+                      }}>
+                      <Text>{item.name}</Text>
+                    </View>
+                    <Icon
+                      name="chevron-right"
+                      color={Color.LightGrey}
+                      size={20}
+                      style={{
+                        position: 'absolute',
+                        right: 20,
+                      }}
+                    />
+                  </View>
+                </TouchableOpacity>
               );
             }}
           />
@@ -59,6 +94,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
   const {brokerDiscover} = state;
+  console.log(brokerDiscover);
   return {
     brands: brokerDiscover.brands,
   };
