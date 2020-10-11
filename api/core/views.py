@@ -167,5 +167,5 @@ class BrandViewSet(BaseModelViewSet):
 def WalletBrandView(request, pk=None):
     wallet = get_object_or_404(Wallet, user__id=pk)
     items = WalletBrand.objects.filter(wallet__id=wallet.id)
-    serializer = WalletBrandSerializer({"wallet": wallet, "wallet_brands": items})
+    serializer = WalletBrandListViewSerializer({"wallet": wallet, "wallet_brands": items})
     return Response(serializer.data)

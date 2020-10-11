@@ -89,6 +89,12 @@ class WalletBrandSerializer(BaseModelSerializer):
         fields = ["id", "created_at", "updated_at", "deleted_at", "brand", "balance"]
 
 
-class WalletBrandSerializer(serializers.Serializer):
+class WalletBrandListViewSerializer(serializers.Serializer):
     wallet = WalletSerializer(read_only=True)
     wallet_brands = serializers.ListSerializer(child=WalletBrandSerializer())
+
+    def create(self, *args, **kwargs):
+        raise NotImplementedError
+
+    def update(self, *args, **kwargs):
+        raise NotImplementedError

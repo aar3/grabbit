@@ -2,7 +2,6 @@
 
 import string
 import random
-import datetime as dt
 
 from django.db import migrations
 from django.utils import timezone
