@@ -1,9 +1,4 @@
-import {Alert} from 'react-native';
-
-import {Actions} from 'react-native-router-flux';
-
 import REDUX_ACTIONS from 'grabbit/src/actions';
-import {httpRequestAsync} from 'grabbit/src/utils';
 
 const defaultState = {
   userType: null,
@@ -24,6 +19,14 @@ const defaultState = {
 
   currentSceneKey: null,
 
+  wallet: {
+    currentSearchInput: null,
+    brands: [],
+    getWalletBrandsPending: false,
+    getWalletBrandsError: null,
+    walletBrands: [],
+  },
+
   session: {
     user: null,
   },
@@ -31,6 +34,27 @@ const defaultState = {
   brokerDiscover: {
     currentBrand: null,
     brandViewSearchInput: null,
+    showBrandCampaignModal: false,
+    brands: {
+      featured: {
+        row0: [],
+        row1: [],
+      },
+      all: [],
+    },
+    currentCampaignCode: {},
+    hasCopiedCurrentCampaignCode: false,
+    getBrandsPending: false,
+    getBrandsError: null,
+  },
+
+  accountLinking: {
+    instagramLinkPending: true,
+    instagramLinkError: null,
+    showInstagramAccountLinkModal: false,
+    hasInstagramLinked: false,
+    instagramEmailInput: null,
+    instagramPasswordInput: null,
   },
 
   messages: {
@@ -67,6 +91,164 @@ const defaultState = {
 
 export default mainReducer = (state = defaultState, action) => {
   switch (action.type) {
+    case REDUX_ACTIONS.CLEAR_CURRENT_CAMPAIGN_CODE_COPIED:
+      return {
+        ...state,
+        brokerDiscover: {
+          ...state.brokerDiscover,
+          hasCopiedCurrentCampaignCode: false,
+        },
+      };
+    case REDUX_ACTIONS.CURRENT_CAMPAIGN_CODE_COPIED:
+      return {
+        ...state,
+        brokerDiscover: {
+          ...state.brokerDiscover,
+          hasCopiedCurrentCampaignCode: true,
+        },
+      };
+    case REDUX_ACTIONS.CLEAR_ALL_INSTAGRAM_LINK_INPUT:
+      return {
+        ...state,
+        accountLinking: {
+          ...state.accountLinking,
+          instagramPasswordInput: null,
+          instagramEmailInput: null,
+        },
+      };
+    case REDUX_ACTIONS.UPDATE_INSTAGRAM_LINK_PASSWORD_INPUT:
+    case REDUX_ACTIONS.UPDATE_INSTAGRAM_LINK_EMAIL_INPUT:
+      return {
+        ...state,
+        accountLinking: {
+          ...state.accountLinking,
+          [action.key]: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.TOGGLE_INSTAGRAM_LINK_ACCOUNT_MODAL:
+      return {
+        ...state,
+        accountLinking: {
+          ...state.accountLinking,
+          showInstagramAccountLinkModal: !state.accountLinking.showInstagramAccountLinkModal,
+        },
+      };
+    case REDUX_ACTIONS.SHOW_INSTAGRAM_LINK_ACCOUNT_MODAL:
+      return {
+        ...state,
+        accountLinking: {
+          ...state.accountLinking,
+          showInstagramAccountLinkModal: true,
+        },
+      };
+    case REDUX_ACTIONS.CLEAR_GET_WALLET_BRANDS_ERROR:
+      return {
+        ...state,
+        wallet: {
+          ...state.wallet,
+          getWalletBrandsError: null,
+        },
+      };
+    case REDUX_ACTIONS.GET_WALLET_BRANDS_SUCCESS:
+      return {
+        ...state,
+        wallet: {
+          ...state.wallet,
+          getWalletBrandsPending: false,
+          walletBrands: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.GET_WALLET_BRANDS_ERROR:
+      return {
+        ...state,
+        wallet: {
+          ...state.wallet,
+          getWalletBrandsPending: false,
+          getWalletBrandsError: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.GET_WALLET_BRANDS_PENDING:
+      return {
+        ...state,
+        wallet: {
+          ...state.wallet,
+          getWalletBrandsPending: true,
+        },
+      };
+    case REDUX_ACTIONS.SET_CURRENT_CAMPAGIN_CODE:
+      return {
+        ...state,
+        brokerDiscover: {
+          ...state.brokerDiscover,
+          currentCampaignCode: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.CLEAR_CURRENT_CAMPAIGN_CODE:
+      return {
+        ...state,
+        brokerDiscover: {
+          ...state.brokerDiscover,
+          currentCampaignCode: null,
+        },
+      };
+    case REDUX_ACTIONS.CLEAR_BROKER_GET_BRANDS_ERROR:
+      return {
+        ...state,
+        brokerDiscover: {
+          ...state.brokerDiscover,
+          getBrandsError: null,
+        },
+      };
+    case REDUX_ACTIONS.BROKER_GET_BRANDS_PENDING:
+      return {
+        ...state,
+        brokerDiscover: {
+          ...state.brokerDiscover,
+          getBrandsPending: true,
+        },
+      };
+    case REDUX_ACTIONS.BROKER_GET_BRANDS_ERROR:
+      return {
+        ...state,
+        brokerDiscover: {
+          ...state.brokerDiscover,
+          getBrandsPending: false,
+          getBrandsError: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.BROKER_GET_BRANDS_SUCCESS:
+      return {
+        ...state,
+        brokerDiscover: {
+          ...state.brokerDiscover,
+          getBrandsPending: false,
+          brands: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.TOGGLE_BROKER_BRAND_CAMPAIGN_MODAL:
+      return {
+        ...state,
+        brokerDiscover: {
+          ...state.brokerDiscover,
+          showBrandCampaignModal: !state.brokerDiscover.showBrandCampaignModal,
+        },
+      };
+    case REDUX_ACTIONS.UPDATE_BROKER_WALLET_VIEW_SEARCH_INPUT:
+      return {
+        ...state,
+        wallet: {
+          ...state.wallet,
+          currentSearchInput: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.CLEAR_BROKER_WALLET_VIEW_SEARCH_INPUT:
+      return {
+        ...state,
+        wallet: {
+          ...state.wallet,
+          currentSearchInput: null,
+        },
+      };
     case REDUX_ACTIONS.CLEAR_BROKER_BRAND_VIEW_SEARCH_INPUT:
       return {
         ...state,
@@ -161,7 +343,6 @@ export default mainReducer = (state = defaultState, action) => {
         },
       };
     case REDUX_ACTIONS.POST_USER_LOGIN_ERROR:
-      // console.log(state.login);
       return {
         ...state,
         login: {
@@ -177,8 +358,8 @@ export default mainReducer = (state = defaultState, action) => {
           ...state.login,
           pending: false,
         },
-        auth: {
-          ...state.auth,
+        session: {
+          ...state.session,
           user: action.payload,
         },
       };

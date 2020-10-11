@@ -5,7 +5,7 @@ REQUIREMENTS_DIR = $(PWD)/requirements
 # pip requirements
 CMD_PIP_OUTDATED = pip list --outdated --format=columns
 CMD_PIP_UPDATE = $(CMD_PIP_OUTDATED) | tail -n +3 | cut -d' ' -f1 | xargs -r pip install --upgrade --trusted-host pypi.python.org
-CMD_PIP_INSTALL_LOCK= pip install --upgrade -r $(REQUIREMENTS_DIR)/requirements.lock
+CMD_PIP_INSTALL_LOCK= python -m pip install --upgrade -r $(REQUIREMENTS_DIR)/requirements.lock --trusted-host pypi.python.org
 CMD_PIP_INSTALL = $(foreach file, $(wildcard $(REQUIREMENTS_DIR)/*), pip install -r $(file) --trusted-host pypi.python.org;)
 CMD_PIP_FREEZE = pip freeze > $(REQUIREMENTS_DIR)/requirements.lock
 

@@ -1,11 +1,9 @@
 # pylint: disable=unused-argument
 from rest_framework import viewsets
 from rest_framework.response import Response
-from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, authentication_classes
 from django.shortcuts import get_object_or_404
-from django.db.models import Q
 
 from core.models import *
 from core.serializers import *
@@ -92,6 +90,36 @@ class UserViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 
+class CampgaignCodeViewSet(BaseModelViewSet):
+    model = CampaignCode
+    serializer = CampaignCodeSerializer
+
+
+@api_view(["GET"])
+@authentication_classes([TokenAuthentication])
+def BrokerDiscoverView(request, pk=None):
+    # TODO: this is ok for now but will need to be updated later
+    _ = get_object_or_404(User, pk=pk)
+    brands_data = Brand.objects.all().values()
+
+    augmented_data = []
+
+    # without a custom serializer for this we have to manually
+    # augment the brand's with only their latest campaign codes
+    for brand_data in brands_data:
+        latest_campaign_code = (
+            CampaignCode.objects.filter(brand__id=brand_data["id"]).order_by("-created_at")[:1].values()
+        )
+        brand_data["latest_campaign_code"] = latest_campaign_code[0] if latest_campaign_code else None
+        augmented_data.append(brand_data)
+
+    featured_row0 = augmented_data[:3]
+    featured_row1 = augmented_data[3:6]
+
+    # TODO: add custom serializer for this
+    return Response({"featured": {"row0": featured_row0, "row1": featured_row1,}, "all": augmented_data})
+
+
 class NotificationViewSet(BaseModelViewSet):
     model = Notification
     serializer = NotificationSerializer
@@ -132,3 +160,12 @@ def UploadImageView(request, pk=None):
 class BrandViewSet(BaseModelViewSet):
     model = Brand
     serializer = BrandSerializer
+
+
+@api_view(["GET"])
+@authentication_classes([TokenAuthentication])
+def WalletBrandView(request, pk=None):
+    wallet = get_object_or_404(Wallet, user__id=pk)
+    items = WalletBrand.objects.filter(wallet__id=wallet.id)
+    serializer = WalletBrandListViewSerializer({"wallet": wallet, "wallet_brands": items})
+    return Response(serializer.data)

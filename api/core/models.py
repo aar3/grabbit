@@ -2,21 +2,16 @@
 
 import hashlib
 import random
-import datetime as dt
-
 from django.db import models
 from django.utils import timezone
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from lib.utils import random_string, make_qrcode
-from lib.const import UserType
+from lib.utils import make_qrcode
+from lib.const import UserType, DEFAULT_PROFILE_IMAGE
 from lib.gcloud import GoogleCloudService
 from lib.gredis import SessionToken, RedisClient
 from core.managers import *
-
-
-DEFAULT_PROFILE_IMAGE = "https://www.teamunhcr.org.au/images/empty-profile-image.jpg"
 
 
 class BaseModel(models.Model):
@@ -116,12 +111,29 @@ class Brand(BaseModel):
     image_url = models.CharField(max_length=255, default=DEFAULT_PROFILE_IMAGE)
 
 
-class BrandCode(BaseModel):
+class CampaignCode(BaseModel):
     class Meta:
-        db_table = "brand_codes"
+        db_table = "campaign_codes"
 
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     code = models.CharField(max_length=255)
+    expiry = models.DateTimeField()
+
+
+class Wallet(BaseModel):
+    class Meta:
+        db_table = "wallets"
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class WalletBrand(BaseModel):
+    class Meta:
+        db_table = "wallet_brands"
+
+    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
+    balance = models.FloatField()
 
 
 class NotificationItemType:

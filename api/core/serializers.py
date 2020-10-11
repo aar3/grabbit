@@ -7,10 +7,6 @@ class BaseModelSerializer(serializers.ModelSerializer):
     pass
 
 
-class BasicSerializer(serializers.BaseSerializer):
-    pass
-
-
 class UserSerializer(BaseModelSerializer):
     class Meta:
         model = User
@@ -62,11 +58,11 @@ class BrandSerializer(BaseModelSerializer):
         ]
 
 
-class BrandCodeSerializer(BaseModelSerializer):
+class CampaignCodeSerializer(BaseModelSerializer):
     brand = BrandSerializer(read_only=True)
 
     class Meta:
-        model = BrandCode
+        model = CampaignCode
         fields = [
             "id",
             "created_at",
@@ -75,3 +71,30 @@ class BrandCodeSerializer(BaseModelSerializer):
             "brand",
             "code",
         ]
+
+
+class WalletSerializer(BaseModelSerializer):
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Wallet
+        fields = ["id", "created_at", "updated_at", "deleted_at", "user"]
+
+
+class WalletBrandSerializer(BaseModelSerializer):
+    brand = BrandSerializer(read_only=True)
+
+    class Meta:
+        model = WalletBrand
+        fields = ["id", "created_at", "updated_at", "deleted_at", "brand", "balance"]
+
+
+class WalletBrandListViewSerializer(serializers.Serializer):
+    wallet = WalletSerializer(read_only=True)
+    wallet_brands = serializers.ListSerializer(child=WalletBrandSerializer())
+
+    def create(self, *args, **kwargs):
+        raise NotImplementedError
+
+    def update(self, *args, **kwargs):
+        raise NotImplementedError

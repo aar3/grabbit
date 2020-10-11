@@ -159,19 +159,21 @@ class V extends React.Component {
               fontSize: 13,
               fontWeight: 'bold',
             }}
-            onPress={postLogin({
-              options: {
-                endpoint: '/login/',
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json;charset-utf8',
+            onPress={() =>
+              postLogin({
+                options: {
+                  endpoint: '/login/',
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json;charset-utf8',
+                  },
+                  data: {
+                    email: emailValue,
+                    secret: passwordValue,
+                  },
                 },
-                data: {
-                  email: emailValue,
-                  secret: passwordValue,
-                },
-              },
-            })}
+              })
+            }
           />
         </View>
       </KeyboardAvoidingView>
@@ -203,39 +205,37 @@ const mapDispatchToProps = (dispatch) => {
         payload: {key, text},
       });
     },
-    postLogin: ({options}) => {
-      return async () => {
-        dispatch({
-          type: REDUX_ACTIONS.CLEAR_POST_LOGIN_ERROR,
-        });
+    postLogin: async ({options}) => {
+      dispatch({
+        type: REDUX_ACTIONS.CLEAR_POST_LOGIN_ERROR,
+      });
 
-        dispatch({
-          type: REDUX_ACTIONS.POST_USER_LOGIN_PENDING,
-        });
+      dispatch({
+        type: REDUX_ACTIONS.POST_USER_LOGIN_PENDING,
+      });
 
-        const {data, error} = await httpRequestAsync({options});
+      const {data, error} = await httpRequestAsync({options});
 
-        if (error) {
-          if (error.statusCode === 404) {
-            error.details = "That user doesn't exist.";
-          } else if (error.statusCode === 401) {
-            error.details = "That's not the right password.";
-          }
-
-          return dispatch({
-            type: REDUX_ACTIONS.POST_USER_LOGIN_ERROR,
-            pending: false,
-            payload: error,
-          });
+      if (error) {
+        if (error.statusCode === 404) {
+          error.details = "That user doesn't exist.";
+        } else if (error.statusCode === 401) {
+          error.details = "That's not the right password.";
         }
 
-        dispatch({
-          type: REDUX_ACTIONS.POST_USER_LOGIN_SUCCESS,
-          payload: data,
+        return dispatch({
+          type: REDUX_ACTIONS.POST_USER_LOGIN_ERROR,
+          pending: false,
+          payload: error,
         });
+      }
 
-        return Actions.brokerDiscoverView();
-      };
+      dispatch({
+        type: REDUX_ACTIONS.POST_USER_LOGIN_SUCCESS,
+        payload: data,
+      });
+
+      return Actions.brokerDiscoverView();
     },
   };
 };
