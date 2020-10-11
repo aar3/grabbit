@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, FlatList, View, Image} from 'react-native';
+import {Text, TouchableOpacity, FlatList, View, Image} from 'react-native';
 
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
@@ -9,7 +9,6 @@ import {Actions} from 'react-native-router-flux';
 import REDUX_ACTIONS from 'grabbit/src/actions';
 import {Color, FakeImage} from 'grabbit/src/const';
 import {httpRequestAsync} from 'grabbit/src/utils';
-import actions from '../actions';
 
 class V extends React.Component {
   constructor(props) {
@@ -129,6 +128,7 @@ class V extends React.Component {
                   }
                 }
                 data={filteredBrands}
+                keyExtractor={(_item, index) => index.toString()}
                 renderItem={({item, index}) => {
                   const brandShortName =
                     item.brand.name.length > 20 ? `${item.brand.name.substr(0, 20)}...` : item.brand.name;

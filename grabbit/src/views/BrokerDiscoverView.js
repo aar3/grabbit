@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import {SearchBar} from 'react-native-elements';
 
 import REDUX_ACTIONS from 'grabbit/src/actions';
-import {FakeImage, Color} from 'grabbit/src/const';
+import {Color} from 'grabbit/src/const';
 import {httpRequestAsync} from 'grabbit/src/utils';
 import BrandCampaignCodeModal from 'grabbit/src/components/modals/BrandCampaignCode';
 
@@ -42,6 +42,14 @@ class V extends React.Component {
         </View>
       </TouchableOpacity>
     );
+  }
+
+  successfulCopyView() {
+    const {hasCopiedCurrentCampaignCode} = this.props;
+    if (!hasCopiedCurrentCampaignCode) {
+      return null;
+    }
+    return;
   }
 
   render() {
@@ -244,6 +252,7 @@ class V extends React.Component {
 const mapStateToProps = (state) => {
   const {brokerDiscover, session} = state;
   return {
+    hasCopiedCurrentCampaignCode: brokerDiscover.hasCopiedCurrentCampaignCode,
     user: session.user,
     brandViewSearchInputValue: brokerDiscover.brandViewSearchInput,
     brands: brokerDiscover.brands,

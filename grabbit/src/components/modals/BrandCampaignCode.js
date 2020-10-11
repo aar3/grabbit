@@ -1,9 +1,8 @@
 import React from 'react';
-import {View, Modal, TouchableOpacity, Text, Image} from 'react-native';
+import {View, Modal, TouchableOpacity, Text, Image, Clipboard} from 'react-native';
 
 import Icon from 'react-native-vector-icons/Feather';
 import {Button} from 'react-native-elements';
-import Clipboard from '@react-native-community/clipboard';
 import {connect} from 'react-redux';
 
 import REDUX_ACTIONS from 'grabbit/src/actions';
@@ -24,8 +23,37 @@ class M extends React.Component {
     toggleBrokerDiscoverBrandCampaignModal();
   }
 
+  renderCopiedCodeView() {
+    const {hasCopiedCurrentCampaignCode} = this.props;
+    if (!hasCopiedCurrentCampaignCode) {
+      return null;
+    }
+
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          width: 150,
+          // borderWidth: 1,
+          // borderColor: 'red',
+          marginTop: 10,
+          justifyContent: 'space-evenly',
+        }}>
+        <Text style={{fontWeight: 'bold', color: Color.ForestGreen}}>Code copied</Text>
+        <Icon name="check" size={20} color={Color.ForestGreen} />
+      </View>
+    );
+  }
+
   render() {
-    const {toggleBrokerDiscoverBrandCampaignModal, currentCampaignCode, showBrandCampaignModal} = this.props;
+    const {
+      toggleBrokerDiscoverBrandCampaignModal,
+      clearClipboardCopy,
+      showSuccessfulClipboardCopy,
+      currentCampaignCode,
+      showBrandCampaignModal,
+    } = this.props;
     return (
       <Modal
         animation={'fade'}
@@ -63,7 +91,11 @@ class M extends React.Component {
               // borderColor: 'green',
               width: '100%',
             }}>
-            <TouchableOpacity onPress={() => toggleBrokerDiscoverBrandCampaignModal()}>
+            <TouchableOpacity
+              onPress={() => {
+                clearClipboardCopy();
+                toggleBrokerDiscoverBrandCampaignModal();
+              }}>
               <Icon name="x" size={15} color={Color.GreyText} />
             </TouchableOpacity>
             <View
@@ -105,21 +137,29 @@ class M extends React.Component {
                 #{currentCampaignCode.code}
               </Text>
               <Button
-                onPress={() => Clipboard.setString(currentCampaignCode.code)}
+                // Using react-native Clipboard instead of react-native community
+                // due to https://stackoverflow.com/a/60948928/4701228
+                onPress={() => {
+                  Clipboard.setString(currentCampaignCode.code);
+                  showSuccessfulClipboardCopy();
+                }}
                 buttonStyle={{
                   borderRadius: 30,
                   width: 200,
                   borderWidth: 0,
-                  backgroundColor: Color.Pink2,
+                  backgroundColor: Color.White,
+                  borderColor: Color.Pink2,
+                  borderWidth: 1,
                 }}
                 titleStyle={{
-                  color: Color.White,
+                  color: Color.Pink2,
                   fontSize: 12,
                   fontWeight: 'bold',
                 }}
                 type="outline"
                 title="Copy To Clipboard"
               />
+              {this.renderCopiedCodeView()}
             </View>
           </View>
         </View>
@@ -131,6 +171,7 @@ class M extends React.Component {
 const mapStateToProps = (state) => {
   const {brokerDiscover} = state;
   return {
+    hasCopiedCurrentCampaignCode: brokerDiscover.hasCopiedCurrentCampaignCode,
     showBrandCampaignModal: brokerDiscover.showBrandCampaignModal,
     currentCampaignCode: brokerDiscover.currentCampaignCode,
   };
@@ -138,6 +179,18 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    clearClipboardCopy: () => {
+      return dispatch({
+        type: REDUX_ACTIONS.CLEAR_CURRENT_CAMPAIGN_CODE_COPIED,
+      });
+    },
+
+    showSuccessfulClipboardCopy: () => {
+      return dispatch({
+        type: REDUX_ACTIONS.CURRENT_CAMPAIGN_CODE_COPIED,
+      });
+    },
+
     toggleBrokerDiscoverBrandCampaignModal: () => {
       return dispatch({
         type: REDUX_ACTIONS.TOGGLE_BROKER_BRAND_CAMPAIGN_MODAL,

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Modal, StyleSheet, TextInput, TouchableOpacity, Text} from 'react-native';
+import {View, Modal, StyleSheet, TextInput, TouchableOpacity, Text, Image} from 'react-native';
 
 import Icon from 'react-native-vector-icons/Feather';
 import {connect} from 'react-redux';
@@ -21,6 +21,28 @@ class M extends React.Component {
   hide() {
     const {toggleInstagramLinkModal} = this.props;
     toggleInstagramLinkModal();
+  }
+
+  renderLoadingView() {
+    const {instagramLinkPending} = this.props;
+    if (!instagramLinkPending) {
+      return null;
+    }
+    return (
+      <View
+        style={{
+          height: 30,
+          width: 30,
+          marginTop: 10,
+          // borderWidth: 1,
+          // borderColor: 'red',
+        }}>
+        <Image
+          source={require('../../../assets/imgs/Loading-Transparent-Cropped.gif')}
+          style={{flex: 1, height: undefined, width: undefined}}
+        />
+      </View>
+    );
   }
 
   render() {
@@ -81,6 +103,14 @@ class M extends React.Component {
                 height: '90%',
                 alignItems: 'center',
               }}>
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  fontSize: 14,
+                  marginBottom: 20,
+                }}>
+                Link Your Instagram
+              </Text>
               <View style={styles.TextInput__Container}>
                 <Text style={styles.TextInput__Label}>Email/Username</Text>
                 <TextInput
@@ -102,20 +132,25 @@ class M extends React.Component {
               </View>
               <Button
                 containerStyle={{
-                    marginTop: 20,
+                  marginTop: 5,
                 }}
+                onPress={() => console.log('Sign in with Instagram')}
                 buttonStyle={{
-                    width: 250,
-                    borderRadius: 5,
-                    backgroundColor: Color.Pink2,
-                    height: 40,
+                  width: 250,
+                  borderRadius: 5,
+                  backgroundColor: Color.White,
+                  height: 50,
+                  borderWidth: 1,
+                  borderColor: Color.Pink2,
                 }}
                 titleStyle={{
-                    color: Color.White,
-                    fontWeight: 'bold',
-                    fontSize: 13,
+                  color: Color.Pink2,
+                  fontWeight: 'bold',
+                  fontSize: 14,
                 }}
-                 title="Sign In with Instagram" />
+                title="Sign In with Instagram"
+              />
+              {this.renderLoadingView()}
             </View>
           </View>
         </View>
@@ -127,6 +162,7 @@ class M extends React.Component {
 const mapStateToProps = (state) => {
   const {accountLinking} = state;
   return {
+    instagramLinkPending: accountLinking.instagramLinkPending,
     showInstagramAccountLinkModal: accountLinking.showInstagramAccountLinkModal,
     instagramEmailInput: accountLinking.instagramEmailInput,
     instagramPasswordInput: accountLinking.instagramPasswordInput,

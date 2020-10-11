@@ -1,5 +1,4 @@
 import REDUX_ACTIONS from 'grabbit/src/actions';
-import actions from '../actions';
 
 const defaultState = {
   userType: null,
@@ -44,11 +43,14 @@ const defaultState = {
       all: [],
     },
     currentCampaignCode: {},
+    hasCopiedCurrentCampaignCode: false,
     getBrandsPending: false,
     getBrandsError: null,
   },
 
   accountLinking: {
+    instagramLinkPending: true,
+    instagramLinkError: null,
     showInstagramAccountLinkModal: false,
     hasInstagramLinked: false,
     instagramEmailInput: null,
@@ -89,6 +91,22 @@ const defaultState = {
 
 export default mainReducer = (state = defaultState, action) => {
   switch (action.type) {
+    case REDUX_ACTIONS.CLEAR_CURRENT_CAMPAIGN_CODE_COPIED:
+      return {
+        ...state,
+        brokerDiscover: {
+          ...state.brokerDiscover,
+          hasCopiedCurrentCampaignCode: false,
+        },
+      };
+    case REDUX_ACTIONS.CURRENT_CAMPAIGN_CODE_COPIED:
+      return {
+        ...state,
+        brokerDiscover: {
+          ...state.brokerDiscover,
+          hasCopiedCurrentCampaignCode: true,
+        },
+      };
     case REDUX_ACTIONS.CLEAR_ALL_INSTAGRAM_LINK_INPUT:
       return {
         ...state,

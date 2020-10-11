@@ -100,7 +100,7 @@ const BottomTabNavigation = ({userType, hasNewNotification}) => {
         />
         <Scene
           key="brokerProfileView"
-          navBar={BasicTopNavigationBar}
+          navBar={AccountSettingsTopNavigationBar}
           component={BrokerProfileView}
           title="Broker Profile View"
           hideNavBar={false}

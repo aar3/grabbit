@@ -113,8 +113,8 @@ def BrokerDiscoverView(request, pk=None):
         brand_data["latest_campaign_code"] = latest_campaign_code[0] if latest_campaign_code else None
         augmented_data.append(brand_data)
 
-    featured_row0 = augmented_data[:4]
-    featured_row1 = augmented_data[4:8]
+    featured_row0 = augmented_data[:3]
+    featured_row1 = augmented_data[3:6]
 
     # TODO: add custom serializer for this
     return Response({"featured": {"row0": featured_row0, "row1": featured_row1,}, "all": augmented_data})
