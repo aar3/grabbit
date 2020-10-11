@@ -269,7 +269,7 @@ class AppRouter extends React.Component {
           />
           <Scene
             key="brokerWalletEntryView"
-            navBar={BackOnlyTopNavigationBar}
+            navBar={ImageAndBackTopNavigationBar}
             component={BrokerWalletEntryView}
             title={null}
             hideNavBar={false}

@@ -343,7 +343,6 @@ export default mainReducer = (state = defaultState, action) => {
         },
       };
     case REDUX_ACTIONS.POST_USER_LOGIN_ERROR:
-      // console.log(state.login);
       return {
         ...state,
         login: {

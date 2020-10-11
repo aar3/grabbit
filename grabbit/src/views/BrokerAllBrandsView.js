@@ -94,7 +94,6 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
   const {brokerDiscover} = state;
-  console.log(brokerDiscover);
   return {
     brands: brokerDiscover.brands,
   };

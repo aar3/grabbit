@@ -169,7 +169,7 @@ class V extends React.Component {
                           <Text
                             style={{
                               fontSize: 14,
-                              fontWeight: 'bold',
+                              // fontWeight: 'bold',
                             }}>
                             {brandShortName}
                           </Text>
