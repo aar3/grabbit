@@ -30,6 +30,7 @@ import MerchantEditProfileView from 'grabbit/src/views/MerchantEditProfileView';
 import MerchantEntryView from 'grabbit/src/views/MerchantEntryView';
 import MerchantDashboardView from 'grabbit/src/views/MerchantDashboardView';
 import MerchantAddCampaignView from 'grabbit/src/views/MerchantAddCampaignView';
+import MerchantProfileSettingsView from 'grabbit/src/views/MerchantProfileSettingsView';
 
 import GeneralInfoView from 'grabbit/src/views/GeneralInfoView';
 import AboutGrabbitView from 'grabbit/src/views/AboutGrabbitView';
@@ -70,6 +71,7 @@ module.exports = {
   MerchantEntryView,
   MerchantDashboardView,
   MerchantAddCampaignView,
+  MerchantProfileSettingsView,
 
   ProductInfoView,
   OffersView,

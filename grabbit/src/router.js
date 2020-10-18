@@ -46,6 +46,7 @@ import {
   LoginView,
   MerchantDashboardView,
   MerchantAddCampaignView,
+  MerchantProfileSettingsView,
 } from 'grabbit/src/views';
 import {TabIconSize, Color, UserType} from 'grabbit/src/const';
 import BasicTopNavigationBar from 'grabbit/src/components/navigation/BasicTopNavigation';
@@ -158,14 +159,14 @@ const BottomTabNavigation = ({userType, hasNewNotification}) => {
         )}
       />
       <Scene
-        key="notifications"
+        key="merchantProfileSettingsView"
         navBar={BasicTopNavigationBar}
-        component={NotificationsView}
-        title="Notifications"
+        component={MerchantProfileSettingsView}
+        title="Merchant Profile Settings"
         hideNavBar={false}
         icon={({focused}) => (
           <Icon
-            name={'message-circle'}
+            name={'user'}
             size={TabIconSize}
             color={hasNewNotification ? Color.Pink2 : focused ? Color.Black : Color.LightGrey}
           />
