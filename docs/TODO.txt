@@ -1,19 +1,17 @@
-- create initial ci
-    - fastlane testflight beta builds
-        - FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD="tpoa-tzxl-dufq-yizc"
+***********
+automation
+************
+- fastlane testflight beta builds
+    - FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD="tpoa-tzxl-dufq-yizc"
 
-- polish broker/merchant views (not functionality just CSS and design)
-
-- when broker likes product
-    - modal pops up showing terms
-    - user has to agree and enter password
-        - or some identifier
-
-- add app images to gcloud?
-
-
+***********
+tech debt
+************
+- not all views/serializers have to be custom (non-REST)
+    - you can just use REST and make multiple calls to update the store
+    - once things are in the store you can do whatever you want with them
 
 ***********
 features
 ************
-- Merchant search in Explore view ($$$)
+

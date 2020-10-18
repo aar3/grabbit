@@ -28,6 +28,8 @@ import MerchantProductsView from 'grabbit/src/views/MerchantProductsView';
 import MerchantAddProductView from 'grabbit/src/views/MerchantAddProductView';
 import MerchantEditProfileView from 'grabbit/src/views/MerchantEditProfileView';
 import MerchantEntryView from 'grabbit/src/views/MerchantEntryView';
+import MerchantDashboardView from 'grabbit/src/views/MerchantDashboardView';
+import MerchantAddCampaignView from 'grabbit/src/views/MerchantAddCampaignView';
 
 import GeneralInfoView from 'grabbit/src/views/GeneralInfoView';
 import AboutGrabbitView from 'grabbit/src/views/AboutGrabbitView';
@@ -38,6 +40,7 @@ import ConversationsView from 'grabbit/src/views/ConversationsView';
 import FeedbackView from 'grabbit/src/views/FeedbackView';
 import MatchesView from 'grabbit/src/views/MatchesView';
 import GrabbedView from 'grabbit/src/views/GrabbedView';
+import LoginView from 'grabbit/src/views/LoginView';
 
 import SplashView from 'grabbit/src/views/SplashView';
 
@@ -65,6 +68,8 @@ module.exports = {
   MerchantAddProductView,
   MerchantEditProfileView,
   MerchantEntryView,
+  MerchantDashboardView,
+  MerchantAddCampaignView,
 
   ProductInfoView,
   OffersView,
@@ -82,6 +87,7 @@ module.exports = {
   PrivacyPolicyView,
   TermsAndConditionsView,
   AboutGrabbitView,
+  LoginView,
 
   SplashView,
 };

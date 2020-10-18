@@ -109,6 +109,7 @@ class Brand(BaseModel):
     name = models.CharField(max_length=255)
     description = models.TextField(null=True)
     image_url = models.CharField(max_length=255, default=DEFAULT_PROFILE_IMAGE)
+    reward_tiers = models.TextField(null=True)
 
 
 class CampaignCode(BaseModel):

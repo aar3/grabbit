@@ -34,30 +34,7 @@ class LoginManager(BaseManager):
         return super().create(user=user, ip_address=ip_address)
 
 
-class ProductManager(BaseManager):
-    def create(
-        self, name, description, user, image_url_1=None, image_url_2=None, image_url_3=None, image_url_4=None,
-    ):
-
-        from core.models import User
-
-        user = get_object_or_404(User, pk=user)
-
-        return super().create(
-            name=name,
-            description=description,
-            user=user,
-            image_url_1=image_url_1,
-            image_url_2=image_url_2,
-            image_url_3=image_url_3,
-            image_url_4=image_url_4,
-        )
-
-
 class NotificationManager(BaseManager):
     def create(self, text, user, item_type, item_id):
-        noti = super().create(text=text, user=user)
-        noti.set_meta(item_type, item_id)
+       return  super().create(text=text, user=user).set_meta(item_type, item_id)
 
-        noti.save()
-        return noti

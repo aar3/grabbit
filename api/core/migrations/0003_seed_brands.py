@@ -1,3 +1,5 @@
+import json
+
 from django.db import migrations
 from faker import Faker
 
@@ -7,12 +9,11 @@ fake = Faker()
 
 
 def seed_brands(apps, _):
+    print("Seeding brands")
     Brand = apps.get_model("core", "Brand")
     count = 20
     for _ in range(count):
-        _ = Brand.objects.create(
-            name=fake.company(), description=fake.sentence(nb_words=30), image_url=DEFAULT_PROFILE_IMAGE
-        )
+        _ = Brand.objects.create(name=fake.company(), description=fake.sentence(nb_words=30), image_url=DEFAULT_PROFILE_IMAGE)
 
 
 class Migration(migrations.Migration):

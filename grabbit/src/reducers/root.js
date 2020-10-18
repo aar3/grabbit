@@ -1,8 +1,6 @@
 import REDUX_ACTIONS from 'grabbit/src/actions';
 
 const defaultState = {
-  userType: null,
-
   login: {
     // TDOO: in the future we can validate on a per-input basis
     responseError: false,
@@ -14,10 +12,8 @@ const defaultState = {
   },
 
   navigation: {
-    currentScene: null,
+    currentSceneKey: null,
   },
-
-  currentSceneKey: null,
 
   wallet: {
     currentSearchInput: null,
@@ -29,6 +25,7 @@ const defaultState = {
 
   session: {
     user: null,
+    userType: null,
   },
 
   brokerDiscover: {
@@ -49,7 +46,7 @@ const defaultState = {
   },
 
   accountLinking: {
-    instagramLinkPending: true,
+    instagramLinkPending: false,
     instagramLinkError: null,
     showInstagramAccountLinkModal: false,
     hasInstagramLinked: false,
@@ -381,10 +378,20 @@ export default mainReducer = (state = defaultState, action) => {
         },
       };
     case REDUX_ACTIONS.SET_CURRENT_SCENE_KEY:
+      return {
+        ...state,
+        navigation: {
+          ...state.navigation,
+          currentSceneKey: action.payload,
+        },
+      };
     case REDUX_ACTIONS.SET_USER_TYPE:
       return {
         ...state,
-        ...action.payload,
+        session: {
+          ...state.session,
+          userType: action.payload,
+        },
       };
     case REDUX_ACTIONS.PRODUCT_INFO_LIKE:
       return {

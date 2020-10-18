@@ -7,6 +7,7 @@ fake = Faker()
 
 
 def seed_wallet_data(apps, _):
+    print("Seeding wallets")
     User = apps.get_model("core", "User")
     Wallet = apps.get_model("core", "Wallet")
 

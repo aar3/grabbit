@@ -17,6 +17,7 @@ def fake_code():
 
 
 def seed_campaign_codes(apps, _):
+    print("Seeding campaign codes")
     code_counts = 20
     Brand = apps.get_model("core", "Brand")
 

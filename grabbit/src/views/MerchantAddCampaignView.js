@@ -10,7 +10,7 @@ export default class V extends React.Component {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <Text>{'BaseView Screen'}</Text>
+        <Text>{'MerchantAddCampaignView Screen'}</Text>
       </View>
     );
   }
