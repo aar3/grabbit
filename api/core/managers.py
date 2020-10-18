@@ -36,5 +36,4 @@ class LoginManager(BaseManager):
 
 class NotificationManager(BaseManager):
     def create(self, text, user, item_type, item_id):
-       return  super().create(text=text, user=user).set_meta(item_type, item_id)
-
+        return super().create(text=text, user=user).set_meta(item_type, item_id)

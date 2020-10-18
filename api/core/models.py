@@ -106,6 +106,7 @@ class Brand(BaseModel):
     class Meta:
         db_table = "brands"
 
+    users = models.ManyToManyField(User)
     name = models.CharField(max_length=255)
     description = models.TextField(null=True)
     image_url = models.CharField(max_length=255, default=DEFAULT_PROFILE_IMAGE)

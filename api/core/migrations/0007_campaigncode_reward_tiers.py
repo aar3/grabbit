@@ -8,26 +8,11 @@ def seed_reward_tiers_on_brands(apps, _):
     print("seeding rewarding tiers on brands....")
     for brand in Brand.objects.all():
         reward_tiers = {
-            "0": {
-                "usd": 5,
-                "points": 1_000
-            },
-            "1": {
-                "usd": 10,
-                "points": 5_000
-            },
-            "2": {
-                "usd": 25,
-                "points": 10_000
-            },
-            "3": {
-                "usd": 50,
-                "points": 30_000
-            },
-            "4": {
-                "usd": 100,
-                "points": 50_000,
-            },
+            "0": {"usd": 5, "points": 1_000},
+            "1": {"usd": 10, "points": 5_000},
+            "2": {"usd": 25, "points": 10_000},
+            "3": {"usd": 50, "points": 30_000},
+            "4": {"usd": 100, "points": 50_000,},
         }
 
         brand.reward_tiers = reward_tiers
@@ -37,14 +22,10 @@ def seed_reward_tiers_on_brands(apps, _):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0006_seed_wallet_brands'),
+        ("core", "0006_seed_wallet_brands"),
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='campaigncode',
-            name='reward_tiers',
-            field=models.JSONField(default=dict),
-        ),
-        migrations.RunPython(seed_reward_tiers_on_brands)
+        migrations.AddField(model_name="campaigncode", name="reward_tiers", field=models.JSONField(default=dict),),
+        migrations.RunPython(seed_reward_tiers_on_brands),
     ]

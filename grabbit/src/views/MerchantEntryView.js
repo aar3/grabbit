@@ -1,11 +1,11 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image, ImageBackground} from 'react-native';
+import {Text, View, Image, ImageBackground} from 'react-native';
 
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
+import {Button} from 'react-native-elements';
 
 import REDUX_ACTIONS from 'grabbit/src/actions';
-import {BasicButton} from 'grabbit/src/components/buttons';
 import {Color, UserType} from 'grabbit/src/const';
 
 class V extends React.Component {
@@ -94,7 +94,7 @@ class V extends React.Component {
                 alignItems: 'center',
                 width: '100%',
               }}>
-              <BasicButton
+              <Button
                 buttonStyle={{
                   width: 300,
                   height: 50,
@@ -107,6 +107,7 @@ class V extends React.Component {
                 titleStyle={{
                   color: Color.Pink2,
                   fontWeight: 'bold',
+                  fontSize: 16,
                 }}
                 title="Login"
                 onPress={() => {
@@ -114,7 +115,7 @@ class V extends React.Component {
                 }}
               />
 
-              <BasicButton
+              <Button
                 buttonStyle={{
                   width: 300,
                   height: 50,
@@ -122,12 +123,14 @@ class V extends React.Component {
                   justifyContent: 'center',
                   alignItems: 'center',
                   borderColor: Color.White,
+                  backgroundColor: null,
                   borderRadius: 40,
                   marginBottom: 10,
                 }}
                 titleStyle={{
                   color: Color.White,
                   fontWeight: 'bold',
+                  fontSize: 16,
                 }}
                 title="Sign Up"
                 onPress={() => {
@@ -147,7 +150,7 @@ const mapDispatchToProps = (dispatch) => {
     setUserType: ({userType}) => {
       return dispatch({
         type: REDUX_ACTIONS.SET_USER_TYPE,
-        payload: {userType},
+        payload: userType,
       });
     },
   };

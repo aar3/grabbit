@@ -6,17 +6,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0007_campaigncode_reward_tiers'),
+        ("core", "0007_campaigncode_reward_tiers"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='campaigncode',
-            name='reward_tiers',
-        ),
-        migrations.AddField(
-            model_name='brand',
-            name='reward_tiers',
-            field=models.JSONField(default=dict),
-        ),
+        migrations.RemoveField(model_name="campaigncode", name="reward_tiers",),
+        migrations.AddField(model_name="brand", name="reward_tiers", field=models.JSONField(default=dict),),
     ]

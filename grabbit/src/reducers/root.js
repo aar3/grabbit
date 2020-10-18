@@ -2,7 +2,7 @@ import REDUX_ACTIONS from 'grabbit/src/actions';
 
 const defaultState = {
   login: {
-    // TDOO: in the future we can validate on a per-input basis
+    // TODO: in the future we can validate on a per-input basis
     responseError: false,
     invalidEmailValue: false,
     invalidPasswordValue: false,
