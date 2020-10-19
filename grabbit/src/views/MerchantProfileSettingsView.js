@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, FlatList, Image, StyleSheet} from 'react-native';
+import {Text, View, FlatList, ScrollView, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
@@ -27,6 +27,36 @@ const data = {
       description: 'This is a description of my super awesome brand',
     },
   ],
+  rewardTiers: [
+    {
+      id: '1',
+      name: 'Reward Tier 1',
+      value: '0',
+      usd: 5,
+      points: 1000,
+    },
+    {
+      id: '2',
+      name: 'Reward Tier 2',
+      value: '1',
+      usd: 10,
+      points: 5000,
+    },
+    {
+      id: '3',
+      name: 'Reward Tier 3',
+      value: '3',
+      usd: 25,
+      points: 10000,
+    },
+    {
+      id: '4',
+      name: 'Reward Tier 4',
+      value: '4',
+      usd: 100,
+      points: 50000,
+    },
+  ],
 };
 
 class V extends React.Component {
@@ -35,12 +65,14 @@ class V extends React.Component {
   }
 
   render() {
-    const {brands} = this.props;
+    const {brands, rewardTiers} = this.props;
     console.log(brands);
     return (
-      <View
-        style={{
+      <ScrollView
+        contentContainerStyle={{
           flex: 1,
+          flexGrow: 1,
+          paddingBottom: 40,
           alignItems: 'center',
         }}>
         <View
@@ -57,6 +89,8 @@ class V extends React.Component {
             data={brands}
             style={{
               width: '90%',
+              height: 225,
+              marginBottom: 10,
               // borderWidth: 1,
               // borderColor: 'pink',
             }}
@@ -116,6 +150,9 @@ class V extends React.Component {
               );
             }}
           />
+          <TouchableOpacity onPress={() => {}}>
+            <Icon style={{marginTop: 10, marginBottom: 20}} name="plus-circle" size={25} color={Color.HyperLink} />
+          </TouchableOpacity>
           <Text style={styles.SectionHeader__Label}>Instagram</Text>
           <View
             style={{
@@ -139,8 +176,52 @@ class V extends React.Component {
               <Text>{'123'}</Text>
             </View>
           </View>
+          <Text style={styles.SectionHeader__Label}>Rewards</Text>
+          <FlatList
+            style={{
+              borderTopWidth: 1,
+              borderTopColor: Color.LightGrey,
+              width: '90%',
+              height: 400,
+            }}
+            contentContainerStyle={{
+              marginTop: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            data={rewardTiers}
+            keyExtractor={(_item, index) => index.toString()}
+            renderItem={({item, index}) => {
+              return (
+                <View
+                  style={{
+                    // borderWidth: 1,
+                    // borderColor: 'red',
+                    height: 90,
+                    width: 350,
+                    padding: 15,
+                    borderWidth: 1,
+                    marginBottom: 10,
+                    borderRadius: 10,
+                    borderColor: Color.LightGrey,
+                  }}>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      marginBottom: 10,
+                      fontSize: 16,
+                    }}>
+                    {item.name}
+                  </Text>
+                  <Text>
+                    ${item.usd} off when Grabbers reach {item.points.toLocaleString()}
+                  </Text>
+                </View>
+              );
+            }}
+          />
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -153,6 +234,7 @@ const mapStateToProps = (state) => {
   const {session} = state;
   return {
     brands: data.brands,
+    rewardTiers: data.rewardTiers,
   };
 };
 
