@@ -137,7 +137,7 @@ export default class M extends React.Component {
                     alignItems: 'center',
                     flexDirection: 'row',
                     alignItems: 'center',
-                    borderRadius: 40,
+                    borderRadius: 10,
                     marginTop: 20,
                     marginBottom: 10,
                   }}

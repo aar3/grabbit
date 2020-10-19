@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from lib.utils import make_qrcode
+from lib.utils import make_qrcode, random_string
 from lib.const import UserType, DEFAULT_PROFILE_IMAGE
 from lib.gcloud import GoogleCloudService
 from lib.gredis import SessionToken, RedisClient
@@ -106,11 +106,17 @@ class Brand(BaseModel):
     class Meta:
         db_table = "brands"
 
+    objects = BrandManager()
+
     users = models.ManyToManyField(User)
     name = models.CharField(max_length=255)
     description = models.TextField(null=True)
     image_url = models.CharField(max_length=255, default=DEFAULT_PROFILE_IMAGE)
+    secret = models.CharField(max_length=255)
     reward_tiers = models.TextField(null=True)
+
+    def set_secret(self):
+        self.secret = random_string(10)
 
 
 class CampaignCode(BaseModel):

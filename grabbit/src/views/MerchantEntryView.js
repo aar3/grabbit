@@ -101,7 +101,7 @@ class V extends React.Component {
                   justifyContent: 'center',
                   backgroundColor: Color.White,
                   alignItems: 'center',
-                  borderRadius: 40,
+                  borderRadius: 10,
                   marginBottom: 10,
                 }}
                 titleStyle={{
@@ -124,7 +124,7 @@ class V extends React.Component {
                   alignItems: 'center',
                   borderColor: Color.White,
                   backgroundColor: null,
-                  borderRadius: 40,
+                  borderRadius: 10,
                   marginBottom: 10,
                 }}
                 titleStyle={{

@@ -6,18 +6,12 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0011_backfill_user_ids_to_brands'),
+        ("core", "0011_backfill_user_ids_to_brands"),
     ]
 
     operations = [
+        migrations.AddField(model_name="campaigncode", name="description", field=models.TextField(null=True),),
         migrations.AddField(
-            model_name='campaigncode',
-            name='description',
-            field=models.TextField(null=True),
-        ),
-        migrations.AddField(
-            model_name='campaigncode',
-            name='name',
-            field=models.CharField(default='Unnamed', max_length=255),
+            model_name="campaigncode", name="name", field=models.CharField(default="Unnamed", max_length=255),
         ),
     ]

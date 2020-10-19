@@ -125,6 +125,7 @@ class V extends React.Component {
           <Button
             disabled={disableLoginButton}
             title="Login"
+            type="outline"
             disabledStyle={{
               width: 300,
               height: 50,
@@ -133,7 +134,7 @@ class V extends React.Component {
               borderWidth: 1,
               backgroundColor: Color.White,
               alignItems: 'center',
-              borderRadius: 40,
+              borderRadius: 10,
               marginTop: 10,
               marginBottom: 10,
             }}
@@ -150,7 +151,7 @@ class V extends React.Component {
               borderWidth: 1,
               backgroundColor: Color.White,
               alignItems: 'center',
-              borderRadius: 40,
+              borderRadius: 10,
               marginTop: 10,
               marginBottom: 10,
             }}

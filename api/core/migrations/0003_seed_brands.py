@@ -1,5 +1,3 @@
-import json
-
 from django.db import migrations
 from faker import Faker
 
@@ -20,7 +18,7 @@ def seed_brands(apps, _):
     # add merchant superuser
     _ = Brand.objects.create(
         name="True Religion",
-        description="""Based out of Los Angeles California, True Religion (LLC) is 
+        description="""Based out of Los Angeles California, True Religion (LLC) is
     a brand that simply makes dope clothes. We make bespoke outfits to fit any occassion. Email us at hi@truereligion.com for more info""",
         image_url=DEFAULT_PROFILE_IMAGE,
     )

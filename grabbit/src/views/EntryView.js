@@ -88,13 +88,14 @@ export default class V extends React.Component {
                 width: '100%',
               }}>
               <Button
+                style="outline"
                 buttonStyle={{
                   width: 300,
                   height: 50,
                   justifyContent: 'center',
                   backgroundColor: Color.White,
                   alignItems: 'center',
-                  borderRadius: 40,
+                  borderRadius: 10,
                   marginBottom: 10,
                 }}
                 titleStyle={{
@@ -107,6 +108,7 @@ export default class V extends React.Component {
               />
 
               <Button
+                style="outline"
                 buttonStyle={{
                   width: 300,
                   height: 50,
@@ -115,7 +117,7 @@ export default class V extends React.Component {
                   justifyContent: 'center',
                   alignItems: 'center',
                   borderColor: Color.White,
-                  borderRadius: 40,
+                  borderRadius: 10,
                   marginBottom: 10,
                 }}
                 titleStyle={{

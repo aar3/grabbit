@@ -161,7 +161,7 @@ const BottomTabNavigation = ({userType, hasNewNotification}) => {
       />
       <Scene
         key="merchantProfileSettingsView"
-        navBar={BasicTopNavigationBar}
+        navBar={ImageCenterTopNavigation}
         component={MerchantProfileSettingsView}
         title="Merchant Profile Settings"
         hideNavBar={false}

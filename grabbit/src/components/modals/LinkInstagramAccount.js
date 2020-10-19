@@ -60,7 +60,6 @@ class M extends React.Component {
         transparent={true}
         visible={showInstagramAccountLinkModal}
         onRequestClose={() => {
-          console.log('modal closed');
           toggleInstagramLinkModal();
         }}>
         <View
@@ -69,7 +68,7 @@ class M extends React.Component {
             // justifyContent: 'center',
             // alignItems: 'center',
             marginTop: 250,
-            marginBottom: 315,
+            marginBottom: 300,
             marginLeft: 50,
             marginRight: 50,
             backgroundColor: 'white',
@@ -132,12 +131,12 @@ class M extends React.Component {
               </View>
               <Button
                 containerStyle={{
-                  marginTop: 5,
+                  marginTop: 20,
                 }}
                 onPress={() => console.log('Sign in with Instagram')}
                 buttonStyle={{
                   width: 250,
-                  borderRadius: 5,
+                  borderRadius: 10,
                   backgroundColor: Color.White,
                   height: 50,
                   borderWidth: 1,

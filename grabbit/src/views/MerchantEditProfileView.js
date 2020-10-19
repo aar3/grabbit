@@ -60,7 +60,7 @@ export default class V extends React.Component {
                     borderColor: Color.Pink2,
                     borderWidth: 1,
                     alignItems: 'center',
-                    borderRadius: 40,
+                    borderRadius: 10,
                     marginTop: 10,
                     marginBottom: 10,
                   }}

@@ -1,7 +1,6 @@
 # pylint: disable=import-outside-toplevel
 
 from django.db import models
-from django.shortcuts import get_object_or_404
 
 
 class BaseManager(models.Manager):
@@ -27,6 +26,13 @@ class UserManager(BaseManager):
         user.save()
 
         return user
+
+
+class BrandManager(BaseManager):
+    def create(self, name, description, image_url):
+        brand = super().create(name=name, description=description, image_url=image_url)
+        brand.set_secret()
+        return brand
 
 
 class LoginManager(BaseManager):

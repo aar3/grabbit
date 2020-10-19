@@ -133,7 +133,7 @@ class V extends React.Component {
               borderWidth: 1,
               backgroundColor: Color.White,
               alignItems: 'center',
-              borderRadius: 40,
+              borderRadius: 10,
               marginTop: 10,
               marginBottom: 10,
             }}
@@ -150,7 +150,7 @@ class V extends React.Component {
               borderWidth: 1,
               backgroundColor: Color.White,
               alignItems: 'center',
-              borderRadius: 40,
+              borderRadius: 10,
               marginTop: 10,
               marginBottom: 10,
             }}
