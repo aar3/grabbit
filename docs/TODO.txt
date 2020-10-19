@@ -10,8 +10,16 @@ tech debt
 - not all views/serializers have to be custom (non-REST)
     - you can just use REST and make multiple calls to update the store
     - once things are in the store you can do whatever you want with them
+- abstract reducer store updates
+    - `component->dispatch(action(type, reducer_space_identifier, payload))`
 
 ***********
 features
 ************
+- none
 
+
+***********
+bugs
+************
+- flatlist scrollview don't work they keep resetting to original position
