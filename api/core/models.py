@@ -117,6 +117,8 @@ class CampaignCode(BaseModel):
     class Meta:
         db_table = "campaign_codes"
 
+    name = models.CharField(max_length=255, default="Unnamed")
+    description = models.TextField(null=True)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     code = models.CharField(max_length=255)
     expiry = models.DateTimeField()

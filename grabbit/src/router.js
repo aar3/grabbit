@@ -47,6 +47,7 @@ import {
   MerchantDashboardView,
   MerchantAddCampaignView,
   MerchantProfileSettingsView,
+  MerchantCampaignCodesView,
 } from 'grabbit/src/views';
 import {TabIconSize, Color, UserType} from 'grabbit/src/const';
 import BasicTopNavigationBar from 'grabbit/src/components/navigation/BasicTopNavigation';
@@ -134,7 +135,7 @@ const BottomTabNavigation = ({userType, hasNewNotification}) => {
           <Icon name={'activity'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
         )}
       />
-      <Scene
+      {/* <Scene
         key="merchantAddCampaignView"
         component={MerchantAddCampaignView}
         navBar={BasicTopNavigationBar}
@@ -143,7 +144,7 @@ const BottomTabNavigation = ({userType, hasNewNotification}) => {
         icon={({focused}) => (
           <Icon name={'plus-circle'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
         )}
-      />
+      /> */}
       <Scene
         key="notifications"
         navBar={BasicTopNavigationBar}
@@ -291,6 +292,14 @@ class AppRouter extends React.Component {
             key="brokerWalletEntryView"
             navBar={ImageAndBackTopNavigationBar}
             component={BrokerWalletEntryView}
+            title={null}
+            hideNavBar={false}
+            renderBackButton={() => <View />}
+          />
+          <Scene
+            key="merchantCampaignCodesView"
+            navBar={BasicTopNavigationBar}
+            component={MerchantCampaignCodesView}
             title={null}
             hideNavBar={false}
             renderBackButton={() => <View />}

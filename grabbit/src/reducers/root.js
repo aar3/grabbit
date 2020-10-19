@@ -11,6 +11,13 @@ const defaultState = {
     passwordValue: null,
   },
 
+  campaignCodes: {
+    campaignStats: [],
+    getCampaignCodesPending: false,
+    getCampaignCodesError: null,
+    currentCampaignCode: null,
+  },
+
   navigation: {
     currentSceneKey: null,
   },
