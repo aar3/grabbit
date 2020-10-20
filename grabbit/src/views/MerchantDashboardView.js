@@ -2,8 +2,10 @@ import React from 'react';
 import {StyleSheet, ScrollView, Text, View, FlatList, TouchableOpacity} from 'react-native';
 
 import {connect} from 'react-redux';
-import {Svg, Path, Line} from 'react-native-svg';
+import {Svg, Path, Line, Circle} from 'react-native-svg';
 import {Actions} from 'react-native-router-flux';
+import {AreaChart, Grid, BarChart, YAxis} from 'react-native-svg-charts';
+import * as shape from 'd3-shape';
 import {Button, ButtonGroup} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
 
@@ -38,13 +40,21 @@ const data = {
   ],
 };
 
+const Decorator = ({x, y, data}) => {
+  return data.map((value, index) => (
+    <Circle key={index} cx={x(index)} cy={y(value)} r={4} stroke={'rgb(134, 65, 244)'} fill={'white'} />
+  ));
+};
+
+const Line2 = ({line}) => <Path d={line} stroke={'rgba(134, 65, 244)'} fill={'none'} />;
+
 class V extends React.Component {
   constructor(props) {
     super(props);
   }
 
   render() {
-    const {currentCampaignCode, campaignStats, rewardTiers} = this.props;
+    const {currentCampaignCode, grabbitScore, campaignStats, rewardTiers} = this.props;
     const [posts, impressions, engagement] = campaignStats;
     return (
       <ScrollView
@@ -71,6 +81,12 @@ class V extends React.Component {
               marginBottom: 20,
               width: '80%',
             }}>
+            <Text
+              style={{
+                textAlign: 'center',
+              }}>
+              Current Campaign
+            </Text>
             <Text
               style={{
                 textAlign: 'center',
@@ -105,14 +121,25 @@ class V extends React.Component {
                 <Text style={styles.StatItem__Value}>{engagement.value.toLocaleString()}</Text>
               </View>
             </View>
-            <Svg height="100" width="100">
-              <Path
-                // d="M25 10 L98 65 L70 25 L16 77 L11 30 L0 4 L90 50 L50 10 L11 22 L77 95 L20 25"
-                d="M15 100 L98 65 L70 25"
-                fill="none"
-                stroke="red"
-              />
-            </Svg>
+            <View
+              style={{
+                // borderWidth: 1,
+                // borderColor: 'green',
+                width: '100%',
+                marginTop: 20,
+                height: 110,
+              }}>
+              <BarChart
+                style={{flex: 1, marginLeft: 8}}
+                data={grabbitScore}
+                // horizontal={true}
+                svg={{fill: Color.Pink2}}
+                contentInset={{top: 10, bottom: 10}}
+                spacing={0.2}
+                gridMin={0}>
+                <Grid direction={Grid.Direction.VERTICAL} />
+              </BarChart>
+            </View>
             <View
               style={{
                 // borderWidth: 1,
@@ -184,6 +211,7 @@ class V extends React.Component {
 const mapStateToProps = (state) => {
   const {campaignCodes} = state;
   return {
+    grabbitScore: [50, 110, 124, 111, 53, 55, 17],
     currentCampaignCode: data.currentCampaignCode,
     rewardTiers: data.rewardTiers,
     campaignStats: data.campaignStats,

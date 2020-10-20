@@ -70,7 +70,6 @@ class V extends React.Component {
     return (
       <ScrollView
         contentContainerStyle={{
-          flex: 1,
           flexGrow: 1,
           paddingBottom: 40,
           alignItems: 'center',
