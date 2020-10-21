@@ -5,10 +5,13 @@ import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 import {Button, ButtonGroup} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
+import ImagePicker from 'react-native-image-picker';
 
 import REDUX_ACTIONS from 'grabbit/src/actions';
 import {httpRequestAsync} from 'grabbit/src/utils';
 import {Color, FakeImage} from 'grabbit/src/const';
+import MerchantCreateBrandModal from 'grabbit/src/components/modals/MerchantCreateBrand';
+import MerchantEditBranddModal from 'grabbit/src/components/modals/MerchantEditBrand';
 
 const data = {
   brands: [
@@ -62,11 +65,20 @@ const data = {
 class V extends React.Component {
   constructor(props) {
     super(props);
+    this.merchantCreateBrandModal = React.createRef();
+    this.merchantEditBrandModal = React.createRef();
   }
 
   render() {
-    const {brands, rewardTiers} = this.props;
-    console.log(brands);
+    const {
+      brands,
+      rewardTiers,
+      clearBrandEditImageError,
+      toggleMerchantBrandCreateModal,
+      toggleMerchantBrandEditModal,
+    } = this.props;
+    const createModal = <MerchantCreateBrandModal ref={this.merchantCreateBrandModal} />;
+    const editModal = <MerchantEditBranddModal ref={this.merchantEditBrandModal} />;
     return (
       <ScrollView
         contentContainerStyle={{
@@ -74,6 +86,8 @@ class V extends React.Component {
           paddingBottom: 40,
           alignItems: 'center',
         }}>
+        {createModal}
+        {editModal}
         <View
           style={{
             // borderWidth: 1,
@@ -88,7 +102,7 @@ class V extends React.Component {
             data={brands}
             style={{
               width: '90%',
-              height: 225,
+              maxHeight: 225,
               marginBottom: 10,
               // borderWidth: 1,
               // borderColor: 'pink',
@@ -100,57 +114,63 @@ class V extends React.Component {
             keyExtractor={(_item, index) => index.toString()}
             renderItem={({item, index}) => {
               return (
-                <View
-                  style={{
-                    borderWidth: 1,
-                    borderColor: Color.LightGrey,
-                    width: 350,
-                    height: 75,
-                    marginBottom: 10,
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                    borderRadius: 10,
+                <TouchableOpacity
+                  onPress={() => {
+                    clearBrandEditImageError();
+                    toggleMerchantBrandEditModal({currentEditBrand: item});
                   }}>
                   <View
                     style={{
-                      // borderWidth: 1,
-                      // borderColor: 'red',
-                      height: 40,
-                      marginLeft: 20,
-                      width: 40,
-                      overflow: 'hidden',
-                      borderRadius: 100,
+                      borderWidth: 1,
+                      borderColor: Color.LightGrey,
+                      width: 350,
+                      height: 75,
+                      marginBottom: 10,
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                      borderRadius: 10,
                     }}>
-                    <Image source={{uri: item.image_url}} style={{height: 40, width: 40}} />
-                  </View>
-                  <View
-                    style={{
-                      // borderWidth: 1,
-                      // borderColor: 'green',
-                      marginLeft: 20,
-                      padding: 5,
-                      justifyContent: 'center',
-                    }}>
-                    <Text
+                    <View
                       style={{
-                        marginBottom: 5,
+                        // borderWidth: 1,
+                        // borderColor: 'red',
+                        height: 40,
+                        marginLeft: 20,
+                        width: 40,
+                        overflow: 'hidden',
+                        borderRadius: 100,
                       }}>
-                      {item.name}
-                    </Text>
-                    <Text
+                      <Image source={{uri: item.image_url}} style={{height: 40, width: 40}} />
+                    </View>
+                    <View
                       style={{
-                        color: Color.LightGrey,
-                        fontSize: 11,
+                        // borderWidth: 1,
+                        // borderColor: 'green',
+                        marginLeft: 20,
+                        padding: 5,
+                        justifyContent: 'center',
                       }}>
-                      Promo Secret: {item.secret}
-                    </Text>
+                      <Text
+                        style={{
+                          marginBottom: 5,
+                        }}>
+                        {item.name}
+                      </Text>
+                      <Text
+                        style={{
+                          color: Color.LightGrey,
+                          fontSize: 11,
+                        }}>
+                        Promo Secret: {item.secret}
+                      </Text>
+                    </View>
                   </View>
-                </View>
+                </TouchableOpacity>
               );
             }}
           />
-          <TouchableOpacity onPress={() => {}}>
-            <Icon style={{marginTop: 10, marginBottom: 20}} name="plus-circle" size={25} color={Color.HyperLink} />
+          <TouchableOpacity onPress={() => toggleMerchantBrandCreateModal()}>
+            <Icon style={{marginTop: 0, marginBottom: 20}} name="plus-circle" size={25} color={Color.HyperLink} />
           </TouchableOpacity>
           <Text style={styles.SectionHeader__Label}>Instagram</Text>
           <View
@@ -172,7 +192,7 @@ class V extends React.Component {
                 padding: 5,
                 justifyContent: 'center',
               }}>
-              <Text>{'123'}</Text>
+              <Text>123</Text>
             </View>
           </View>
           <Text style={styles.SectionHeader__Label}>Rewards</Text>
@@ -226,7 +246,24 @@ class V extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    clearBrandEditImageError: () => {
+      dispatch({
+        type: REDUX_ACTIONS.CLEAR_CURRENT_BRAND_EDIT_IMAGE_ERROR,
+      });
+    },
+    toggleMerchantBrandCreateModal: () => {
+      dispatch({
+        type: REDUX_ACTIONS.TOGGLE_MERCHANT_BRAND_CREATE_MODAL,
+      });
+    },
+    toggleMerchantBrandEditModal: ({currentEditBrand}) => {
+      dispatch({
+        type: REDUX_ACTIONS.TOGGLE_MERCHANT_BRAND_EDIT_MODAL,
+        payload: currentEditBrand,
+      });
+    },
+  };
 };
 
 const mapStateToProps = (state) => {

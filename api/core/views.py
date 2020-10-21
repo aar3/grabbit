@@ -161,6 +161,17 @@ class BrandViewSet(BaseModelViewSet):
     model = Brand
     serializer = BrandSerializer
 
+    def update(self, request, pk=None):
+        if "image" in request.data:
+            print("Image found")
+            return
+        instance = get_object_or_404(self.model.objects.filter(pk=pk))
+        instance.__dict__.update(request.data)
+        instance.save()
+
+        serializer = self.serializer(instance)
+        return Response(serializer.data)
+
 
 @api_view(["GET"])
 @authentication_classes([TokenAuthentication])

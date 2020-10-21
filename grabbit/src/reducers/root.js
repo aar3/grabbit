@@ -84,6 +84,15 @@ const defaultState = {
     getNotificationsError: null,
   },
 
+  settings: {
+    showMerchantBrandEditModal: false,
+    showMerchantBrandCreateModal: false,
+    currentEditBrand: {},
+    currentEditBrandImage: null,
+    updateCurrentEditBrandImagePending: false,
+    updateCurrentEditBrandImageError: null,
+  },
+
   productInfo: {
     currentProduct: null,
     currentProductHasLike: false,
@@ -95,6 +104,77 @@ const defaultState = {
 
 export default mainReducer = (state = defaultState, action) => {
   switch (action.type) {
+    case REDUX_ACTIONS.PUT_CURRENT_BRAND_EDIT_IMAGE_SUCCESS:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          currentEditBrand: action.payload,
+          currentEditBrandImage: null,
+          updateCurrentEditBrandImagePending: false,
+        },
+      };
+    case REDUX_ACTIONS.PUT_CURRENT_BRAND_EDIT_IMAGE_ERROR:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          updateCurrentEditBrandImagePending: false,
+          updateCurrentEditBrandImageError: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.PUT_CURRENT_BRAND_EDIT_IMAGE_PENDING:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          updateCurrentEditBrandImagePending: true,
+        },
+      };
+    case REDUX_ACTIONS.CLEAR_CURRENT_BRAND_EDIT_IMAGE_ERROR:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          updateCurrentEditBrandImageError: null,
+        },
+      };
+    case REDUX_ACTIONS.SET_CURRENT_BRAND_EDIT_IMAGE:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          currentEditBrandImage: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.UPDATE_CURRENT_EDIT_BRAND_DETAILS:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          currentEditBrand: {
+            ...state.settings.currentEditBrand,
+            [action.key]: action.payload,
+          },
+        },
+      };
+    case REDUX_ACTIONS.TOGGLE_MERCHANT_BRAND_EDIT_MODAL:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          showMerchantBrandEditModal: !state.settings.showMerchantBrandEditModal,
+          currentEditBrand: action.payload || {},
+        },
+      };
+    case REDUX_ACTIONS.TOGGLE_MERCHANT_BRAND_CREATE_MODAL:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          showMerchantBrandCreateModal: !state.settings.showMerchantBrandCreateModal,
+        },
+      };
     case REDUX_ACTIONS.CLEAR_CURRENT_CAMPAIGN_CODE_COPIED:
       return {
         ...state,

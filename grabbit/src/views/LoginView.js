@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 import REDUX_ACTIONS from 'grabbit/src/actions';
 import {Color, UserType} from 'grabbit/src/const';
 import {httpRequestAsync} from 'grabbit/src/utils';
+import styles from 'grabbit/src/styles/global';
 
 class V extends React.Component {
   constructor(props) {
@@ -244,29 +245,3 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(V);
-
-const styles = StyleSheet.create({
-  TextInput__Container: {
-    // borderWidth: 1,
-    // borderColor: 'blue',
-    width: 300,
-    marginBottom: 10,
-  },
-  TextInput__Container__Input: {
-    borderWidth: 1,
-    borderColor: Color.LightGrey,
-    padding: 5,
-    paddingLeft: 10,
-    fontSize: 12,
-    fontFamily: 'Arial',
-    width: '100%',
-    height: 40,
-    borderRadius: 5,
-    backgroundColor: Color.White,
-  },
-  TextInput__Label: {
-    fontSize: 12,
-    paddingBottom: 5,
-    // fontFamily: Font.Default,
-  },
-});
