@@ -32,6 +32,7 @@ class BrandManager(BaseManager):
     def create(self, name, description, image_url):
         brand = super().create(name=name, description=description, image_url=image_url)
         brand.set_secret()
+        brand.set_slug()
         return brand
 
 

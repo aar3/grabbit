@@ -64,6 +64,8 @@ class M extends React.Component {
   selectImage() {
     const {setCurrentBrandEditImage, user, currentEditBrand} = this.props;
 
+    const formData = new FormData();
+
     ImagePicker.showImagePicker(options, (response) => {
       console.log(Object.keys(response));
 
@@ -75,13 +77,18 @@ class M extends React.Component {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         console.log('Merchant Product ImagePicker success');
+
+        formData.append('name', 'image');
+        formData.append('user_id', user.id);
+        formData.append('file', response.data, {
+          type: 'application/octet-stream',
+        });
+
         return setCurrentBrandEditImage({
           options: {
-            endpoint: `/brands/${currentEditBrand.id}/`,
-            method: 'PUT',
-            data: {
-              image: response.data,
-            },
+            endpoint: `/brands/${currentEditBrand.id}/upload/`,
+            method: 'POST',
+            data: formData,
             headers: {
               'Content-Type': 'multipart/form-data',
               'X-Grabbit-Token': user.session_token_key,

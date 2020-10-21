@@ -6,9 +6,10 @@ from django.db import models
 from django.utils import timezone
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.template.defaultfilters import slugify
 
 from lib.utils import make_qrcode, random_string
-from lib.const import UserType, DEFAULT_PROFILE_IMAGE
+from lib.const import DEFAULT_PROFILE_IMAGE
 from lib.gcloud import GoogleCloudService
 from lib.gredis import SessionToken, RedisClient
 from core.managers import *
@@ -79,7 +80,7 @@ def create_qr_code_for_new_user(sender, instance, created, **kwargs):
     # TODO: qr code should contain what exactly?
     if created:
         code = make_qrcode(instance.username)
-        img_path = GoogleCloudService.upload_asset_to_bucket(instance.email, UserType.BROKER, "qr_code", code)
+        img_path = GoogleCloudService.upload_user_image_to_bucket(instance.email, "qr_code", code)
         instance.qr_code_url = img_path
         instance.save()
 
@@ -113,10 +114,14 @@ class Brand(BaseModel):
     description = models.TextField(null=True)
     image_url = models.CharField(max_length=255, default=DEFAULT_PROFILE_IMAGE)
     secret = models.CharField(max_length=255)
+    slug = models.CharField(max_length=255)
     reward_tiers = models.TextField(null=True)
 
     def set_secret(self):
         self.secret = random_string(10)
+
+    def set_slug(self):
+        self.slug = slugify(self.name)
 
 
 class CampaignCode(BaseModel):

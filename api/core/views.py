@@ -2,11 +2,13 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view, authentication_classes
+from rest_framework.decorators import api_view, authentication_classes, parser_classes
+from rest_framework.parsers import MultiPartParser
 from django.shortcuts import get_object_or_404
 
 from core.models import *
 from core.serializers import *
+from lib.gcloud import GoogleCloudService
 from lib.middlewares import TokenAuthentication
 
 
@@ -149,28 +151,22 @@ def LoginView(request):
 
 @api_view(["POST"])
 @authentication_classes([TokenAuthentication])
-def UploadImageView(request, pk=None):
-    # pylint: disable=unused-variable
-    params = request.data
-    user = get_object_or_404(User, pk=pk)
-    # TODO: verify photo, format, and send to gcloud (create task)
-    # return full url from gcloud and store it in user instance
+@parser_classes([MultiPartParser])
+def UploadBrandImageView2(request, pk=None):
+    # TODO: authenticate and verify image
+    brand = get_object_or_404(Brand, pk=pk)
+    file_obj = request.data["file"]
+    user_id = request.data["user_id"]
+
+    user = get_object_or_404(User, pk=user_id)
+
+    GoogleCloudService.upload_brand_image_to_bucket(user.email, brand.slug, "some-image.jpg", file_obj)
+    return Response(status=204)
 
 
 class BrandViewSet(BaseModelViewSet):
     model = Brand
     serializer = BrandSerializer
-
-    def update(self, request, pk=None):
-        if "image" in request.data:
-            print("Image found")
-            return
-        instance = get_object_or_404(self.model.objects.filter(pk=pk))
-        instance.__dict__.update(request.data)
-        instance.save()
-
-        serializer = self.serializer(instance)
-        return Response(serializer.data)
 
 
 @api_view(["GET"])
