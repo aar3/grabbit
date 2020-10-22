@@ -168,6 +168,19 @@ class BrandViewSet(BaseModelViewSet):
     model = Brand
     serializer = BrandSerializer
 
+    def create(self, request):
+        params = request.data
+
+        brand = params["brand"]
+        user_id = params["user_id"]
+        user = get_object_or_404(User, pk=user_id)
+
+        instance = self.model.objects.create(**brand)
+
+        instance.users.add(user)
+        serializer = self.serializer(instance)
+        return Response(serializer.data)
+
 
 @api_view(["GET"])
 @authentication_classes([TokenAuthentication])

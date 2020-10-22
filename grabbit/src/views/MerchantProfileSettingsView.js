@@ -13,55 +13,6 @@ import {Color, FakeImage} from 'grabbit/src/const';
 import MerchantCreateBrandModal from 'grabbit/src/components/modals/MerchantCreateBrand';
 import MerchantEditBranddModal from 'grabbit/src/components/modals/MerchantEditBrand';
 
-const data = {
-  brands: [
-    {
-      id: '1',
-      image_url: FakeImage,
-      name: 'My Brand Number One',
-      secret: 'AW27IE5FNAWIFNA424',
-      description: 'This is a description of my super awesome brand',
-    },
-    {
-      id: '2',
-      image_url: FakeImage,
-      name: 'My Brand #2',
-      secret: 'AW27IE5FNAWIFNA424',
-      description: 'This is a description of my super awesome brand',
-    },
-  ],
-  rewardTiers: [
-    {
-      id: '1',
-      name: 'Reward Tier 1',
-      value: '0',
-      usd: 5,
-      points: 1000,
-    },
-    {
-      id: '2',
-      name: 'Reward Tier 2',
-      value: '1',
-      usd: 10,
-      points: 5000,
-    },
-    {
-      id: '3',
-      name: 'Reward Tier 3',
-      value: '3',
-      usd: 25,
-      points: 10000,
-    },
-    {
-      id: '4',
-      name: 'Reward Tier 4',
-      value: '4',
-      usd: 100,
-      points: 50000,
-    },
-  ],
-};
-
 class V extends React.Component {
   constructor(props) {
     super(props);
@@ -79,6 +30,95 @@ class V extends React.Component {
     } = this.props;
     const createModal = <MerchantCreateBrandModal ref={this.merchantCreateBrandModal} />;
     const editModal = <MerchantEditBranddModal ref={this.merchantEditBrandModal} />;
+
+    console.log('???? ', brands.length);
+
+    const renderedBrandItems = brands.map((item) => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            clearBrandEditImageError();
+            toggleMerchantBrandEditModal({currentEditBrand: item});
+          }}>
+          <View
+            style={{
+              borderWidth: 1,
+              borderColor: Color.LightGrey,
+              width: 350,
+              height: 75,
+              marginBottom: 10,
+              alignItems: 'center',
+              flexDirection: 'row',
+              borderRadius: 10,
+            }}>
+            <View
+              style={{
+                // borderWidth: 1,
+                // borderColor: 'red',
+                height: 40,
+                marginLeft: 20,
+                width: 40,
+                overflow: 'hidden',
+                borderRadius: 100,
+              }}>
+              <Image source={{uri: item.image_url}} style={{height: 40, width: 40}} />
+            </View>
+            <View
+              style={{
+                // borderWidth: 1,
+                // borderColor: 'green',
+                marginLeft: 20,
+                padding: 5,
+                justifyContent: 'center',
+              }}>
+              <Text
+                style={{
+                  marginBottom: 5,
+                }}>
+                {item.name}
+              </Text>
+              <Text
+                style={{
+                  color: Color.LightGrey,
+                  fontSize: 11,
+                }}>
+                Promo Secret: {item.secret}
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      );
+    });
+
+    const renderedRewardTiers = rewardTiers.map((item) => {
+      return (
+        <View
+          style={{
+            // borderWidth: 1,
+            // borderColor: 'red',
+            height: 90,
+            width: 350,
+            padding: 15,
+            borderWidth: 1,
+            marginBottom: 10,
+            borderRadius: 10,
+            borderColor: Color.LightGrey,
+          }}>
+          <Text
+            style={{
+              fontWeight: 'bold',
+              marginBottom: 10,
+              fontSize: 16,
+            }}>
+            {item.name}
+          </Text>
+          <Text>
+            ${item.usd} off when Grabbers reach {item.points.toLocaleString()}
+          </Text>
+        </View>
+      );
+    });
+
     return (
       <ScrollView
         contentContainerStyle={{
@@ -98,77 +138,15 @@ class V extends React.Component {
             width: '100%',
           }}>
           <Text style={styles.SectionHeader__Label}>My Brands</Text>
-          <FlatList
-            data={brands}
-            style={{
-              width: '90%',
-              maxHeight: 225,
-              marginBottom: 10,
-              // borderWidth: 1,
-              // borderColor: 'pink',
-            }}
-            contentContainerStyle={{
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            keyExtractor={(_item, index) => index.toString()}
-            renderItem={({item, index}) => {
-              return (
-                <TouchableOpacity
-                  onPress={() => {
-                    clearBrandEditImageError();
-                    toggleMerchantBrandEditModal({currentEditBrand: item});
-                  }}>
-                  <View
-                    style={{
-                      borderWidth: 1,
-                      borderColor: Color.LightGrey,
-                      width: 350,
-                      height: 75,
-                      marginBottom: 10,
-                      alignItems: 'center',
-                      flexDirection: 'row',
-                      borderRadius: 10,
-                    }}>
-                    <View
-                      style={{
-                        // borderWidth: 1,
-                        // borderColor: 'red',
-                        height: 40,
-                        marginLeft: 20,
-                        width: 40,
-                        overflow: 'hidden',
-                        borderRadius: 100,
-                      }}>
-                      <Image source={{uri: item.image_url}} style={{height: 40, width: 40}} />
-                    </View>
-                    <View
-                      style={{
-                        // borderWidth: 1,
-                        // borderColor: 'green',
-                        marginLeft: 20,
-                        padding: 5,
-                        justifyContent: 'center',
-                      }}>
-                      <Text
-                        style={{
-                          marginBottom: 5,
-                        }}>
-                        {item.name}
-                      </Text>
-                      <Text
-                        style={{
-                          color: Color.LightGrey,
-                          fontSize: 11,
-                        }}>
-                        Promo Secret: {item.secret}
-                      </Text>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              );
-            }}
-          />
+          <View
+            style={
+              {
+                // borderWidth: 1,
+                // borderColor: 'blue',
+              }
+            }>
+            {renderedBrandItems}
+          </View>
           <TouchableOpacity onPress={() => toggleMerchantBrandCreateModal()}>
             <Icon style={{marginTop: 0, marginBottom: 20}} name="plus-circle" size={25} color={Color.HyperLink} />
           </TouchableOpacity>
@@ -196,49 +174,7 @@ class V extends React.Component {
             </View>
           </View>
           <Text style={styles.SectionHeader__Label}>Rewards</Text>
-          <FlatList
-            style={{
-              borderTopWidth: 1,
-              borderTopColor: Color.LightGrey,
-              width: '90%',
-              height: 400,
-            }}
-            contentContainerStyle={{
-              marginTop: 10,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            data={rewardTiers}
-            keyExtractor={(_item, index) => index.toString()}
-            renderItem={({item, index}) => {
-              return (
-                <View
-                  style={{
-                    // borderWidth: 1,
-                    // borderColor: 'red',
-                    height: 90,
-                    width: 350,
-                    padding: 15,
-                    borderWidth: 1,
-                    marginBottom: 10,
-                    borderRadius: 10,
-                    borderColor: Color.LightGrey,
-                  }}>
-                  <Text
-                    style={{
-                      fontWeight: 'bold',
-                      marginBottom: 10,
-                      fontSize: 16,
-                    }}>
-                    {item.name}
-                  </Text>
-                  <Text>
-                    ${item.usd} off when Grabbers reach {item.points.toLocaleString()}
-                  </Text>
-                </View>
-              );
-            }}
-          />
+          {renderedRewardTiers}
         </View>
       </ScrollView>
     );
@@ -254,6 +190,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     toggleMerchantBrandCreateModal: () => {
       dispatch({
+        type: REDUX_ACTIONS.CLEAR_CURRENT_CREATE_BRAND,
+      });
+      dispatch({
         type: REDUX_ACTIONS.TOGGLE_MERCHANT_BRAND_CREATE_MODAL,
       });
     },
@@ -267,10 +206,12 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const mapStateToProps = (state) => {
-  const {session} = state;
+  const {session, settings} = state;
+  console.log('state has ', settings.brands.length, ' brands');
   return {
-    brands: data.brands,
-    rewardTiers: data.rewardTiers,
+    user: session.user,
+    brands: settings.brands,
+    rewardTiers: settings.rewardTiers,
   };
 };
 

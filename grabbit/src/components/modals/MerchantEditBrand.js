@@ -111,6 +111,9 @@ class M extends React.Component {
       currentEditBrand,
       showMerchantBrandEditModal,
     } = this.props;
+
+    console.log(currentEditBrand);
+
     return (
       <Modal
         animation={'fade'}
@@ -161,6 +164,8 @@ class M extends React.Component {
               <TouchableOpacity onPress={() => this.selectImage()}>
                 <View
                   style={{
+                    // borderWidth: 1,
+                    // borderColor: 'red',
                     borderRadius: 100,
                     height: 100,
                     width: 100,
@@ -193,7 +198,7 @@ class M extends React.Component {
                 containerStyle={{
                   marginTop: 10,
                 }}
-                onPress={() => console.log('Sign in with Instagram')}
+                onPress={() => console.log('Update Brand')}
                 buttonStyle={{
                   width: 250,
                   borderRadius: 10,
@@ -219,7 +224,6 @@ class M extends React.Component {
 
 const mapStateToProps = (state) => {
   const {settings, session} = state;
-  console.log(settings.updateCurrentEditBrandImageError);
   return {
     updateCurrentEditBrandImageError: settings.updateCurrentEditBrandImageError,
     user: session.user,
@@ -250,7 +254,7 @@ const mapDispatchToProps = (dispatch) => {
     setCurrentBrandEditImage: async ({options}) => {
       // TODO: should attempt to upload the image, then set it in the state on success (fallback on error)
       dispatch({
-        type: REDUX_ACTIONS.PUT_CURRENT_BRAND_EDIT_IMAGE_PENDING,
+        type: REDUX_ACTIONS.POST_CURRENT_BRAND_EDIT_IMAGE_PENDING,
       });
 
       const {data, error} = await httpRequestAsync({options});
@@ -259,13 +263,13 @@ const mapDispatchToProps = (dispatch) => {
         error.details = error.statusCode === 400 ? 'Error uploading image' : error.details;
 
         return dispatch({
-          type: REDUX_ACTIONS.PUT_CURRENT_BRAND_EDIT_IMAGE_ERROR,
+          type: REDUX_ACTIONS.POST_CURRENT_BRAND_EDIT_IMAGE_ERROR,
           payload: error,
         });
       }
 
       return dispatch({
-        type: REDUX_ACTIONS.PUT_CURRENT_BRAND_EDIT_IMAGE_SUCCESS,
+        type: REDUX_ACTIONS.POST_CURRENT_BRAND_EDIT_IMAGE_SUCCESS,
         payload: data,
       });
     },

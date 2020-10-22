@@ -1,4 +1,5 @@
 import REDUX_ACTIONS from 'grabbit/src/actions';
+import {FakeImage} from 'grabbit/src/const';
 
 const defaultState = {
   login: {
@@ -85,12 +86,62 @@ const defaultState = {
   },
 
   settings: {
+    brands: [
+      {
+        id: '1',
+        image_url: FakeImage,
+        name: 'My Brand Number One',
+        secret: 'AW27IE5FNAWIFNA424',
+        description: 'This is a description of my super awesome brand',
+      },
+      {
+        id: '2',
+        image_url: FakeImage,
+        name: 'My Brand #2',
+        secret: 'AW27IE5FNAWIFNA424',
+        description: 'This is a description of my super awesome brand',
+      },
+    ],
+    rewardTiers: [
+      {
+        id: '1',
+        name: 'Reward Tier 1',
+        value: '0',
+        usd: 5,
+        points: 1000,
+      },
+      {
+        id: '2',
+        name: 'Reward Tier 2',
+        value: '1',
+        usd: 10,
+        points: 5000,
+      },
+      {
+        id: '3',
+        name: 'Reward Tier 3',
+        value: '3',
+        usd: 25,
+        points: 10000,
+      },
+      {
+        id: '4',
+        name: 'Reward Tier 4',
+        value: '4',
+        usd: 100,
+        points: 50000,
+      },
+    ],
     showMerchantBrandEditModal: false,
     showMerchantBrandCreateModal: false,
     currentEditBrand: {},
     currentEditBrandImage: null,
+    currentCreateBrandImage: null,
     updateCurrentEditBrandImagePending: false,
     updateCurrentEditBrandImageError: null,
+    currentCreateBrand: {},
+    postCurrentCreateBrandPending: false,
+    postCurrentBrandError: null,
   },
 
   productInfo: {
@@ -104,7 +155,56 @@ const defaultState = {
 
 export default mainReducer = (state = defaultState, action) => {
   switch (action.type) {
-    case REDUX_ACTIONS.PUT_CURRENT_BRAND_EDIT_IMAGE_SUCCESS:
+    case REDUX_ACTIONS.CLEAR_CURRENT_CREATE_BRAND:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          currentCreateBrand: {},
+        },
+      };
+    case REDUX_ACTIONS.POST_CURRENT_BRAND_CREATE_SUCCESS:
+      console.log('created ', action.payload);
+      console.log('>> ', state.settings.brands.length);
+      let tmp = state.settings.brands;
+      tmp.push(action.payload);
+      const foo = {
+        ...state,
+        settings: {
+          brands: tmp,
+          ...state.settings,
+        },
+      };
+      console.log('>> ', state.settings.brands.length);
+      return foo;
+    case REDUX_ACTIONS.POST_CURRENT_BRAND_CREATE_ERROR:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          postCurrentBrandError: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.UPDATE_CURRENT_CREATE_BRAND_DETAILS:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          currentCreateBrand: {
+            ...state.settings.currentCreateBrand,
+            [action.key]: action.payload,
+          },
+        },
+      };
+    case REDUX_ACTIONS.CLEAR_CURRENT_BRAND_CREATE_ERROR:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          postCurrentBrandError: null,
+        },
+      };
+    case REDUX_ACTIONS.POST_CURRENT_BRAND_EDIT_IMAGE_SUCCESS:
       return {
         ...state,
         settings: {
@@ -114,7 +214,7 @@ export default mainReducer = (state = defaultState, action) => {
           updateCurrentEditBrandImagePending: false,
         },
       };
-    case REDUX_ACTIONS.PUT_CURRENT_BRAND_EDIT_IMAGE_ERROR:
+    case REDUX_ACTIONS.POST_CURRENT_BRAND_EDIT_IMAGE_ERROR:
       return {
         ...state,
         settings: {
@@ -123,7 +223,7 @@ export default mainReducer = (state = defaultState, action) => {
           updateCurrentEditBrandImageError: action.payload,
         },
       };
-    case REDUX_ACTIONS.PUT_CURRENT_BRAND_EDIT_IMAGE_PENDING:
+    case REDUX_ACTIONS.POST_CURRENT_BRAND_EDIT_IMAGE_PENDING:
       return {
         ...state,
         settings: {
