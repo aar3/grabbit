@@ -31,7 +31,7 @@ def seed_brands(apps, _):
             address_line1=fake.address(),
         )
 
-    # add superuser
+    # add broker superuser
     _ = User.objects.create(
         email="b@gmail.com",
         session_token_key="MASTER",

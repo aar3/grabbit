@@ -50,10 +50,16 @@ class M extends React.Component {
     const {
       toggleBrokerDiscoverBrandCampaignModal,
       clearClipboardCopy,
+      hasCopiedCurrentCampaignCode,
       showSuccessfulClipboardCopy,
       currentCampaignCode,
       showBrandCampaignModal,
     } = this.props;
+
+    const icon = !hasCopiedCurrentCampaignCode ? null : <Icon name="check" size={20} color={Color.Pink2} />;
+    const primaryColor = !hasCopiedCurrentCampaignCode ? Color.Black : Color.Pink2;
+    const title = !hasCopiedCurrentCampaignCode ? 'Copy to Clipboard' : 'Copied to Clipboard';
+
     return (
       <Modal
         animation={'fade'}
@@ -68,7 +74,7 @@ class M extends React.Component {
             flex: 1,
             // justifyContent: 'center',
             // alignItems: 'center',
-            marginTop: 250,
+            marginTop: 275,
             marginBottom: 315,
             marginLeft: 50,
             marginRight: 50,
@@ -143,23 +149,25 @@ class M extends React.Component {
                   Clipboard.setString(currentCampaignCode.code);
                   showSuccessfulClipboardCopy();
                 }}
+                icon={icon}
                 buttonStyle={{
-                  borderRadius: 30,
+                  borderRadius: 10,
                   width: 200,
                   borderWidth: 0,
+                  height: 50,
                   backgroundColor: Color.White,
-                  borderColor: Color.Pink2,
+                  borderColor: primaryColor,
                   borderWidth: 1,
                 }}
                 titleStyle={{
-                  color: Color.Pink2,
+                  color: primaryColor,
                   fontSize: 12,
                   fontWeight: 'bold',
                 }}
                 type="outline"
-                title="Copy To Clipboard"
+                title={title}
               />
-              {this.renderCopiedCodeView()}
+              {/* {this.renderCopiedCodeView()} */}
             </View>
           </View>
         </View>

@@ -6,8 +6,9 @@ import {Button} from 'react-native-elements';
 import {connect} from 'react-redux';
 
 import REDUX_ACTIONS from 'grabbit/src/actions';
-import {Color} from 'grabbit/src/const';
+import {Color, UserType} from 'grabbit/src/const';
 import {httpRequestAsync} from 'grabbit/src/utils';
+import styles from 'grabbit/src/styles/global';
 
 class V extends React.Component {
   constructor(props) {
@@ -68,7 +69,7 @@ class V extends React.Component {
   }
 
   render() {
-    const {emailValue, postLogin, passwordValue, updatePasswordValue, updateEmailValue} = this.props;
+    const {emailValue, userType, postLogin, passwordValue, updatePasswordValue, updateEmailValue} = this.props;
     const disableLoginButton = this._disableLoginButton();
     return (
       <KeyboardAvoidingView
@@ -125,6 +126,7 @@ class V extends React.Component {
           <Button
             disabled={disableLoginButton}
             title="Login"
+            type="outline"
             disabledStyle={{
               width: 300,
               height: 50,
@@ -172,6 +174,7 @@ class V extends React.Component {
                     secret: passwordValue,
                   },
                 },
+                userType,
               })
             }
           />
@@ -182,12 +185,13 @@ class V extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const {login} = state;
+  const {login, session} = state;
   return {
     emailValue: login.emailValue,
     passwordValue: login.passwordValue,
     error: login.error,
     pending: login.pending,
+    userType: session.userType,
   };
 };
 
@@ -205,7 +209,7 @@ const mapDispatchToProps = (dispatch) => {
         payload: {key, text},
       });
     },
-    postLogin: async ({options}) => {
+    postLogin: async ({options, userType}) => {
       dispatch({
         type: REDUX_ACTIONS.CLEAR_POST_LOGIN_ERROR,
       });
@@ -235,35 +239,9 @@ const mapDispatchToProps = (dispatch) => {
         payload: data,
       });
 
-      return Actions.brokerDiscoverView();
+      return userType === UserType.Broker ? Actions.brokerDiscoverView() : Actions.merchantDashboardView();
     },
   };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(V);
-
-const styles = StyleSheet.create({
-  TextInput__Container: {
-    // borderWidth: 1,
-    // borderColor: 'blue',
-    width: 300,
-    marginBottom: 10,
-  },
-  TextInput__Container__Input: {
-    borderWidth: 1,
-    borderColor: Color.LightGrey,
-    padding: 5,
-    paddingLeft: 10,
-    fontSize: 12,
-    fontFamily: 'Arial',
-    width: '100%',
-    height: 40,
-    borderRadius: 5,
-    backgroundColor: Color.White,
-  },
-  TextInput__Label: {
-    fontSize: 12,
-    paddingBottom: 5,
-    // fontFamily: Font.Default,
-  },
-});

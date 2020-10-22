@@ -37,7 +37,7 @@ export default class V extends React.Component {
               justifyContent: 'center',
               backgroundColor: Color.Pink2,
               alignItems: 'center',
-              borderRadius: 40,
+              borderRadius: 10,
               marginTop: 10,
               marginBottom: 10,
             }}
@@ -58,7 +58,7 @@ export default class V extends React.Component {
               borderWidth: 1,
               backgroundColor: Color.White,
               alignItems: 'center',
-              borderRadius: 40,
+              borderRadius: 10,
               marginTop: 10,
               marginBottom: 10,
             }}

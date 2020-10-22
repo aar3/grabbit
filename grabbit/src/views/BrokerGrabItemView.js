@@ -237,7 +237,7 @@ class BrokerGrabItemView extends React.Component {
                 borderWidth: 1,
                 backgroundColor: Color.Pink2,
                 alignItems: 'center',
-                borderRadius: 40,
+                borderRadius: 10,
               }}
               titleStyle={{
                 color: Color.White,
@@ -275,7 +275,7 @@ class BrokerGrabItemView extends React.Component {
                 borderWidth: 1,
                 backgroundColor: Color.White,
                 alignItems: 'center',
-                borderRadius: 40,
+                borderRadius: 10,
                 marginTop: 10,
               }}
               titleStyle={{

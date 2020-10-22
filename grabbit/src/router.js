@@ -43,6 +43,11 @@ import {
   BrokerWalletView,
   BrokerWalletEntryView,
   BrokerProfileView,
+  LoginView,
+  MerchantDashboardView,
+  MerchantAddCampaignView,
+  MerchantProfileSettingsView,
+  MerchantCampaignCodesView,
 } from 'grabbit/src/views';
 import {TabIconSize, Color, UserType} from 'grabbit/src/const';
 import BasicTopNavigationBar from 'grabbit/src/components/navigation/BasicTopNavigation';
@@ -85,7 +90,7 @@ const BottomTabNavigation = ({userType, hasNewNotification}) => {
           title="Notifications"
           hideNavBar={false}
           icon={({focused}) => (
-            <Icon name={'message-square'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
+            <Icon name={'message-circle'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
           )}
         />
         <Scene
@@ -121,15 +126,25 @@ const BottomTabNavigation = ({userType, hasNewNotification}) => {
       activeBackgroundColor="white"
       lazy>
       <Scene
-        key="merchantDashboard"
-        component={MerchantExploreView}
+        key="merchantDashboardView"
+        component={MerchantDashboardView}
         navBar={DiscoverTopNvigationBar}
         title="Merchant Dashboard"
         hideNavBar={false}
         icon={({focused}) => (
-          <Icon name={'search'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
+          <Icon name={'activity'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
         )}
       />
+      {/* <Scene
+        key="merchantAddCampaignView"
+        component={MerchantAddCampaignView}
+        navBar={BasicTopNavigationBar}
+        title="Merchant Add Campaign"
+        hideNavBar={false}
+        icon={({focused}) => (
+          <Icon name={'plus-circle'} size={TabIconSize} color={focused ? Color.Black : Color.LightGrey} />
+        )}
+      /> */}
       <Scene
         key="notifications"
         navBar={BasicTopNavigationBar}
@@ -138,7 +153,21 @@ const BottomTabNavigation = ({userType, hasNewNotification}) => {
         hideNavBar={false}
         icon={({focused}) => (
           <Icon
-            name={'message-square'}
+            name={'message-circle'}
+            size={TabIconSize}
+            color={hasNewNotification ? Color.Pink2 : focused ? Color.Black : Color.LightGrey}
+          />
+        )}
+      />
+      <Scene
+        key="merchantProfileSettingsView"
+        navBar={ImageCenterTopNavigation}
+        component={MerchantProfileSettingsView}
+        title="Merchant Profile Settings"
+        hideNavBar={false}
+        icon={({focused}) => (
+          <Icon
+            name={'user'}
             size={TabIconSize}
             color={hasNewNotification ? Color.Pink2 : focused ? Color.Black : Color.LightGrey}
           />
@@ -188,17 +217,9 @@ class AppRouter extends React.Component {
             renderBackButton={() => <View />}
           />
           <Scene
-            key="brokerLoginView"
+            key="loginView"
             navBar={BackOnlyTopNavigationBar}
-            component={BrokerLoginView}
-            title={null}
-            hideNavBar={false}
-            renderBackButton={() => <View />}
-          />
-          <Scene
-            key="merchantLoginView"
-            navBar={BackOnlyTopNavigationBar}
-            component={MerchantLoginView}
+            component={LoginView}
             title={null}
             hideNavBar={false}
             renderBackButton={() => <View />}
@@ -275,6 +296,14 @@ class AppRouter extends React.Component {
             hideNavBar={false}
             renderBackButton={() => <View />}
           />
+          <Scene
+            key="merchantCampaignCodesView"
+            navBar={BasicTopNavigationBar}
+            component={MerchantCampaignCodesView}
+            title={null}
+            hideNavBar={false}
+            renderBackButton={() => <View />}
+          />
           {BottomTabNavigation({userType, hasNewNotification})}
         </Stack>
       </Router>
@@ -345,9 +374,9 @@ const transitionConfig = () => ({
 });
 
 const mapStateToProps = (state) => {
-  const {userType, notifications} = state;
+  const {session, notifications} = state;
   return {
-    userType,
+    userType: session.userType,
     hasNewNotification: notifications.hasNewNotification,
   };
 };

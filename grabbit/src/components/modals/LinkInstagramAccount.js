@@ -7,6 +7,7 @@ import {Button} from 'react-native-elements';
 
 import REDUX_ACTIONS from 'grabbit/src/actions';
 import {Color} from 'grabbit/src/const';
+import styles from 'grabbit/src/styles/global';
 
 class M extends React.Component {
   constructor(props) {
@@ -60,7 +61,6 @@ class M extends React.Component {
         transparent={true}
         visible={showInstagramAccountLinkModal}
         onRequestClose={() => {
-          console.log('modal closed');
           toggleInstagramLinkModal();
         }}>
         <View
@@ -69,7 +69,7 @@ class M extends React.Component {
             // justifyContent: 'center',
             // alignItems: 'center',
             marginTop: 250,
-            marginBottom: 315,
+            marginBottom: 300,
             marginLeft: 50,
             marginRight: 50,
             backgroundColor: 'white',
@@ -132,12 +132,12 @@ class M extends React.Component {
               </View>
               <Button
                 containerStyle={{
-                  marginTop: 5,
+                  marginTop: 20,
                 }}
                 onPress={() => console.log('Sign in with Instagram')}
                 buttonStyle={{
                   width: 250,
-                  borderRadius: 5,
+                  borderRadius: 10,
                   backgroundColor: Color.White,
                   height: 50,
                   borderWidth: 1,
@@ -196,29 +196,3 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(M);
-
-const styles = StyleSheet.create({
-  TextInput__Container: {
-    // borderWidth: 1,
-    // borderColor: 'blue',
-    width: 250,
-    marginBottom: 10,
-  },
-  TextInput__Container__Input: {
-    borderWidth: 1,
-    borderColor: Color.LightGrey,
-    padding: 5,
-    paddingLeft: 10,
-    fontSize: 12,
-    fontFamily: 'Arial',
-    width: '100%',
-    height: 40,
-    borderRadius: 5,
-    backgroundColor: Color.White,
-  },
-  TextInput__Label: {
-    fontSize: 12,
-    paddingBottom: 5,
-    // fontFamily: Font.Default,
-  },
-});

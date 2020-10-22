@@ -53,6 +53,8 @@ export default class V extends React.Component {
             width: '90%',
             // borderColor: 'blue',
             // borderWidth: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
           <View
             style={{
@@ -62,9 +64,15 @@ export default class V extends React.Component {
 
           <FlatList
             style={{
-              borderWidth: 1,
-              borderColor: 'red',
-              width: '100%',
+              width: 400,
+              // borderWidth: 1,
+              // borderColor: 'pink',
+            }}
+            contentContainerStyle={{
+              // borderWidth: 1,
+              // borderColor: 'red',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
             data={data.tiers}
             renderItem={({item, index}) => {
@@ -77,10 +85,9 @@ export default class V extends React.Component {
                       alignItems: 'center',
                       height: 200,
                       borderColor: 'orange',
-                      // flexDirection: 'row',
                       borderRadius: 10,
                       borderWidth: 1,
-                      // width: '95%',
+                      width: 350,
                       marginBottom: 20,
                       borderColor: Color.ForestGreen,
                       justifyContent: 'space-evenly',
@@ -111,9 +118,8 @@ export default class V extends React.Component {
                     justifyContent: 'center',
                     alignItems: 'center',
                     height: 200,
-                    // width: '95%',
                     borderColor: 'orange',
-                    // flexDirection: 'row',
+                    width: 350,
                     borderRadius: 10,
                     borderWidth: 1,
                     marginBottom: 20,
@@ -134,7 +140,7 @@ export default class V extends React.Component {
                       fontWeight: 'bold',
                       color: Color.ReadableGreyText,
                     }}>
-                    Redeem Code: FOOFOO
+                    {/* No code if tier is not unlocked */}
                   </Text>
                 </View>
               );

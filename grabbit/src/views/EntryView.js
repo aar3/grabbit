@@ -1,9 +1,9 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image, ImageBackground} from 'react-native';
+import {Text, View, Image, ImageBackground} from 'react-native';
 
 import {Actions} from 'react-native-router-flux';
+import {Button} from 'react-native-elements';
 
-import {BasicButton} from 'grabbit/src/components/buttons';
 import {Color} from 'grabbit/src/const';
 
 export default class V extends React.Component {
@@ -13,18 +13,52 @@ export default class V extends React.Component {
 
   render() {
     return (
-      <View style={styles.EntryView}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          // backgroundColor: Color.Pink2,
+        }}>
         <ImageBackground
-          style={styles.EntryView__BackgroundImage}
+          style={{
+            flex: 1,
+            width: '110%',
+            resizeMode: 'cover',
+            justifyContent: 'center',
+          }}
           source={require('../../assets/imgs/Gradient_Purple_Pink_Background_583x1258.png')}>
-          <View style={styles.EntryView__ContentContainer}>
-            <View style={styles.EntryView__ContentContainer__LogoContainer}>
+          <View
+            style={{
+              // borderWidth: 1,
+              // borderColor: 'green',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 300,
+            }}>
+            <View
+              style={{
+                // borderWidth: 1,
+                // borderColor: 'red',
+                width: 320,
+                height: 70,
+                marginBottom: 10,
+              }}>
               <Image
                 source={require('../../assets/imgs/Grabbit_White_Letters_222x1000.png')}
                 style={{flex: 1, height: undefined, width: undefined}}
               />
             </View>
-            <Text style={styles.EntryView__ContentContainer__HeaderLabel}>{'Products. For. Promo.'}</Text>
+            <Text
+              style={{
+                color: Color.White,
+                fontWeight: 'bold',
+                fontSize: 22,
+                textAlign: 'center',
+                marginBottom: 200,
+              }}>
+              {'Products. For. Promo.'}
+            </Text>
 
             <View
               style={{
@@ -45,17 +79,52 @@ export default class V extends React.Component {
               </Text>
             </View>
 
-            <View style={styles.EntryView__Actions__Container}>
-              <BasicButton
-                buttonStyle={styles.EntryView__Actions__Container__UserTypeButton__Broker}
-                titleStyle={styles.EntryView__Actions__Container__UserTypeButton__Title__Broker}
+            <View
+              style={{
+                // borderColor: 'red',
+                // borderWidth: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+              }}>
+              <Button
+                style="outline"
+                buttonStyle={{
+                  width: 300,
+                  height: 50,
+                  justifyContent: 'center',
+                  backgroundColor: Color.White,
+                  alignItems: 'center',
+                  borderRadius: 10,
+                  marginBottom: 10,
+                }}
+                titleStyle={{
+                  color: Color.Pink2,
+                  fontWeight: 'bold',
+                  fontSize: 16,
+                }}
                 title="Grabber"
                 onPress={() => Actions.brokerEntryView()}
               />
 
-              <BasicButton
-                buttonStyle={styles.EntryView__Actions__Container__UserTypeButton__Merchant}
-                titleStyle={styles.EntryView__Actions__Container__UserTypeButton__Title__Merchant}
+              <Button
+                style="outline"
+                buttonStyle={{
+                  width: 300,
+                  height: 50,
+                  borderWidth: 1,
+                  backgroundColor: null,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderColor: Color.White,
+                  borderRadius: 10,
+                  marginBottom: 10,
+                }}
+                titleStyle={{
+                  color: Color.White,
+                  fontWeight: 'bold',
+                  fontSize: 16,
+                }}
                 title="Merchant"
                 onPress={() => Actions.merchantEntryView()}
               />
@@ -66,73 +135,3 @@ export default class V extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  EntryView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: Color.Pink2,
-  },
-  EntryView__BackgroundImage: {
-    flex: 1,
-    width: '110%',
-    resizeMode: 'cover',
-    justifyContent: 'center',
-  },
-  EntryView__ContentContainer: {
-    // borderWidth: 1,
-    // borderColor: 'green',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 300,
-  },
-  EntryView__ContentContainer__LogoContainer: {
-    // borderWidth: 1,
-    // borderColor: 'red',
-    width: 320,
-    height: 70,
-    marginBottom: 10,
-  },
-  EntryView__Actions__Container: {
-    // borderColor: 'red',
-    // borderWidth: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-  },
-  EntryView__Actions__Container__UserTypeButton__Broker: {
-    width: 300,
-    height: 50,
-    justifyContent: 'center',
-    backgroundColor: Color.White,
-    alignItems: 'center',
-    borderRadius: 40,
-    marginBottom: 10,
-  },
-  EntryView__Actions__Container__UserTypeButton__Merchant: {
-    width: 300,
-    height: 50,
-    borderWidth: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderColor: Color.White,
-    borderRadius: 40,
-    marginBottom: 10,
-  },
-  EntryView__Actions__Container__UserTypeButton__Title__Broker: {
-    color: Color.Pink2,
-    fontWeight: 'bold',
-  },
-  EntryView__Actions__Container__UserTypeButton__Title__Merchant: {
-    color: Color.White,
-    fontWeight: 'bold',
-  },
-  EntryView__ContentContainer__HeaderLabel: {
-    color: Color.White,
-    fontWeight: 'bold',
-    fontSize: 22,
-    textAlign: 'center',
-    marginBottom: 200,
-  },
-});

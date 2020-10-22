@@ -121,12 +121,11 @@ class V extends React.Component {
                 marginTop: 40,
               }}>
               <FlatList
-                style={
-                  {
-                    // borderWidth: 1,
-                    // borderColor: 'green',
-                  }
-                }
+                style={{
+                  // borderWidth: 1,
+                  // borderColor: 'green',
+                  height: 450,
+                }}
                 data={filteredBrands}
                 keyExtractor={(_item, index) => index.toString()}
                 renderItem={({item, index}) => {

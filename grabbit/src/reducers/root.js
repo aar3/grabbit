@@ -1,10 +1,9 @@
 import REDUX_ACTIONS from 'grabbit/src/actions';
+import {FakeImage} from 'grabbit/src/const';
 
 const defaultState = {
-  userType: null,
-
   login: {
-    // TDOO: in the future we can validate on a per-input basis
+    // TODO: in the future we can validate on a per-input basis
     responseError: false,
     invalidEmailValue: false,
     invalidPasswordValue: false,
@@ -13,11 +12,16 @@ const defaultState = {
     passwordValue: null,
   },
 
-  navigation: {
-    currentScene: null,
+  campaignCodes: {
+    campaignStats: [],
+    getCampaignCodesPending: false,
+    getCampaignCodesError: null,
+    currentCampaignCode: null,
   },
 
-  currentSceneKey: null,
+  navigation: {
+    currentSceneKey: null,
+  },
 
   wallet: {
     currentSearchInput: null,
@@ -29,6 +33,7 @@ const defaultState = {
 
   session: {
     user: null,
+    userType: null,
   },
 
   brokerDiscover: {
@@ -49,7 +54,7 @@ const defaultState = {
   },
 
   accountLinking: {
-    instagramLinkPending: true,
+    instagramLinkPending: false,
     instagramLinkError: null,
     showInstagramAccountLinkModal: false,
     hasInstagramLinked: false,
@@ -80,6 +85,65 @@ const defaultState = {
     getNotificationsError: null,
   },
 
+  settings: {
+    brands: [
+      {
+        id: '1',
+        image_url: FakeImage,
+        name: 'My Brand Number One',
+        secret: 'AW27IE5FNAWIFNA424',
+        description: 'This is a description of my super awesome brand',
+      },
+      {
+        id: '2',
+        image_url: FakeImage,
+        name: 'My Brand #2',
+        secret: 'AW27IE5FNAWIFNA424',
+        description: 'This is a description of my super awesome brand',
+      },
+    ],
+    rewardTiers: [
+      {
+        id: '1',
+        name: 'Reward Tier 1',
+        value: '0',
+        usd: 5,
+        points: 1000,
+      },
+      {
+        id: '2',
+        name: 'Reward Tier 2',
+        value: '1',
+        usd: 10,
+        points: 5000,
+      },
+      {
+        id: '3',
+        name: 'Reward Tier 3',
+        value: '3',
+        usd: 25,
+        points: 10000,
+      },
+      {
+        id: '4',
+        name: 'Reward Tier 4',
+        value: '4',
+        usd: 100,
+        points: 50000,
+      },
+    ],
+    showMerchantBrandEditModal: false,
+    showMerchantBrandCreateModal: false,
+    currentEditBrand: {},
+    currentEditBrandImage: null,
+    currentCreateBrandImage: null,
+    updateCurrentEditBrandImagePending: false,
+    updateCurrentEditBrandImageError: null,
+    currentCreateBrand: {},
+    postCurrentCreateBrandPending: false,
+    postCurrentBrandError: null,
+  },
+
   productInfo: {
     currentProduct: null,
     currentProductHasLike: false,
@@ -91,6 +155,126 @@ const defaultState = {
 
 export default mainReducer = (state = defaultState, action) => {
   switch (action.type) {
+    case REDUX_ACTIONS.CLEAR_CURRENT_CREATE_BRAND:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          currentCreateBrand: {},
+        },
+      };
+    case REDUX_ACTIONS.POST_CURRENT_BRAND_CREATE_SUCCESS:
+      console.log('created ', action.payload);
+      console.log('>> ', state.settings.brands.length);
+      let tmp = state.settings.brands;
+      tmp.push(action.payload);
+      const foo = {
+        ...state,
+        settings: {
+          brands: tmp,
+          ...state.settings,
+        },
+      };
+      console.log('>> ', state.settings.brands.length);
+      return foo;
+    case REDUX_ACTIONS.POST_CURRENT_BRAND_CREATE_ERROR:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          postCurrentBrandError: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.UPDATE_CURRENT_CREATE_BRAND_DETAILS:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          currentCreateBrand: {
+            ...state.settings.currentCreateBrand,
+            [action.key]: action.payload,
+          },
+        },
+      };
+    case REDUX_ACTIONS.CLEAR_CURRENT_BRAND_CREATE_ERROR:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          postCurrentBrandError: null,
+        },
+      };
+    case REDUX_ACTIONS.POST_CURRENT_BRAND_EDIT_IMAGE_SUCCESS:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          currentEditBrand: action.payload,
+          currentEditBrandImage: null,
+          updateCurrentEditBrandImagePending: false,
+        },
+      };
+    case REDUX_ACTIONS.POST_CURRENT_BRAND_EDIT_IMAGE_ERROR:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          updateCurrentEditBrandImagePending: false,
+          updateCurrentEditBrandImageError: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.POST_CURRENT_BRAND_EDIT_IMAGE_PENDING:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          updateCurrentEditBrandImagePending: true,
+        },
+      };
+    case REDUX_ACTIONS.CLEAR_CURRENT_BRAND_EDIT_IMAGE_ERROR:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          updateCurrentEditBrandImageError: null,
+        },
+      };
+    case REDUX_ACTIONS.SET_CURRENT_BRAND_EDIT_IMAGE:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          currentEditBrandImage: action.payload,
+        },
+      };
+    case REDUX_ACTIONS.UPDATE_CURRENT_EDIT_BRAND_DETAILS:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          currentEditBrand: {
+            ...state.settings.currentEditBrand,
+            [action.key]: action.payload,
+          },
+        },
+      };
+    case REDUX_ACTIONS.TOGGLE_MERCHANT_BRAND_EDIT_MODAL:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          showMerchantBrandEditModal: !state.settings.showMerchantBrandEditModal,
+          currentEditBrand: action.payload || {},
+        },
+      };
+    case REDUX_ACTIONS.TOGGLE_MERCHANT_BRAND_CREATE_MODAL:
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          showMerchantBrandCreateModal: !state.settings.showMerchantBrandCreateModal,
+        },
+      };
     case REDUX_ACTIONS.CLEAR_CURRENT_CAMPAIGN_CODE_COPIED:
       return {
         ...state,
@@ -381,10 +565,20 @@ export default mainReducer = (state = defaultState, action) => {
         },
       };
     case REDUX_ACTIONS.SET_CURRENT_SCENE_KEY:
+      return {
+        ...state,
+        navigation: {
+          ...state.navigation,
+          currentSceneKey: action.payload,
+        },
+      };
     case REDUX_ACTIONS.SET_USER_TYPE:
       return {
         ...state,
-        ...action.payload,
+        session: {
+          ...state.session,
+          userType: action.payload,
+        },
       };
     case REDUX_ACTIONS.PRODUCT_INFO_LIKE:
       return {

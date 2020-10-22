@@ -85,9 +85,9 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const mapStateToProps = (state) => {
-  const {userType, currentSceneKey} = state;
+  const {session, currentSceneKey} = state;
   return {
-    userType,
+    userType: session.userType,
     currentSceneKey,
   };
 };

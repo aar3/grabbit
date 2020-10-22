@@ -8,7 +8,7 @@ import REDUX_ACTIONS from 'grabbit/src/actions';
 import {BasicButton} from 'grabbit/src/components/buttons';
 import {Color, UserType} from 'grabbit/src/const';
 
-class BrokerEntryView extends React.Component {
+class V extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -19,20 +19,53 @@ class BrokerEntryView extends React.Component {
   }
 
   render() {
-    const {userType} = this.props;
     return (
-      <View style={styles.BrokerEntryView}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          // backgroundColor: Color.Pink2,
+        }}>
         <ImageBackground
-          style={styles.BrokerEntryView__BackgroundImage}
+          style={{
+            flex: 1,
+            width: '110%',
+            resizeMode: 'cover',
+            justifyContent: 'center',
+          }}
           source={require('../../assets/imgs/Gradient_Purple_Pink_Background_583x1258.png')}>
-          <View style={styles.BrokerEntryView__ContentContainer}>
-            <View style={styles.BrokerEntryView__ContentContainer__LogoContainer}>
+          <View
+            style={{
+              // borderWidth: 1,
+              // borderColor: 'green',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 300,
+            }}>
+            <View
+              style={{
+                // borderWidth: 1,
+                // borderColor: 'red',
+                width: 98,
+                height: 100,
+                marginBottom: 30,
+              }}>
               <Image
                 source={require('../../assets/imgs/Grabbit_White_G_300x300.png')}
                 style={{flex: 1, height: undefined, width: undefined}}
               />
             </View>
-            <Text style={styles.BrokerEntryView__ContentContainer__HeaderLabel}>{'For Grabbers'}</Text>
+            <Text
+              style={{
+                color: Color.White,
+                fontWeight: 'bold',
+                fontSize: 16,
+                textAlign: 'center',
+                marginBottom: 160,
+              }}>
+              {'For Grabbers'}
+            </Text>
 
             <View
               style={{
@@ -53,19 +86,49 @@ class BrokerEntryView extends React.Component {
               </Text>
             </View>
 
-            <View style={styles.BrokerEntryView__Actions__Container}>
+            <View
+              style={{
+                // borderColor: 'red',
+                // borderWidth: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+              }}>
               <BasicButton
-                buttonStyle={styles.BrokerEntryView__Actions__Container__UserTypeButton__Broker}
-                titleStyle={styles.BrokerEntryView__Actions__Container__UserTypeButton__Title__Broker}
+                buttonStyle={{
+                  width: 300,
+                  height: 50,
+                  justifyContent: 'center',
+                  backgroundColor: Color.White,
+                  alignItems: 'center',
+                  borderRadius: 10,
+                  marginBottom: 10,
+                }}
+                titleStyle={{
+                  color: Color.Pink2,
+                  fontWeight: 'bold',
+                }}
                 title="Login"
                 onPress={() => {
-                  return Actions.brokerLoginView();
+                  return Actions.loginView();
                 }}
               />
 
               <BasicButton
-                buttonStyle={styles.BrokerEntryView__Actions__Container__UserTypeButton__Merchant}
-                titleStyle={styles.BrokerEntryView__Actions__Container__UserTypeButton__Title__Merchant}
+                buttonStyle={{
+                  width: 300,
+                  height: 50,
+                  borderWidth: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderColor: Color.White,
+                  borderRadius: 10,
+                  marginBottom: 10,
+                }}
+                titleStyle={{
+                  color: Color.White,
+                  fontWeight: 'bold',
+                }}
                 title="Sign Up"
                 onPress={() => {
                   return Actions.brokerSignupView();
@@ -84,7 +147,7 @@ const mapDispatchToProps = (dispatch) => {
     setUserType: ({userType}) => {
       return dispatch({
         type: REDUX_ACTIONS.SET_USER_TYPE,
-        payload: {userType},
+        payload: userType,
       });
     },
   };
@@ -97,74 +160,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(BrokerEntryView);
-
-const styles = StyleSheet.create({
-  BrokerEntryView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    // backgroundColor: Color.Pink2,
-  },
-  BrokerEntryView__BackgroundImage: {
-    flex: 1,
-    width: '110%',
-    resizeMode: 'cover',
-    justifyContent: 'center',
-  },
-  BrokerEntryView__ContentContainer: {
-    // borderWidth: 1,
-    // borderColor: 'green',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 300,
-  },
-  BrokerEntryView__ContentContainer__LogoContainer: {
-    // borderWidth: 1,
-    // borderColor: 'red',
-    width: 98,
-    height: 100,
-    marginBottom: 30,
-  },
-  BrokerEntryView__Actions__Container: {
-    // borderColor: 'red',
-    // borderWidth: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-  },
-  BrokerEntryView__Actions__Container__UserTypeButton__Broker: {
-    width: 300,
-    height: 50,
-    justifyContent: 'center',
-    backgroundColor: Color.White,
-    alignItems: 'center',
-    borderRadius: 40,
-    marginBottom: 10,
-  },
-  BrokerEntryView__Actions__Container__UserTypeButton__Merchant: {
-    width: 300,
-    height: 50,
-    borderWidth: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderColor: Color.White,
-    borderRadius: 40,
-    marginBottom: 10,
-  },
-  BrokerEntryView__Actions__Container__UserTypeButton__Title__Broker: {
-    color: Color.Pink2,
-    fontWeight: 'bold',
-  },
-  BrokerEntryView__Actions__Container__UserTypeButton__Title__Merchant: {
-    color: Color.White,
-    fontWeight: 'bold',
-  },
-  BrokerEntryView__ContentContainer__HeaderLabel: {
-    color: Color.White,
-    fontWeight: 'bold',
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 160,
-  },
-});
+export default connect(mapStateToProps, mapDispatchToProps)(V);

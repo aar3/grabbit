@@ -15,4 +15,5 @@ urlpatterns = [
     path(r"login/", LoginView),
     re_path(r"discover/(\d+)", BrokerDiscoverView),
     re_path(r"wallet-brands/(\d+)", WalletBrandView),
+    re_path(r"brands/(\d+)/upload", UploadBrandImageView2),
 ]

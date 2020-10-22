@@ -1,7 +1,8 @@
 # pylint: disable=import-outside-toplevel
 
 from django.db import models
-from django.shortcuts import get_object_or_404
+
+from lib.const import DEFAULT_PROFILE_IMAGE
 
 
 class BaseManager(models.Manager):
@@ -29,35 +30,19 @@ class UserManager(BaseManager):
         return user
 
 
+class BrandManager(BaseManager):
+    def create(self, name, description, image_url=DEFAULT_PROFILE_IMAGE):
+        brand = super().create(name=name, description=description, image_url=image_url)
+        brand.set_secret()
+        brand.set_slug()
+        return brand
+
+
 class LoginManager(BaseManager):
     def create(self, user, ip_address):
         return super().create(user=user, ip_address=ip_address)
 
 
-class ProductManager(BaseManager):
-    def create(
-        self, name, description, user, image_url_1=None, image_url_2=None, image_url_3=None, image_url_4=None,
-    ):
-
-        from core.models import User
-
-        user = get_object_or_404(User, pk=user)
-
-        return super().create(
-            name=name,
-            description=description,
-            user=user,
-            image_url_1=image_url_1,
-            image_url_2=image_url_2,
-            image_url_3=image_url_3,
-            image_url_4=image_url_4,
-        )
-
-
 class NotificationManager(BaseManager):
     def create(self, text, user, item_type, item_id):
-        noti = super().create(text=text, user=user)
-        noti.set_meta(item_type, item_id)
-
-        noti.save()
-        return noti
+        return super().create(text=text, user=user).set_meta(item_type, item_id)

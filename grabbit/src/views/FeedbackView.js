@@ -54,7 +54,7 @@ export default class V extends React.Component {
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'center',
-                borderRadius: 40,
+                borderRadius: 10,
                 marginTop: 20,
                 marginBottom: 10,
               }}
