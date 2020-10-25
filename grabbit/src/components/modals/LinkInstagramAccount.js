@@ -14,6 +14,16 @@ class M extends React.Component {
     super(props);
   }
 
+  componentDidMount() {
+    const {childRef} = this.props;
+    childRef(this);
+  }
+
+  componentWillUnmount() {
+    const {childRef} = this.props;
+    childRef(undefined);
+  }
+
   show() {
     const {toggleInstagramLinkModal} = this.props;
     toggleInstagramLinkModal();

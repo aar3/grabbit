@@ -25,8 +25,15 @@ class V extends React.Component {
         <View
           style={{
             width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
           <FlatList
+            style={{
+              width: 375,
+              // borderWidth: 1,
+              // borderColor: 'blue',
+            }}
             data={brands.all}
             keyExtractor={(_item, index) => index.toString()}
             renderItem={({item, index}) => {
@@ -40,8 +47,10 @@ class V extends React.Component {
                       height: 80,
                       alignItems: 'center',
                       flexDirection: 'row',
-                      borderBottomWidth: 1,
-                      borderBottomColor: Color.LightGrey,
+                      borderWidth: 1,
+                      borderColor: Color.LightGrey,
+                      borderRadius: 10,
+                      marginBottom: 10,
                     }}>
                     <View
                       style={{

@@ -164,19 +164,15 @@ export default mainReducer = (state = defaultState, action) => {
         },
       };
     case REDUX_ACTIONS.POST_CURRENT_BRAND_CREATE_SUCCESS:
-      console.log('created ', action.payload);
-      console.log('>> ', state.settings.brands.length);
       let tmp = state.settings.brands;
       tmp.push(action.payload);
-      const foo = {
+      return {
         ...state,
         settings: {
           brands: tmp,
           ...state.settings,
         },
       };
-      console.log('>> ', state.settings.brands.length);
-      return foo;
     case REDUX_ACTIONS.POST_CURRENT_BRAND_CREATE_ERROR:
       return {
         ...state,
@@ -372,7 +368,7 @@ export default mainReducer = (state = defaultState, action) => {
         ...state,
         brokerDiscover: {
           ...state.brokerDiscover,
-          currentCampaignCode: null,
+          currentCampaignCode: {},
         },
       };
     case REDUX_ACTIONS.CLEAR_BROKER_GET_BRANDS_ERROR:
@@ -410,11 +406,22 @@ export default mainReducer = (state = defaultState, action) => {
         },
       };
     case REDUX_ACTIONS.TOGGLE_BROKER_BRAND_CAMPAIGN_MODAL:
+      if (!state.brokerDiscover.showBrandCampaignModal) {
+        return {
+          ...state,
+          brokerDiscover: {
+            ...state.brokerDiscover,
+            currentCampaignCode: action.payload,
+            showBrandCampaignModal: !state.brokerDiscover.showBrandCampaignModal,
+          },
+        };
+      }
       return {
         ...state,
         brokerDiscover: {
           ...state.brokerDiscover,
           showBrandCampaignModal: !state.brokerDiscover.showBrandCampaignModal,
+          currentCampaignCode: {},
         },
       };
     case REDUX_ACTIONS.UPDATE_BROKER_WALLET_VIEW_SEARCH_INPUT:

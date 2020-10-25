@@ -15,7 +15,7 @@ class V extends React.Component {
 
   render() {
     const {hasInstagramLinked, toggleInstagramLinking} = this.props;
-    const modal = <LinkInstagramAccountModal ref={this.instagramLinkModal} />;
+    const modal = <LinkInstagramAccountModal childRef={(ref) => (this.childRef = ref)} />;
     return (
       <View
         style={{

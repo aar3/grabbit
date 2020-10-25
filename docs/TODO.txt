@@ -12,6 +12,7 @@ tech debt
     - once things are in the store you can do whatever you want with them
 - abstract reducer store updates
     - `component->dispatch(action(type, reducer_space_identifier, payload))`
+- break views into merchant/  and broker/ folders and remove Merchant* Broker* prefixes
 
 ***********
 features
