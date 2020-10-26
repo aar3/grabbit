@@ -1,8 +1,7 @@
 import React from 'react';
-import {StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Clipboard} from 'react-native';
+import {Text, View, FlatList, Image, TouchableOpacity, Clipboard} from 'react-native';
 
 import {connect} from 'react-redux';
-import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
 
 import {Color} from 'grabbit/src/const';
@@ -128,15 +127,6 @@ class V extends React.Component {
                         {campaignCode.code}
                       </Text>
                     </View>
-                    {/* <Icon
-                      name="chevron-right"
-                      color={Color.LightGrey}
-                      size={20}
-                      style={{
-                        position: 'absolute',
-                        right: 20,
-                      }}
-                    /> */}
                   </View>
                 </TouchableOpacity>
               );

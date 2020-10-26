@@ -141,6 +141,7 @@ const defaultState = {
     updateCurrentEditBrandImageError: null,
     currentCreateBrand: {},
     postCurrentCreateBrandPending: false,
+    postCurrentCreateBrandSuccess: false,
     postCurrentBrandError: null,
   },
 
@@ -155,6 +156,13 @@ const defaultState = {
 
 export default mainReducer = (state = defaultState, action) => {
   switch (action.type) {
+    case REDUX_ACTIONS.RESET_POST_CURRENT_BRAND_CREATE_SUCCESS:
+      return {
+        ...state,
+        settings: {
+          postCurrentCreateBrandSuccess: false,
+        },
+      };
     case REDUX_ACTIONS.CLEAR_CURRENT_CREATE_BRAND:
       return {
         ...state,
@@ -170,6 +178,7 @@ export default mainReducer = (state = defaultState, action) => {
         ...state,
         settings: {
           brands: tmp,
+          postCurrentCreateBrandSuccess: true,
           ...state.settings,
         },
       };
