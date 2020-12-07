@@ -1,0 +1,1 @@
+PLAID_DATE_FORMAT = "%Y-%m-%d"
