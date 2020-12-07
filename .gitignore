@@ -11,7 +11,35 @@ TODO.md
 grabbit/grabbit/logs
 
 ####################
-# CLIENT
+# WEB CLIENT
+####################
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+www/grabbit/node_modules
+www/grabbit/.pnp
+www/grabbit/.pnp.js
+
+# testing
+www/grabbit/coverage
+
+# production
+www/grabbit/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+####################
+# MOBILE CLIENT
 ####################
 bingoMobile/
 
@@ -21,7 +49,7 @@ bingoMobile/
 
 # Xcode
 #
-grabbitMobile/build/
+mobile/grabbit/build/
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -40,7 +68,7 @@ DerivedData
 
 # Android/IntelliJ
 #
-grabbitMobile/build/
+mobile/grabbit/build/
 .idea
 .gradle
 local.properties
@@ -48,12 +76,12 @@ local.properties
 
 # node.js
 #
-grabbitMobile/node_modules/
+mobile/grabbit/node_modules/
 npm-debug.log
 yarn-error.log
 
 # BUCK
-grabbitMobile/buck-out/
+mobile/grabbit/buck-out/
 \.buckd/
 *.keystore
 !debug.keystore
@@ -73,4 +101,4 @@ grabbitMobile/buck-out/
 *.jsbundle
 
 # CocoaPods
-grabbitMobile/ios/Pods/
+mobile/grabbit/ios/Pods/
