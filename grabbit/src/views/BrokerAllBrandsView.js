@@ -1,8 +1,7 @@
 import React from 'react';
-import {StyleSheet, Text, View, FlatList, Image, TouchableOpacity} from 'react-native';
+import {Text, View, FlatList, Image, TouchableOpacity, Clipboard} from 'react-native';
 
 import {connect} from 'react-redux';
-import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
 
 import {Color} from 'grabbit/src/const';
@@ -13,8 +12,46 @@ class V extends React.Component {
     super(props);
   }
 
+  componentDidMount() {
+    const {clearClipboardCopy} = this.props;
+    return clearClipboardCopy();
+  }
+
+  renderCopiedCodeText() {
+    const {hasCopiedCurrentCampaignCode} = this.props;
+    if (!hasCopiedCurrentCampaignCode) {
+      return null;
+    }
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          // borderWidth: 1,
+          // borderColor: 'red',
+          width: '90%',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Text
+          style={{
+            color: Color.Pink2,
+          }}>
+          Code Copied to Clipboard
+        </Text>
+        <Icon
+          name={'check'}
+          size={10}
+          color={Color.ForestGreen}
+          style={{
+            marginLeft: 20,
+          }}
+        />
+      </View>
+    );
+  }
+
   render() {
-    const {brands, setCurrentBrand} = this.props;
+    const {brands, showSuccessfulClipboardCopy} = this.props;
     return (
       <View
         style={{
@@ -25,13 +62,28 @@ class V extends React.Component {
         <View
           style={{
             width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingTop: 20,
           }}>
+          {this.renderCopiedCodeText()}
           <FlatList
+            style={{
+              width: 375,
+              marginTop: 10,
+              // borderWidth: 1,
+              // borderColor: 'blue',
+            }}
             data={brands.all}
             keyExtractor={(_item, index) => index.toString()}
             renderItem={({item, index}) => {
+              const campaignCode = item.latest_campaign_code || {code: 'No Current Campaign'};
               return (
-                <TouchableOpacity onPress={() => {}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    Clipboard.setString(campaignCode.code);
+                    showSuccessfulClipboardCopy();
+                  }}>
                   <View
                     style={{
                       // borderWidth: 1,
@@ -40,8 +92,10 @@ class V extends React.Component {
                       height: 80,
                       alignItems: 'center',
                       flexDirection: 'row',
-                      borderBottomWidth: 1,
-                      borderBottomColor: Color.LightGrey,
+                      borderWidth: 1,
+                      borderColor: Color.LightGrey,
+                      borderRadius: 10,
+                      marginBottom: 10,
                     }}>
                     <View
                       style={{
@@ -59,17 +113,20 @@ class V extends React.Component {
                         // borderColor: 'green',
                         marginLeft: 20,
                       }}>
-                      <Text>{item.name}</Text>
+                      <Text
+                        style={{
+                          marginBottom: 5,
+                        }}>
+                        {item.name}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 11,
+                          color: Color.ReadableGreyText,
+                        }}>
+                        {campaignCode.code}
+                      </Text>
                     </View>
-                    <Icon
-                      name="chevron-right"
-                      color={Color.LightGrey}
-                      size={20}
-                      style={{
-                        position: 'absolute',
-                        right: 20,
-                      }}
-                    />
                   </View>
                 </TouchableOpacity>
               );
@@ -83,10 +140,15 @@ class V extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setCurrentBrand: ({brandId}) => {
+    clearClipboardCopy: () => {
       return dispatch({
-        type: REDUX_ACTIONS.SET_CURRENT_BRAND,
-        payload: brandId,
+        type: REDUX_ACTIONS.CLEAR_CURRENT_CAMPAIGN_CODE_COPIED,
+      });
+    },
+
+    showSuccessfulClipboardCopy: () => {
+      return dispatch({
+        type: REDUX_ACTIONS.CURRENT_CAMPAIGN_CODE_COPIED,
       });
     },
   };
@@ -95,6 +157,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
   const {brokerDiscover} = state;
   return {
+    hasCopiedCurrentCampaignCode: brokerDiscover.hasCopiedCurrentCampaignCode,
     brands: brokerDiscover.brands,
   };
 };

@@ -26,12 +26,18 @@ class V extends React.Component {
       rewardTiers,
       clearBrandEditImageError,
       toggleMerchantBrandCreateModal,
+      postCurrentCreateBrandSuccess,
+      resetPostCurrentBrandSuccess,
       toggleMerchantBrandEditModal,
     } = this.props;
-    const createModal = <MerchantCreateBrandModal ref={this.merchantCreateBrandModal} />;
-    const editModal = <MerchantEditBranddModal ref={this.merchantEditBrandModal} />;
 
-    console.log('???? ', brands.length);
+    if (postCurrentCreateBrandSuccess) {
+      this.forceUpdate();
+      resetPostCurrentBrandSuccess();
+    }
+
+    const createModal = <MerchantCreateBrandModal childRef={(ref) => (this.childRef = ref)} />;
+    const editModal = <MerchantEditBranddModal childRef={(ref) => (this.childRef = ref)} />;
 
     const renderedBrandItems = brands.map((item) => {
       return (
@@ -202,16 +208,21 @@ const mapDispatchToProps = (dispatch) => {
         payload: currentEditBrand,
       });
     },
+    resetPostCurrentBrandSuccess: () => {
+      dispatch({
+        type: REDUX_ACTIONS.RESET_POST_CURRENT_BRAND_CREATE_SUCCESS,
+      });
+    },
   };
 };
 
 const mapStateToProps = (state) => {
   const {session, settings} = state;
-  console.log('state has ', settings.brands.length, ' brands');
   return {
     user: session.user,
     brands: settings.brands,
     rewardTiers: settings.rewardTiers,
+    postCurrentCreateBrandSuccess: settings.postCurrentCreateBrandSuccess,
   };
 };
 

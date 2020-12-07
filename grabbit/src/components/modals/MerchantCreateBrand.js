@@ -99,8 +99,14 @@ class M extends React.Component {
   }
 
   componentDidMount() {
-    const {clearBrandEditImageError} = this.props;
+    const {clearBrandEditImageError, childRef} = this.props;
+    childRef(this);
     return clearBrandEditImageError();
+  }
+
+  componentWillUnmount() {
+    const {childRef} = this.props;
+    childRef(undefined);
   }
 
   render() {

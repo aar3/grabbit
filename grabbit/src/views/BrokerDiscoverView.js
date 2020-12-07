@@ -14,7 +14,7 @@ import BrandCampaignCodeModal from 'grabbit/src/components/modals/BrandCampaignC
 class V extends React.Component {
   constructor(props) {
     super(props);
-    this.brandCampaignsCodeModal = React.createRef();
+    // this.brandCampaignsCodeModal = React.createRef();
   }
 
   componentDidMount() {
@@ -44,14 +44,6 @@ class V extends React.Component {
     );
   }
 
-  successfulCopyView() {
-    const {hasCopiedCurrentCampaignCode} = this.props;
-    if (!hasCopiedCurrentCampaignCode) {
-      return null;
-    }
-    return;
-  }
-
   render() {
     const {updateBrandViewSearchInput, brands, clearBrandViewSearchInput, brandViewSearchInputValue} = this.props;
 
@@ -59,7 +51,8 @@ class V extends React.Component {
       ? brands.all
       : brands.all.filter((brandItem) => brandItem.name.startsWith(brandViewSearchInputValue));
 
-    const modal = <BrandCampaignCodeModal ref={this.brandCampaignsCodeModal} />;
+    // const modal = <BrandCampaignCodeModal ref={this.brandCampaignsCodeModal} />;
+    const modal = <BrandCampaignCodeModal childRef={(ref) => (this.childRef = ref)} />;
     return (
       <View
         style={{

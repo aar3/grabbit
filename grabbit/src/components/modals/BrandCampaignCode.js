@@ -13,6 +13,16 @@ class M extends React.Component {
     super(props);
   }
 
+  componentDidMount() {
+    const {childRef} = this.props;
+    childRef(this);
+  }
+
+  componentWillUnmount() {
+    const {childRef} = this.props;
+    childRef(undefined);
+  }
+
   show() {
     const {toggleBrokerDiscoverBrandCampaignModal} = this.props;
     toggleBrokerDiscoverBrandCampaignModal();
@@ -55,6 +65,8 @@ class M extends React.Component {
       currentCampaignCode,
       showBrandCampaignModal,
     } = this.props;
+
+    console.log('>>>>> ', currentCampaignCode, showBrandCampaignModal);
 
     const icon = !hasCopiedCurrentCampaignCode ? null : <Icon name="check" size={20} color={Color.Pink2} />;
     const primaryColor = !hasCopiedCurrentCampaignCode ? Color.Black : Color.Pink2;
