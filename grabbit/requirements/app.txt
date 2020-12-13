@@ -17,3 +17,5 @@ requests
 qrcode
 plaid-python
 
+numpy
+sklearn

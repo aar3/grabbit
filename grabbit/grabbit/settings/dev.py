@@ -17,7 +17,6 @@ PGSQL_HOST = DATABASES["default"]["HOST"]
 
 PGSQL_ENVIRONMENT = "dev"
 
-
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,

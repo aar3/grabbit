@@ -59,6 +59,10 @@ class Campaign(BaseModel):
         self.activated_by_user = user
         self.save()
 
+    def derive_criteria(self):
+        # TODO: derive specific criteria for profile
+        pass
+
 
 class RewardCode(BaseModel):
     class Meta:
@@ -68,6 +72,7 @@ class RewardCode(BaseModel):
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
     value = models.JSONField(default=dict)
     is_active = models.IntegerField(default=0)
+    description = models.TextField(null=True)
     created_by_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="rewardcode_created_by_user")
 
 
