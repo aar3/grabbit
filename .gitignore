@@ -8,7 +8,7 @@ __pycache__
 .envrc
 .env*
 TODO.md
-grabbit/grabbit/logs
+**/logs
 
 ####################
 # WEB CLIENT
