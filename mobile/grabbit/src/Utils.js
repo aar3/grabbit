@@ -1,13 +1,12 @@
 import axios from 'axios';
-import Config from 'grabbit/config.dev';
 
-export const httpRequest = async ({options}) => {
+export const httpRequest = async function (options) {
   if (!options.endpoint) {
     throw new Error('httpRequest requires endpoint property in options');
   }
 
   try {
-    options.url = 'http://' + Config.Hostname + '/api/v1' + options.endpoint;
+    options.url = 'http://localhost:8000/api/v1' + options.endpoint;
     const {data, status, headers} = await axios(options);
     if (status === 200) {
       return {data};
@@ -29,4 +28,13 @@ export const httpRequest = async ({options}) => {
       },
     };
   }
+};
+
+export const getStateForKey = function (key, state) {
+  let curr = state;
+  const nodes = key.split('.').slice(1);
+  for (let i = 0; i < nodes.length; i++) {
+    curr = curr[nodes[i]];
+  }
+  return curr;
 };

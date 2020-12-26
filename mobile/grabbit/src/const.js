@@ -4,4 +4,7 @@ export const Color = {
   InfoTextBlue: '#007AFF',
   ReadableGreyText: '#64686C',
   White: '#FFFF',
+  Black: '#0000',
 };
+
+export const TabIconSize = 24;

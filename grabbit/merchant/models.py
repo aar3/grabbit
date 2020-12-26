@@ -18,8 +18,12 @@ class Merchant(BaseModel):
 
     objects = MerchantManager()
     name = models.CharField(max_length=255)
+    alternative_name = models.CharField(max_length=255, null=True)
     industry = models.JSONField(default=list)
+    primary_color = models.CharField(max_length=255, default='#88888')
     keywords = models.JSONField(default=list)
+    invitation_code = models.CharField(max_length=255, null=True)
+    image_url = models.CharField(max_length=255, null=True)
     users = models.ManyToManyField(User)
 
 
