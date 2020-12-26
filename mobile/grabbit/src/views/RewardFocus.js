@@ -13,6 +13,7 @@ class V extends React.Component {
 
   render() {
     const {reward} = this.props;
+    console.log('curr reward is ', reward);
     return (
       <View
         style={{
@@ -28,6 +29,8 @@ class V extends React.Component {
             backgroundColor: reward.merchant.primary_color,
           }}>
           <Text
+            numberOfLines={1}
+            ellipsizeMode={'clip'}
             style={{
               fontWeight: 'bold',
               position: 'absolute',

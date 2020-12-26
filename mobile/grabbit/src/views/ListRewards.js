@@ -14,7 +14,7 @@ class V extends React.Component {
   }
 
   render() {
-    const {rewards} = this.props;
+    const {rewards, focusReward} = this.props;
     return (
       <View
         style={{
@@ -30,7 +30,7 @@ class V extends React.Component {
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
             return (
-              <TouchableOpacity onPress={() => Actions.rewardFocus()}>
+              <TouchableOpacity onPress={() => focusReward(item)}>
                 <View
                   style={{
                     borderBottomWidth: 1,
@@ -89,12 +89,14 @@ const mapStateToProps = function (state) {
 const mapDispatchToProps = function (dispatch) {
   return {
     focusReward: function (reward) {
-      return dispatch({
+      dispatch({
         type: ReduxActions.GENERIC_ACTION,
         payload: reward,
         operation: 'replace',
         stateKey: 'state.rewards.focused',
       });
+
+      return Actions.rewardFocus();
     },
   };
 };

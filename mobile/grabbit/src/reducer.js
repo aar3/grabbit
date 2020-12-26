@@ -28,7 +28,7 @@ const defaultState = {
           image_url: 'https://miro.medium.com/max/1161/1*cJUVJJSWPj9WFIJlvf7dKg.jpeg',
           name: 'Nike',
           alternative_name: 'Nike Corporation',
-          primary_color: '#00000',
+          primary_color: '#000',
         },
       },
       {
@@ -68,6 +68,7 @@ const defaultState = {
 
 export default function (state = defaultState, action) {
   const {payload, stateKey, operation, key} = action;
+  console.log(action)
 
   const checks = [!payload, !stateKey, !operation];
 
