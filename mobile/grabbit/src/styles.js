@@ -7,3 +7,8 @@ export const buttonStyle = {
 export const buttonContainerStyle = {
   marginBottom: 20,
 };
+
+export const ToggleStyle = {
+  On: '#39e76d',
+  Off: '#D0D0D0',
+};

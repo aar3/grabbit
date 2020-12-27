@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {Router, Scene, Stack, Tabs} from 'react-native-router-flux';
 import {Color, TabIconSize} from 'grabbit/src/Const';
-import {BasicTopNavigationBar} from 'grabbit/src/components/navigation/Top';
+import {BasicTopNavigationBar, MainTopNavigationBar} from 'grabbit/src/components/navigation/Top';
 import {
   EntryView,
   LoginView,
@@ -12,6 +12,7 @@ import {
   LinkAccountView,
   AccountView,
   RewardFocusView,
+  SettingsView,
 } from 'grabbit/src/views';
 
 export default class Router_ extends React.Component {
@@ -19,10 +20,33 @@ export default class Router_ extends React.Component {
     return (
       <Router>
         <Stack key="root" transitionConfig={transitionConfig}>
-          <Scene key="entry" component={EntryView} title="Entry" hideNavBar={true} initial />
-          <Scene key="login" component={LoginView} title="Login" hideNavBar={true} />
-          <Scene key="signup" component={SignupView} title="Sign Up" hideNavBar={true} />
+          <Scene
+            key="entry"
+            component={EntryView}
+            title="Entry"
+            gesturesEnabled={false}
+            drawerLockMode="locked-closed"
+            hideNavBar={true}
+            initial
+          />
+          <Scene
+            key="login"
+            component={LoginView}
+            gesturesEnabled={false}
+            drawerLockMode="locked-closed"
+            title="Login"
+            hideNavBar={true}
+          />
+          <Scene
+            key="signup"
+            component={SignupView}
+            gesturesEnabled={false}
+            drawerLockMode="locked-closed"
+            title="Sign Up"
+            hideNavBar={true}
+          />
           <Scene key="rewardFocus" component={RewardFocusView} title="Reward Focus" hideNavBar={true} />
+          <Scene key="settings" component={SettingsView} title="Settings" hideNavBar={false} />
           <Tabs
             duration={0}
             animationEnabled={false}
@@ -33,7 +57,7 @@ export default class Router_ extends React.Component {
             activeBackgroundColor={Color.White}
             lazy>
             <Scene
-              navBar={BasicTopNavigationBar}
+              navBar={MainTopNavigationBar}
               title={null}
               hideNavBar={false}
               renderBackButton={() => <View />}
@@ -45,7 +69,7 @@ export default class Router_ extends React.Component {
             />
             <Scene
               navBar={BasicTopNavigationBar}
-              title={null}
+              title={'Linked Accounts'}
               hideNavBar={false}
               renderBackButton={() => <View />}
               key="linkAccount"
@@ -59,9 +83,9 @@ export default class Router_ extends React.Component {
               component={LinkAccountView}
             />
             <Scene
-              navBar={BasicTopNavigationBar}
+              navBar={null}
               title={null}
-              hideNavBar={false}
+              hideNavBar={true}
               renderBackButton={() => <View />}
               key="account"
               icon={({focused}) => (

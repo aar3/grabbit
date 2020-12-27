@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, KeyboardAvoidingView, Image} from 'react-native';
+import {View, Text, KeyboardAvoidingView, Image, Keyboard, TouchableWithoutFeedback} from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 import ReduxActions from 'grabbit/src/Actions';
@@ -19,48 +19,50 @@ export default class V extends React.Component {
     };
 
     return (
-      <KeyboardAvoidingView
-        behavior={'padding'}
-        enabled={true}
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <View
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <KeyboardAvoidingView
+          behavior={'padding'}
+          enabled={true}
           style={{
-            borderWidth: 1,
-            borderColor: 'red',
-            width: 300,
+            flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
           }}>
           <View
             style={{
-              marginBottom: 20,
-              height: 50,
-              width: 50,
+              // borderWidth: 1,
+              // borderColor: 'red',
+              width: 300,
+              justifyContent: 'center',
+              alignItems: 'center',
             }}>
-            <Image
-              source={require('./../../assets/imgs/Grabbit_Gradient_G_300x300.png')}
-              style={{flex: 1, height: undefined, width: undefined}}
+            <View
+              style={{
+                marginBottom: 20,
+                height: 50,
+                width: 50,
+              }}>
+              <Image
+                source={require('./../../assets/imgs/Grabbit_Gradient_G_300x300.png')}
+                style={{flex: 1, height: undefined, width: undefined}}
+              />
+            </View>
+            <TextInput autoCompleteType={'email'} label={'Email'} labelStyle={labelStyle} placeholder="you@gmail.com" />
+            <TextInput secureTextEntry={true} labelStyle={labelStyle} label={'Password'} placeholder="******" />
+            <GrabbitButton
+              onPress={() => Actions.listRewards()}
+              _buttonStyle={{
+                backgroundColor: Color.Purple,
+              }}
+              titleStyle={{
+                color: Color.White,
+                fontWeight: 'bold',
+              }}
+              title="Login"
             />
           </View>
-          <TextInput autoCompleteType={'email'} label={'Email'} labelStyle={labelStyle} placeholder="you@gmail.com" />
-          <TextInput secureTextEntry={true} labelStyle={labelStyle} label={'Password'} placeholder="******" />
-          <GrabbitButton
-            onPress={() => Actions.listRewards()}
-            _buttonStyle={{
-              backgroundColor: Color.Purple,
-            }}
-            titleStyle={{
-              color: Color.White,
-              fontWeight: 'bold',
-            }}
-            title="Login"
-          />
-        </View>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     );
   }
 }
@@ -82,6 +84,7 @@ const mapDispatchToProps = function (dispatch) {
       }
 
       return dispatch({
+        type: ReduxActions.GENERIC_ACTION,
         payload: data,
         stateKey,
         operation,

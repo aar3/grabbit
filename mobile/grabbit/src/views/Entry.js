@@ -19,12 +19,12 @@ export default class V extends React.Component {
         }}>
         <View
           style={{
-            borderWidth: 1,
             height: 65,
             position: 'absolute',
             top: 400,
             width: 300,
-            borderColor: 'blue',
+            // borderColor: 'blue',
+            // borderWidth: 1,
           }}>
           <Image
             source={require('./../../assets/imgs/Grabbit_Gradient_Letters_222x1000.png')}
@@ -33,8 +33,8 @@ export default class V extends React.Component {
         </View>
         <View
           style={{
-            borderWidth: 1,
-            borderColor: 'red',
+            // borderWidth: 1,
+            // borderColor: 'red',
             position: 'absolute',
             top: 700,
             width: 300,
@@ -43,7 +43,7 @@ export default class V extends React.Component {
             onPress={() => Actions.login()}
             _buttonStyle={{
               backgroundColor: Color.White,
-              borderWidth: 1,
+              borderWidth: 2,
               borderColor: Color.Purple,
             }}
             titleStyle={{

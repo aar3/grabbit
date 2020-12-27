@@ -31,6 +31,9 @@ export const httpRequest = async function (options) {
 };
 
 export const getStateForKey = function (key, state) {
+  if (!key || !state) {
+    throw new Error('getStateForKey requires valid key and state');
+  }
   let curr = state;
   const nodes = key.split('.').slice(1);
   for (let i = 0; i < nodes.length; i++) {

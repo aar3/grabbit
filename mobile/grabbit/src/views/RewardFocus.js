@@ -13,13 +13,11 @@ class V extends React.Component {
 
   render() {
     const {reward} = this.props;
-    console.log('curr reward is ', reward);
     return (
       <View
         style={{
           flex: 1,
           flexDirection: 'column',
-          //   justifyContent: 'center',
           alignItems: 'center',
         }}>
         <View
@@ -98,8 +96,8 @@ class V extends React.Component {
           </View>
           <View
             style={{
-              borderWidth: 1,
-              borderColor: 'green',
+              // borderWidth: 1,
+              // borderColor: 'green',
               marginTop: 20,
               width: 225,
               justifyContent: 'center',
@@ -116,6 +114,9 @@ class V extends React.Component {
             </Text>
             <GrabbitButton
               title={reward.code}
+              titleStyle={{
+                fontWeight: 'bold',
+              }}
               _buttonStyle={{
                 width: 225,
                 backgroundColor: reward.merchant.primary_color,

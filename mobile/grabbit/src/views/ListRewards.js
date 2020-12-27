@@ -35,14 +35,14 @@ class V extends React.Component {
                   style={{
                     borderBottomWidth: 1,
                     borderBottomColor: Color.BorderLightGrey,
-                    height: 50,
+                    height: 60,
                     alignItems: 'center',
                     flexDirection: 'row',
                   }}>
                   <View
                     style={{
-                      borderWidth: 1,
-                      borderColor: 'red',
+                      // borderWidth: 1,
+                      // borderColor: 'red',
                       height: 40,
                       width: 40,
                       marginLeft: 20,
@@ -54,11 +54,11 @@ class V extends React.Component {
                   <View
                     style={{
                       marginLeft: 20,
-                      borderWidth: 1,
                       height: 40,
                       width: '65%',
                       justifyContent: 'center',
-                      borderColor: 'blue',
+                      // borderWidth: 1,
+                      // borderColor: 'blue',
                     }}>
                     <Text
                       style={{
