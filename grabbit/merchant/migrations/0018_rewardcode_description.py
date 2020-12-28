@@ -6,13 +6,9 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('merchant', '0017_merchant_users'),
+        ("merchant", "0017_merchant_users"),
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='rewardcode',
-            name='description',
-            field=models.TextField(null=True),
-        ),
+        migrations.AddField(model_name="rewardcode", name="description", field=models.TextField(null=True),),
     ]

@@ -1,10 +1,10 @@
 export default {
   GENERIC_ACTION: 'GENERIC_ACTION',
-  POST_USER_LOGIN_PENDING: 'POST_USER_LOGIN_PENDING',
-  POST_USER_LOGIN_SUCCESS: 'POST_USER_LOGIN_SUCCESS',
-  POST_USER_LOGIN_ERROR: 'POST_USER_LOGIN_ERROR',
-
-  POST_USER_SIGNUP_PENDING: 'POST_USER_SIGNUP_PENDING',
-  POST_USER_SIGNUP_SUCCESS: 'POST_USER_SIGNUP_SUCCESS',
-  POST_USER_SIGNUP_ERROR: 'POST_USER_SIGNUP_ERROR',
+  Session: {
+    UpdateLoginValue: 'UpdateLoginValue',
+    PostUserLoginPending: 'PostUserLoginPending',
+    PostUserLoginSuccess: 'PostUserLoginSuccess',
+    PostUserLoginError: 'PostUserLoginError',
+    ResetAuthError: 'ResetAuthError',
+  },
 };

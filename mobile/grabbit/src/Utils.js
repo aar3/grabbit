@@ -20,7 +20,7 @@ export const httpRequest = async function (options) {
       };
     }
   } catch (e) {
-    console.log('httpRequest error: ' + e.toString());
+    console.log('httpRequest: ' + e.toString());
     return {
       error: {
         statusCode: e.response.status,

@@ -6,6 +6,7 @@ export const Color = {
   White: '#FFFF',
   Black: '#0000',
   HyperlinkBlue: '#007AFF',
+  ErrorRed: '#FF0000',
 };
 
 export const TabIconSize = 24;

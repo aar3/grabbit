@@ -28,9 +28,9 @@ class V extends React.Component {
       data,
     };
 
-    const {error, data} = await httpRequest(options);
+    const {error, data: payload} = await httpRequest(options);
     // TODO: handle error case
-    return dispatchUpdateState('state.plaid.accounts.current_publicktoken', data.public_key);
+    return dispatchUpdateState('state.plaid.accounts', payload, 'replace');
   }
 
   _handleExit(data) {
@@ -53,7 +53,7 @@ class V extends React.Component {
 
     const {error, data} = await httpRequest(options);
     // TODO: if (error) { handle error }
-    return dispatchUpdateState('state.plaid.accounts.current_linktoken', data.token);
+    dispatchUpdateState('state.plaid.accounts.current_linktoken', data.token);
   }
 
   _renderPlaidButton() {
@@ -191,7 +191,7 @@ class V extends React.Component {
 const mapStateToProps = function (state) {
   const accountList = getStateForKey('state.plaid.accounts.list', state);
   return {
-    user: getStateForKey('state.user', state),
+    user: getStateForKey('state.session.user', state),
     showPlaidModal: getStateForKey('state.plaid.accounts.show_modal', state),
     accounts: Object.values(accountList),
     currentLinkToken: getStateForKey('state.plaid.accounts.current_linktoken', state),
@@ -205,7 +205,6 @@ const mapDispatchToProps = function (dispatch) {
         type: ReduxActions.GENERIC_ACTION,
         payload,
         stateKey,
-        operation: 'replace',
       });
     },
     postNewAccountStatus: function (stateKey, account) {
@@ -217,7 +216,6 @@ const mapDispatchToProps = function (dispatch) {
         type: ReduxActions.GENERIC_ACTION,
         payload: value,
         stateKey,
-        operation: 'replace',
       });
     },
   };

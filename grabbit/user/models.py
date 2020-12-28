@@ -80,6 +80,7 @@ class Login(BaseModel):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     ip_address = models.CharField(max_length=255)
+    user_agent = models.CharField(max_length=255, null=True)
 
 
 class Notification(BaseModel):
@@ -93,3 +94,11 @@ class Notification(BaseModel):
 
     def set_expiry(self):
         self.expiry = dt.datetime.utcnow() + dt.timedelta(hours=24)
+
+
+class Setting(BaseModel):
+    class Meta:
+        db_table = "settings"
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    metadata = models.JSONField(default=dict({"targeted_advertising_enabled": True, "profile_sharing_enabled": True,}))

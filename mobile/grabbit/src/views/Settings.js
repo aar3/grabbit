@@ -24,7 +24,7 @@ class V extends React.Component {
     const {settings} = this.props;
     return settings.support.map((item, index) => {
       return (
-        <TouchableOpacity key={String(index)} onPress={() => Actions[item.routeKey]}>
+        <TouchableOpacity key={String(index)} onPress={() => Actions[item.routeKey]()}>
           <View
             key={String(index)}
             style={{

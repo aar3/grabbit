@@ -1,5 +1,5 @@
 from lib.serializers import BaseModelSerializer
-from user.models import User, Notification
+from user.models import User, Notification, Setting
 
 
 class UserSerializer(BaseModelSerializer):
@@ -14,7 +14,7 @@ class UserSerializer(BaseModelSerializer):
             "name",
             "email",
             "address_line1",
-            "address_line1",
+            "address_line2",
             "current_session_token",
             "phone",
         ]
@@ -24,3 +24,9 @@ class NotificationSerializer(BaseModelSerializer):
     class Meta:
         model = Notification
         fields = ["id", "created_at", "updated_at", "deleted_at", "text", "expiry", "user"]
+
+
+class SettingSerializer(BaseModelSerializer):
+    class Meta:
+        model = Setting
+        fields = ["id", "created_at", "updated_at", "deleted_at", "user_id", "metadata"]

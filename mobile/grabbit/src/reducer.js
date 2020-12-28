@@ -1,19 +1,31 @@
+import ReduxActions from 'grabbit/src/Actions';
+
 // IMPORTANT: all state properties are snake-cased because that's how the python
 // api sends data over the wire
 const defaultState = {
-  user: {
-    id: 1,
-    created_at: '2020-12-06 16:21:33.521762-8',
-    updated_at: null,
-    deleted_at: null,
-    email: 'ava@gmail.com',
-    name: 'Ava Campo',
-    username: 'ava',
-    address_line_1: '5916 Bottoms Dairy Rd',
-    address_line_2: 'Elm City, NC 27822',
-    phone: '+1 555-555-5555',
-    current_session_token: '319a80a21e02e87bb4c1d983f01c6097c0de9ddbd329a1a27cfa40b94a959eb8',
-    qr_code_url: null,
+  session: {
+    user: null,
+    authentication: {
+      input: {
+        login: {
+          phone: null,
+          secret: null,
+        },
+        signup: {
+          name: null,
+          email: null,
+          username: null,
+          address_line1: null,
+          address_line2: null,
+          phone: null,
+          secret: null,
+          user_type: 1,
+          invitation_code: null,
+        },
+      },
+      pending: false,
+      error: null,
+    },
   },
   rewards: {
     inactive: [
@@ -172,43 +184,78 @@ const defaultState = {
 };
 
 export default function (state = defaultState, action) {
-  const {payload, stateKey, operation, key} = action;
+  const {payload, type, key} = action;
+  switch (type) {
+    // ********************************************
+    // Session
+    // ********************************************
 
-  const checks = [!payload, !stateKey, !operation];
-
-  if (checks.some((x) => x)) {
-    console.log('Invalid state updated passed: ', action);
-    return state;
-  }
-
-  let stateObject = state;
-  const nodes = stateKey.split('.').slice(1);
-  let i;
-  for (i = 0; i < nodes.length - 1; i++) {
-    stateObject = stateObject[nodes[i]];
-  }
-
-  let updated = stateObject;
-
-  if (operation === 'replace') {
-    updated = payload;
-  } else if (operation === 'update') {
-    if (updated instanceof object && key.length) {
-      updated[key] = payload;
-    } else if (updated.isArray()) {
-      updated.push(payload);
-    } else {
-      updated = payload;
+    case ReduxActions.Session.ResetAuthError: {
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          authentication: {
+            ...state.session.authentication,
+            error: null,
+          },
+        },
+      };
     }
-  } else {
-    throw new Error('Invalid state operation: ', operation);
+    case ReduxActions.Session.UpdateLoginValue: {
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          authentication: {
+            ...state.session.authentication,
+            input: {
+              ...state.session.authentication.input,
+              login: {
+                ...state.session.authentication.input.login,
+                [key]: payload,
+              },
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Session.PostUserLoginPending: {
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          pending: true,
+          error: null,
+        },
+      };
+    }
+    case ReduxActions.Session.PostUserLoginSuccess: {
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          pending: false,
+          error: null,
+          user: payload,
+        },
+      };
+    }
+    case ReduxActions.Session.PostUserLoginError: {
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          authentication: {
+            ...state.session.authentication,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+    default: {
+      return state;
+    }
   }
-
-  console.log(stateObject, nodes[i], updated);
-
-  stateObject[nodes[i]] = updated;
-
-  console.log(state.plaid);
-
-  return state;
 }

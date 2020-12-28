@@ -92,7 +92,6 @@ const mapDispatchToProps = function (dispatch) {
       dispatch({
         type: ReduxActions.GENERIC_ACTION,
         payload: reward,
-        operation: 'replace',
         stateKey: 'state.rewards.focused',
       });
 

@@ -1,8 +1,8 @@
 import random
 import io
 import string
-
 import qrcode
+from lib.const import INVITATION_CODE
 
 
 def random_string(n=10):

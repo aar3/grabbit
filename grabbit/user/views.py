@@ -5,9 +5,11 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view, authentication_classes, parser_classes
 from rest_framework.parsers import MultiPartParser
 from django.shortcuts import get_object_or_404
-from user.models import User, Login, Notification
-from user.serializers import UserSerializer, NotificationSerializer
+from user.models import User, Login, Notification, Setting
+from user.serializers import UserSerializer, NotificationSerializer, SettingSerializer
 from lib.middlewares import TokenAuthentication
+from lib.views import BaseModelViewSet
+from lib.const import INVITATION_CODE
 
 
 class UserViewSet(viewsets.ViewSet):
@@ -25,6 +27,10 @@ class UserViewSet(viewsets.ViewSet):
 
     def create(self, request):
         params = request.data
+        code = params.get("invitation_code")
+        if code != INVITATION_CODE:
+            return Response(data={"details": "Invalid invitation code"}, status=403)
+
         instance = self.model.objects.filter(email=params["email"])
         if instance:
             return Response(status=400, data={"detail": "exists"})
@@ -45,12 +51,13 @@ class UserViewSet(viewsets.ViewSet):
 @api_view(["POST"])
 def user_login(request):
     remote_addr = request.META.get("REMOTE_ADDR")
-    user = get_object_or_404(User, email=request.data["email"])
+    user_agent = request.META.get("HTTP_USER_AGENT")
+    user = get_object_or_404(User, phone=request.data["phone"])
 
     if not user.matches_secret(request.data["secret"]):
         return Response(status=401)
 
-    _ = Login.objects.create(ip_address=remote_addr, user=user)
+    _ = Login.objects.create(ip_address=remote_addr, user=user, user_agent=user_agent)
     user.refresh_from_db()
     serializer = UserSerializer(user)
     return Response(serializer.data)
@@ -63,3 +70,8 @@ def list_all_notifications(request, pk=None):
     notifications = Notification.objects.filter(user__id=user.id)
     serializer = NotificationSerializer(notifications, many=True)
     return Response(serializer.data)
+
+
+class SettingViewSet(BaseModelViewSet):
+    model = Setting
+    serializers = SettingSerializer

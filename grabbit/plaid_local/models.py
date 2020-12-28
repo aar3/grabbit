@@ -13,6 +13,7 @@ class LinkToken(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
+# Link model is same as an Account model
 class Link(BaseModel):
     class Meta:
         db_table = "links"
@@ -50,10 +51,3 @@ class Transaction(BaseModel):
     payment_meta = models.JSONField(default=dict)
     pending = models.IntegerField()
     transaction_id = models.CharField(max_length=255)
-
-
-class Account(BaseModel):
-    class Meta:
-        db_table = "accounts"
-
-    link = models.ForeignKey(Link, on_delete=models.CASCADE)
