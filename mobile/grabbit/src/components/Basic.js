@@ -1,33 +1,15 @@
 import React from 'react';
 import {Input, Button} from 'react-native-elements';
-import {buttonStyle, buttonContainerStyle} from 'grabbit/src/styles';
+import {buttonStyle, buttonContainerStyle} from 'grabbit/src/Styles';
 
 export class TextInput extends React.Component {
   render() {
-    const {placeholder, label, labelStyle} = this.props;
+    const {placeholder, label, autoCapitalize = 'none', labelStyle, secureTextEntry, autoCompleteType} = this.props;
     return (
       <Input
-        containerStyle={{
-          width: 300,
-        }}
-        inputStyle={{
-          fontSize: 13,
-        }}
-        label={label}
-        labelStyle={labelStyle}
-        placeholder={placeholder}
-      />
-    );
-  }
-}
-
-// NOTE: this should be the exact same as TextInput just with secureTextEntry
-export class PasswordInput extends React.Component {
-  render() {
-    const {placeholder, label, labelStyle} = this.props;
-    return (
-      <Input
-        secureTextEntry={true}
+        autoCapitalize={autoCapitalize}
+        secureTextEntry={secureTextEntry}
+        autoCompleteType={autoCompleteType}
         containerStyle={{
           width: 300,
         }}

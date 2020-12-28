@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Text, Image} from 'react-native';
+import {View, Image} from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import {Color} from 'grabbit/src/const';
+import {Color} from 'grabbit/src/Const';
 import {GrabbitButton} from 'grabbit/src/components/Basic';
 
 export default class V extends React.Component {
@@ -19,12 +19,12 @@ export default class V extends React.Component {
         }}>
         <View
           style={{
-            borderWidth: 1,
             height: 65,
             position: 'absolute',
             top: 400,
             width: 300,
-            borderColor: 'blue',
+            // borderColor: 'blue',
+            // borderWidth: 1,
           }}>
           <Image
             source={require('./../../assets/imgs/Grabbit_Gradient_Letters_222x1000.png')}
@@ -33,8 +33,8 @@ export default class V extends React.Component {
         </View>
         <View
           style={{
-            borderWidth: 1,
-            borderColor: 'red',
+            // borderWidth: 1,
+            // borderColor: 'red',
             position: 'absolute',
             top: 700,
             width: 300,

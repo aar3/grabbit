@@ -1,6 +1,7 @@
 django
 djangorestframework
 django-cors-headers
+django[argon2]
 gunicorn
 django-utils
 celery

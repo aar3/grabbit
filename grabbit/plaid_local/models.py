@@ -50,3 +50,10 @@ class Transaction(BaseModel):
     payment_meta = models.JSONField(default=dict)
     pending = models.IntegerField()
     transaction_id = models.CharField(max_length=255)
+
+
+class Account(BaseModel):
+    class Meta:
+        db_table = "accounts"
+
+    link = models.ForeignKey(Link, on_delete=models.CASCADE)

@@ -1,3 +1,3 @@
 export default {
-  Hostname: 'localhost:8000',
+  Hostname: '0.0.0.0:8000',
 };
