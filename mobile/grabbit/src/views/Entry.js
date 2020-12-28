@@ -43,7 +43,7 @@ export default class V extends React.Component {
             onPress={() => Actions.login()}
             _buttonStyle={{
               backgroundColor: Color.White,
-              borderWidth: 2,
+              borderWidth: 1,
               borderColor: Color.Purple,
             }}
             titleStyle={{

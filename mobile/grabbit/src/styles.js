@@ -2,6 +2,7 @@ export const buttonStyle = {
   borderRadius: 50,
   height: 50,
   width: 300,
+  borderRadius: 5,
 };
 
 export const buttonContainerStyle = {

@@ -1,7 +1,8 @@
 import React from 'react';
-import {View, Text, FlatList} from 'react-native';
+import {View, Text, FlatList, Image, ImageBackground} from 'react-native';
 import ToggleSwitch from 'toggle-switch-react-native';
 import {connect} from 'react-redux';
+import {Actions} from 'react-native-router-flux';
 import PlaidLink from 'react-native-plaid-link-sdk';
 import ReduxActions from 'grabbit/src/Actions';
 import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
@@ -15,54 +16,92 @@ class V extends React.Component {
     this.state = {};
   }
 
-  async _getLinkToken() {
-    // const {user} = this.props;
-    // const options = {
-    //   method: 'POST',
-    //   url: 'http://localhost:8000/api/v1/plaid/link-tokens/',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'X-Session-Token': user.current_session_token,
-    //   },
-    //   data: {
-    //     user_id: user.email,
-    //   },
-    // };
-    // const response = await httpRequest(options);
-    // this.setState({linkToken: response.data.token, didMount: true});
-  }
+  async _handleOnSuccess(data) {
+    const {user, dispatchUpdateState} = this.props;
+    const options = {
+      method: 'POST',
+      endpoint: '/plaid/1/link-token-success/',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Session-Token': user.current_session_token,
+      },
+      data,
+    };
 
-  _handleOnSuccess(data) {}
+    const {error, data} = await httpRequest(options);
+    // TODO: handle error case
+    return dispatchUpdateState('state.plaid.accounts.current_publicktoken', data.public_key);
+  }
 
   _handleExit(data) {
     console.log('exit: ', data);
   }
 
-  // _renderPlaidModal() {
-  //   // await this._getLinkToken();
-  //   const {showPlaidModal} = this.props;
-  //   console.log('>> ', showPlaidModal)
-  //   if (showPlaidModal) {
-  //     return (
-  //       <View
-  //       style={{
-  //         flex: 1,
-  //         justifyContent: 'center',
-  //         alignItems: 'center',
-  //       }}>
-  //       <PlaidLink
-  //         token={'123'}
-  //         onSuccess={(data) => this._handleOnSuccess(data)}
-  //         onExit={(data) => this._handleExit(data)}>
-  //         <Text>Add Account</Text>
-  //       </PlaidLink>
-  //     </View>
-  //     );
-  //   }
-  // }
+  async componentDidMount() {
+    const {user, dispatchUpdateState} = this.props;
+    const options = {
+      method: 'POST',
+      endpoint: '/plaid/link-tokens/',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Session-Token': user.current_session_token,
+      },
+      data: {
+        user_id: user.email,
+      },
+    };
+
+    const {error, data} = await httpRequest(options);
+    // TODO: if (error) { handle error }
+    return dispatchUpdateState('state.plaid.accounts.current_linktoken', data.token);
+  }
+
+  _renderPlaidButton() {
+    const {currentLinkToken} = this.props;
+    if (!currentLinkToken) {
+      return (
+        <ImageBackground
+          source={require('./../../assets/imgs/Loading-Transparent-Cropped.gif')}
+          style={{
+            // borderWidth: 1,
+            // borderColor: 'red',
+            height: 50,
+            width: 50,
+            marginBottom: 20,
+          }}></ImageBackground>
+      );
+    }
+    return (
+      <PlaidLink
+        token={currentLinkToken}
+        onSuccess={(data) => this._handleOnSuccess(data)}
+        onExit={(data) => Actions.listRewards()}>
+        <View
+          style={{
+            borderWidth: 1,
+            backgroundColor: Color.Purple,
+            borderColor: Color.White,
+            height: 50,
+            width: 300,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginBottom: 20,
+            borderRadius: 10,
+          }}>
+          <Text
+            style={{
+              color: Color.White,
+              fontWeight: 'bold',
+            }}>
+            Add
+          </Text>
+        </View>
+      </PlaidLink>
+    );
+  }
 
   render() {
-    const {accounts, postNewAccountStatus, updateStateProperty} = this.props;
+    const {accounts, postNewAccountStatus} = this.props;
     return (
       <View
         style={{
@@ -143,52 +182,37 @@ class V extends React.Component {
             );
           }}
         />
-        <PlaidLink
-          token={'123'}
-          onSuccess={(data) => this._handleOnSuccess(data)}
-          onExit={(data) => this._handleExit(data)}>
-          <GrabbitButton
-            // onPress={() => updateStateProperty('state.plaid.accounts.show_modal', true)}
-            _buttonStyle={{
-              backgroundColor: Color.Purple,
-            }}
-            titleStyle={{
-              color: Color.White,
-              fontWeight: 'bold',
-            }}
-            title="Add"
-          />
-        </PlaidLink>
+        {this._renderPlaidButton()}
       </View>
     );
   }
 }
 
 const mapStateToProps = function (state) {
-  console.log(state);
   const accountList = getStateForKey('state.plaid.accounts.list', state);
   return {
     user: getStateForKey('state.user', state),
     showPlaidModal: getStateForKey('state.plaid.accounts.show_modal', state),
     accounts: Object.values(accountList),
+    currentLinkToken: getStateForKey('state.plaid.accounts.current_linktoken', state),
   };
 };
 
 const mapDispatchToProps = function (dispatch) {
   return {
+    dispatchUpdateState: function (stateKey, payload) {
+      return dispatch({
+        type: ReduxActions.GENERIC_ACTION,
+        payload,
+        stateKey,
+        operation: 'replace',
+      });
+    },
     postNewAccountStatus: function (stateKey, account) {
       const value = Object.assign({}, account, {
         active: false,
       });
 
-      return dispatch({
-        type: ReduxActions.GENERIC_ACTION,
-        payload: value,
-        stateKey,
-        operation: 'replace',
-      });
-    },
-    updateStateProperty: function (stateKey, value) {
       return dispatch({
         type: ReduxActions.GENERIC_ACTION,
         payload: value,

@@ -28,7 +28,7 @@ class LinkTokenViewSet(BaseModelViewSet):
             "client_name": config.NAME,
             "country_codes": ["US"],
             "language": "en",
-            "webhook": config.PLAID.CREATE_LINK_WEBHOOK,
+            # "webhook": config.PLAID.CREATE_LINK_WEBHOOK,
             "link_customization_name": "default",
             "account_filters": {"depository": {"account_subtypes": ["checking", "savings"],},},
         }

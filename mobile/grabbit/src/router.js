@@ -13,6 +13,10 @@ import {
   AccountView,
   RewardFocusView,
   SettingsView,
+  ContactView,
+  AboutView,
+  TermsView,
+  PrivacyView,
 } from 'grabbit/src/views';
 
 export default class Router_ extends React.Component {
@@ -47,6 +51,10 @@ export default class Router_ extends React.Component {
           />
           <Scene key="rewardFocus" component={RewardFocusView} title="Reward Focus" hideNavBar={true} />
           <Scene key="settings" component={SettingsView} title="Settings" hideNavBar={false} />
+          <Scene key="contact" component={ContactView} title="Contact" hideNavBar={false} />
+          <Scene key="about" component={AboutView} title="About" hideNavBar={false} />
+          <Scene key="terms" component={TermsView} title="Terms" hideNavBar={false} />
+          <Scene key="privacy" component={TermsView} title="Privacy Policy" hideNavBar={false} />
           <Tabs
             duration={0}
             animationEnabled={false}

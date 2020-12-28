@@ -1,5 +1,13 @@
 import React from 'react';
-import {View, Text, KeyboardAvoidingView, Image, Keyboard, TouchableWithoutFeedback} from 'react-native';
+import {
+  View,
+  Text,
+  KeyboardAvoidingView,
+  Image,
+  Keyboard,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 import ReduxActions from 'grabbit/src/Actions';
@@ -48,7 +56,7 @@ export default class V extends React.Component {
               />
             </View>
             <TextInput autoCompleteType={'email'} label={'Email'} labelStyle={labelStyle} placeholder="you@gmail.com" />
-            <TextInput secureTextEntry={true} labelStyle={labelStyle} label={'Password'} placeholder="******" />
+            <TextInput secureTextEntry={true} labelStyle={labelStyle} label={'Password'} placeholder="**********" />
             <GrabbitButton
               onPress={() => Actions.listRewards()}
               _buttonStyle={{
@@ -60,6 +68,17 @@ export default class V extends React.Component {
               }}
               title="Login"
             />
+            <View
+              style={{
+                flexDirection: 'row',
+              }}>
+              <Text style={{color: Color.ReadableGreyText}}>Don't have an account? </Text>
+              <TouchableOpacity onPress={() => Actions.signup()}>
+                <Text style={{fontWeight: 'bold', textDecorationLine: 'underline', color: Color.HyperlinkBlue}}>
+                  Sign Up
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>

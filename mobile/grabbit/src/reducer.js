@@ -119,25 +119,30 @@ const defaultState = {
       {
         id: 1,
         title: 'About Grabbit',
+        routeKey: 'about',
       },
       {
         id: 2,
         title: 'Terms & Conditions',
+        routeKey: 'terms',
       },
       {
         id: 3,
         title: 'Privacy Policy',
+        routeKey: 'privacy',
       },
       {
         id: 4,
         title: 'Contact Us',
+        routeKey: 'contact',
       },
     ],
   },
   plaid: {
     accounts: {
-      show_modal: false,
-      current_llinttoken: null,
+      show_modal: true,
+      current_linktoken: null,
+      current_publickey: null,
       list: {
         1: {
           id: 1,
@@ -186,7 +191,6 @@ export default function (state = defaultState, action) {
   let updated = stateObject;
 
   if (operation === 'replace') {
-    console.log('>> udpated ', payload);
     updated = payload;
   } else if (operation === 'update') {
     if (updated instanceof object && key.length) {
@@ -200,7 +204,11 @@ export default function (state = defaultState, action) {
     throw new Error('Invalid state operation: ', operation);
   }
 
+  console.log(stateObject, nodes[i], updated);
+
   stateObject[nodes[i]] = updated;
+
+  console.log(state.plaid);
 
   return state;
 }
