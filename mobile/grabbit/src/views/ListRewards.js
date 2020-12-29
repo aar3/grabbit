@@ -4,13 +4,26 @@ import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
 import ReduxActions from 'grabbit/src/Actions';
-import {getStateForKey} from 'grabbit/src/Utils';
+import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
 import {Color} from 'grabbit/src/Const';
 
 class V extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  componentDidMount() {
+    const options = {
+      endpoint: `/user/${this.props.user.id}/rewards`,
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'X-Session-Token': this.props.user.current_session_token,
+      },
+    };
+
+    return this.props.getUserRewards(options);
   }
 
   render() {
@@ -29,6 +42,7 @@ class V extends React.Component {
           }}
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
+            console.log(item);
             return (
               <TouchableOpacity onPress={() => focusReward(item)}>
                 <View
@@ -80,19 +94,37 @@ class V extends React.Component {
 }
 
 const mapStateToProps = function (state) {
-  const rewards = getStateForKey('state.rewards.list', state);
   return {
-    rewards,
+    user: getStateForKey('state.session.user', state),
+    rewards: getStateForKey('state.rewards.list', state),
   };
 };
 
 const mapDispatchToProps = function (dispatch) {
   return {
+    getUserRewards: async function (options) {
+      dispatch({
+        type: ReduxActions.Rewards.GetUserRewardsPending,
+      });
+
+      const {data, error} = await httpRequest(options);
+      if (error) {
+        return dispatch({
+          type: ReduxActions.Rewards.GetUserRewardsError,
+          payload: error,
+        });
+      }
+
+      return dispatch({
+        type: ReduxActions.Rewards.GetUserRewardsSuccess,
+        payload: data,
+      });
+    },
+
     focusReward: function (reward) {
       dispatch({
-        type: ReduxActions.GENERIC_ACTION,
+        type: ReduxActions.Rewards.SetFocusedReward,
         payload: reward,
-        stateKey: 'state.rewards.focused',
       });
 
       return Actions.rewardFocus();

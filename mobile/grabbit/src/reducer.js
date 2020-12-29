@@ -28,6 +28,8 @@ const defaultState = {
     },
   },
   rewards: {
+    get_rewards_pending: false,
+    get_rewards_error: null,
     inactive: [
       {
         id: 1,
@@ -58,36 +60,7 @@ const defaultState = {
         },
       },
     ],
-    list: [
-      {
-        id: 1,
-        description: '15% off purchase off select purchase of Nike Urban Fit',
-        expiry: '1/12/2021',
-        code: 'NIKE-CFX13M',
-        qr_code_url:
-          'https://www.qr-code-generator.com/wp-content/themes/qr/new_structure/markets/core_market_full/generator/dist/generator/assets/images/websiteQRCode_noFrame.png',
-        merchant: {
-          image_url: 'https://miro.medium.com/max/1161/1*cJUVJJSWPj9WFIJlvf7dKg.jpeg',
-          name: 'Nike',
-          alternative_name: 'Nike Corporation',
-          primary_color: '#000',
-        },
-      },
-      {
-        id: 2,
-        description: "10% off men's tops from with purchase of $50 or more",
-        expiry: '2/21/2021',
-        code: 'SUPR-AG78E',
-        qr_code_url:
-          'https://www.qr-code-generator.com/wp-content/themes/qr/new_structure/markets/core_market_full/generator/dist/generator/assets/images/websiteQRCode_noFrame.png',
-        merchant: {
-          image_url: 'https://ak.picdn.net/shutterstock/videos/1032859976/thumb/10.jpg',
-          name: 'Supreme',
-          primary_color: '#CF0F0F',
-          alternative_name: 'Vivandi Group Intl.',
-        },
-      },
-    ],
+    list: [],
     focused: {
       id: 1,
       code: 'NIKE-CFX13M',
@@ -186,6 +159,51 @@ const defaultState = {
 export default function (state = defaultState, action) {
   const {payload, type, key} = action;
   switch (type) {
+    // ********************************************
+    // Rewards
+    // ********************************************
+
+    case ReduxActions.Rewards.GetUserRewardsError: {
+      return {
+        ...state,
+        rewards: {
+          ...state.rewards,
+          get_rewards_error: payload,
+        },
+      };
+    }
+
+    case ReduxActions.Rewards.GetUserRewardsSuccess: {
+      return {
+        ...state,
+        rewards: {
+          ...state.rewards,
+          list: payload,
+        },
+      };
+    }
+
+    case ReduxActions.Rewards.GetUserRewardsPending: {
+      return {
+        ...state,
+        rewards: {
+          ...state.rewards,
+          get_rewards_pending: true,
+          get_rewards_error: null,
+        },
+      };
+    }
+
+    case ReduxActions.Rewards.SetFocusedReward: {
+      return {
+        ...state,
+        rewards: {
+          focused: payload,
+          ...state.rewards,
+        },
+      };
+    }
+
     // ********************************************
     // Session
     // ********************************************

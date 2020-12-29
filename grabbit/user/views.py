@@ -7,6 +7,8 @@ from rest_framework.parsers import MultiPartParser
 from django.shortcuts import get_object_or_404
 from user.models import User, Login, Notification, Setting
 from user.serializers import UserSerializer, NotificationSerializer, SettingSerializer
+from merchant.models import Reward
+from merchant.serializers import RewardSerializer
 from lib.middlewares import TokenAuthentication
 from lib.views import BaseModelViewSet
 from lib.const import INVITATION_CODE
@@ -69,6 +71,15 @@ def list_all_notifications(request, pk=None):
     user = get_object_or_404(User, pk=pk)
     notifications = Notification.objects.filter(user__id=user.id)
     serializer = NotificationSerializer(notifications, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+@authentication_classes([TokenAuthentication])
+def list_all_user_rewards(request, pk=None):
+    user = get_object_or_404(User, pk=pk)
+    rewards = Reward.objects.filter(owner_user__id=user.id)
+    serializer = RewardSerializer(rewards, many=True)
     return Response(serializer.data)
 
 

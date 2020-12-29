@@ -5,8 +5,8 @@ from rest_framework.decorators import api_view, authentication_classes
 from django.shortcuts import get_object_or_404
 from lib.views import BaseModelViewSet
 from lib.middlewares import TokenAuthentication
-from merchant.models import Merchant, Reward, Campaign
-from merchant.serializers import MerchantSerializer, RewardSerializer, CampaignSerializer
+from merchant.models import Merchant, Reward, Campaign, RewardCode
+from merchant.serializers import MerchantSerializer, RewardSerializer, CampaignSerializer, RewardCodeSerializer
 from user.models import User
 
 
@@ -50,6 +50,30 @@ class CampaignViewSet(BaseModelViewSet):
         user = get_object_or_404(User, pk=request.data["created_by_user_id"])
         create_params["created_by_user"] = user
         instance = self.model.objects.create(**create_params)
+        serializer = self.serializer(instance)
+        return Response(serializer.data)
+
+
+class RewardCodeViewSet(BaseModelViewSet):
+    model = RewardCode
+    serializer = RewardCodeSerializer
+    authentication_classes = [TokenAuthentication]
+
+    def list(self, request, merchant_id=None):
+        _ = get_object_or_404(Merchant, pk=merchant_id)
+        instances = self.model.objects.filter(merchant__id=merchant_id)
+        serializer = self.serializer(instances, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None, *args):
+        _ = get_object_or_404(Merchant, pk=pk)
+        instance = get_object_or_404(RewardCode, pk=1)
+        serializer = self.serializer(instance)
+        return Response(serializer.data)
+
+    def create(self, request, merchant_id=None):
+        _ = get_object_or_404(Merchant, pk=merchant_id)
+        instance = self.model.objects.create(**request.data)
         serializer = self.serializer(instance)
         return Response(serializer.data)
 

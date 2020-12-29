@@ -7,4 +7,10 @@ export default {
     PostUserLoginError: 'PostUserLoginError',
     ResetAuthError: 'ResetAuthError',
   },
+  Rewards: {
+    GetUserRewardsPending: 'GetUserRewardsPending',
+    GetUserRewardsSuccess: 'GetUserRewardsSuccess',
+    GetUserRewardsError: 'GetUserRewardsError',
+    SetFocusedReward: 'SetFocusedReward',
+  },
 };
