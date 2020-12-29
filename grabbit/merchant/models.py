@@ -89,7 +89,7 @@ class Reward(BaseModel):
     code = models.ForeignKey(RewardCode, on_delete=models.CASCADE)
     expiry = models.DateTimeField()
     is_active = models.IntegerField(default=1)
-    qr_code = models.CharField(max_length=255, null=True)
+    qr_code_url = models.CharField(max_length=255, null=True)
     redeemed_at = models.DateTimeField(null=True)
     owner_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owner_user")
 

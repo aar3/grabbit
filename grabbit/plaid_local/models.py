@@ -25,6 +25,7 @@ class Link(BaseModel):
     institution_id = models.CharField(max_length=255)
     accounts = models.JSONField(default=dict)
     link_session_id = models.CharField(max_length=255)
+    active = models.IntegerField(default=1)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 

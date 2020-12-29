@@ -22,6 +22,7 @@ class LinkSerializer(BaseModelSerializer):
             "id",
             "created_at",
             "updated_at",
+            "active",
             "deleted_at",
             "institution_name",
             "institution_id",

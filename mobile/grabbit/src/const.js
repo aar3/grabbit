@@ -10,3 +10,6 @@ export const Color = {
 };
 
 export const TabIconSize = 24;
+
+export const FakeQRCodeURL =
+  'https://www.qr-code-generator.com/wp-content/themes/qr/new_structure/markets/core_market_full/generator/dist/generator/assets/images/websiteQRCode_noFrame.png';

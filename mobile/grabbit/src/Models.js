@@ -1,7 +1,11 @@
 class BaseModel {
-  constructor() {}
+  constructor(data) {
+    this.data = data;
+  }
 }
 
 class User extends BaseModel {
-  constructor(data) {}
+  constructor(data) {
+    super(data);
+  }
 }

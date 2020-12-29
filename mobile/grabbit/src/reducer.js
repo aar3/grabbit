@@ -4,7 +4,19 @@ import ReduxActions from 'grabbit/src/Actions';
 // api sends data over the wire
 const defaultState = {
   session: {
-    user: null,
+    user: {
+      id: 3,
+      created_at: '2020-12-28T20:49:15.378923Z',
+      updated_at: null,
+      deleted_at: null,
+      qr_code_url: '',
+      name: 'Rashad Alston',
+      email: 'rashad.a.alston@gmail.com',
+      address_line1: '600 S Spring St',
+      address_line2: 'Los Angeles, CA 90014',
+      current_session_token: '8f710063cffbe962bcf51aec432aff687acd027e41e52589b63bda1ae9903048',
+      phone: '+1 213-222-7624',
+    },
     authentication: {
       input: {
         login: {
@@ -28,8 +40,6 @@ const defaultState = {
     },
   },
   rewards: {
-    get_rewards_pending: false,
-    get_rewards_error: null,
     inactive: [
       {
         id: 1,
@@ -60,21 +70,14 @@ const defaultState = {
         },
       },
     ],
-    list: [],
-    focused: {
-      id: 1,
-      code: 'NIKE-CFX13M',
-      description: '15% off purchase off select purchase of Nike Urban Fit',
-      expiry: '1/12/2021',
-      qr_code_url:
-        'https://www.qr-code-generator.com/wp-content/themes/qr/new_structure/markets/core_market_full/generator/dist/generator/assets/images/websiteQRCode_noFrame.png',
-      merchant: {
-        image_url: 'https://miro.medium.com/max/1161/1*cJUVJJSWPj9WFIJlvf7dKg.jpeg',
-        name: 'Nike',
-        alternative_name: 'Nike Corporation',
-        primary_color: '#000',
+    list: {
+      pending: false,
+      error: {
+        details: 'Something unexpected happened',
       },
+      items: [],
     },
+    focused: null,
   },
   stats: {
     total_spend: '814.73',
@@ -124,34 +127,20 @@ const defaultState = {
     ],
   },
   plaid: {
-    accounts: {
-      show_modal: true,
-      current_linktoken: null,
-      current_publickey: null,
-      list: {
-        1: {
-          id: 1,
-          active: true,
-          institution: 'Captial One Bank',
-          last_updated: '03/26/2019',
-          account_number: 'XXXX8192',
-        },
-        2: {
-          id: 2,
-          active: true,
-          institution: 'J.P. Morgan Chase',
-          last_updated: '04/21/2019',
-          account_number: 'XXXX8194411',
-        },
-        3: {
-          id: 3,
-          active: false,
-          institution: 'Golden Banc of California',
-          deactivated_since: '12/26/2020',
-          last_updated: '12/01/2019',
-          account_number: 'XXXX819212',
-        },
-      },
+    links: {
+      pending: false,
+      error: null,
+      list: {},
+    },
+    link_token: {
+      pending: false,
+      error: null,
+      link_token: null,
+    },
+    show_modal: true,
+    update: {
+      error: null,
+      pending: false,
     },
   },
 };
@@ -160,7 +149,172 @@ export default function (state = defaultState, action) {
   const {payload, type, key} = action;
   switch (type) {
     // ********************************************
-    // Rewards
+    // Plaid
+    // ********************************************
+    case ReduxActions.Plaid.GetUserLinksSuccess: {
+      const foo = {};
+      payload.forEach((item) => {
+        foo[item.id] = item;
+      });
+
+      return {
+        ...state,
+        plaid: {
+          ...state.plaid,
+          links: {
+            ...state.plaid.links,
+            pending: false,
+            error: null,
+            list: foo,
+          },
+        },
+      };
+    }
+
+    case ReduxActions.Plaid.GetUserLinksError: {
+      return {
+        ...state,
+        plaid: {
+          ...state.plaid,
+          links: {
+            ...state.plaid.links,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+
+    case ReduxActions.Plaid.GetUserLinksPending: {
+      return {
+        ...state,
+        plaid: {
+          ...state.plaid,
+          links: {
+            ...state.plaid.links,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
+
+    case ReduxActions.Plaid.UpdateLinkAccountStatusSuccess: {
+      console.log('curr keys ', Object.keys(state.plaid.links.list));
+      console.log('>> update for ', payload);
+      return {
+        ...state,
+        plaid: {
+          ...state.plaid,
+          // Update both the pending state, and the PUT response payload
+          links: {
+            ...state.plaid.links,
+            list: {
+              ...state.plaid.links.list,
+              [payload.id]: payload,
+            },
+          },
+          update: {
+            ...state.plaid.links.update,
+            pending: false,
+            error: null,
+          },
+        },
+      };
+    }
+
+    case ReduxActions.Plaid.UpdateLinkAccountStatusError: {
+      return {
+        ...state,
+        plaid: {
+          ...state.plaid,
+          update: {
+            ...state.plaid.links.update,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+
+    case ReduxActions.Plaid.UpdateLinkAccountStatusPending: {
+      return {
+        ...state,
+        plaid: {
+          ...state.plaid,
+          update: {
+            ...state.plaid.links.update,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
+
+    case ReduxActions.Plaid.HandleLinkTokenSuccess: {
+      return {
+        ...state,
+        plaid: {
+          ...state.plaid,
+          // Index the new account to the accounts object
+          links: {
+            ...state.plaid.links,
+            list: {
+              ...state.plaid.links.list,
+              [payload.id]: payload,
+            },
+          },
+        },
+      };
+    }
+
+    case ReduxActions.Plaid.HandleLinkTokenError:
+    case ReduxActions.Plaid.GetLinkTokenError: {
+      return {
+        ...state,
+        plaid: {
+          ...state.plaid,
+          link_token: {
+            ...state.plaid.link_token,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+
+    case ReduxActions.Plaid.GetLinkTokenSuccess: {
+      const {token} = payload;
+      return {
+        ...state,
+        plaid: {
+          ...state.plaid,
+          link_token: {
+            ...state.plaid.link_token,
+            pending: false,
+            error: null,
+            link_token: token,
+          },
+        },
+      };
+    }
+
+    case ReduxActions.Plaid.GetLinkTokenPending: {
+      return {
+        ...state,
+        plaid: {
+          ...state.plaid,
+          link_token: {
+            ...state.plaid.link_token,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
+
+    // ********************************************
+    // RewardsList
     // ********************************************
 
     case ReduxActions.Rewards.GetUserRewardsError: {
@@ -168,7 +322,11 @@ export default function (state = defaultState, action) {
         ...state,
         rewards: {
           ...state.rewards,
-          get_rewards_error: payload,
+          list: {
+            ...state.rewards.list,
+            error: payload,
+            pending: false,
+          },
         },
       };
     }
@@ -178,7 +336,12 @@ export default function (state = defaultState, action) {
         ...state,
         rewards: {
           ...state.rewards,
-          list: payload,
+          list: {
+            ...state.rewards.list,
+            items: payload,
+            pending: false,
+            error: null,
+          },
         },
       };
     }
@@ -188,8 +351,11 @@ export default function (state = defaultState, action) {
         ...state,
         rewards: {
           ...state.rewards,
-          get_rewards_pending: true,
-          get_rewards_error: null,
+          list: {
+            ...state.rewards.list,
+            pending: true,
+            error: null,
+          },
         },
       };
     }
@@ -198,8 +364,8 @@ export default function (state = defaultState, action) {
       return {
         ...state,
         rewards: {
-          focused: payload,
           ...state.rewards,
+          focused: payload,
         },
       };
     }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, FlatList, Image, TouchableOpacity} from 'react-native';
+import {View, Text, FlatList, Image, TouchableOpacity, ImageBackground} from 'react-native';
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
@@ -11,23 +11,74 @@ class V extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this._options = {};
   }
 
-  componentDidMount() {
-    const options = {
-      endpoint: `/user/${this.props.user.id}/rewards`,
+  get options() {
+    return {
+      endpoint: `/user/${this.props.user.id}/rewards/`,
       method: 'GET',
       headers: {
         'Accept': 'application/json',
         'X-Session-Token': this.props.user.current_session_token,
       },
     };
+  }
 
-    return this.props.getUserRewards(options);
+  componentDidMount() {
+    return this.props.getUserRewards(this.options);
   }
 
   render() {
-    const {rewards, focusReward} = this.props;
+    if (this.props.getRewardsPending) {
+      return (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text style={{fontSize: 22, fontWeight: 'bold', color: Color.BorderLightGrey}}>Loading Rewards</Text>
+          <ImageBackground
+            source={require('./../../assets/imgs/Loading-Transparent-Cropped.gif')}
+            style={{
+              marginTop: 20,
+              // borderWidth: 1,
+              // borderColor: 'red',
+              height: 50,
+              width: 50,
+            }}></ImageBackground>
+        </View>
+      );
+    }
+
+    if (this.props.getRewardsError) {
+      return (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              color: Color.Purple,
+              fontSize: 22,
+              fontWeight: 'bold',
+            }}>
+            Whoops, there was an error
+          </Text>
+          <Text style={{fontSize: 14, fontWeight: 'bold', marginTop: 10, color: Color.BorderLightGrey}}>
+            {this.props.getRewardsError.details}
+          </Text>
+          <TouchableOpacity onPress={() => this.props.getUserRewards(this.options)}>
+            <Icon style={{marginTop: 20}} name={'rotate-ccw'} size={24} color={Color.BorderLightGrey} />
+          </TouchableOpacity>
+          <Text style={{color: Color.BorderLightGrey}}>Try Again</Text>
+        </View>
+      );
+    }
+
     return (
       <View
         style={{
@@ -36,15 +87,14 @@ class V extends React.Component {
           alignItems: 'center',
         }}>
         <FlatList
-          data={rewards}
+          data={this.props.rewards}
           style={{
             width: '100%',
           }}
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
-            console.log(item);
             return (
-              <TouchableOpacity onPress={() => focusReward(item)}>
+              <TouchableOpacity onPress={() => this.props.focusReward(item)}>
                 <View
                   style={{
                     borderBottomWidth: 1,
@@ -63,7 +113,7 @@ class V extends React.Component {
                       overflow: 'hidden',
                       borderRadius: 100,
                     }}>
-                    <Image source={{uri: item.merchant.image_url}} style={{height: 40, width: 40}} />
+                    <Image source={{uri: item.code.campaign.merchant.image_url}} style={{height: 40, width: 40}} />
                   </View>
                   <View
                     style={{
@@ -79,7 +129,7 @@ class V extends React.Component {
                         fontSize: 11,
                         color: Color.ReadableGreyText,
                       }}>
-                      {item.description}
+                      {item.code.description}
                     </Text>
                   </View>
                   <Icon style={{marginLeft: 20}} name={'chevron-right'} size={20} color={Color.BorderLightGrey} />
@@ -96,7 +146,9 @@ class V extends React.Component {
 const mapStateToProps = function (state) {
   return {
     user: getStateForKey('state.session.user', state),
-    rewards: getStateForKey('state.rewards.list', state),
+    rewards: getStateForKey('state.rewards.list.items', state),
+    getRewardsPending: getStateForKey('state.rewards.list.pending', state),
+    getRewardsError: getStateForKey('state.rewards.list.error', state),
   };
 };
 

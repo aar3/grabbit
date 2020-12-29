@@ -31,7 +31,6 @@ export default class Router_ extends React.Component {
             gesturesEnabled={false}
             drawerLockMode="locked-closed"
             hideNavBar={true}
-            initial
           />
           <Scene
             key="login"
@@ -63,6 +62,7 @@ export default class Router_ extends React.Component {
             showLabel={false}
             tabBarPosition={'bottom'}
             activeBackgroundColor={Color.White}
+            initial
             lazy>
             <Scene
               navBar={MainTopNavigationBar}

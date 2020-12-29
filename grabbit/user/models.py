@@ -101,4 +101,4 @@ class Setting(BaseModel):
         db_table = "settings"
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    metadata = models.JSONField(default=dict({"targeted_advertising_enabled": True, "profile_sharing_enabled": True,}))
+    metadata = models.JSONField(default=dict)

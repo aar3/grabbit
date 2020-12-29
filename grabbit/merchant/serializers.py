@@ -16,6 +16,7 @@ class MerchantSerializer(BaseModelSerializer):
             "name",
             "alternative_name",
             "image_url",
+            "primary_color",
             "keywords",
             "industry",
             "users",
