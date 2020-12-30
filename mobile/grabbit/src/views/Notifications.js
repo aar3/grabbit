@@ -225,6 +225,25 @@ const mapStateToProps = function (state) {
 
 const mapDispatchToProps = function (dispatch) {
   return {
+    getNotifications: async function (options) {
+      dispatch({
+        type: ReduxActions.Notifications.GetNotificationsPending,
+      });
+
+      const {data, error} = await httpRequest(options);
+
+      if (error) {
+        return dispatch({
+          type: ReduxActions.Notifications.GetNotificationsError,
+          payload: error,
+        });
+      }
+
+      return dispatch({
+        type: ReduxActions.Notifications.GetNotificationsSuccess,
+        payload: data,
+      });
+    },
     setNotificationsSeen: async function (options) {
       const {error, data} = await httpRequest(options);
       if (error) {

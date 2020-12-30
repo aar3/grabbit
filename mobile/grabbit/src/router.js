@@ -140,7 +140,6 @@ class Router_ extends React.Component {
 const mapStateToProps = function (state) {
   const notifications = Object.values(getStateForKey('state.notifications.list.items', state));
   const unseenNotifications = notifications.filter((item) => !item.seen_at);
-  console.log(notifications);
   return {
     hasUnseenNotifications: unseenNotifications.length > 0,
   };

@@ -35,7 +35,7 @@ class V extends React.Component {
     console.log('exit: ', data);
   }
 
-  get options() {
+  get linkTokenOptions() {
     return {
       method: 'POST',
       endpoint: '/plaid/link-tokens/',
@@ -49,15 +49,19 @@ class V extends React.Component {
     };
   }
 
-  async componentDidMount() {
-    await this.props.getUserLinks({
+  get userLinksOptions() {
+    return {
       method: 'GET',
       endpoint: `/plaid/${this.props.user.id}/links/`,
       headers: {
         'Content-Type': 'application/json',
         'X-Session-Token': this.props.user.current_session_token,
       },
-    });
+    };
+  }
+
+  async componentDidMount() {
+    await this.props.getUserLinks(this.userLinksOptions);
 
     await this.props.getLinkToken({
       method: 'POST',
@@ -125,7 +129,7 @@ class V extends React.Component {
           <Text style={{fontSize: 14, marginTop: 10, fontWeight: 'bold', color: Color.BorderLightGrey}}>
             {this.props.getLinkTokenError.details}
           </Text>
-          <TouchableOpacity onPress={() => this.props.getLinkToken(this.options)}>
+          <TouchableOpacity onPress={() => this.props.getLinkToken(this.linkTokenOptions)}>
             <Icon style={{marginTop: 20}} name={'rotate-ccw'} size={24} color={Color.BorderLightGrey} />
           </TouchableOpacity>
           <Text style={{color: Color.BorderLightGrey}}>Try Again</Text>
@@ -245,7 +249,7 @@ class V extends React.Component {
           <Text style={{fontSize: 14, marginTop: 10, fontWeight: 'bold', color: Color.BorderLightGrey}}>
             {this.props.getUserLinkError.details}
           </Text>
-          <TouchableOpacity onPress={() => this.props.getLinkToken(this.options)}>
+          <TouchableOpacity onPress={() => this.props.getUserLinks(this.userLinksOptions)}>
             <Icon style={{marginTop: 20}} name={'rotate-ccw'} size={24} color={Color.BorderLightGrey} />
           </TouchableOpacity>
           <Text style={{color: Color.BorderLightGrey}}>Try Again</Text>
