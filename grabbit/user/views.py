@@ -11,6 +11,7 @@ from merchant.models import Reward
 from merchant.serializers import RewardSerializer
 from lib.middlewares import TokenAuthentication
 from lib.views import BaseModelViewSet
+from lib.utils import average, most_common
 from lib.const import INVITATION_CODE
 
 
@@ -86,3 +87,45 @@ def list_all_user_rewards(request, pk=None):
 class SettingViewSet(BaseModelViewSet):
     model = Setting
     serializers = SettingSerializer
+
+
+
+@api_view(["GET"])
+@authentication_classes([TokenAuthentication])
+def get_user_stats(request, pk=None):
+
+    from merchant.models import Merchant
+    from merchant.serializers import MerchantSerializer
+
+    user = get_object_or_404(User, pk=pk)
+    rewards = Reward.objects.filter(owner_user__id=user.id, is_active=False)
+    unique_merchants = set([reward.code.campaign.merchant.id for reward in rewards])
+    stats = {}
+    
+    if unique_merchants:
+        mid = most_common(unique_merchants)
+        instance = Merchant.objects.get(pk=mid)
+        top_merchant = MerchantSerializer(instance).data
+
+        stats = {
+            # IMPORTANT: We have to get some of this data from the merchant integration
+            "total_spend": 0,
+            "avg_discount": average([reward.code.value for reward in rewards]),
+            "time_elapsed": 30,
+            "conversions": len([reward for reward in rewards if reward.redeemed_at]),
+            "impressions": len(rewards),
+            "unique_merchants": len(unique_merchants),
+            "top_merchant": top_merchant,
+            "missed_opportunities": {
+                "expiries": len([reward.__dict__ for reward in rewards if not reward.redeemed_at]),
+                "time_elapsed": 30,
+                "potential_spend": 0,
+                "avg_discount": average([reward.code.value for reward in rewards if not reward.redeemed_at])
+            },
+        }
+
+        stats["top_merchant"]["total_spend"] = 0
+        stats["top_merchant"]["avg_discount"] = average([reward.code.value for reward in rewards if reward.redeemed_at and reward.code.campaign.merchant.id == mid])
+        stats["top_merchant"]["conversions"] = len([reward for reward in rewards if reward.code.campaign.merchant.id == mid])
+
+    return Response(data=stats)

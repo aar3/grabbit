@@ -1,5 +1,5 @@
 export const Color = {
-  Purple: '#6400FF',
+  Purple: '#8f30d5',
   BorderLightGrey: '#D0D4D9',
   InfoTextBlue: '#007AFF',
   ReadableGreyText: '#64686C',
@@ -7,6 +7,7 @@ export const Color = {
   Black: '#0000',
   HyperlinkBlue: '#007AFF',
   ErrorRed: '#FF0000',
+  HotPink: '#E20086',
 };
 
 export const TabIconSize = 24;

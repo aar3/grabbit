@@ -1,8 +1,8 @@
 import random
 import io
 import string
+import collections
 import qrcode
-from lib.const import INVITATION_CODE
 
 
 def random_string(n=10):
@@ -21,3 +21,22 @@ def make_qrcode(s):
     img.save(buff, format="PNG")
 
     return buff.getvalue()
+
+
+def average(arr):
+    arr = list(map(float, arr))
+    if not arr:
+        return 0
+    return round(sum(arr) / len(arr), 1)
+
+
+def most_common(arr):
+    counts = collections.defaultdict(lambda: 0)
+    m = 0
+    max_ = None
+    for x in arr:
+        counts[x] += 1
+        if counts[x] > m:
+            m = counts[x]
+            max_ = x
+    return max_

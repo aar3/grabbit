@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import ReduxActions from 'grabbit/src/Actions';
 import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
 import {Color} from 'grabbit/src/Const';
+import {Reward} from 'grabbit/src/Models';
 
 class V extends React.Component {
   constructor(props) {
@@ -27,6 +28,32 @@ class V extends React.Component {
 
   componentDidMount() {
     return this.props.getUserRewards(this.options);
+  }
+
+  _renderExpiryTag(item) {
+    const reward = new Reward(item);
+    if (reward.expired()) {
+      return (
+        <Text
+          style={{
+            marginTop: 10,
+            fontSize: 12,
+            color: Color.ErrorRed,
+          }}>
+          Expired {item.data.expiry.substr(0, 10)}
+        </Text>
+      );
+    }
+    return (
+      <Text
+        style={{
+          marginTop: 10,
+          fontSize: 12,
+          color: Color.ReadableGreyText,
+        }}>
+        Expires {item.data.expiry.substr(0, 10)}
+      </Text>
+    );
   }
 
   render() {
@@ -87,7 +114,7 @@ class V extends React.Component {
           alignItems: 'center',
         }}>
         <FlatList
-          data={this.props.rewards}
+          data={this.props.activeRewards}
           style={{
             width: '100%',
           }}
@@ -99,7 +126,7 @@ class V extends React.Component {
                   style={{
                     borderBottomWidth: 1,
                     borderBottomColor: Color.BorderLightGrey,
-                    height: 60,
+                    height: 80,
                     alignItems: 'center',
                     flexDirection: 'row',
                   }}>
@@ -113,7 +140,7 @@ class V extends React.Component {
                       overflow: 'hidden',
                       borderRadius: 100,
                     }}>
-                    <Image source={{uri: item.code.campaign.merchant.image_url}} style={{height: 40, width: 40}} />
+                    <Image source={{uri: item.data.code.campaign.merchant.image_url}} style={{height: 40, width: 40}} />
                   </View>
                   <View
                     style={{
@@ -126,11 +153,12 @@ class V extends React.Component {
                     }}>
                     <Text
                       style={{
-                        fontSize: 11,
+                        fontSize: 13,
                         color: Color.ReadableGreyText,
                       }}>
-                      {item.code.description}
+                      {item.data.code.description}
                     </Text>
+                    {this._renderExpiryTag(item)}
                   </View>
                   <Icon style={{marginLeft: 20}} name={'chevron-right'} size={20} color={Color.BorderLightGrey} />
                 </View>
@@ -144,9 +172,12 @@ class V extends React.Component {
 }
 
 const mapStateToProps = function (state) {
+  const rewards = getStateForKey('state.rewards.list.items', state).map((item) => new Reward(item));
+  console.log(rewards);
+  const activeRewards = rewards.filter((reward) => !reward.expired());
   return {
     user: getStateForKey('state.session.user', state),
-    rewards: getStateForKey('state.rewards.list.items', state),
+    activeRewards,
     getRewardsPending: getStateForKey('state.rewards.list.pending', state),
     getRewardsError: getStateForKey('state.rewards.list.error', state),
   };

@@ -29,4 +29,10 @@ export default {
     UpdateLinkAccountStatusSuccess: 'UpdateLinkAccountStatusSuccess',
     UpdateLinkAccountStatusError: 'UpdateLinkAccountStatusError',
   },
+
+  Stats: {
+    GetUserStatsPending: 'GetUserStatsPending',
+    GetUserStatsError: 'GetUserStatsError',
+    GetUserStatsSuccess: 'GetUserStatsSuccess',
+  },
 };

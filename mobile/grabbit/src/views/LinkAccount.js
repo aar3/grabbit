@@ -79,7 +79,7 @@ class V extends React.Component {
           key={index.toString()}
           style={{
             borderWidth: 1,
-            borderColor: Color.BorderLightGrey,
+            borderColor: Color.Purple,
             padding: 10,
             borderRadius: 10,
             marginBottom: 10,
@@ -138,10 +138,10 @@ class V extends React.Component {
         <View
           style={{
             // borderWidth: 1,
+            // borderColor: 'green',
             // justifyContent: 'center',
             alignItems: 'center',
             marginTop: 20,
-            borderColor: 'green',
           }}>
           <ImageBackground
             source={require('./../../assets/imgs/Loading-Transparent-Cropped.gif')}
@@ -156,41 +156,40 @@ class V extends React.Component {
       );
     }
     return (
-      <PlaidLink
-        token={this.props.linkToken}
-        onSuccess={(data) => this._handleOnSuccess(data)}
-        onExit={(data) => Actions.listRewards()}>
-        <View
-          style={{
-            // borderWidth: 1,
-            // borderColor: 'blue',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: 30,
-            wdith: '100%',
-          }}>
-          <View
+      <ImageBackground
+        source={require('./../../assets/imgs/Gradient_Purple_Pink_Background_583x1258.png')}
+        style={{
+          // borderWidth: 1,
+          // borderColor: 'blue',
+          justifyContent: 'center',
+          alignItems: 'center',
+          // marginTop: 30,
+          backgroundColor: Color.HotPink,
+          // width: 100,
+          height: 50,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: -1,
+          },
+          shadowOpacity: 0.5,
+          shadowRadius: 3.84,
+          elevation: 5,
+        }}>
+        <PlaidLink
+          content
+          token={this.props.linkToken}
+          onSuccess={(data) => this._handleOnSuccess(data)}
+          onExit={(data) => this._handleExit()}>
+          <Text
             style={{
-              borderWidth: 1,
-              backgroundColor: Color.Purple,
-              borderColor: Color.White,
-              height: 50,
-              width: 300,
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginBottom: 5,
-              borderRadius: 50,
+              color: Color.White,
+              fontWeight: 'bold',
             }}>
-            <Text
-              style={{
-                color: Color.White,
-                fontWeight: 'bold',
-              }}>
-              Add
-            </Text>
-          </View>
-        </View>
-      </PlaidLink>
+            Add Account
+          </Text>
+        </PlaidLink>
+      </ImageBackground>
     );
   }
 
@@ -279,7 +278,7 @@ class V extends React.Component {
             width: '100%',
             // borderWidth: 1,
             // borderColor: 'red',
-            paddingTop: 20,
+            // paddingTop: 20,
             paddingBottom: 20,
             maxHeight: 240 * this.props.accounts.length,
           }}
@@ -306,7 +305,9 @@ class V extends React.Component {
                   <Text
                     style={{
                       fontSize: 16,
+                      color: Color.Purple,
                       fontWeight: 'bold',
+                      marginTop: 10,
                       marginBottom: 10,
                     }}>
                     {item.institution_name}

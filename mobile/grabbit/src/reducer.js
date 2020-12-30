@@ -80,24 +80,9 @@ const defaultState = {
     focused: null,
   },
   stats: {
-    total_spend: '814.73',
-    avg_discount: 0.2,
-    time_elapsed: 30,
-    conversions: 15,
-    impressions: 19,
-    unique_merchants: 12,
-    top_merchant: {
-      name: 'Supreme Brands',
-      conversions: 3,
-      impressions: 6,
-      total_spend: 320.12,
-      avg_discount: 0.3,
-    },
-    missed_opportunities: {
-      expiries: 3,
-      time_elapsed: 7,
-      potential_spend: 200.5,
-      avg_discount: 0.25,
+    pending: false,
+    error: {
+      details: 'Whoops something went wrong',
     },
   },
   settings: {
@@ -149,12 +134,49 @@ export default function (state = defaultState, action) {
   const {payload, type, key} = action;
   switch (type) {
     // ********************************************
+    // Stats
+    // ********************************************
+    case ReduxActions.Stats.GetUserStatsPending: {
+      return {
+        ...state,
+        stats: {
+          ...state.stats,
+          pending: true,
+          error: null,
+        },
+      };
+    }
+
+    case ReduxActions.Stats.GetUserStatsError: {
+      return {
+        ...state,
+        stats: {
+          ...state.stats,
+          pending: false,
+          error: payload,
+        },
+      };
+    }
+
+    case ReduxActions.Stats.GetUserStatsSuccess: {
+      return {
+        ...state,
+        stats: {
+          ...state.stats,
+          pending: false,
+          error: null,
+          ...payload,
+        },
+      };
+    }
+
+    // ********************************************
     // Plaid
     // ********************************************
     case ReduxActions.Plaid.GetUserLinksSuccess: {
-      const foo = {};
+      const list = {};
       payload.forEach((item) => {
-        foo[item.id] = item;
+        list[item.id] = item;
       });
 
       return {
@@ -165,7 +187,7 @@ export default function (state = defaultState, action) {
             ...state.plaid.links,
             pending: false,
             error: null,
-            list: foo,
+            list,
           },
         },
       };
@@ -200,8 +222,6 @@ export default function (state = defaultState, action) {
     }
 
     case ReduxActions.Plaid.UpdateLinkAccountStatusSuccess: {
-      console.log('curr keys ', Object.keys(state.plaid.links.list));
-      console.log('>> update for ', payload);
       return {
         ...state,
         plaid: {

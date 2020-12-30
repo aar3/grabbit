@@ -76,7 +76,7 @@ export default class Router_ extends React.Component {
               component={ListRewardsView}
             />
             <Scene
-              navBar={BasicTopNavigationBar}
+              navBar={null}
               title={'Linked Accounts'}
               hideNavBar={false}
               renderBackButton={() => <View />}
