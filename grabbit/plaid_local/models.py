@@ -29,6 +29,18 @@ class Link(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
+@receiver(post_save, sender=Link)
+def create_notification_for_new_link(sender, instance, created, **kwargs):
+    from user.models import Notification
+    if created:
+        _ = Notification.objects.create(
+            user=instance.user, 
+            route_key="linkAccount",
+            metadata={"instance": instance.__dict__},
+            icon="credit-card", 
+            text=f"Your new {instance.institution_name} account is now live on Grabbit!"
+        )
+
 class TransactionTask(BaseModel):
     class Meta:
         db_table = "transaction_tasks"

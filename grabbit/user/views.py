@@ -147,15 +147,3 @@ def get_user_stats(request, pk=None):
         )
 
     return Response(data=stats)
-
-
-# @api_view(["PUT"])
-# @authentication_classes([TokenAuthentication])
-# def set_all_notifications_as_seen(request, pk=None):
-#     user = get_object_or_404(User, pk=pk)
-#     notifications = Notification.objects.filter(user__id=user.id)
-#     for notification in notifications:
-#         notification.seen_at = timezone.now()
-
-#     Notification.objects.bulk_update(notifications, fields=["seen_at"])
-#     return Response(status=200)

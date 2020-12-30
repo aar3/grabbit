@@ -91,6 +91,8 @@ class Notification(BaseModel):
     text = models.CharField(max_length=255)
     icon = models.CharField(max_length=255, default="user")
     expiry = models.DateTimeField(null=True)
+    route_key = models.CharField(max_length=255, null=True)
+    metadata = models.JSONField(default=dict)
     seen_at = models.DateTimeField(null=True)
 
 
@@ -106,4 +108,4 @@ class Setting(BaseModel):
 @receiver(post_save, sender=Setting)
 def create_notification_for_updated_settings(sender, instance, created, **kwargs):
     if not created:
-        _ = Notification.objects.create(user=instance.user, icon="unlock", text="You've updated your profile settings")
+        _ = Notification.objects.create(user=instance.user, icon="unlock", route_key="settings", text="You've updated your profile settings")
