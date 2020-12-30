@@ -7,6 +7,7 @@ import RewardFocusView from 'grabbit/src/views/RewardFocus';
 import SettingsView from 'grabbit/src/views/Settings';
 import SignupView from 'grabbit/src/views/Signup';
 import SplashView from 'grabbit/src/views/Splash';
+import NotificationsView from 'grabbit/src/views/Notifications';
 
 import ContactView from 'grabbit/src/views/support/Contact';
 import AboutView from 'grabbit/src/views/support/About';
@@ -27,4 +28,5 @@ module.exports = {
   AboutView,
   TermsView,
   PrivacyView,
+  NotificationsView,
 };

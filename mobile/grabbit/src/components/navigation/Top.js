@@ -1,17 +1,14 @@
 import React from 'react';
-import {View, ImageBackground} from 'react-native';
-import {connect} from 'react-redux';
+import {View, ImageBackground, Image} from 'react-native';
 import {Color} from 'grabbit/src/Const';
-import {getStateForKey} from 'grabbit/src/Utils';
 
-class BasicTopNavigationBar extends React.Component {
+export class BasicTopNavigationBar extends React.Component {
   render() {
-    const {user} = this.props;
     return (
       <View
         style={{
-          borderWidth: 1,
-          borderColor: 'orange',
+          // borderWidth: 1,
+          // borderColor: 'orange',
           flexDirection: 'row',
           height: 90,
           padding: 10,
@@ -22,8 +19,8 @@ class BasicTopNavigationBar extends React.Component {
         }}>
         <View
           style={{
-            borderWidth: 1,
-            borderColor: 'green',
+            // borderWidth: 1,
+            // borderColor: 'green',
             top: 40,
             height: 40,
             width: 40,
@@ -37,8 +34,8 @@ class BasicTopNavigationBar extends React.Component {
         </View>
         <View
           style={{
-            borderWidth: 1,
-            borderColor: 'black',
+            // borderWidth: 1,
+            // borderColor: 'pink',
             top: 40,
             height: 40,
             width: 40,
@@ -53,8 +50,8 @@ class BasicTopNavigationBar extends React.Component {
         </View>
         <View
           style={{
-            borderWidth: 1,
-            borderColor: 'red',
+            // borderWidth: 1,
+            // borderColor: 'red',
             top: 40,
             borderRadius: 50,
             height: 40,
@@ -71,27 +68,26 @@ class BasicTopNavigationBar extends React.Component {
   }
 }
 
-class MainTopNavigationBar extends React.Component {
+export class MainTopNavigationBar extends React.Component {
   render() {
-    const {user} = this.props;
     return (
       <ImageBackground
-        source={require('../../../assets/imgs/Gradient_Purple_Pink_Background_583x1258.png')}
+        source={require('./../../../assets/imgs/Gradient_Purple_Pink_Background_583x1258.png')}
         style={{
-          borderWidth: 1,
-          borderColor: 'orange',
+          // borderWidth: 1,
+          // borderColor: 'orange',
           flexDirection: 'row',
           height: 90,
           padding: 10,
-          backgroundColor: '#fff',
+          backgroundColor: Color.Purple,
           borderBottomWidth: 1,
           borderBottomColor: Color.LightGrey,
-          width: '100%',
+          width: '103%',
         }}>
         <View
           style={{
-            borderWidth: 1,
-            borderColor: 'green',
+            // borderWidth: 1,
+            // borderColor: 'green',
             top: 40,
             height: 40,
             width: 40,
@@ -105,8 +101,8 @@ class MainTopNavigationBar extends React.Component {
         </View>
         <View
           style={{
-            borderWidth: 1,
-            borderColor: 'black',
+            // borderWidth: 1,
+            // borderColor: 'yellow',
             top: 40,
             height: 40,
             width: 40,
@@ -117,17 +113,20 @@ class MainTopNavigationBar extends React.Component {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          {null}
+          <Image
+            source={require('./../../../assets/imgs/Grabbit_White_G_300x300.png')}
+            style={{height: 30, width: 30}}
+          />
         </View>
         <View
           style={{
-            borderWidth: 1,
-            borderColor: 'red',
+            // borderWidth: 1,
+            // borderColor: 'red',
             top: 40,
             borderRadius: 50,
             height: 40,
             width: 40,
-            left: 330,
+            right: 20,
             position: 'absolute',
             alignItems: 'center',
             justifyContent: 'center',
@@ -138,14 +137,3 @@ class MainTopNavigationBar extends React.Component {
     );
   }
 }
-
-export const mapStateToProps = function (state) {
-  return {
-    user: getStateForKey('state.user', state),
-  };
-};
-
-export default {
-  BasicTopNavigationBar: connect(mapStateToProps)(BasicTopNavigationBar),
-  MainTopNavigationBar: connect(mapStateToProps)(MainTopNavigationBar),
-};

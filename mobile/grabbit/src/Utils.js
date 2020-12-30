@@ -1,4 +1,8 @@
+import React from 'react';
+import {View} from 'react-native';
 import axios from 'axios';
+import Icon from 'react-native-vector-icons/Feather';
+import {Color} from 'grabbit/src/Const';
 
 export const httpRequest = async function (options) {
   if (!options.endpoint) {
@@ -20,10 +24,10 @@ export const httpRequest = async function (options) {
       };
     }
   } catch (e) {
-    console.log('httpRequest error: ' + e.toString());
+    console.log('httpRequest: ' + e.toString());
     return {
       error: {
-        statusCode: e.response.status,
+        statusCode: 500,
         details: 'Something unexpected happened :(',
       },
     };
@@ -41,3 +45,27 @@ export const getStateForKey = function (key, state) {
   }
   return curr;
 };
+
+export function arrayToObject(arr, keyedBy) {
+  const obj = {};
+  arr.forEach((element) => {
+    obj[element[keyedBy]] = element;
+  });
+  return obj;
+}
+
+export function NewNotificationIcon(focused) {
+  return (
+    <View>
+      <View
+        style={{
+          backgroundColor: Color.ErrorRed,
+          borderRadius: 100,
+          height: 10,
+          width: 10,
+          position: 'absolute',
+        }}></View>
+      <Icon name="message-circle" size={20} color={focused ? Color.Purple : Color.ReadableGreyText} />
+    </View>
+  );
+}

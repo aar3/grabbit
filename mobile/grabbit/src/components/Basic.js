@@ -4,11 +4,20 @@ import {buttonStyle, buttonContainerStyle} from 'grabbit/src/Styles';
 
 export class TextInput extends React.Component {
   render() {
-    const {placeholder, label, autoCapitalize = 'none', labelStyle, secureTextEntry, autoCompleteType} = this.props;
+    const {
+      placeholder,
+      label,
+      autoCapitalize = 'none',
+      labelStyle,
+      onChangeText,
+      secureTextEntry,
+      autoCompleteType,
+    } = this.props;
     return (
       <Input
         autoCapitalize={autoCapitalize}
         secureTextEntry={secureTextEntry}
+        onChangeText={onChangeText}
         autoCompleteType={autoCompleteType}
         containerStyle={{
           width: 300,

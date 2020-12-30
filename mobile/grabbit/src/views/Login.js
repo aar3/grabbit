@@ -13,12 +13,28 @@ import {connect} from 'react-redux';
 import ReduxActions from 'grabbit/src/Actions';
 import {TextInput, GrabbitButton} from 'grabbit/src/components/Basic';
 import {Color} from 'grabbit/src/Const';
-import {httpRequest} from 'grabbit/src/Utils';
+import {httpRequest, getStateForKey} from 'grabbit/src/Utils';
 
-export default class V extends React.Component {
+class V extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  _renderErrorView() {
+    const {loginError} = this.props;
+    if (loginError) {
+      return (
+        <View
+          style={{
+            // borderWidth: 1,
+            // borderColor: 'blue',
+            marginBottom: 20,
+          }}>
+          <Text style={{color: Color.ErrorRed}}>{loginError.details}</Text>
+        </View>
+      );
+    }
   }
 
   render() {
@@ -33,7 +49,8 @@ export default class V extends React.Component {
           enabled={true}
           style={{
             flex: 1,
-            justifyContent: 'center',
+            // justifyContent: 'center',
+            paddingTop: 200,
             alignItems: 'center',
           }}>
           <View
@@ -55,10 +72,35 @@ export default class V extends React.Component {
                 style={{flex: 1, height: undefined, width: undefined}}
               />
             </View>
-            <TextInput autoCompleteType={'email'} label={'Email'} labelStyle={labelStyle} placeholder="you@gmail.com" />
-            <TextInput secureTextEntry={true} labelStyle={labelStyle} label={'Password'} placeholder="**********" />
+            {this._renderErrorView()}
+            <TextInput
+              autCorrect={false}
+              keyboardType={'numeric'}
+              label={'Phone'}
+              value={this.props.loginData.phone}
+              labelStyle={labelStyle}
+              onChangeText={(text) => this.props.updateLoginValue('phone', text)}
+              placeholder="+1 555-555-5555"
+            />
+            <TextInput
+              secureTextEntry={true}
+              labelStyle={labelStyle}
+              label={'Password'}
+              value={this.props.loginData.secret}
+              onChangeText={(text) => this.props.updateLoginValue('secret', text)}
+              placeholder="**********"
+            />
             <GrabbitButton
-              onPress={() => Actions.listRewards()}
+              onPress={() =>
+                this.props.postUserLogin({
+                  endpoint: '/user/login/',
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  data: this.props.loginData,
+                })
+              }
               _buttonStyle={{
                 backgroundColor: Color.Purple,
               }}
@@ -86,32 +128,50 @@ export default class V extends React.Component {
   }
 }
 
-const mapDispatchToProps = function (dispatch) {
+const mapDispatchToProps = (dispatch) => {
   return {
-    postUserLogin: async function ({stateKey = 'state.user', operation = 'replace', options}) {
+    postUserLogin: async function (options) {
       dispatch({
-        type: ReduxActions.POST_USER_LOGIN_PENDING,
+        type: ReduxActions.Session.ResetAuthError,
       });
 
-      const {data, error} = await httpRequest({options});
+      dispatch({
+        type: ReduxActions.Session.PostUserLoginPending,
+      });
+
+      const {data, error} = await httpRequest(options);
 
       if (error) {
+        error.details = error.statusCode === 404 ? 'Account not found' : error.details;
         return dispatch({
-          type: ReduxActions.GENERIC_ACTION,
-          error,
+          type: ReduxActions.Session.PostUserLoginError,
+          payload: error,
         });
       }
 
-      return dispatch({
-        type: ReduxActions.GENERIC_ACTION,
+      dispatch({
+        type: ReduxActions.Session.PostUserLoginSuccess,
         payload: data,
-        stateKey,
-        operation,
+      });
+
+      return Actions.listRewards();
+    },
+
+    updateLoginValue: function (key, value) {
+      return dispatch({
+        type: ReduxActions.Session.UpdateLoginValue,
+        payload: value,
+        key,
       });
     },
   };
 };
 
-const mapStateToProps = function (state) {
-  return {};
+const mapStateToProps = (state) => {
+  return {
+    loginData: getStateForKey('state.session.authentication.input.login', state),
+    loginError: getStateForKey('state.session.authentication.error', state),
+  };
 };
+
+export default connect(mapStateToProps, mapDispatchToProps)(V);

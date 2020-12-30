@@ -61,7 +61,7 @@ def create_session_for_new_user(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def create_new_account_notification(sender, instance, created, **kwargs):
     if created:
-        _ = Notification.objects.create(user=instance, text="Welcome to Grabbit!")
+        _ = Notification.objects.create(user=instance, icon="user", text="Welcome to Grabbit!")
 
 
 # @receiver(post_save, sender=User)
@@ -80,6 +80,7 @@ class Login(BaseModel):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     ip_address = models.CharField(max_length=255)
+    user_agent = models.CharField(max_length=255, null=True)
 
 
 class Notification(BaseModel):
@@ -88,8 +89,23 @@ class Notification(BaseModel):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.CharField(max_length=255)
+    icon = models.CharField(max_length=255, default="user")
     expiry = models.DateTimeField(null=True)
-    seen = models.IntegerField(default=0)
+    route_key = models.CharField(max_length=255, null=True)
+    metadata = models.JSONField(default=dict)
+    seen_at = models.DateTimeField(null=True)
 
-    def set_expiry(self):
-        self.expiry = dt.datetime.utcnow() + dt.timedelta(hours=24)
+
+class Setting(BaseModel):
+    class Meta:
+        db_table = "settings"
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    metadata = models.JSONField(default=dict)
+    targeting_enabled = models.IntegerField(default=1)
+
+
+@receiver(post_save, sender=Setting)
+def create_notification_for_updated_settings(sender, instance, created, **kwargs):
+    if not created:
+        _ = Notification.objects.create(user=instance.user, icon="unlock", route_key="settings", text="You've updated your profile settings")

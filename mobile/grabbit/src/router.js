@@ -1,9 +1,12 @@
 import React from 'react';
 import {View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import {connect} from 'react-redux';
+import ReduxActions from 'grabbit/src/Actions';
 import {Router, Scene, Stack, Tabs} from 'react-native-router-flux';
 import {Color, TabIconSize} from 'grabbit/src/Const';
 import {BasicTopNavigationBar, MainTopNavigationBar} from 'grabbit/src/components/navigation/Top';
+import {getStateForKey, NewNotificationIcon} from 'grabbit/src/Utils';
 import {
   EntryView,
   LoginView,
@@ -17,9 +20,15 @@ import {
   AboutView,
   TermsView,
   PrivacyView,
+  NotificationsView,
 } from 'grabbit/src/views';
 
-export default class Router_ extends React.Component {
+class Router_ extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
   render() {
     return (
       <Router>
@@ -31,7 +40,6 @@ export default class Router_ extends React.Component {
             gesturesEnabled={false}
             drawerLockMode="locked-closed"
             hideNavBar={true}
-            initial
           />
           <Scene
             key="login"
@@ -54,7 +62,7 @@ export default class Router_ extends React.Component {
           <Scene key="contact" component={ContactView} title="Contact" hideNavBar={false} />
           <Scene key="about" component={AboutView} title="About" hideNavBar={false} />
           <Scene key="terms" component={TermsView} title="Terms" hideNavBar={false} />
-          <Scene key="privacy" component={TermsView} title="Privacy Policy" hideNavBar={false} />
+          <Scene key="privacy" component={PrivacyView} title="Privacy Policy" hideNavBar={false} />
           <Tabs
             duration={0}
             animationEnabled={false}
@@ -63,6 +71,7 @@ export default class Router_ extends React.Component {
             showLabel={false}
             tabBarPosition={'bottom'}
             activeBackgroundColor={Color.White}
+            initial
             lazy>
             <Scene
               navBar={MainTopNavigationBar}
@@ -76,7 +85,7 @@ export default class Router_ extends React.Component {
               component={ListRewardsView}
             />
             <Scene
-              navBar={BasicTopNavigationBar}
+              navBar={null}
               title={'Linked Accounts'}
               hideNavBar={false}
               renderBackButton={() => <View />}
@@ -89,6 +98,26 @@ export default class Router_ extends React.Component {
                 />
               )}
               component={LinkAccountView}
+            />
+            <Scene
+              navBar={MainTopNavigationBar}
+              title={null}
+              hideNavBar={false}
+              renderBackButton={() => <View />}
+              key="notifications"
+              icon={({focused}) => {
+                if (this.props.hasUnseenNotifications) {
+                  return <NewNotificationIcon focused={focused} />;
+                }
+                return (
+                  <Icon
+                    name={'message-circle'}
+                    size={TabIconSize}
+                    color={focused ? Color.Purple : Color.ReadableGreyText}
+                  />
+                );
+              }}
+              component={NotificationsView}
             />
             <Scene
               navBar={null}
@@ -107,6 +136,16 @@ export default class Router_ extends React.Component {
     );
   }
 }
+
+const mapStateToProps = function (state) {
+  const notifications = Object.values(getStateForKey('state.notifications.list.items', state));
+  const unseenNotifications = notifications.filter((item) => !item.seen_at);
+  return {
+    hasUnseenNotifications: unseenNotifications.length > 0,
+  };
+};
+
+export default connect(mapStateToProps)(Router_);
 
 const MyTransitionSpec = {
   duration: 0,

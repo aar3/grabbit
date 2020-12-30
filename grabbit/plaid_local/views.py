@@ -21,7 +21,7 @@ class LinkTokenViewSet(BaseModelViewSet):
     authentication_classes = [TokenAuthentication]
 
     def create(self, request):
-        user = get_object_or_404(User, email=request.data["user_id"])
+        user = get_object_or_404(User, phone=request.data["user_id"])
         configs = {
             "user": {"client_user_id": request.data["user_id"],},
             "products": ["auth", "transactions"],
@@ -37,6 +37,18 @@ class LinkTokenViewSet(BaseModelViewSet):
         instance = self.model.objects.create(token=response["link_token"], user=user)
         serializer = self.serializer(instance)
 
+        return Response(serializer.data)
+
+
+class LinkViewSet(BaseModelViewSet):
+    model = Link
+    serializer = LinkSerializer
+    authentication_classes = [TokenAuthentication]
+
+    def list(self, request, pk=None):
+        user = get_object_or_404(User, pk=pk)
+        links = self.model.objects.filter(user__id=user.id)
+        serializer = self.serializer(links, many=True)
         return Response(serializer.data)
 
 

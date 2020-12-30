@@ -29,20 +29,23 @@ export default class V extends React.Component {
 
     return (
       <ScrollView
-        contentContainerStyle={{
-          paddingTop: 150,
-          // maxHeight: 700,
-          height: 1000,
-        }}>
+        contentContainerStyle={
+          {
+            // borderWidth: 1,
+            // borderColor: 'blue'
+          }
+        }>
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <KeyboardAvoidingView
             behavior={'padding'}
             enabled={true}
-            keyboardVerticalOffset={75}
+            keyboardVerticalOffset={150}
             style={{
               flex: 1,
-              justifyContent: 'center',
+              paddingTop: 100,
               alignItems: 'center',
+              // borderWidth: 1,
+              // borderColor: 'red'
             }}>
             <View
               style={{
@@ -85,7 +88,7 @@ export default class V extends React.Component {
               />
               <TextInput labelStyle={labelStyle} label={'Invitation Code'} placeholder="5-digit code (e.g., XY43D)" />
               <GrabbitButton
-                onPress={() => Actions.login()}
+                onPress={() => Actions.listRewards()}
                 _buttonStyle={{
                   backgroundColor: Color.Purple,
                 }}
@@ -116,7 +119,7 @@ export default class V extends React.Component {
 
 const mapDispatchToProps = function (dispatch) {
   return {
-    postUserSignup: async function ({stateKey = 'state.user', operation = 'replace', options}) {
+    postUserSignup: async function ({stateKey = 'state.user', options}) {
       dispatch({
         type: ReduxActions.GENERIC_ACTION,
       });
@@ -133,7 +136,6 @@ const mapDispatchToProps = function (dispatch) {
       return dispatch({
         payload: data,
         stateKey,
-        operation,
       });
     },
   };

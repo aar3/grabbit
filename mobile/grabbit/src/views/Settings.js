@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, Linking} from 'react-native';
 import ToggleSwitch from 'toggle-switch-react-native';
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
@@ -24,7 +24,7 @@ class V extends React.Component {
     const {settings} = this.props;
     return settings.support.map((item, index) => {
       return (
-        <TouchableOpacity key={String(index)} onPress={() => Actions[item.routeKey]}>
+        <TouchableOpacity key={String(index)} onPress={() => Linking.openURL(item.href)}>
           <View
             key={String(index)}
             style={{

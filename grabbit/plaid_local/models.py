@@ -13,6 +13,7 @@ class LinkToken(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
+# Link model is same as an Account model
 class Link(BaseModel):
     class Meta:
         db_table = "links"
@@ -24,8 +25,21 @@ class Link(BaseModel):
     institution_id = models.CharField(max_length=255)
     accounts = models.JSONField(default=dict)
     link_session_id = models.CharField(max_length=255)
+    active = models.IntegerField(default=1)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+
+@receiver(post_save, sender=Link)
+def create_notification_for_new_link(sender, instance, created, **kwargs):
+    from user.models import Notification
+    if created:
+        _ = Notification.objects.create(
+            user=instance.user, 
+            route_key="linkAccount",
+            metadata={"instance": instance.__dict__},
+            icon="credit-card", 
+            text=f"Your new {instance.institution_name} account is now live on Grabbit!"
+        )
 
 class TransactionTask(BaseModel):
     class Meta:
@@ -50,10 +64,3 @@ class Transaction(BaseModel):
     payment_meta = models.JSONField(default=dict)
     pending = models.IntegerField()
     transaction_id = models.CharField(max_length=255)
-
-
-class Account(BaseModel):
-    class Meta:
-        db_table = "accounts"
-
-    link = models.ForeignKey(Link, on_delete=models.CASCADE)

@@ -1,10 +1,44 @@
 export default {
   GENERIC_ACTION: 'GENERIC_ACTION',
-  POST_USER_LOGIN_PENDING: 'POST_USER_LOGIN_PENDING',
-  POST_USER_LOGIN_SUCCESS: 'POST_USER_LOGIN_SUCCESS',
-  POST_USER_LOGIN_ERROR: 'POST_USER_LOGIN_ERROR',
+  Session: {
+    UpdateLoginValue: 'UpdateLoginValue',
+    PostUserLoginPending: 'PostUserLoginPending',
+    PostUserLoginSuccess: 'PostUserLoginSuccess',
+    PostUserLoginError: 'PostUserLoginError',
+    ResetAuthError: 'ResetAuthError',
+  },
+  Rewards: {
+    GetUserRewardsPending: 'GetUserRewardsPending',
+    GetUserRewardsSuccess: 'GetUserRewardsSuccess',
+    GetUserRewardsError: 'GetUserRewardsError',
+    SetFocusedReward: 'SetFocusedReward',
+  },
+  Plaid: {
+    GetLinkTokenPending: 'GetLinkTokenPending',
+    GetLinkTokenSuccess: 'GetLinkTokenSuccess',
+    GetLinkTokenError: 'GetLinkTokenError',
 
-  POST_USER_SIGNUP_PENDING: 'POST_USER_SIGNUP_PENDING',
-  POST_USER_SIGNUP_SUCCESS: 'POST_USER_SIGNUP_SUCCESS',
-  POST_USER_SIGNUP_ERROR: 'POST_USER_SIGNUP_ERROR',
+    GetUserLinksPending: 'GetUserLinksPending',
+    GetUserLinksError: 'GetUserLinksError',
+    GetUserLinksSuccess: 'GetUserLinksSuccess',
+
+    HandleLinkTokenSuccess: 'HandleLinkTokenSuccess',
+    HandleLinkTokenError: 'HandleLinkTokenError',
+
+    UpdateLinkAccountStatusPending: 'UpdateLinkAccountStatusPending',
+    UpdateLinkAccountStatusSuccess: 'UpdateLinkAccountStatusSuccess',
+    UpdateLinkAccountStatusError: 'UpdateLinkAccountStatusError',
+  },
+
+  Stats: {
+    GetUserStatsPending: 'GetUserStatsPending',
+    GetUserStatsError: 'GetUserStatsError',
+    GetUserStatsSuccess: 'GetUserStatsSuccess',
+  },
+
+  Notifications: {
+    GetNotificationsPending: 'GetNotificationsPending',
+    GetNotificationsError: 'GetNotificationsError',
+    GetNotificationsSuccess: 'GetNotificationsSuccess',
+  },
 };

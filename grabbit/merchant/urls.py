@@ -2,6 +2,7 @@ from django.urls import path, include, re_path
 from rest_framework import routers
 from merchant.views import (
     MerchantViewSet,
+    RewardCodeViewSet,
     RewardViewSet,
     CampaignViewSet,
     redeem_campaign_reward,
@@ -11,8 +12,8 @@ from merchant.views import (
 
 router = routers.DefaultRouter()
 router.register(r"accounts", MerchantViewSet, basename="merchant")
+router.register(r"(\d+)/codes", RewardCodeViewSet, basename="rewardcode")
 router.register(r"(\d+)/campaigns", CampaignViewSet, basename="campaign")
-router.register(r"(\d+)/campaigns/(\d+)/rewards", RewardViewSet, basename="reward")
 
 urlpatterns = [
     path(r"merchant/", include(router.urls)),

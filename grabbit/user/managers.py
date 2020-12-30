@@ -3,7 +3,10 @@ from lib.managers import BaseManager
 
 
 class UserManager(BaseManager):
-    def create(self, email, name, secret, phone, username, user_type=0, address_line1=None, address_line2=None):
+    # kwargs includes invitation_code
+    def create(
+        self, email, name, secret, phone, username, user_type=0, address_line1=None, address_line2=None, *args, **kwargs
+    ):
 
         user = self.model(
             email=email,

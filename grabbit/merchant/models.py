@@ -20,7 +20,7 @@ class Merchant(BaseModel):
     name = models.CharField(max_length=255)
     alternative_name = models.CharField(max_length=255, null=True)
     industry = models.JSONField(default=list)
-    primary_color = models.CharField(max_length=255, default='#88888')
+    primary_color = models.CharField(max_length=255, default="#88888")
     keywords = models.JSONField(default=list)
     invitation_code = models.CharField(max_length=255, null=True)
     image_url = models.CharField(max_length=255, null=True)
@@ -89,8 +89,7 @@ class Reward(BaseModel):
     code = models.ForeignKey(RewardCode, on_delete=models.CASCADE)
     expiry = models.DateTimeField()
     is_active = models.IntegerField(default=1)
-    qr_code = models.CharField(max_length=255, null=True)
-    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
+    qr_code_url = models.CharField(max_length=255, null=True)
     redeemed_at = models.DateTimeField(null=True)
     owner_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owner_user")
 
