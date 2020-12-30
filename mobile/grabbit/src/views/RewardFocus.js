@@ -12,7 +12,6 @@ class V extends React.Component {
   }
 
   render() {
-    console.log('>> reward ', this.props.reward.code.campaign.merchant.primary_color);
     return (
       <View
         style={{
@@ -24,7 +23,7 @@ class V extends React.Component {
           style={{
             height: '50%',
             width: '100%',
-            backgroundColor: this.props.reward.code.campaign.merchant.primary_color,
+            backgroundColor: this.props.reward.data.code.campaign.merchant.primary_color,
           }}>
           <Text
             numberOfLines={1}
@@ -38,7 +37,7 @@ class V extends React.Component {
               fontSize: 102,
               color: Color.White,
             }}>
-            {this.props.reward.code.campaign.merchant.name.toUpperCase()}
+            {this.props.reward.data.code.campaign.merchant.name.toUpperCase()}
           </Text>
           <Text
             style={{
@@ -47,7 +46,7 @@ class V extends React.Component {
               left: 50,
               top: 220,
             }}>
-            {this.props.reward.code.campaign.merchant.alternative_name}
+            {this.props.reward.data.code.campaign.merchant.alternative_name}
           </Text>
         </View>
         <View
@@ -83,7 +82,7 @@ class V extends React.Component {
               borderColor: 'blue',
             }}>
             <Image
-              source={{uri: this.props.reward.code.campaign.merchant.image_url}}
+              source={{uri: this.props.reward.data.code.campaign.merchant.image_url}}
               style={{height: 100, width: 100}}
             />
           </View>
@@ -95,7 +94,10 @@ class V extends React.Component {
               width: 125,
               height: 125,
             }}>
-            <Image source={{uri: this.props.reward.qr_code_url || FakeQRCodeURL}} style={{height: 125, width: 125}} />
+            <Image
+              source={{uri: this.props.reward.data.qr_code_url || FakeQRCodeURL}}
+              style={{height: 125, width: 125}}
+            />
           </View>
           <View
             style={{
@@ -113,23 +115,23 @@ class V extends React.Component {
                 textAlign: 'center',
                 marginBottom: 20,
               }}>
-              {this.props.reward.code.description}
+              {this.props.reward.data.code.description}
             </Text>
             <GrabbitButton
-              title={this.props.reward.code.code}
+              title={this.props.reward.data.code.code}
               titleStyle={{
                 fontWeight: 'bold',
               }}
               _buttonStyle={{
                 width: 225,
-                backgroundColor: this.props.reward.code.campaign.merchant.primary_color,
+                backgroundColor: this.props.reward.data.code.campaign.merchant.primary_color,
               }}
             />
             <Text
               style={{
                 color: Color.ReadableGreyText,
                 fontSize: 10,
-              }}>{`Expires on ${this.props.reward.expiry.substr(0, 10)}`}</Text>
+              }}>{`Expires on ${this.props.reward.data.expiry.substr(0, 10)}`}</Text>
           </View>
         </View>
         <View

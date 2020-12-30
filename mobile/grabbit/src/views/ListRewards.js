@@ -173,7 +173,6 @@ class V extends React.Component {
 
 const mapStateToProps = function (state) {
   const rewards = getStateForKey('state.rewards.list.items', state).map((item) => new Reward(item));
-  console.log(rewards);
   const activeRewards = rewards.filter((reward) => !reward.expired());
   return {
     user: getStateForKey('state.session.user', state),

@@ -1,8 +1,6 @@
 import React from 'react';
 import {View, ImageBackground, Image} from 'react-native';
-import {connect} from 'react-redux';
 import {Color} from 'grabbit/src/Const';
-import {getStateForKey} from 'grabbit/src/Utils';
 
 export class BasicTopNavigationBar extends React.Component {
   render() {
@@ -139,14 +137,3 @@ export class MainTopNavigationBar extends React.Component {
     );
   }
 }
-
-// export const mapStateToProps = function (state) {
-//   return {
-//     user: getStateForKey('state.session.user', state),
-//   };
-// };
-
-// export default {
-//   BasicTopNavigationBar: connect(mapStateToProps)(BasicTopNavigationBar),
-//   MainTopNavigationBar: connect(mapStateToProps)(MainTopNavigationBar),
-// };

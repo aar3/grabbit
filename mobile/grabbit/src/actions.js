@@ -35,4 +35,10 @@ export default {
     GetUserStatsError: 'GetUserStatsError',
     GetUserStatsSuccess: 'GetUserStatsSuccess',
   },
+
+  Notifications: {
+    GetNotificationsPending: 'GetNotificationsPending',
+    GetNotificationsError: 'GetNotificationsError',
+    GetNotificationsSuccess: 'GetNotificationsSuccess',
+  },
 };

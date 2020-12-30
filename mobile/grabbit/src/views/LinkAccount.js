@@ -78,16 +78,16 @@ class V extends React.Component {
         <View
           key={index.toString()}
           style={{
-            borderWidth: 1,
-            borderColor: Color.Purple,
+            // borderWidth: 1,
+            // borderColor: Color.ReadableGreyText,
             padding: 10,
             borderRadius: 10,
-            marginBottom: 10,
+            // marginBottom: 10,
           }}>
           <Text
             style={{
               color: Color.ReadableGreyText,
-              marginBottom: 5,
+              // marginBottom: 5,
             }}>
             Account Name: {item.name}
           </Text>
@@ -291,67 +291,71 @@ class V extends React.Component {
                   borderBottomWidth: 1,
                   borderBottomColor: Color.BorderLightGrey,
                   padding: 10,
-                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   width: '100%',
                 }}>
                 <View
                   style={{
                     // borderWidth: 1,
                     // borderColor: 'red',
-                    width: 250,
+                    // width: 250,
                     justifyContent: 'center',
-                    marginLeft: 30,
+                    alignItems: 'center',
+                    // marginLeft: 30,
                   }}>
                   <Text
                     style={{
-                      fontSize: 16,
+                      fontSize: 18,
                       color: Color.Purple,
                       fontWeight: 'bold',
                       marginTop: 10,
+                      textAlign: 'center',
                       marginBottom: 10,
                     }}>
                     {item.institution_name}
                   </Text>
                   {this._renderAccountMetadata(item.accounts)}
+                  <View
+                    style={{
+                      // borderWidth: 1,
+                      // borderColor: 'green',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 10,
+                      marginLeft: 30,
+                    }}>
+                    <ToggleSwitch
+                      isOn={Boolean(item.active)}
+                      onColor={ToggleStyle.On}
+                      offColor={ToggleStyle.Off}
+                      label={null}
+                      size="large"
+                      onToggle={() =>
+                        this.props.updateLinkStatus({
+                          endpoint: `/plaid/${this.props.user.id}/links/${item.id}/`,
+                          method: 'PUT',
+                          headers: {
+                            'Content-Type': 'application/json',
+                            'X-Session-Token': this.props.user.current_session_token,
+                          },
+                          data: Object.assign({}, item, {
+                            active: item.active === 1 ? 0 : 1,
+                          }),
+                        })
+                      }
+                    />
+                  </View>
                   <Text
                     style={{
                       textAlign: 'center',
                       fontSize: 12,
-                      marginTop: 3,
+                      marginTop: 20,
+                      marginBottom: 5,
                       color: Color.ReadableGreyText,
                     }}>
                     Last Updated: {(item.updated_at || item.created_at).substring(0, 10)}
                   </Text>
-                </View>
-                <View
-                  style={{
-                    // borderWidth: 1,
-                    // borderColor: 'green',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: 50,
-                    marginLeft: 30,
-                  }}>
-                  <ToggleSwitch
-                    isOn={Boolean(item.active)}
-                    onColor={ToggleStyle.On}
-                    offColor={ToggleStyle.Off}
-                    label={null}
-                    size="small"
-                    onToggle={() =>
-                      this.props.updateLinkStatus({
-                        endpoint: `/plaid/${this.props.user.id}/links/${item.id}/`,
-                        method: 'PUT',
-                        headers: {
-                          'Content-Type': 'application/json',
-                          'X-Session-Token': this.props.user.current_session_token,
-                        },
-                        data: Object.assign({}, item, {
-                          active: item.active === 1 ? 0 : 1,
-                        }),
-                      })
-                    }
-                  />
                 </View>
               </View>
             );
@@ -418,7 +422,6 @@ const mapDispatchToProps = function (dispatch) {
     },
 
     updateLinkStatus: async function (options) {
-      console.log('>> updating to ', options.data);
       dispatch({
         type: ReduxActions.Plaid.UpdateLinkAccountStatusPending,
       });

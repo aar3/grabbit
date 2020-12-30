@@ -17,6 +17,7 @@ import {
   AboutView,
   TermsView,
   PrivacyView,
+  NotificationsView,
 } from 'grabbit/src/views';
 
 export default class Router_ extends React.Component {
@@ -89,6 +90,21 @@ export default class Router_ extends React.Component {
                 />
               )}
               component={LinkAccountView}
+            />
+            <Scene
+              navBar={MainTopNavigationBar}
+              title={null}
+              hideNavBar={false}
+              renderBackButton={() => <View />}
+              key="notifications"
+              icon={({focused}) => (
+                <Icon
+                  name={'message-circle'}
+                  size={TabIconSize}
+                  color={focused ? Color.Purple : Color.ReadableGreyText}
+                />
+              )}
+              component={NotificationsView}
             />
             <Scene
               navBar={null}

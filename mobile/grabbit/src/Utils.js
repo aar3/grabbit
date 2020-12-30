@@ -41,3 +41,12 @@ export const getStateForKey = function (key, state) {
   }
   return curr;
 };
+
+
+export function arrayToObject(arr, keyedBy) {
+  const obj = {};
+  arr.forEach(element => {
+    obj[element[keyedBy]] = element;
+  });
+  return obj;
+}

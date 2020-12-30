@@ -30,6 +30,31 @@ class V extends React.Component {
     };
   }
 
+  _renderExpiryTag(reward) {
+    if (reward.expired()) {
+      return (
+        <Text
+          style={{
+            marginTop: 10,
+            fontSize: 12,
+            color: Color.ErrorRed,
+          }}>
+          Expired {reward.data.expiry.substr(0, 10)}
+        </Text>
+      );
+    }
+    return (
+      <Text
+        style={{
+          marginTop: 10,
+          fontSize: 12,
+          color: Color.ReadableGreyText,
+        }}>
+        Redeemed {reward.data.redeemed_at.substr(0, 10)}
+      </Text>
+    );
+  }
+
   _renderStatsHeaderContent() {
     const {stats} = this.props;
 
@@ -186,6 +211,7 @@ class V extends React.Component {
   }
 
   render() {
+    console.log('>> all inactive ', this.props.inactiveRewards);
     return (
       <View
         style={{
@@ -230,7 +256,6 @@ class V extends React.Component {
             }}
             keyExtractor={(_item, index) => index.toString()}
             renderItem={({item, index}) => {
-              console.log('> inactive ', item);
               return (
                 <TouchableOpacity>
                   <View
@@ -272,14 +297,7 @@ class V extends React.Component {
                         }}>
                         {item.data.code.description}
                       </Text>
-                      <Text
-                        style={{
-                          marginTop: 10,
-                          fontSize: 12,
-                          color: Color.ErrorRed,
-                        }}>
-                        Expired {item.data.expiry.substr(0, 10)}
-                      </Text>
+                      {this._renderExpiryTag(item)}
                     </View>
                   </View>
                 </TouchableOpacity>
@@ -295,8 +313,6 @@ class V extends React.Component {
 const mapStateToProps = function (state) {
   const rewards = getStateForKey('state.rewards.list.items', state).map((item) => new Reward(item));
   const inactiveRewards = rewards.filter((reward) => reward.inactive());
-
-  console.log('inactive length ', inactiveRewards.length);
   return {
     user: getStateForKey('state.session.user', state),
     inactiveRewards,

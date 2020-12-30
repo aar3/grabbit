@@ -1,4 +1,5 @@
 import ReduxActions from 'grabbit/src/Actions';
+import {arrayToObject} from 'grabbit/src/Utils';
 
 // IMPORTANT: all state properties are snake-cased because that's how the python
 // api sends data over the wire
@@ -40,41 +41,10 @@ const defaultState = {
     },
   },
   rewards: {
-    inactive: [
-      {
-        id: 1,
-        description: '15% off purchase off select purchase of Nike Urban Fit',
-        expiry: '1/12/2021',
-        code: 'NIKE-CFX13M',
-        qr_code_url:
-          'https://www.qr-code-generator.com/wp-content/themes/qr/new_structure/markets/core_market_full/generator/dist/generator/assets/images/websiteQRCode_noFrame.png',
-        merchant: {
-          image_url: 'https://miro.medium.com/max/1161/1*cJUVJJSWPj9WFIJlvf7dKg.jpeg',
-          name: 'Nike',
-          alternative_name: 'Nike Corporation',
-          primary_color: '#000',
-        },
-      },
-      {
-        id: 2,
-        description: "10% off men's tops from with purchase of $50 or more",
-        expiry: '2/21/2021',
-        code: 'SUPR-AG78E',
-        qr_code_url:
-          'https://www.qr-code-generator.com/wp-content/themes/qr/new_structure/markets/core_market_full/generator/dist/generator/assets/images/websiteQRCode_noFrame.png',
-        merchant: {
-          image_url: 'https://ak.picdn.net/shutterstock/videos/1032859976/thumb/10.jpg',
-          name: 'Supreme',
-          primary_color: '#CF0F0F',
-          alternative_name: 'Vivandi Group Intl.',
-        },
-      },
-    ],
+    inactive: {},
     list: {
       pending: false,
-      error: {
-        details: 'Something unexpected happened',
-      },
+      error: null,
       items: [],
     },
     focused: null,
@@ -92,24 +62,31 @@ const defaultState = {
       {
         id: 1,
         title: 'About Grabbit',
-        routeKey: 'about',
+        href: 'https://www.grabbithq.com/about',
       },
       {
         id: 2,
         title: 'Terms & Conditions',
-        routeKey: 'terms',
+        href: 'https://www.grabbithq.com/terms',
       },
       {
         id: 3,
         title: 'Privacy Policy',
-        routeKey: 'privacy',
+        href: 'https://www.grabbithq.com/privacy',
       },
       {
         id: 4,
         title: 'Contact Us',
-        routeKey: 'contact',
+        href: 'https://www.grabbithq.com/contact',
       },
     ],
+  },
+  notifications: {
+    list: {
+      pending: false,
+      error: null,
+      items: {},
+    },
   },
   plaid: {
     links: {
@@ -133,6 +110,53 @@ const defaultState = {
 export default function (state = defaultState, action) {
   const {payload, type, key} = action;
   switch (type) {
+    // ********************************************
+    // Notifications
+    // ********************************************
+    case ReduxActions.Notifications.GetNotificationsSuccess: {
+      const items = arrayToObject(payload, 'id');
+      return {
+        ...state,
+        notifications: {
+          ...state.notifications,
+          list: {
+            ...state.notifications.list,
+            pending: false,
+            error: null,
+            items,
+          },
+        },
+      };
+    }
+
+    case ReduxActions.Notifications.GetNotificationsError: {
+      return {
+        ...state,
+        notifications: {
+          ...state.notifications,
+          list: {
+            ...state.notifications.list,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+
+    case ReduxActions.Notifications.GetNotificationsPending: {
+      return {
+        ...state,
+        notifications: {
+          ...state.notifications,
+          list: {
+            ...state.notifications.list,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
+
     // ********************************************
     // Stats
     // ********************************************
@@ -174,11 +198,7 @@ export default function (state = defaultState, action) {
     // Plaid
     // ********************************************
     case ReduxActions.Plaid.GetUserLinksSuccess: {
-      const list = {};
-      payload.forEach((item) => {
-        list[item.id] = item;
-      });
-
+      const list = arrayToObject(payload, 'id');
       return {
         ...state,
         plaid: {
