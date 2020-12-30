@@ -25,7 +25,14 @@ class V extends React.Component {
   }
 
   async componentDidMount() {
-    return this.props.getNotifications(this.options);
+    return this.props.setNotificationsSeen({
+      endpoint: `/user/${this.props.user.id}/notifications/`,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Session-Token': this.props.user.current_session_token,
+      },
+    });
   }
 
   render() {
@@ -93,20 +100,23 @@ class V extends React.Component {
     if (this.props.notifications.length === 0) {
       return (
         <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-          <Text style={{
-            color: Color.BorderLightGrey,
-            fontWeight: 'bold',
-            fontSize: 18,
-            marginBottom: 20,
-          }}>You have no notifications</Text>
-          <Icon name='thumbs-down' size={20} color={Color.BorderLightGrey} />
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              color: Color.BorderLightGrey,
+              fontWeight: 'bold',
+              fontSize: 18,
+              marginBottom: 20,
+            }}>
+            You have no notifications
+          </Text>
+          <Icon name="thumbs-down" size={20} color={Color.BorderLightGrey} />
         </View>
-      )
+      );
     }
 
     return (
@@ -116,39 +126,48 @@ class V extends React.Component {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-          <FlatList 
-            data={this.props.notifications}
-            style={{
-              width: '100%',
-            }}
-            keyExtractor={(_item, index) => index.toString()} 
-            renderItem={({ item, index }) => {
-              return (
-                <View style={{
+        <FlatList
+          data={this.props.notifications}
+          style={{
+            width: '100%',
+          }}
+          keyExtractor={(_item, index) => index.toString()}
+          renderItem={({item, index}) => {
+            return (
+              <View
+                style={{
                   borderBottomWidth: 1,
                   borderBottomColor: Color.BorderLightGrey,
                   height: 60,
                   width: '100%',
                   padding: 10,
                   alignItems: 'center',
-                  flexDirection: 'row'
+                  flexDirection: 'row',
                 }}>
-                  <Icon style={{
+                <Icon
+                  style={{
                     // borderWidth: 1,
                     // borderColor: 'blue',
                     marginLeft: 10,
-                  }} name={item.icon} color={Color.BorderLightGrey} size={20} />
-                  <Text style={{
+                  }}
+                  name={item.icon}
+                  color={Color.BorderLightGrey}
+                  size={20}
+                />
+                <Text
+                  style={{
                     // borderWidth: 1,
                     // borderColor: 'red',
                     marginLeft: 20,
-                    color: Color.ReadableGreyText
-                  }}>{item.text}</Text>
-                </View>
-              )
-            }}
-            />
-        </View>
+                    color: Color.ReadableGreyText,
+                  }}>
+                  {item.text}
+                </Text>
+              </View>
+            );
+          }}
+        />
+      </View>
     );
   }
 }
@@ -165,18 +184,11 @@ const mapStateToProps = function (state) {
 
 const mapDispatchToProps = function (dispatch) {
   return {
-    getNotifications: async function (options) {
-      dispatch({
-        type: ReduxActions.Notifications.GetNotificationsPending,
-      });
-
-      const {data, error} = await httpRequest(options);
-
+    setNotificationsSeen: async function (options) {
+      const {error, data} = await httpRequest(options);
       if (error) {
-        return dispatch({
-          type: ReduxActions.Notifications.GetNotificationsError,
-          payload: error,
-        });
+        console.log(`Error setting notifications as seen: ${error.details}`);
+        return;
       }
 
       return dispatch({

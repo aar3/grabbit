@@ -1,9 +1,12 @@
 import React from 'react';
 import {View} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import {connect} from 'react-redux';
+import ReduxActions from 'grabbit/src/Actions';
 import {Router, Scene, Stack, Tabs} from 'react-native-router-flux';
 import {Color, TabIconSize} from 'grabbit/src/Const';
 import {BasicTopNavigationBar, MainTopNavigationBar} from 'grabbit/src/components/navigation/Top';
+import {getStateForKey} from 'grabbit/src/Utils';
 import {
   EntryView,
   LoginView,
@@ -20,7 +23,12 @@ import {
   NotificationsView,
 } from 'grabbit/src/views';
 
-export default class Router_ extends React.Component {
+class Router_ extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
   render() {
     return (
       <Router>
@@ -101,7 +109,9 @@ export default class Router_ extends React.Component {
                 <Icon
                   name={'message-circle'}
                   size={TabIconSize}
-                  color={focused ? Color.Purple : Color.ReadableGreyText}
+                  color={
+                    focused ? Color.Purple : this.props.hasUnseenNotifications ? Color.ErrorRed : Color.ReadableGreyText
+                  }
                 />
               )}
               component={NotificationsView}
@@ -123,6 +133,17 @@ export default class Router_ extends React.Component {
     );
   }
 }
+
+const mapStateToProps = function (state) {
+  const notifications = Object.values(getStateForKey('state.notifications.list.items', state));
+  const unseenNotifications = notifications.filter((item) => !item.seen_at);
+  console.log(notifications);
+  return {
+    hasUnseenNotifications: unseenNotifications.length > 0,
+  };
+};
+
+export default connect(mapStateToProps)(Router_);
 
 const MyTransitionSpec = {
   duration: 0,

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Image} from 'react-native';
+import {View, Text, Image, ImageBackground} from 'react-native';
 import {getStateForKey} from 'grabbit/src/Utils';
 import {connect} from 'react-redux';
 import {Color, FakeQRCodeURL} from 'grabbit/src/Const';
@@ -31,10 +31,10 @@ class V extends React.Component {
             style={{
               fontWeight: 'bold',
               position: 'absolute',
-              top: 100,
+              top: 25,
               left: 50,
               letterSpacing: 20,
-              fontSize: 102,
+              fontSize: 180,
               color: Color.White,
             }}>
             {this.props.reward.data.code.campaign.merchant.name.toUpperCase()}
@@ -43,7 +43,7 @@ class V extends React.Component {
             style={{
               color: Color.White,
               position: 'absolute',
-              left: 50,
+              left: 55,
               top: 220,
             }}>
             {this.props.reward.data.code.campaign.merchant.alternative_name}
@@ -53,7 +53,7 @@ class V extends React.Component {
           style={{
             borderWidth: 1,
             borderColor: Color.BorderLightGrey,
-            height: 500,
+            height: 450,
             width: 300,
             position: 'absolute',
             top: 300,
@@ -91,8 +91,8 @@ class V extends React.Component {
               marginTop: 20,
               borderWidth: 1,
               borderColor: Color.BorderLightGrey,
-              width: 125,
-              height: 125,
+              width: 127,
+              height: 127,
             }}>
             <Image
               source={{uri: this.props.reward.data.qr_code_url || FakeQRCodeURL}}
@@ -138,8 +138,19 @@ class V extends React.Component {
           style={{
             height: '50%',
             width: '100%',
-            backgroundColor: Color.White,
-          }}></View>
+            // backgroundColor: Color.White,
+          }}>
+          <ImageBackground
+            style={{
+              // borderWidth: 1,
+              // borderColor: 'red',
+              height: 100,
+              width: '100%',
+              position: 'absolute',
+              bottom: 100,
+            }}
+            source={require('./../../assets/imgs/BarCode_Background.png')}></ImageBackground>
+        </View>
       </View>
     );
   }

@@ -211,7 +211,6 @@ class V extends React.Component {
   }
 
   render() {
-    console.log('>> all inactive ', this.props.inactiveRewards);
     return (
       <View
         style={{

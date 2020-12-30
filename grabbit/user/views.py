@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view, authentication_classes, parser_classes
 from rest_framework.parsers import MultiPartParser
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from user.models import User, Login, Notification, Setting
 from user.serializers import UserSerializer, NotificationSerializer, SettingSerializer
 from merchant.models import Reward
@@ -68,15 +69,6 @@ def user_login(request):
 
 @api_view(["GET"])
 @authentication_classes([TokenAuthentication])
-def list_all_notifications(request, pk=None):
-    user = get_object_or_404(User, pk=pk)
-    notifications = Notification.objects.filter(user__id=user.id)
-    serializer = NotificationSerializer(notifications, many=True)
-    return Response(serializer.data)
-
-
-@api_view(["GET"])
-@authentication_classes([TokenAuthentication])
 def list_all_user_rewards(request, pk=None):
     user = get_object_or_404(User, pk=pk)
     rewards = Reward.objects.filter(owner_user__id=user.id)
@@ -88,6 +80,28 @@ class SettingViewSet(BaseModelViewSet):
     model = Setting
     serializers = SettingSerializer
 
+
+class NotificationViewSet(BaseModelViewSet):
+    model = Notification
+    serializer = NotificationSerializer
+    authentication_classes = [TokenAuthentication]
+
+    def list(self, request, pk=None):
+        user = get_object_or_404(User, pk=pk)
+        notifications = self.model.objects.filter(user__id=user.id)
+        serializer = self.serializer(notifications, many=True)
+        return Response(serializer.data)
+
+    def create(self, request, pk=None):
+        user = get_object_or_404(User, pk=pk)
+        notifications = self.model.objects.filter(user__id=user.id)
+        for notification in notifications:
+            notification.seen_at = timezone.now()
+
+        self.model.objects.bulk_update(notifications, fields=["seen_at"])
+        instances = self.model.objects.filter(user__id=user.id)
+        serializer = self.serializer(instances, many=True)
+        return Response(serializer.data)
 
 
 @api_view(["GET"])
@@ -101,7 +115,7 @@ def get_user_stats(request, pk=None):
     rewards = Reward.objects.filter(owner_user__id=user.id, is_active=False)
     unique_merchants = set([reward.code.campaign.merchant.id for reward in rewards])
     stats = {}
-    
+
     if unique_merchants:
         mid = most_common(unique_merchants)
         instance = Merchant.objects.get(pk=mid)
@@ -120,12 +134,28 @@ def get_user_stats(request, pk=None):
                 "expiries": len([reward.__dict__ for reward in rewards if not reward.redeemed_at]),
                 "time_elapsed": 30,
                 "potential_spend": 0,
-                "avg_discount": average([reward.code.value for reward in rewards if not reward.redeemed_at])
+                "avg_discount": average([reward.code.value for reward in rewards if not reward.redeemed_at]),
             },
         }
 
         stats["top_merchant"]["total_spend"] = 0
-        stats["top_merchant"]["avg_discount"] = average([reward.code.value for reward in rewards if reward.redeemed_at and reward.code.campaign.merchant.id == mid])
-        stats["top_merchant"]["conversions"] = len([reward for reward in rewards if reward.code.campaign.merchant.id == mid])
+        stats["top_merchant"]["avg_discount"] = average(
+            [reward.code.value for reward in rewards if reward.redeemed_at and reward.code.campaign.merchant.id == mid]
+        )
+        stats["top_merchant"]["conversions"] = len(
+            [reward for reward in rewards if reward.code.campaign.merchant.id == mid]
+        )
 
     return Response(data=stats)
+
+
+# @api_view(["PUT"])
+# @authentication_classes([TokenAuthentication])
+# def set_all_notifications_as_seen(request, pk=None):
+#     user = get_object_or_404(User, pk=pk)
+#     notifications = Notification.objects.filter(user__id=user.id)
+#     for notification in notifications:
+#         notification.seen_at = timezone.now()
+
+#     Notification.objects.bulk_update(notifications, fields=["seen_at"])
+#     return Response(status=200)

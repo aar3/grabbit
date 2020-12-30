@@ -89,12 +89,9 @@ class Notification(BaseModel):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.CharField(max_length=255)
-    icon = models.CharField(max_length=255, default='user')
+    icon = models.CharField(max_length=255, default="user")
     expiry = models.DateTimeField(null=True)
-    seen = models.IntegerField(default=0)
-
-    def set_expiry(self):
-        self.expiry = dt.datetime.utcnow() + dt.timedelta(hours=24)
+    seen_at = models.DateTimeField(null=True)
 
 
 class Setting(BaseModel):
@@ -104,6 +101,7 @@ class Setting(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     metadata = models.JSONField(default=dict)
     targeting_enabled = models.IntegerField(default=1)
+
 
 @receiver(post_save, sender=Setting)
 def create_notification_for_updated_settings(sender, instance, created, **kwargs):
