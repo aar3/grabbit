@@ -99,7 +99,7 @@ class V extends React.Component {
           <Text
             style={{
               color: Color.Purple,
-              fontSize: 22,
+              fontSize: 18,
               fontWeight: 'bold',
             }}>
             Whoops, there was an error

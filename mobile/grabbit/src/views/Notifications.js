@@ -134,12 +134,13 @@ class V extends React.Component {
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
             return (
-              <TouchableOpacity onPress={() => {
-                if (item.route_key) {
-                  // TODO: pass item.metadata along as well
-                  return Actions[item.route_key]();
-                }
-              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  if (item.route_key) {
+                    // TODO: pass item.metadata along as well
+                    return Actions[item.route_key]();
+                  }
+                }}>
                 <View
                   style={{
                     borderBottomWidth: 1,

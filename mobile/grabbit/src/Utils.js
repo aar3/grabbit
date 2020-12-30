@@ -27,7 +27,7 @@ export const httpRequest = async function (options) {
     console.log('httpRequest: ' + e.toString());
     return {
       error: {
-        statusCode: e.response.status,
+        statusCode: 500,
         details: 'Something unexpected happened :(',
       },
     };
