@@ -6,7 +6,7 @@ import ReduxActions from 'grabbit/src/Actions';
 import {Router, Scene, Stack, Tabs} from 'react-native-router-flux';
 import {Color, TabIconSize} from 'grabbit/src/Const';
 import {BasicTopNavigationBar, MainTopNavigationBar} from 'grabbit/src/components/navigation/Top';
-import {getStateForKey} from 'grabbit/src/Utils';
+import {getStateForKey, NewNotificationIcon} from 'grabbit/src/Utils';
 import {
   EntryView,
   LoginView,
@@ -105,15 +105,18 @@ class Router_ extends React.Component {
               hideNavBar={false}
               renderBackButton={() => <View />}
               key="notifications"
-              icon={({focused}) => (
-                <Icon
-                  name={'message-circle'}
-                  size={TabIconSize}
-                  color={
-                    focused ? Color.Purple : this.props.hasUnseenNotifications ? Color.ErrorRed : Color.ReadableGreyText
-                  }
-                />
-              )}
+              icon={({focused}) => {
+                if (this.props.hasUnseenNotifications) {
+                  return <NewNotificationIcon focused={focused} />;
+                }
+                return (
+                  <Icon
+                    name={'message-circle'}
+                    size={TabIconSize}
+                    color={focused ? Color.Purple : Color.ReadableGreyText}
+                  />
+                );
+              }}
               component={NotificationsView}
             />
             <Scene

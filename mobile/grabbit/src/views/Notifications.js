@@ -134,36 +134,71 @@ class V extends React.Component {
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
             return (
-              <View
-                style={{
-                  borderBottomWidth: 1,
-                  borderBottomColor: Color.BorderLightGrey,
-                  height: 60,
-                  width: '100%',
-                  padding: 10,
-                  alignItems: 'center',
-                  flexDirection: 'row',
-                }}>
-                <Icon
+              <TouchableOpacity onPress={() => {}}>
+                <View
                   style={{
-                    // borderWidth: 1,
-                    // borderColor: 'blue',
-                    marginLeft: 10,
-                  }}
-                  name={item.icon}
-                  color={Color.BorderLightGrey}
-                  size={20}
-                />
-                <Text
-                  style={{
-                    // borderWidth: 1,
-                    // borderColor: 'red',
-                    marginLeft: 20,
-                    color: Color.ReadableGreyText,
+                    borderBottomWidth: 1,
+                    borderBottomColor: Color.BorderLightGrey,
+                    height: 60,
+                    width: '100%',
+                    flexDirection: 'row',
+                    // justifyContent: 'center',
+                    alignItems: 'center',
                   }}>
-                  {item.text}
-                </Text>
-              </View>
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: 60,
+                      width: 60,
+                      // borderWidth: 1,
+                      // borderColor: 'green',
+                    }}>
+                    <Icon name={item.icon} color={Color.BorderLightGrey} size={30} />
+                  </View>
+                  <View
+                    style={{
+                      // borderWidth: 1,
+                      // borderColor: 'blue',
+                      width: 280,
+                      marginLeft: 20,
+                    }}>
+                    <Text
+                      style={{
+                        marginTop: 10,
+                        color: Color.ReadableGreyText,
+                      }}>
+                      {item.text}
+                    </Text>
+                    <View
+                      style={{
+                        // borderWidth: 1,
+                        // borderColor: 'red',
+                        marginTop: 5,
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                      }}>
+                      <Icon name={'check'} size={15} color={Color.BorderLightGrey} />
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: Color.BorderLightGrey,
+                        }}>
+                        Seen At {item.seen_at.substr(0, 10)}
+                      </Text>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      // borderColor: 'red',
+                      // borderWidth: 1,
+                      width: 25,
+                      height: 25,
+                    }}>
+                    <Icon name={'chevron-right'} size={20} color={Color.ReadableGreyText} />
+                  </View>
+                </View>
+              </TouchableOpacity>
             );
           }}
         />
