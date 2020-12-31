@@ -60,6 +60,7 @@ export function NewNotificationIcon(focused) {
       <View
         style={{
           backgroundColor: Color.ErrorRed,
+          zIndex: 1,
           borderRadius: 100,
           height: 10,
           width: 10,
