@@ -114,7 +114,7 @@ class V extends React.Component {
           style={{
             // borderWidth: 1,
             // borderColor: 'red',
-            marginBottom: 60,
+            marginBottom: 10,
             justifyContent: 'center',
             alignItems: 'center',
           }}>
@@ -127,7 +127,7 @@ class V extends React.Component {
             Whoops, there was an error
           </Text>
           <Text style={{fontSize: 14, marginTop: 10, fontWeight: 'bold', color: Color.BorderLightGrey}}>
-            {this.props.getLinkTokenError.details}
+            We couldn't get your account information :(
           </Text>
           <TouchableOpacity onPress={() => this.props.getLinkToken(this.linkTokenOptions)}>
             <Icon style={{marginTop: 20}} name={'rotate-ccw'} size={24} color={Color.BorderLightGrey} />

@@ -35,6 +35,21 @@ class V extends React.Component {
     });
   }
 
+  _renderInfoButton(item) {
+    if (!item.route_key) {
+      return null;
+    }
+    return (
+      <View
+        style={{
+          // borderColor: 'red',
+          // borderWidth: 1,
+          width: 25,
+          height: 25,
+        }}></View>
+    );
+  }
+
   render() {
     if (this.props.getNotificationsPending) {
       return (
@@ -194,15 +209,7 @@ class V extends React.Component {
                       </Text>
                     </View>
                   </View>
-                  <View
-                    style={{
-                      // borderColor: 'red',
-                      // borderWidth: 1,
-                      width: 25,
-                      height: 25,
-                    }}>
-                    <Icon name={'chevron-right'} size={20} color={Color.ReadableGreyText} />
-                  </View>
+                  {this._renderInfoButton(item)}
                 </View>
               </TouchableOpacity>
             );

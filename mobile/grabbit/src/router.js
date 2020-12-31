@@ -75,7 +75,7 @@ class Router_ extends React.Component {
             lazy>
             <Scene
               navBar={MainTopNavigationBar}
-              title={null}
+              title={'Rewards'}
               hideNavBar={false}
               renderBackButton={() => <View />}
               key="listRewards"

@@ -1,6 +1,7 @@
 import React from 'react';
-import {View, ImageBackground, Image} from 'react-native';
+import {View, Image, TouchableOpacity} from 'react-native';
 import {Color} from 'grabbit/src/Const';
+import {Actions} from 'react-native-router-flux';
 
 export class BasicTopNavigationBar extends React.Component {
   render() {
@@ -14,7 +15,7 @@ export class BasicTopNavigationBar extends React.Component {
           padding: 10,
           backgroundColor: '#fff',
           borderBottomWidth: 1,
-          borderBottomColor: Color.LightGrey,
+          borderBottomColor: Color.BorderLighGrey,
           width: '100%',
         }}>
         <View
@@ -71,69 +72,67 @@ export class BasicTopNavigationBar extends React.Component {
 export class MainTopNavigationBar extends React.Component {
   render() {
     return (
-      <ImageBackground
-        source={require('./../../../assets/imgs/Gradient_Purple_Pink_Background_583x1258.png')}
+      <View
         style={{
           // borderWidth: 1,
           // borderColor: 'orange',
-          flexDirection: 'row',
           height: 90,
-          padding: 10,
-          backgroundColor: Color.Purple,
+          backgroundColor: '#f0f0f0',
           borderBottomWidth: 1,
-          borderBottomColor: Color.LightGrey,
-          width: '103%',
+          borderBottomColor: Color.BorderLightGrey,
         }}>
         <View
           style={{
             // borderWidth: 1,
-            // borderColor: 'green',
-            top: 40,
-            height: 40,
-            width: 40,
-            position: 'absolute',
-            left: 10,
-            borderRadius: 50,
-            alignItems: 'center',
-            justifyContent: 'center',
+            // borderColor: 'blue',
+            flexDirection: 'row',
+            marginTop: 50,
+            justifyContent: 'space-evenly',
           }}>
-          {null}
+          <View
+            style={{
+              // borderWidth: 1,
+              // borderColor: 'green',
+              height: 40,
+              width: 40,
+              borderRadius: 50,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            {null}
+          </View>
+          <TouchableOpacity onPress={() => Actions.listRewards()}>
+            <View
+              style={{
+                // borderWidth: 1,
+                // borderColor: 'yellow',
+                // height: 40,
+                // width: 40,
+                borderRadius: 50,
+                overflow: 'hidden',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Image
+                source={require('./../../../assets/imgs/Grabbit_Gradient_Letters_111x500.png')}
+                style={{height: 27, width: 122}}
+              />
+            </View>
+          </TouchableOpacity>
+          <View
+            style={{
+              // borderWidth: 1,
+              // borderColor: 'red',
+              borderRadius: 50,
+              height: 40,
+              width: 40,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            {null}
+          </View>
         </View>
-        <View
-          style={{
-            // borderWidth: 1,
-            // borderColor: 'yellow',
-            top: 40,
-            height: 40,
-            width: 40,
-            borderRadius: 50,
-            left: 180,
-            position: 'absolute',
-            overflow: 'hidden',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <Image
-            source={require('./../../../assets/imgs/Grabbit_White_G_300x300.png')}
-            style={{height: 30, width: 30}}
-          />
-        </View>
-        <View
-          style={{
-            // borderWidth: 1,
-            // borderColor: 'red',
-            top: 40,
-            borderRadius: 50,
-            height: 40,
-            width: 40,
-            right: 20,
-            position: 'absolute',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          {null}
-        </View>
-      </ImageBackground>
+      </View>
     );
   }
 }

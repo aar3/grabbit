@@ -89,5 +89,5 @@ def process_user_transactions(request, pk=None):
     start_date = dt.datetime.strptime(request.data["start_date"], PLAID_DATE_FORMAT)
     end_date = dt.datetime.strptime(request.data["end_date"], PLAID_DATE_FORMAT)
     _ = scrape_transactions_for_user.apply_async(args=(user.id, start_date, end_date))
-    # scrape_transactions_for_user(user.id, start_date, end_date)
+    # TODO: scrape_transactions_for_user(user.id, start_date, end_date)
     return Response(data={"details": "ok"}, status=200)

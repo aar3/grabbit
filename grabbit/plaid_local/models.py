@@ -36,7 +36,7 @@ def create_notification_for_new_link(sender, instance, created, **kwargs):
         _ = Notification.objects.create(
             user=instance.user, 
             route_key="linkAccount",
-            metadata={"instance": instance.__dict__},
+            metadata={"instance": instance.to_dict()},
             icon="credit-card", 
             text=f"Your new {instance.institution_name} account is now live on Grabbit!"
         )
