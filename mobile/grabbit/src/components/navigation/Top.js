@@ -1,9 +1,29 @@
 import React from 'react';
-import {View, Image, TouchableOpacity} from 'react-native';
+import {View, Image, Text, TouchableOpacity} from 'react-native';
 import {Color} from 'grabbit/src/Const';
 import {Actions} from 'react-native-router-flux';
+import Icon from 'react-native-vector-icons/Feather';
 
 export class BasicTopNavigationBar extends React.Component {
+  _renderBackButton() {
+    if (this.props.backButton) {
+      return (
+        <View
+          style={{
+            //  borderWidth: 1,
+            //  borderColor: 'red',
+            position: 'absolute',
+            left: 10,
+            top: 50,
+          }}>
+          <TouchableOpacity onPress={() => Actions.pop()}>
+            <Icon name={'chevron-left'} color={Color.Black} size={25} />
+          </TouchableOpacity>
+        </View>
+      );
+    }
+  }
+
   render() {
     return (
       <View
@@ -12,57 +32,30 @@ export class BasicTopNavigationBar extends React.Component {
           // borderColor: 'orange',
           flexDirection: 'row',
           height: 90,
-          padding: 10,
           backgroundColor: '#fff',
+          justifyContent: 'center',
+          alignItems: 'center',
           borderBottomWidth: 1,
-          borderBottomColor: Color.BorderLighGrey,
+          borderBottomColor: Color.BorderLightGrey,
           width: '100%',
         }}>
-        <View
-          style={{
-            // borderWidth: 1,
-            // borderColor: 'green',
-            top: 40,
-            height: 40,
-            width: 40,
-            position: 'absolute',
-            left: 10,
-            borderRadius: 50,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          {null}
-        </View>
+        {this._renderBackButton()}
         <View
           style={{
             // borderWidth: 1,
             // borderColor: 'pink',
-            top: 40,
-            height: 40,
-            width: 40,
-            borderRadius: 50,
-            left: 180,
-            position: 'absolute',
-            overflow: 'hidden',
             alignItems: 'center',
+            marginTop: 40,
             justifyContent: 'center',
           }}>
-          {null}
-        </View>
-        <View
-          style={{
-            // borderWidth: 1,
-            // borderColor: 'red',
-            top: 40,
-            borderRadius: 50,
-            height: 40,
-            width: 40,
-            left: 330,
-            position: 'absolute',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          {null}
+          <Text
+            style={{
+              fontWeight: 'bold',
+              fontSize: 16,
+              color: Color.Black,
+            }}>
+            {this.props.title}
+          </Text>
         </View>
       </View>
     );
