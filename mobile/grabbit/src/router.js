@@ -58,10 +58,23 @@ class Router_ extends React.Component {
             hideNavBar={true}
           />
           <Scene key="rewardFocus" component={RewardFocusView} title="Reward Focus" hideNavBar={true} />
-          <Scene key="settings" component={SettingsView} title="Settings" hideNavBar={false} />
-          <Scene key="contact" component={ContactView} title="Contact" hideNavBar={false} />
-          <Scene key="about" component={AboutView} title="About" hideNavBar={false} />
-          <Scene key="terms" component={TermsView} title="Terms" hideNavBar={false} />
+          <Scene
+            key="settings"
+            backButton={true}
+            component={SettingsView}
+            title="Settings"
+            hideNavBar={false}
+            navBar={BasicTopNavigationBar}
+          />
+          <Scene
+            key="contact"
+            component={ContactView}
+            title="Contact"
+            hideNavBar={false}
+            navBar={BasicTopNavigationBar}
+          />
+          <Scene key="about" component={AboutView} title="About" hideNavBar={false} navBar={BasicTopNavigationBar} />
+          <Scene key="terms" component={TermsView} title="Terms" hideNavBar={false} navBar={BasicTopNavigationBar} />
           <Scene key="privacy" component={PrivacyView} title="Privacy Policy" hideNavBar={false} />
           <Tabs
             duration={0}
@@ -75,7 +88,7 @@ class Router_ extends React.Component {
             lazy>
             <Scene
               navBar={MainTopNavigationBar}
-              title={null}
+              title={'Rewards'}
               hideNavBar={false}
               renderBackButton={() => <View />}
               key="listRewards"
@@ -85,7 +98,7 @@ class Router_ extends React.Component {
               component={ListRewardsView}
             />
             <Scene
-              navBar={null}
+              navBar={BasicTopNavigationBar}
               title={'Linked Accounts'}
               hideNavBar={false}
               renderBackButton={() => <View />}

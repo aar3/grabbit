@@ -64,12 +64,12 @@ class V extends React.Component {
             alignItems: 'center',
             shadowColor: '#000',
             shadowOffset: {
-              width: 0,
-              height: 2,
+              width: 3,
+              height: 3,
             },
             shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5,
+            shadowRadius: 12.84,
+            elevation: 10,
           }}>
           <View
             style={{

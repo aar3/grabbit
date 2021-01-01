@@ -28,7 +28,7 @@ export const httpRequest = async function (options) {
     return {
       error: {
         statusCode: 500,
-        details: 'Something unexpected happened :(',
+        details: e.toString(),
       },
     };
   }
@@ -60,6 +60,7 @@ export function NewNotificationIcon(focused) {
       <View
         style={{
           backgroundColor: Color.ErrorRed,
+          zIndex: 1,
           borderRadius: 100,
           height: 10,
           width: 10,

@@ -114,7 +114,7 @@ class V extends React.Component {
           style={{
             // borderWidth: 1,
             // borderColor: 'red',
-            marginBottom: 60,
+            marginBottom: 10,
             justifyContent: 'center',
             alignItems: 'center',
           }}>
@@ -127,7 +127,7 @@ class V extends React.Component {
             Whoops, there was an error
           </Text>
           <Text style={{fontSize: 14, marginTop: 10, fontWeight: 'bold', color: Color.BorderLightGrey}}>
-            {this.props.getLinkTokenError.details}
+            We couldn't get your account information :(
           </Text>
           <TouchableOpacity onPress={() => this.props.getLinkToken(this.linkTokenOptions)}>
             <Icon style={{marginTop: 20}} name={'rotate-ccw'} size={24} color={Color.BorderLightGrey} />
@@ -160,24 +160,25 @@ class V extends React.Component {
       );
     }
     return (
-      <ImageBackground
-        source={require('./../../assets/imgs/Gradient_Purple_Pink_Background_583x1258.png')}
+      <View
         style={{
           // borderWidth: 1,
           // borderColor: 'blue',
           justifyContent: 'center',
           alignItems: 'center',
-          // marginTop: 30,
-          backgroundColor: Color.HotPink,
-          // width: 100,
+          position: 'absolute',
+          backgroundColor: Color.Purple,
+          bottom: 10,
+          width: 300,
+          borderRadius: 50,
           height: 50,
           shadowColor: '#000',
           shadowOffset: {
-            width: 0,
+            width: 1,
             height: -1,
           },
           shadowOpacity: 0.5,
-          shadowRadius: 3.84,
+          shadowRadius: 5.84,
           elevation: 5,
         }}>
         <PlaidLink
@@ -193,7 +194,7 @@ class V extends React.Component {
             Add Account
           </Text>
         </PlaidLink>
-      </ImageBackground>
+      </View>
     );
   }
 
@@ -302,17 +303,14 @@ class V extends React.Component {
       <View
         style={{
           flex: 1,
-          // justifyContent: 'center',
-          // alignItems: 'center',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}>
         <FlatList
           style={{
-            // marginTop: 20,
             width: '100%',
             // borderWidth: 1,
             // borderColor: 'red',
-            // paddingTop: 20,
-            paddingBottom: 20,
             maxHeight: 240 * this.props.accounts.length,
           }}
           data={this.props.accounts}
@@ -324,39 +322,65 @@ class V extends React.Component {
                   borderBottomWidth: 1,
                   borderBottomColor: Color.BorderLightGrey,
                   padding: 10,
-                  justifyContent: 'center',
-                  alignItems: 'center',
                   width: '100%',
                 }}>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    color: Color.BorderLightGrey,
+                    fontWeight: 'bold',
+                    marginTop: 10,
+                    marginLeft: 65,
+                    marginBottom: 10,
+                  }}>
+                  {item.institution_name}
+                </Text>
                 <View
                   style={{
+                    // borderColor: 'green',
                     // borderWidth: 1,
-                    // borderColor: 'red',
-                    // width: 250,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    // marginLeft: 30,
+                    flexDirection: 'row',
+                    width: '100%',
                   }}>
-                  <Text
+                  <ImageBackground
+                    source={{
+                      uri: 'https://image.shutterstock.com/image-vector/bank-icon-logo-vector-260nw-399995245.jpg',
+                    }}
                     style={{
-                      fontSize: 18,
-                      color: Color.Purple,
-                      fontWeight: 'bold',
-                      marginTop: 10,
-                      textAlign: 'center',
-                      marginBottom: 10,
+                      height: 50,
+                      width: 50,
+                      borderWidth: 1,
+                      borderColor: Color.BorderLightGrey,
+                      borderRadius: 100,
+                      overflow: 'hidden',
+                    }}></ImageBackground>
+                  <View
+                    style={{
+                      // borderWidth: 1,
+                      // borderColor: 'red',
+                      justifyContent: 'center',
+                      width: 250,
+                      alignItems: 'center',
                     }}>
-                    {item.institution_name}
-                  </Text>
-                  {this._renderAccountMetadata(item.accounts)}
+                    {this._renderAccountMetadata(item.accounts)}
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        fontSize: 12,
+                        marginTop: 10,
+                        marginBottom: 5,
+                        color: Color.ReadableGreyText,
+                      }}>
+                      Last Updated: {(item.updated_at || item.created_at).substring(0, 10)}
+                    </Text>
+                  </View>
                   <View
                     style={{
                       // borderWidth: 1,
                       // borderColor: 'green',
                       justifyContent: 'center',
                       alignItems: 'center',
-                      marginTop: 10,
-                      marginLeft: 30,
+                      marginLeft: 20,
                     }}>
                     <ToggleSwitch
                       isOn={Boolean(item.active)}
@@ -379,16 +403,6 @@ class V extends React.Component {
                       }
                     />
                   </View>
-                  <Text
-                    style={{
-                      textAlign: 'center',
-                      fontSize: 12,
-                      marginTop: 20,
-                      marginBottom: 5,
-                      color: Color.ReadableGreyText,
-                    }}>
-                    Last Updated: {(item.updated_at || item.created_at).substring(0, 10)}
-                  </Text>
                 </View>
               </View>
             );

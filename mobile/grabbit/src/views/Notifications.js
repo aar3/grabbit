@@ -35,6 +35,38 @@ class V extends React.Component {
     });
   }
 
+  _renderMoreInfoButton(item) {
+    if (!item.route_key) {
+      return null;
+    }
+    return (
+      <View
+        style={{
+          // borderColor: 'red',
+          // borderWidth: 1,
+          width: 25,
+          height: 25,
+        }}>
+        <Icon name={'chevron-right'} size={20} color={Color.BorderLightGrey} />
+      </View>
+    );
+  }
+
+  _renderSeenTag(item) {
+    if (!item.seen_at) {
+      return null;
+    }
+    return (
+      <Text
+        style={{
+          fontSize: 12,
+          color: Color.BorderLightGrey,
+        }}>
+        Seen At {item.seen_at.substr(0, 10)}
+      </Text>
+    );
+  }
+
   render() {
     if (this.props.getNotificationsPending) {
       return (
@@ -145,7 +177,7 @@ class V extends React.Component {
                   style={{
                     borderBottomWidth: 1,
                     borderBottomColor: Color.BorderLightGrey,
-                    height: 60,
+                    height: 80,
                     width: '100%',
                     flexDirection: 'row',
                     // justifyContent: 'center',
@@ -172,6 +204,7 @@ class V extends React.Component {
                     <Text
                       style={{
                         marginTop: 10,
+                        fontSize: 13,
                         color: Color.ReadableGreyText,
                       }}>
                       {item.text}
@@ -185,24 +218,10 @@ class V extends React.Component {
                         flexDirection: 'row',
                       }}>
                       <Icon name={'check'} size={15} color={Color.BorderLightGrey} />
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          color: Color.BorderLightGrey,
-                        }}>
-                        Seen At {item.seen_at.substr(0, 10)}
-                      </Text>
+                      {this._renderSeenTag(item)}
                     </View>
                   </View>
-                  <View
-                    style={{
-                      // borderColor: 'red',
-                      // borderWidth: 1,
-                      width: 25,
-                      height: 25,
-                    }}>
-                    <Icon name={'chevron-right'} size={20} color={Color.ReadableGreyText} />
-                  </View>
+                  {this._renderMoreInfoButton(item)}
                 </View>
               </TouchableOpacity>
             );

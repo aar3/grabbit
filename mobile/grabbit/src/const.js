@@ -4,7 +4,7 @@ export const Color = {
   InfoTextBlue: '#007AFF',
   ReadableGreyText: '#64686C',
   White: '#FFFF',
-  Black: '#0000',
+  Black: '#000',
   HyperlinkBlue: '#007AFF',
   ErrorRed: '#FF0000',
   HotPink: '#E20086',
