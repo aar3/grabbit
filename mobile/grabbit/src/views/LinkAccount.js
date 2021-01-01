@@ -455,7 +455,7 @@ const mapDispatchToProps = function (dispatch) {
       });
     },
 
-     // Remove the pending state so it doesn't clash with default FlatList loading image
+    // Remove the pending state so it doesn't clash with default FlatList loading image
     getUserLinksViaFlatList: async function (options) {
       const {data, error} = await httpRequest(options);
       if (error) {

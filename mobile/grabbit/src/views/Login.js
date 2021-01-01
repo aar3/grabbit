@@ -18,7 +18,28 @@ import {httpRequest, getStateForKey} from 'grabbit/src/Utils';
 class V extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      loginDisabled: true,
+    };
+  }
+
+  _validateLoginForm() {
+    let loginDisabled = true;
+    const {secret, areaCode, lineNumber, prefix} = this.props.loginData;
+
+    const conditions = [
+      !areaCode,
+      !lineNumber,
+      !prefix,
+      !secret,
+      areaCode && areaCode.length !== 3,
+      lineNumber && lineNumber.length !== 4,
+      prefix && prefix.length !== 3,
+    ];
+
+    loginDisabled = conditions.some((condition) => condition);
+
+    this.setState({loginDisabled});
   }
 
   _renderErrorView() {
@@ -73,34 +94,90 @@ class V extends React.Component {
               />
             </View>
             {this._renderErrorView()}
-            <TextInput
-              autCorrect={false}
-              keyboardType={'numeric'}
-              label={'Phone'}
-              value={this.props.loginData.phone}
-              labelStyle={labelStyle}
-              onChangeText={(text) => this.props.updateLoginValue('phone', text)}
-              placeholder="+1 555-555-5555"
-            />
+            <View
+              style={{
+                // borderWidth: 1,
+                // borderColor: 'blue',
+                // justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row',
+                width: '100%',
+              }}>
+              <TextInput
+                containerStyle={{
+                  width: 70,
+                }}
+                autCorrect={false}
+                keyboardType={'number-pad'}
+                label={'Phone'}
+                value={this.props.loginData.areaCode}
+                labelStyle={labelStyle}
+                placeholder={'555'}
+                onChangeText={(text) => {
+                  this.props.updateLoginValue('areaCode', text);
+                  this._validateLoginForm();
+                }}
+              />
+              <Text>-</Text>
+              <TextInput
+                containerStyle={{
+                  width: 70,
+                }}
+                autCorrect={false}
+                keyboardType={'number-pad'}
+                label={' '}
+                value={this.props.loginData.prefix}
+                placeholder={'555'}
+                labelStyle={labelStyle}
+                onChangeText={(text) => {
+                  this.props.updateLoginValue('prefix', text);
+                  this._validateLoginForm();
+                }}
+              />
+              <Text>-</Text>
+              <TextInput
+                containerStyle={{
+                  width: 125,
+                }}
+                autCorrect={false}
+                keyboardType={'number-pad'}
+                label={' '}
+                placeholder={'5555'}
+                value={this.props.loginData.lineNumber}
+                labelStyle={labelStyle}
+                onChangeText={(text) => {
+                  this.props.updateLoginValue('lineNumber', text);
+                  this._validateLoginForm();
+                }}
+              />
+            </View>
             <TextInput
               secureTextEntry={true}
               labelStyle={labelStyle}
               label={'Password'}
               value={this.props.loginData.secret}
-              onChangeText={(text) => this.props.updateLoginValue('secret', text)}
+              onChangeText={(text) => {
+                this.props.updateLoginValue('secret', text);
+                this._validateLoginForm();
+              }}
               placeholder="**********"
             />
             <GrabbitButton
-              onPress={() =>
-                this.props.postUserLogin({
+              disabled={this.state.loginDisabled}
+              onPress={() => {
+                const {areaCode, prefix, lineNumber} = this.props.loginData;
+                return this.props.postUserLogin({
                   endpoint: '/user/login/',
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
                   },
-                  data: this.props.loginData,
-                })
-              }
+                  data: {
+                    phone: `${areaCode}-${prefix}-${lineNumber}`,
+                    secret: this.props.loginData.secret,
+                  },
+                });
+              }}
               _buttonStyle={{
                 backgroundColor: Color.Purple,
               }}
@@ -142,7 +219,8 @@ const mapDispatchToProps = (dispatch) => {
       const {data, error} = await httpRequest(options);
 
       if (error) {
-        error.details = error.statusCode === 404 ? 'Account not found' : error.details;
+        error.details = error.details.endsWith('404') ? 'Account not found' : error.details;
+
         return dispatch({
           type: ReduxActions.Session.PostUserLoginError,
           payload: error,

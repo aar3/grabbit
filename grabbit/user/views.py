@@ -92,6 +92,9 @@ class NotificationViewSet(BaseModelViewSet):
         serializer = self.serializer(notifications, many=True)
         return Response(serializer.data)
 
+    # FIXME: we only need to update and return items that have seen_at=None, and the reducer
+    # on the client needs to know that the incoming update operation is an "inplace" and not
+    # a "replace"
     def create(self, request, pk=None):
         user = get_object_or_404(User, pk=pk)
         notifications = self.model.objects.filter(user__id=user.id)

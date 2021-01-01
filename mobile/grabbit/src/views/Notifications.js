@@ -250,7 +250,7 @@ const mapStateToProps = function (state) {
 
 const mapDispatchToProps = function (dispatch) {
   return {
-     // Remove the pending state so it doesn't clash with default FlatList loading image
+    // Remove the pending state so it doesn't clash with default FlatList loading image
     getNotificationsViaFlatList: async function (options) {
       const {data, error} = await httpRequest(options);
 

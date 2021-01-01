@@ -1,5 +1,5 @@
 import ReduxActions from 'grabbit/src/Actions';
-import {arrayToObject} from 'grabbit/src/Utils';
+import {arrayToObject, getStateForKey} from 'grabbit/src/Utils';
 
 // IMPORTANT: all state properties are snake-cased because that's how the python
 // api sends data over the wire
@@ -21,8 +21,10 @@ const defaultState = {
     authentication: {
       input: {
         login: {
-          phone: null,
-          secret: null,
+          secret: '',
+          areaCode: '',
+          prefix: '',
+          lineNumber: '',
         },
         signup: {
           name: null,
