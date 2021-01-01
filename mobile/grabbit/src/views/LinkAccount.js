@@ -198,6 +198,10 @@ class V extends React.Component {
     );
   }
 
+  _onRefresh() {
+    return this.props.getUserLinksViaFlatList(this.userLinksOptions);
+  }
+
   render() {
     if (this.props.getUserLinksPending) {
       return (
@@ -313,6 +317,8 @@ class V extends React.Component {
             // borderColor: 'red',
             maxHeight: 240 * this.props.accounts.length,
           }}
+          refreshing={this.props.getUserLinksPending}
+          onRefresh={() => this._onRefresh()}
           data={this.props.accounts}
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
@@ -445,6 +451,22 @@ const mapDispatchToProps = function (dispatch) {
 
       return dispatch({
         type: ReduxActions.Plaid.GetLinkTokenSuccess,
+        payload: data,
+      });
+    },
+
+     // Remove the pending state so it doesn't clash with default FlatList loading image
+    getUserLinksViaFlatList: async function (options) {
+      const {data, error} = await httpRequest(options);
+      if (error) {
+        return dispatch({
+          type: ReduxActions.Plaid.GetUserLinksError,
+          payload: error,
+        });
+      }
+
+      return dispatch({
+        type: ReduxActions.Plaid.GetUserLinksSuccess,
         payload: data,
       });
     },

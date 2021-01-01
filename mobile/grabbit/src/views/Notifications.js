@@ -52,6 +52,10 @@ class V extends React.Component {
     );
   }
 
+  _onRefresh() {
+    return this.props.getNotificationsViaFlatList(this.options);
+  }
+
   _renderSeenTag(item) {
     if (!item.seen_at) {
       return null;
@@ -163,6 +167,8 @@ class V extends React.Component {
           style={{
             width: '100%',
           }}
+          refreshing={this.props.getNotificationsPending}
+          onRefresh={() => this._onRefresh()}
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
             return (
@@ -192,7 +198,7 @@ class V extends React.Component {
                       // borderWidth: 1,
                       // borderColor: 'green',
                     }}>
-                    <Icon name={item.icon} color={Color.BorderLightGrey} size={30} />
+                    <Icon name={item.icon} color={Color.Purple} size={30} />
                   </View>
                   <View
                     style={{
@@ -244,6 +250,22 @@ const mapStateToProps = function (state) {
 
 const mapDispatchToProps = function (dispatch) {
   return {
+     // Remove the pending state so it doesn't clash with default FlatList loading image
+    getNotificationsViaFlatList: async function (options) {
+      const {data, error} = await httpRequest(options);
+
+      if (error) {
+        return dispatch({
+          type: ReduxActions.Notifications.GetNotificationsError,
+          payload: error,
+        });
+      }
+
+      return dispatch({
+        type: ReduxActions.Notifications.GetNotificationsSuccess,
+        payload: data,
+      });
+    },
     getNotifications: async function (options) {
       dispatch({
         type: ReduxActions.Notifications.GetNotificationsPending,
