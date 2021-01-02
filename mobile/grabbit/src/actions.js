@@ -2,10 +2,16 @@ export default {
   GENERIC_ACTION: 'GENERIC_ACTION',
   Session: {
     UpdateLoginValue: 'UpdateLoginValue',
+    UpdateSignupValue: 'UpdateSignupValue',
+
     PostUserLoginPending: 'PostUserLoginPending',
     PostUserLoginSuccess: 'PostUserLoginSuccess',
     PostUserLoginError: 'PostUserLoginError',
     ResetAuthError: 'ResetAuthError',
+
+    PostUserSignupPending: 'PostUserSignupPending',
+    PostUserSignupError: 'PostUserSignupError',
+    PostUserSignupSuccess: 'PostUserSignupSuccess',
   },
   Rewards: {
     GetUserRewardsPending: 'GetUserRewardsPending',

@@ -108,4 +108,6 @@ class Setting(BaseModel):
 @receiver(post_save, sender=Setting)
 def create_notification_for_updated_settings(sender, instance, created, **kwargs):
     if not created:
-        _ = Notification.objects.create(user=instance.user, icon="unlock", route_key="settings", text="You've updated your profile settings")
+        _ = Notification.objects.create(
+            user=instance.user, icon="unlock", route_key="settings", text="You've updated your profile settings"
+        )

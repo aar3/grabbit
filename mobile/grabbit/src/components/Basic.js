@@ -10,13 +10,17 @@ export class TextInput extends React.Component {
       autoCapitalize = 'none',
       labelStyle,
       onChangeText,
+      autoCorrect,
       keyboardType,
       secureTextEntry,
+      value,
       containerStyle,
       autoCompleteType,
     } = this.props;
     return (
       <Input
+        value={value}
+        autoCorrect={autoCorrect}
         keyboardType={keyboardType}
         autoCapitalize={autoCapitalize}
         secureTextEntry={secureTextEntry}

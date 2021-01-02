@@ -22,20 +22,21 @@ const defaultState = {
       input: {
         login: {
           secret: '',
-          areaCode: '',
+          area_code: '',
           prefix: '',
-          lineNumber: '',
+          line_number: '',
         },
         signup: {
-          name: null,
-          email: null,
-          username: null,
-          address_line1: null,
-          address_line2: null,
-          phone: null,
-          secret: null,
+          first_name: '',
+          last_name: '',
+          email: '',
+          username: '',
+          area_code: '',
+          prefix: '',
+          line_number: '',
+          secret: '',
           user_type: 1,
-          invitation_code: null,
+          invitation_code: '6YQK-3E9Y',
         },
       },
       pending: false,
@@ -415,7 +416,64 @@ export default function (state = defaultState, action) {
     // ********************************************
     // Session
     // ********************************************
-
+    case ReduxActions.Session.PostUserSignupSuccess: {
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          authentication: {
+            ...state.session.authentication,
+            pending: false,
+            error: null,
+          },
+          user: payload,
+        },
+      };
+    }
+    case ReduxActions.Session.PostUserSignupError: {
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          authentication: {
+            ...state.session.authentication,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Session.PostUserSignupPending: {
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          authentication: {
+            ...state.session.authentication,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
+    case ReduxActions.Session.UpdateSignupValue: {
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          authentication: {
+            ...state.session.authentication,
+            input: {
+              ...state.session.authentication.input,
+              signup: {
+                ...state.session.authentication.input.signup,
+                [key]: payload,
+              },
+            },
+          },
+        },
+      };
+    }
     case ReduxActions.Session.ResetAuthError: {
       return {
         ...state,
@@ -451,8 +509,11 @@ export default function (state = defaultState, action) {
         ...state,
         session: {
           ...state.session,
-          pending: true,
-          error: null,
+          authentication: {
+            ...state.session.authentication,
+            pending: true,
+            error: null,
+          },
         },
       };
     }
@@ -461,9 +522,12 @@ export default function (state = defaultState, action) {
         ...state,
         session: {
           ...state.session,
-          pending: false,
-          error: null,
           user: payload,
+          authentication: {
+            ...state.session.authentication,
+            error: null,
+            pending: false,
+          },
         },
       };
     }

@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
   Keyboard,
+  ImageBackground,
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from 'react-native';
@@ -14,12 +15,85 @@ import {connect} from 'react-redux';
 import ReduxActions from 'grabbit/src/Actions';
 import {TextInput, GrabbitButton} from 'grabbit/src/components/Basic';
 import {Color} from 'grabbit/src/Const';
-import {httpRequest} from 'grabbit/src/Utils';
+import {httpRequest, getStateForKey} from 'grabbit/src/Utils';
 
-export default class V extends React.Component {
+class V extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      signupDisabled: true,
+    };
+  }
+
+  _renderErrorHeader() {
+    if (this.props.signupError) {
+      return (
+        <View
+          style={{
+            // borderWidth: 1,
+            // borderColor: 'blue',
+            marginBottom: 20,
+          }}>
+          <Text style={{color: Color.ErrorRed}}>{this.props.signupError.details}</Text>
+        </View>
+      );
+    }
+  }
+
+  _validateSignupForm() {
+    let signupDisabled = true;
+    const {
+      secret,
+      first_name,
+      last_name,
+      email,
+      username,
+      area_code,
+      line_number,
+      invitation_code,
+      prefix,
+    } = this.props.signupData;
+
+    const conditions = [
+      !secret,
+      secret && secret.length < 5,
+      !first_name,
+      !username,
+      !last_name,
+      !email,
+      email && (!email.includes('@') || !email.includes('.')),
+      !area_code,
+      !line_number,
+      !prefix,
+      area_code && area_code.length !== 3,
+      line_number && line_number.length !== 4,
+      prefix && prefix.length !== 3,
+      !invitation_code,
+    ];
+
+    console.log(conditions);
+    console.log(this.props.signupData);
+
+    signupDisabled = conditions.some((condition) => condition);
+
+    this.setState({signupDisabled});
+  }
+
+  _renderPendingFooter() {
+    if (this.props.signupPending) {
+      return (
+        <ImageBackground
+          source={require('./../../assets/imgs/Loading-Transparent-Cropped.gif')}
+          style={{
+            // borderWidth: 1,
+            // borderColor: 'red',
+            marginTop: 20,
+            height: 35,
+            width: 35,
+            marginBottom: 20,
+          }}></ImageBackground>
+      );
+    }
   }
 
   render() {
@@ -66,29 +140,173 @@ export default class V extends React.Component {
                   style={{flex: 1, height: undefined, width: undefined}}
                 />
               </View>
-              <TextInput label={'Name'} labelStyle={labelStyle} placeholder="Your name (Ex: Ava Washington)" />
+              {this._renderErrorHeader()}
+              <View
+                style={{
+                  // borderWidth: 1,
+                  // borderColor: 'blue',
+                  // justifyContent: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                  width: '100%',
+                }}>
+                <TextInput
+                  autoCorrect={false}
+                  onChangeText={(text) => {
+                    this.props.updateSignupValue('first_name', text);
+                    this._validateSignupForm();
+                  }}
+                  containerStyle={{width: 150}}
+                  label={'First Name'}
+                  labelStyle={labelStyle}
+                  placeholder="Ava"
+                />
+                <TextInput
+                  autoCorrect={false}
+                  onChangeText={(text) => {
+                    this.props.updateSignupValue('last_name', text);
+                    this._validateSignupForm();
+                  }}
+                  containerStyle={{width: 150}}
+                  label={'Last Name'}
+                  labelStyle={labelStyle}
+                  placeholder="Campo"
+                />
+              </View>
+              <View
+                style={{
+                  // borderWidth: 1,
+                  // borderColor: 'blue',
+                  // justifyContent: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                  width: '100%',
+                }}>
+                <TextInput
+                  autoCorrect={false}
+                  containerStyle={{
+                    width: 70,
+                  }}
+                  autoCorrect={false}
+                  keyboardType={'number-pad'}
+                  label={'Phone'}
+                  value={this.props.signupData.area_code}
+                  labelStyle={labelStyle}
+                  placeholder={'555'}
+                  onChangeText={(text) => {
+                    this.props.updateSignupValue('area_code', text);
+                    this._validateSignupForm();
+                  }}
+                />
+                <Text>-</Text>
+                <TextInput
+                  autoCorrect={false}
+                  containerStyle={{
+                    width: 70,
+                  }}
+                  autoCorrect={false}
+                  keyboardType={'number-pad'}
+                  label={' '}
+                  value={this.props.signupData.prefix}
+                  placeholder={'555'}
+                  labelStyle={labelStyle}
+                  onChangeText={(text) => {
+                    this.props.updateSignupValue('prefix', text);
+                    this._validateSignupForm();
+                  }}
+                />
+                <Text>-</Text>
+                <TextInput
+                  autoCorrect={false}
+                  containerStyle={{
+                    width: 125,
+                  }}
+                  autoCorrect={false}
+                  keyboardType={'number-pad'}
+                  label={' '}
+                  placeholder={'5555'}
+                  value={this.props.signupData.line_number}
+                  labelStyle={labelStyle}
+                  onChangeText={(text) => {
+                    this.props.updateSignupValue('line_number', text);
+                    this._validateSignupForm();
+                  }}
+                />
+              </View>
               <TextInput
-                autoCompleteType={'tel'}
-                label={'Phone'}
+                autoCorrect={false}
+                onChangeText={(text) => {
+                  this.props.updateSignupValue('username', text);
+                  this._validateSignupForm();
+                }}
+                value={this.props.signupData.username}
+                label={'Username'}
                 labelStyle={labelStyle}
-                placeholder="+1 555-555-5555"
+                placeholder="@ava"
               />
               <TextInput
+                value={this.props.signupData.email}
+                autoCorrect={false}
+                onChangeText={(text) => {
+                  this.props.updateSignupValue('email', text);
+                  this._validateSignupForm();
+                }}
                 autoCompleteType={'email'}
                 label={'Email'}
                 labelStyle={labelStyle}
-                placeholder="ava.washington@gmail.com"
+                placeholder="ava.campo@gmail.com"
               />
-              <TextInput secureTextEntry={true} labelStyle={labelStyle} label={'Password'} placeholder="**********" />
               <TextInput
+                value={this.props.signupData.secret}
+                autoCorrect={false}
+                onChangeText={(text) => {
+                  this.props.updateSignupValue('secret', text);
+                  this._validateSignupForm();
+                }}
                 secureTextEntry={true}
                 labelStyle={labelStyle}
-                label={'Confirm Password'}
+                label={'Password'}
                 placeholder="**********"
               />
-              <TextInput labelStyle={labelStyle} label={'Invitation Code'} placeholder="5-digit code (e.g., XY43D)" />
+              <TextInput
+                // value={this.props.signupData.invitation_code}
+                value={this.props.signupData.invitation_code}
+                autoCorrect={false}
+                onChangeText={(text) => {
+                  this.props.updateSignupValue('invitation_code', text);
+                  this._validateSignupForm();
+                }}
+                labelStyle={labelStyle}
+                label={'Invitation Code'}
+                placeholder="5-digit code (e.g., XY43D)"
+              />
               <GrabbitButton
-                onPress={() => Actions.listRewards()}
+                disabled={this.state.signupDisabled}
+                onPress={() => {
+                  const reducerData = this.props.signupData;
+
+                  const postData = Object.assign(
+                    {},
+                    {
+                      name: `${reducerData.first_name} ${reducerData.last_name}`,
+                      email: reducerData.email,
+                      username: reducerData.username,
+                      secret: reducerData.secret,
+                      phone: `${reducerData.area_code}-${reducerData.prefix}-${reducerData.line_number}`,
+                      invitation_code: reducerData.invitation_code,
+                    },
+                  );
+                  const options = {
+                    endpoint: '/users/',
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    data: postData,
+                  };
+
+                  return this.props.postUserSignup(options);
+                }}
                 _buttonStyle={{
                   backgroundColor: Color.Purple,
                 }}
@@ -109,6 +327,7 @@ export default class V extends React.Component {
                   </Text>
                 </TouchableOpacity>
               </View>
+              {this._renderPendingFooter()}
             </View>
           </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
@@ -119,28 +338,44 @@ export default class V extends React.Component {
 
 const mapDispatchToProps = function (dispatch) {
   return {
-    postUserSignup: async function ({stateKey = 'state.user', options}) {
+    postUserSignup: async function (options) {
       dispatch({
-        type: ReduxActions.GENERIC_ACTION,
+        type: ReduxActions.Session.PostUserSignupPending,
       });
 
-      const {data, error} = await httpRequest({options});
+      const {data, error} = await httpRequest(options);
 
       if (error) {
+        error.details = error.details.endsWith('403') ? 'Invalid invitation code' : error.details;
         return dispatch({
-          type: ReduxActions.GENERIC_ACTION,
-          error,
+          type: ReduxActions.Session.PostUserSignupError,
+          payload: error,
         });
       }
 
-      return dispatch({
+      dispatch({
+        type: ReduxActions.Session.PostUserSignupSuccess,
         payload: data,
-        stateKey,
+      });
+
+      return Actions.listRewards();
+    },
+    updateSignupValue: function (key, value) {
+      return dispatch({
+        type: ReduxActions.Session.UpdateSignupValue,
+        payload: value,
+        key,
       });
     },
   };
 };
 
 const mapStateToProps = function (state) {
-  return {};
+  return {
+    signupPending: getStateForKey('state.session.authentication.pending', state),
+    signupError: getStateForKey('state.session.authentication.error', state),
+    signupData: getStateForKey('state.session.authentication.input.signup', state),
+  };
 };
+
+export default connect(mapStateToProps, mapDispatchToProps)(V);

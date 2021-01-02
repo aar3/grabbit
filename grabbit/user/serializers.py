@@ -23,7 +23,18 @@ class UserSerializer(BaseModelSerializer):
 class NotificationSerializer(BaseModelSerializer):
     class Meta:
         model = Notification
-        fields = ["id", "created_at", "updated_at", "deleted_at", "text", "expiry", "user_id", "route_key", "icon", "seen_at"]
+        fields = [
+            "id",
+            "created_at",
+            "updated_at",
+            "deleted_at",
+            "text",
+            "expiry",
+            "user_id",
+            "route_key",
+            "icon",
+            "seen_at",
+        ]
 
 
 class SettingSerializer(BaseModelSerializer):

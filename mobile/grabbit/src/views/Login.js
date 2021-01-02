@@ -7,6 +7,7 @@ import {
   Keyboard,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  ImageBackground,
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
@@ -23,17 +24,34 @@ class V extends React.Component {
     };
   }
 
+  _renderPendingFooter() {
+    if (this.props.loginPending) {
+      return (
+        <ImageBackground
+          source={require('./../../assets/imgs/Loading-Transparent-Cropped.gif')}
+          style={{
+            // borderWidth: 1,
+            // borderColor: 'red',
+            marginTop: 20,
+            height: 35,
+            width: 35,
+            marginBottom: 20,
+          }}></ImageBackground>
+      );
+    }
+  }
+
   _validateLoginForm() {
     let loginDisabled = true;
-    const {secret, areaCode, lineNumber, prefix} = this.props.loginData;
+    const {secret, area_code, line_number, prefix} = this.props.loginData;
 
     const conditions = [
-      !areaCode,
-      !lineNumber,
+      !area_code,
+      !line_number,
       !prefix,
       !secret,
-      areaCode && areaCode.length !== 3,
-      lineNumber && lineNumber.length !== 4,
+      area_code && area_code.length !== 3,
+      line_number && line_number.length !== 4,
       prefix && prefix.length !== 3,
     ];
 
@@ -42,7 +60,7 @@ class V extends React.Component {
     this.setState({loginDisabled});
   }
 
-  _renderErrorView() {
+  _renderErrorHeader() {
     const {loginError} = this.props;
     if (loginError) {
       return (
@@ -93,7 +111,7 @@ class V extends React.Component {
                 style={{flex: 1, height: undefined, width: undefined}}
               />
             </View>
-            {this._renderErrorView()}
+            {this._renderErrorHeader()}
             <View
               style={{
                 // borderWidth: 1,
@@ -107,14 +125,14 @@ class V extends React.Component {
                 containerStyle={{
                   width: 70,
                 }}
-                autCorrect={false}
+                autoCorrect={false}
                 keyboardType={'number-pad'}
                 label={'Phone'}
-                value={this.props.loginData.areaCode}
+                value={this.props.loginData.area_code}
                 labelStyle={labelStyle}
                 placeholder={'555'}
                 onChangeText={(text) => {
-                  this.props.updateLoginValue('areaCode', text);
+                  this.props.updateLoginValue('area_code', text);
                   this._validateLoginForm();
                 }}
               />
@@ -123,7 +141,7 @@ class V extends React.Component {
                 containerStyle={{
                   width: 70,
                 }}
-                autCorrect={false}
+                autoCorrect={false}
                 keyboardType={'number-pad'}
                 label={' '}
                 value={this.props.loginData.prefix}
@@ -139,14 +157,14 @@ class V extends React.Component {
                 containerStyle={{
                   width: 125,
                 }}
-                autCorrect={false}
+                autoCorrect={false}
                 keyboardType={'number-pad'}
                 label={' '}
                 placeholder={'5555'}
-                value={this.props.loginData.lineNumber}
+                value={this.props.loginData.line_number}
                 labelStyle={labelStyle}
                 onChangeText={(text) => {
-                  this.props.updateLoginValue('lineNumber', text);
+                  this.props.updateLoginValue('line_number', text);
                   this._validateLoginForm();
                 }}
               />
@@ -165,7 +183,7 @@ class V extends React.Component {
             <GrabbitButton
               disabled={this.state.loginDisabled}
               onPress={() => {
-                const {areaCode, prefix, lineNumber} = this.props.loginData;
+                const {area_code, prefix, line_number} = this.props.loginData;
                 return this.props.postUserLogin({
                   endpoint: '/user/login/',
                   method: 'POST',
@@ -173,7 +191,7 @@ class V extends React.Component {
                     'Content-Type': 'application/json',
                   },
                   data: {
-                    phone: `${areaCode}-${prefix}-${lineNumber}`,
+                    phone: `${area_code}-${prefix}-${line_number}`,
                     secret: this.props.loginData.secret,
                   },
                 });
@@ -198,6 +216,7 @@ class V extends React.Component {
                 </Text>
               </TouchableOpacity>
             </View>
+            {this._renderPendingFooter()}
           </View>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
@@ -247,6 +266,7 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state) => {
   return {
+    loginPending: getStateForKey('state.session.authentication.pending', state),
     loginData: getStateForKey('state.session.authentication.input.login', state),
     loginError: getStateForKey('state.session.authentication.error', state),
   };
