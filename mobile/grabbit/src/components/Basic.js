@@ -10,18 +10,27 @@ export class TextInput extends React.Component {
       autoCapitalize = 'none',
       labelStyle,
       onChangeText,
+      autoCorrect,
+      keyboardType,
       secureTextEntry,
+      value,
+      containerStyle,
       autoCompleteType,
     } = this.props;
     return (
       <Input
+        value={value}
+        autoCorrect={autoCorrect}
+        keyboardType={keyboardType}
         autoCapitalize={autoCapitalize}
         secureTextEntry={secureTextEntry}
         onChangeText={onChangeText}
         autoCompleteType={autoCompleteType}
-        containerStyle={{
-          width: 300,
-        }}
+        containerStyle={
+          containerStyle || {
+            width: 300,
+          }
+        }
         inputStyle={{
           fontSize: 13,
         }}
@@ -35,9 +44,10 @@ export class TextInput extends React.Component {
 
 export class GrabbitButton extends React.Component {
   render() {
-    const {onPress, title, titleStyle, _buttonStyle} = this.props;
+    const {onPress, title, titleStyle, _buttonStyle, disabled} = this.props;
     return (
       <Button
+        disabled={disabled}
         onPress={onPress}
         buttonStyle={[buttonStyle, _buttonStyle]}
         containerStyle={buttonContainerStyle}

@@ -33,15 +33,17 @@ class Link(BaseModel):
 def create_notification_for_new_link(sender, instance, created, **kwargs):
     from user.models import Notification
     from plaid_local.serializers import LinkSerializer
+
     if created:
         serializer = LinkSerializer(instance)
         _ = Notification.objects.create(
-            user=instance.user, 
+            user=instance.user,
             route_key="linkAccount",
             metadata={"instance": serializer.data},
-            icon="credit-card", 
-            text=f"Your new {instance.institution_name} account is now live on Grabbit!"
+            icon="credit-card",
+            text=f"Your new {instance.institution_name} account is now live on Grabbit!",
         )
+
 
 class TransactionTask(BaseModel):
     class Meta:

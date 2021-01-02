@@ -6,13 +6,9 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user', '0010_notification_route_key'),
+        ("user", "0010_notification_route_key"),
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='notification',
-            name='metadata',
-            field=models.JSONField(default=dict),
-        ),
+        migrations.AddField(model_name="notification", name="metadata", field=models.JSONField(default=dict),),
     ]

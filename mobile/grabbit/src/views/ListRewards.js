@@ -11,7 +11,9 @@ import {Reward} from 'grabbit/src/Models';
 class V extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      flatListReloading: false,
+    };
     this._options = {};
   }
 
@@ -65,8 +67,12 @@ class V extends React.Component {
     );
   }
 
+  _onRefresh() {
+    return this.props.getUserRewardViaFlatList(this.options);
+  }
+
   render() {
-    if (this.props.getRewardsPending) {
+    if (this.props.getRewardsPending && !this.state.flatListReloading) {
       return (
         <View
           style={{
@@ -127,6 +133,8 @@ class V extends React.Component {
           style={{
             width: '100%',
           }}
+          refreshing={this.props.getRewardsPending}
+          onRefresh={() => this._onRefresh()}
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
             return (
@@ -209,6 +217,22 @@ const mapDispatchToProps = function (dispatch) {
 
       return dispatch({
         type: ReduxActions.Notifications.GetNotificationsSuccess,
+        payload: data,
+      });
+    },
+
+    // Remove the pending state so it doesn't clash with default FlatList loading image
+    getUserRewardViaFlatList: async function (options) {
+      const {data, error} = await httpRequest(options);
+      if (error) {
+        return dispatch({
+          type: ReduxActions.Rewards.GetUserRewardsError,
+          payload: error,
+        });
+      }
+
+      return dispatch({
+        type: ReduxActions.Rewards.GetUserRewardsSuccess,
         payload: data,
       });
     },

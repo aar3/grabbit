@@ -105,6 +105,7 @@ class Reward(BaseModel):
         self.save()
 
 
+# FIXME: implement this
 # @receiver(post_save, sender=Reward)
 # def create_qrcode_for_reward(sender, instance, created, **kwargs):
 #     if created:
@@ -112,3 +113,27 @@ class Reward(BaseModel):
 #         img_path = GoogleCloudService.upload_image_to_bucket(instance.email, "qr_code", code)
 #         instance.qr_code_url = img_path
 #         instance.save()
+
+
+@receiver(post_save, sender=Reward)
+def create_notification_for_new_user_reward(sender, instance, created, **kwargs):
+    from merchant.serializers import RewardSerializer
+
+    serializer = RewardSerializer(instance)
+    if created:
+        # FIXME: This route_key should be 'rewardFocus', and on the client, we do something similar to:
+        #
+        # if route_key === 'rewardFocus':
+        #     dispatch({
+        #       type: Actions.SetFocusedReward.
+        #       payload: metadata
+        # })
+        #
+        # Where we set `state.rewards.focused` to be `notification.metadata`
+        _ = Notification.objects.create(
+            user=instance.owner_user,
+            icon="dollar-sign",
+            route_key="listRewards",
+            metadata=serializer.data,
+            text="You've updated your profile settings",
+        )

@@ -6,13 +6,11 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user', '0009_auto_20201230_2158'),
+        ("user", "0009_auto_20201230_2158"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='notification',
-            name='route_key',
-            field=models.CharField(max_length=255, null=True),
+            model_name="notification", name="route_key", field=models.CharField(max_length=255, null=True),
         ),
     ]
