@@ -28,7 +28,7 @@ class V extends React.Component {
   get options() {
     return {
       method: 'GET',
-      endpoint: `/user/${this.props.user.id}/settings/`,
+      endpoint: `/users/${this.props.user.id}/settings/`,
       headers: {
         'Content-Type': 'application/json',
         'X-Session-Token': this.props.user.current_session_token,
@@ -193,7 +193,7 @@ class V extends React.Component {
               size="medium"
               onToggle={() => {
                 return this.props.updateUserSettings({
-                  endpoint: `/user/${this.props.user.id}/settings/${this.props.profile.id}/`,
+                  endpoint: `/users/${this.props.user.id}/settings/${this.props.profile.id}/`,
                   method: 'PUT',
                   headers: {
                     'Content-Type': 'application/json',

@@ -15,7 +15,7 @@ class V extends React.Component {
 
   get options() {
     return {
-      endpoint: `/user/${this.props.user.id}/notifications/`,
+      endpoint: `/users/${this.props.user.id}/notifications/`,
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -25,14 +25,15 @@ class V extends React.Component {
   }
 
   async componentDidMount() {
-    return this.props.setNotificationsSeen({
-      endpoint: `/user/${this.props.user.id}/notifications/`,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Session-Token': this.props.user.current_session_token,
-      },
-    });
+    // return this.props.setNotificationsSeen({
+    //   endpoint: `/users/${this.props.user.id}/notifications/`,
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'X-Session-Token': this.props.user.current_session_token,
+    //   },
+    // });
+    return this.props.getNotifications(this.options);
   }
 
   _renderMoreInfoButton(item) {
