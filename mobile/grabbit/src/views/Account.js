@@ -190,6 +190,92 @@ class V extends React.Component {
     );
   }
 
+  _renderExpiredItems() {
+    if (this.props.inactiveRewards > 0) {
+      return (
+        <FlatList
+        data={this.props.inactiveRewards}
+        style={{
+          width: '100%',
+        }}
+        keyExtractor={(_item, index) => index.toString()}
+        renderItem={({item, index}) => {
+          return (
+            <TouchableOpacity>
+              <View
+                style={{
+                  backgroundColor: Color.White,
+                  borderBottomWidth: 1,
+                  borderBottomColor: Color.BorderLightGrey,
+                  height: 80,
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                }}>
+                <View
+                  style={{
+                    // borderWidth: 1,
+                    // borderColor: 'red',
+                    height: 40,
+                    width: 40,
+                    marginLeft: 20,
+                    overflow: 'hidden',
+                    borderRadius: 100,
+                  }}>
+                  <Image
+                    source={{uri: item.data.code.campaign.merchant.image_url}}
+                    style={{height: 40, width: 40}}
+                  />
+                </View>
+                <View
+                  style={{
+                    marginLeft: 20,
+                    height: 40,
+                    width: '65%',
+                    justifyContent: 'center',
+                    // borderColor: 'blue',
+                    // borderWidth: 1,
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      color: Color.ReadableGreyText,
+                    }}>
+                    {item.data.code.description}
+                  </Text>
+                  {this._renderExpiryTag(item)}
+                </View>
+              </View>
+            </TouchableOpacity>
+          );
+        }}
+      />
+      );
+    }
+
+    return (
+      <View style={{
+        flex: 1,
+        // borderColor: 'red',
+        // borderWidth: 1,
+        padding: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        <Text style={{
+          fontWeight: 'bold',
+          color: Color.Purple,
+          fontSize: 18,
+        }}>You don't have any inactive rewards yet</Text>
+        <Text style={{
+          textAlign: 'center',
+          marginTop: 10,
+          fontSize: 14,
+          color: Color.BorderLightGrey,
+        }}>Rewards that have expired and rewards that you've redeeemed will appear here</Text>
+      </View>
+    )
+  }
+
   render() {
     return (
       <View
@@ -232,62 +318,7 @@ class V extends React.Component {
             width: '100%',
             height: 400,
           }}>
-          <FlatList
-            data={this.props.inactiveRewards}
-            style={{
-              width: '100%',
-            }}
-            keyExtractor={(_item, index) => index.toString()}
-            renderItem={({item, index}) => {
-              return (
-                <TouchableOpacity>
-                  <View
-                    style={{
-                      backgroundColor: Color.White,
-                      borderBottomWidth: 1,
-                      borderBottomColor: Color.BorderLightGrey,
-                      height: 80,
-                      alignItems: 'center',
-                      flexDirection: 'row',
-                    }}>
-                    <View
-                      style={{
-                        // borderWidth: 1,
-                        // borderColor: 'red',
-                        height: 40,
-                        width: 40,
-                        marginLeft: 20,
-                        overflow: 'hidden',
-                        borderRadius: 100,
-                      }}>
-                      <Image
-                        source={{uri: item.data.code.campaign.merchant.image_url}}
-                        style={{height: 40, width: 40}}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        marginLeft: 20,
-                        height: 40,
-                        width: '65%',
-                        justifyContent: 'center',
-                        // borderColor: 'blue',
-                        // borderWidth: 1,
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 13,
-                          color: Color.ReadableGreyText,
-                        }}>
-                        {item.data.code.description}
-                      </Text>
-                      {this._renderExpiryTag(item)}
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              );
-            }}
-          />
+            {this._renderExpiredItems()}
         </View>
       </View>
     );

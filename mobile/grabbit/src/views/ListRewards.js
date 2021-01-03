@@ -29,16 +29,16 @@ class V extends React.Component {
   }
 
   async componentDidMount() {
-    await this.props.getUserRewards(this.options);
+    return this.props.getUserRewards(this.options);
 
-    return this.props.getNotifications({
-      endpoint: `/user/${this.props.user.id}/notifications/`,
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Session-Token': this.props.user.current_session_token,
-      },
-    });
+    // return this.props.getNotifications({
+    //   endpoint: `/user/${this.props.user.id}/notifications/`,
+    //   method: 'GET',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'X-Session-Token': this.props.user.current_session_token,
+    //   },
+    // });
   }
 
   _renderExpiryTag(item) {
