@@ -31,6 +31,7 @@ class UserViewSet(viewsets.ViewSet):
 
     def create(self, request):
         params = request.data
+        print(">>> params: ", params)
         code = params.get("invitation_code")
         if code != INVITATION_CODE:
             return Response(data={"details": "Invalid invitation code"}, status=403)
@@ -150,3 +151,15 @@ def get_user_stats(request, pk=None):
         )
 
     return Response(data=stats)
+
+
+class SettingViewSet(BaseModelViewSet):
+    model = Setting
+    serializer = SettingSerializer
+    authentication_classes = [TokenAuthentication]
+
+    def list(self, request, pk=None):
+        user = get_object_or_404(User, pk=pk)
+        settings = Setting.objects.filter(user__id=user.id).order_by("-created_at")[0]
+        serializer = SettingSerializer(settings)
+        return Response(serializer.data)

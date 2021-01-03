@@ -101,7 +101,7 @@ class Setting(BaseModel):
         db_table = "settings"
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    metadata = models.JSONField(default=dict)
+    keywords = models.JSONField(default=dict)
     targeting_enabled = models.IntegerField(default=1)
 
 

@@ -16,6 +16,7 @@ export default class V extends React.Component {
         style={{
           flex: 1,
           alignItems: 'center',
+          backgroundColor: Color.White,
         }}>
         <View
           style={{
@@ -40,7 +41,7 @@ export default class V extends React.Component {
             width: 300,
           }}>
           <GrabbitButton
-            onPress={() => Actions.login()}
+            onPress={() => Actions.listRewards()}
             _buttonStyle={{
               backgroundColor: Color.White,
               borderWidth: 1,

@@ -110,30 +110,36 @@ class V extends React.Component {
   _renderPlaidButton() {
     if (this.props.getLinkTokenError) {
       return (
-        <View
-          style={{
-            // borderWidth: 1,
-            // borderColor: 'red',
-            marginBottom: 10,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Text
+        <TouchableOpacity onPress={() => this.props.getLinkToken(this.linkTokenOptions)}>
+          <View
             style={{
-              color: Color.Purple,
-              fontWeight: 'bold',
-              fontSize: 22,
+              // borderWidth: 1,
+              // borderColor: 'blue',
+              justifyContent: 'center',
+              alignItems: 'center',
+              // position: 'absolute',
+              backgroundColor: Color.ErrorRed,
+              bottom: 10,
+              width: 300,
+              borderRadius: 50,
+              height: 50,
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 1,
+                height: -1,
+              },
+              shadowOpacity: 0.5,
+              shadowRadius: 5.84,
+              elevation: 5,
             }}>
-            Whoops, there was an error
-          </Text>
-          <Text style={{fontSize: 14, marginTop: 10, fontWeight: 'bold', color: Color.BorderLightGrey}}>
-            We couldn't get your account information :(
-          </Text>
-          <TouchableOpacity onPress={() => this.props.getLinkToken(this.linkTokenOptions)}>
-            <Icon style={{marginTop: 20}} name={'rotate-ccw'} size={24} color={Color.BorderLightGrey} />
-          </TouchableOpacity>
-          <Text style={{color: Color.BorderLightGrey}}>Try Again</Text>
-        </View>
+            <Text
+              style={{
+                color: Color.White,
+              }}>
+              Couldn't get your account info.
+            </Text>
+          </View>
+        </TouchableOpacity>
       );
     }
 
@@ -279,17 +285,17 @@ class V extends React.Component {
               width: 300,
             }}>
             <Text style={{textAlign: 'center', fontWeight: 'bold', fontSize: 18, color: Color.Purple}}>
-              You haven't linked any accounts yet
+              You haven't linked any accounts, yet
             </Text>
             <Text
               style={{
                 color: Color.ReadableGreyText,
-                marginTop: 20,
-                marginBottom: 20,
+                fontSize: 12,
+                textAlign: 'center',
+                marginTop: 10,
               }}>
               Tap below to add your first account
             </Text>
-            {this._renderPlaidButton()}
             <Text
               style={{
                 color: Color.ReadableGreyText,
@@ -300,6 +306,7 @@ class V extends React.Component {
               You unfortunately won't be able to use Grabbit until you link at least 1 account
             </Text>
           </View>
+          {this._renderPlaidButton()}
         </View>
       );
     }
@@ -325,6 +332,7 @@ class V extends React.Component {
             return (
               <View
                 style={{
+                  backgroundColor: Color.White,
                   borderBottomWidth: 1,
                   borderBottomColor: Color.BorderLightGrey,
                   padding: 10,

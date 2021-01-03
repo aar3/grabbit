@@ -7,11 +7,12 @@ from user.views import (
     NotificationViewSet,
     list_all_user_rewards,
     get_user_stats,
+    SettingViewSet,
 )
 
 router = routers.DefaultRouter()
 router.register(r"users", UserViewSet, basename="user")
-router.register(r"settings", SettingViewSet, basename="setting")
+router.register(r"user/(\d+)/settings", SettingViewSet, basename="setting")
 router.register(r"user/(\d+)/notifications", NotificationViewSet, basename="notification")
 
 urlpatterns = [

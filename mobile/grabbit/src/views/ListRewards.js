@@ -141,6 +141,7 @@ class V extends React.Component {
               <TouchableOpacity onPress={() => this.props.focusReward(item)}>
                 <View
                   style={{
+                    backgroundColor: Color.White,
                     borderBottomWidth: 1,
                     borderBottomColor: Color.BorderLightGrey,
                     height: 80,

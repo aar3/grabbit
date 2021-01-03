@@ -118,18 +118,21 @@ class Reward(BaseModel):
 @receiver(post_save, sender=Reward)
 def create_notification_for_new_user_reward(sender, instance, created, **kwargs):
     from merchant.serializers import RewardSerializer
+    from user.models import Notification
 
     serializer = RewardSerializer(instance)
     if created:
-        # FIXME: This route_key should be 'rewardFocus', and on the client, we do something similar to:
-        #
-        # if route_key === 'rewardFocus':
-        #     dispatch({
-        #       type: Actions.SetFocusedReward.
-        #       payload: metadata
-        # })
-        #
-        # Where we set `state.rewards.focused` to be `notification.metadata`
+        """
+        FIXME: This route_key should be 'rewardFocus', and on the client, we do something similar to:
+        
+        if route_key === 'rewardFocus':
+            dispatch({
+              type: A.SetFocusedReward.
+              payload: metadata
+        })
+
+        Where we set `state.rewards.focused` to be `notification.metadata`
+        """
         _ = Notification.objects.create(
             user=instance.owner_user,
             icon="dollar-sign",

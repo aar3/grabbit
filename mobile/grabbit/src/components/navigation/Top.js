@@ -62,6 +62,64 @@ export class BasicTopNavigationBar extends React.Component {
   }
 }
 
+export class AccountTopNavigationBar extends React.Component {
+  render() {
+    return (
+      <View
+        style={{
+          // borderWidth: 1,
+          // borderColor: 'orange',
+          height: 90,
+          backgroundColor: '#f0f0f0',
+          borderBottomWidth: 1,
+          borderBottomColor: Color.BorderLightGrey,
+        }}>
+        <View
+          style={{
+            // borderWidth: 1,
+            // borderColor: 'blue',
+            flexDirection: 'row',
+            marginTop: 50,
+            justifyContent: 'space-evenly',
+          }}>
+          <TouchableOpacity onPress={() => Actions.listRewards()}>
+            <View
+              style={{
+                // borderWidth: 1,
+                // borderColor: 'red',
+                // height: 40,
+                // width: 40,
+                // overflow: 'hidden',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Image
+                source={require('./../../../assets/imgs/Grabbit_Gradient_Letters_111x500.png')}
+                style={{height: 27, width: 122}}
+              />
+            </View>
+          </TouchableOpacity>
+          <View
+            style={{
+              // borderWidth: 1,
+              // borderColor: 'red',
+              height: 40,
+              width: 40,
+              right: 20,
+              position: 'absolute',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <TouchableOpacity onPress={() => Actions.settings()}>
+              <Icon name={'more-horizontal'} size={20} color={Color.Black} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
+  }
+}
+
 export class MainTopNavigationBar extends React.Component {
   render() {
     return (

@@ -5,7 +5,11 @@ import {connect} from 'react-redux';
 import ReduxActions from 'grabbit/src/Actions';
 import {Router, Scene, Stack, Tabs} from 'react-native-router-flux';
 import {Color, TabIconSize} from 'grabbit/src/Const';
-import {BasicTopNavigationBar, MainTopNavigationBar} from 'grabbit/src/components/navigation/Top';
+import {
+  BasicTopNavigationBar,
+  MainTopNavigationBar,
+  AccountTopNavigationBar,
+} from 'grabbit/src/components/navigation/Top';
 import {getStateForKey, NewNotificationIcon} from 'grabbit/src/Utils';
 import {
   EntryView,
@@ -40,7 +44,6 @@ class Router_ extends React.Component {
             gesturesEnabled={false}
             drawerLockMode="locked-closed"
             hideNavBar={true}
-            initial
           />
           <Scene
             key="login"
@@ -78,19 +81,17 @@ class Router_ extends React.Component {
           <Scene key="terms" component={TermsView} title="Terms" hideNavBar={false} navBar={BasicTopNavigationBar} />
           <Scene key="privacy" component={PrivacyView} title="Privacy Policy" hideNavBar={false} />
           <Tabs
-            duration={0}
-            animationEnabled={false}
             key="tabRoot"
-            hideNavBar={true}
             showLabel={false}
             tabBarPosition={'bottom'}
+            hideNavBar={true}
             activeBackgroundColor={Color.White}
+            initial
             lazy>
             <Scene
               navBar={MainTopNavigationBar}
               title={'Rewards'}
               hideNavBar={false}
-              renderBackButton={() => <View />}
               key="listRewards"
               icon={({focused}) => (
                 <Icon name={'menu'} size={TabIconSize} color={focused ? Color.Purple : Color.ReadableGreyText} />
@@ -101,7 +102,6 @@ class Router_ extends React.Component {
               navBar={BasicTopNavigationBar}
               title={'Linked Accounts'}
               hideNavBar={false}
-              renderBackButton={() => <View />}
               key="linkAccount"
               icon={({focused}) => (
                 <Icon
@@ -114,9 +114,8 @@ class Router_ extends React.Component {
             />
             <Scene
               navBar={MainTopNavigationBar}
-              title={null}
+              title={'Notifications'}
               hideNavBar={false}
-              renderBackButton={() => <View />}
               key="notifications"
               icon={({focused}) => {
                 if (this.props.hasUnseenNotifications) {
@@ -133,10 +132,9 @@ class Router_ extends React.Component {
               component={NotificationsView}
             />
             <Scene
-              navBar={null}
-              title={null}
-              hideNavBar={true}
-              renderBackButton={() => <View />}
+              navBar={AccountTopNavigationBar}
+              title={'Account'}
+              hideNavBar={false}
               key="account"
               icon={({focused}) => (
                 <Icon name={'user'} size={TabIconSize} color={focused ? Color.Purple : Color.ReadableGreyText} />

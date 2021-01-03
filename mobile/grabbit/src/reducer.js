@@ -16,7 +16,7 @@ const defaultState = {
       address_line1: '600 S Spring St',
       address_line2: 'Los Angeles, CA 90014',
       current_session_token: '8f710063cffbe962bcf51aec432aff687acd027e41e52589b63bda1ae9903048',
-      phone: '+1 213-222-7624',
+      phone: '213-222-7624',
     },
     authentication: {
       input: {
@@ -59,8 +59,11 @@ const defaultState = {
     },
   },
   settings: {
-    targeting_disabled: false,
-    grabbit_profile_keywords: 'Spender, Luxury, Sports, Active, Enjoys weekend trips, Loves entertainment',
+    profile: {
+      keywords: [],
+    },
+    pending: false,
+    error: null,
     support: [
       {
         id: 1,
@@ -113,6 +116,42 @@ const defaultState = {
 export default function (state = defaultState, action) {
   const {payload, type, key} = action;
   switch (type) {
+    // ********************************************
+    // Settings
+    // ********************************************
+    case ReduxActions.Settings.GetUserSettingsSuccess: {
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          pending: false,
+          error: null,
+          profile: payload,
+        },
+      };
+    }
+    case ReduxActions.Settings.GetUserSettingsError: {
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          pending: false,
+          error: payload,
+        },
+      };
+    }
+
+    case ReduxActions.Settings.GetUserSettingsPending: {
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          pending: true,
+          error: null,
+        },
+      };
+    }
+
     // ********************************************
     // Notifications
     // ********************************************

@@ -90,6 +90,7 @@ class V extends React.Component {
             flex: 1,
             // justifyContent: 'center',
             paddingTop: 200,
+            backgroundColor: Color.White,
             alignItems: 'center',
           }}>
           <View

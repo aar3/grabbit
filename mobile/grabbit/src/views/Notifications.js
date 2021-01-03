@@ -181,6 +181,7 @@ class V extends React.Component {
                 }}>
                 <View
                   style={{
+                    backgroundColor: Color.White,
                     borderBottomWidth: 1,
                     borderBottomColor: Color.BorderLightGrey,
                     height: 80,

@@ -1,10 +1,11 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, Linking} from 'react-native';
+import {View, Text, TouchableOpacity, Linking, ImageBackground} from 'react-native';
 import ToggleSwitch from 'toggle-switch-react-native';
 import {connect} from 'react-redux';
+import ReduxActions from 'grabbit/src/Actions';
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
-import {getStateForKey} from 'grabbit/src/Utils';
+import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
 import {ToggleStyle} from 'grabbit/src/Styles';
 import {Color} from 'grabbit/src/Const';
 
@@ -20,9 +21,23 @@ class V extends React.Component {
     this.state = {};
   }
 
+  async componentDidMount() {
+    return this.props.getUserSettings(this.options);
+  }
+
+  get options() {
+    return {
+      method: 'GET',
+      endpoint: `/user/${this.props.user.id}/settings/`,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Session-Token': this.props.user.current_session_token,
+      },
+    };
+  }
+
   _renderSupportItems() {
-    const {settings} = this.props;
-    return settings.support.map((item, index) => {
+    return this.props.supportItems.map((item, index) => {
       return (
         <TouchableOpacity key={String(index)} onPress={() => Linking.openURL(item.href)}>
           <View
@@ -31,6 +46,7 @@ class V extends React.Component {
               borderTopWidth: 1,
               alignItems: 'center',
               borderTopColor: Color.BorderLightGrey,
+              backgroundColor: Color.White,
               height: 50,
               width: '100%',
               flexDirection: 'row',
@@ -58,28 +74,94 @@ class V extends React.Component {
   }
 
   render() {
-    const {settings} = this.props;
+    if (this.props.getUserSettingsPending) {
+      return (
+        <View
+          style={{
+            // borderWidth: 1,
+            // borderColor: 'red',
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              fontWeight: 'bold',
+              fontSize: 18,
+              color: Color.BorderLightGrey,
+            }}>
+            Loading settings...
+          </Text>
+          <ImageBackground
+            source={require('./../../assets/imgs/Loading-Transparent-Cropped.gif')}
+            style={{
+              // borderWidth: 1,
+              // borderColor: 'red',
+              marginTop: 20,
+              height: 50,
+              width: 50,
+              marginBottom: 20,
+            }}></ImageBackground>
+        </View>
+      );
+    }
+
+    if (this.props.getUserSettingsError) {
+      return (
+        <View
+          style={{
+            flex: 1,
+            // borderWidth: 1,
+            // borderColor: 'red',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              fontWeight: 'bold',
+              fontSize: 18,
+              color: Color.Purple,
+            }}>
+            Doh, looks like there was an error
+          </Text>
+          <Text
+            style={{
+              marginTop: 5,
+              color: Color.BorderLightGrey,
+            }}>
+            {this.props.getUserSettingsError.details}
+          </Text>
+          <TouchableOpacity onPress={() => this.props.getUserSettings(this.options)}>
+            <Icon style={{marginTop: 20}} name={'rotate-ccw'} size={24} color={Color.BorderLightGrey} />
+          </TouchableOpacity>
+          <Text style={{color: Color.BorderLightGrey}}>Try Again</Text>
+        </View>
+      );
+    }
+
     return (
       <View
         style={{
           flex: 1,
-          // justifyContent: 'center',
           alignItems: 'center',
+          backgroundColor: '#f0f0f0',
         }}>
         <View
           style={{
             marginTop: 20,
             borderBottomWidth: 1,
             borderBottomColor: Color.BorderLightGrey,
-            width: '90%',
+            width: '100%',
+            padding: 20,
             height: 175,
             flexDirection: 'row',
+            backgroundColor: Color.White,
           }}>
           <View
             style={{
               // borderWidth: 1,
               // borderColor: 'orange',
-              width: 275,
+              width: 300,
             }}>
             <Text
               style={{
@@ -99,35 +181,48 @@ class V extends React.Component {
             style={{
               // borderWidth: 1,
               // borderColor: 'red',
-              marginLeft: 50,
+              marginLeft: 20,
               justifyContent: 'center',
               alignItems: 'center',
             }}>
             <ToggleSwitch
-              isOn={settings.targeting_disabled}
+              isOn={Boolean(this.props.profile.targeting_enabled)}
               onColor={ToggleStyle.On}
               offColor={ToggleStyle.Off}
               label={null}
-              size="small"
-              onToggle={() => {}}
+              size="medium"
+              onToggle={() => {
+                return this.props.updateUserSettings({
+                  endpoint: `/user/${this.props.user.id}/settings/${this.props.profile.id}/`,
+                  method: 'PUT',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'X-Session-Token': this.props.user.current_session_token,
+                  },
+                  data: Object.assign({}, this.props.profile, {
+                    targeting_enabled: this.props.profile.targeting_enabled === 1 ? 0 : 1,
+                  }),
+                });
+              }}
             />
           </View>
         </View>
         <View
           style={{
             marginTop: 25,
-            width: '90%',
+            width: '100%',
+            padding: 20,
             borderTopWidth: 1,
             borderBottomWidth: 1,
             borderBottomColor: Color.BorderLightGrey,
             borderTopColor: Color.BorderLightGrey,
             // borderWidth: 1,
             // borderColor: 'blue',
+            backgroundColor: Color.White,
           }}>
           <Text
             style={{
               fontSize: 16,
-              marginTop: 20,
             }}>
             My Grabbit Advertiser Profile
           </Text>
@@ -136,7 +231,7 @@ class V extends React.Component {
             discounts using proprietary technology. Below is a rough idea of the type of profile on you that we’ve built
             using your data.
           </Text>
-          <Text style={textSection}>{settings.grabbit_profile_keywords}</Text>
+          <Text style={[textSection, {color: Color.Purple}]}>{this.props.profile.keywords.join(', ')}</Text>
           <Text style={[textSection, {marginBottom: 20}]}>
             Remember, this is a ephemeral profile built using data that changes over time. This data is NOT personally
             identifiable, and as always, your data is safe with us.
@@ -160,12 +255,50 @@ class V extends React.Component {
 
 const mapStateToProps = function (state) {
   return {
-    settings: getStateForKey('state.settings', state),
+    getUserSettingsPending: getStateForKey('state.settings.pending', state),
+    getUserSettingsError: getStateForKey('state.settings.error', state),
+    supportItems: getStateForKey('state.settings.support', state),
+    profile: getStateForKey('state.settings.profile', state),
+    user: getStateForKey('state.session.user', state),
   };
 };
 
 const mapDispatchToProps = function (dispatch) {
-  return {};
+  return {
+    getUserSettings: async function (options) {
+      dispatch({
+        type: ReduxActions.Settings.GetUserSettingsPending,
+      });
+
+      const {data, error} = await httpRequest(options);
+
+      if (error) {
+        return dispatch({
+          type: ReduxActions.Settings.GetUserSettingsError,
+          payload: error,
+        });
+      }
+
+      return dispatch({
+        type: ReduxActions.Settings.GetUserSettingsSuccess,
+        payload: data,
+      });
+    },
+
+    updateUserSettings: async function (options) {
+      const {data, error} = await httpRequest(options);
+
+      if (error) {
+        console.log(`Couldn\'t update user settings: ${error.details}`);
+        return;
+      }
+
+      return dispatch({
+        type: ReduxActions.Settings.GetUserSettingsSuccess,
+        payload: data,
+      });
+    },
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(V);
