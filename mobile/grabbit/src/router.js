@@ -44,6 +44,7 @@ class Router_ extends React.Component {
             gesturesEnabled={false}
             drawerLockMode="locked-closed"
             hideNavBar={true}
+            initial={!this.props.user}
           />
           <Scene
             key="login"
@@ -86,7 +87,7 @@ class Router_ extends React.Component {
             tabBarPosition={'bottom'}
             hideNavBar={true}
             activeBackgroundColor={Color.White}
-            initial
+            initial={this.props.user}
             lazy>
             <Scene
               navBar={MainTopNavigationBar}
@@ -134,7 +135,7 @@ class Router_ extends React.Component {
             <Scene
               navBar={AccountTopNavigationBar}
               title={'Account'}
-              hideNavBar={false}
+              hideNavBar={true}
               key="account"
               icon={({focused}) => (
                 <Icon name={'user'} size={TabIconSize} color={focused ? Color.Purple : Color.ReadableGreyText} />
@@ -153,6 +154,7 @@ const mapStateToProps = function (state) {
   const unseenNotifications = notifications.filter((item) => !item.seen_at);
   return {
     hasUnseenNotifications: unseenNotifications.length > 0,
+    user: getStateForKey('state.session.user', state),
   };
 };
 

@@ -298,7 +298,7 @@ class V extends React.Component {
             </Text>
             <Text
               style={{
-                color: Color.ReadableGreyText,
+                color: Color.BorderLightGrey,
                 fontSize: 12,
                 textAlign: 'center',
                 marginTop: 10,

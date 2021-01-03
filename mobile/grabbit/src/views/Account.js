@@ -146,7 +146,20 @@ class V extends React.Component {
           // borderWidth: 1,
           // borderColor: 'blue',
           width: '80%',
+          marginTop: 20,
         }}>
+        <TouchableOpacity onPress={() => Actions.settings()}>
+          <Icon
+            name={'more-horizontal'}
+            color={Color.White}
+            size={20}
+            style={{
+              position: 'absolute',
+              right: 10,
+              top: -10,
+            }}
+          />
+        </TouchableOpacity>
         <Text
           style={{
             marginTop: 30,
@@ -190,7 +203,9 @@ class V extends React.Component {
         <ImageBackground
           style={{
             width: '110%',
-            height: 320,
+            height: 350,
+            position: 'absolute',
+            top: 0,
             padding: 10,
             // overflow: 'hidden',
             alignItems: 'center',
@@ -213,6 +228,7 @@ class V extends React.Component {
           style={{
             // borderWidth: 1,
             // borderColor: 'red',
+            marginTop: 285,
             width: '100%',
             height: 400,
           }}>

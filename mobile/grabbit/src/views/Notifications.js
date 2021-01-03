@@ -47,7 +47,7 @@ class V extends React.Component {
           width: 25,
           height: 25,
         }}>
-        <Icon name={'chevron-right'} size={20} color={Color.BorderLightGrey} />
+        <Icon name={'chevron-right'} size={20} color={!item.seen_at ? Color.Purple : Color.BorderLightGrey} />
       </View>
     );
   }
@@ -58,7 +58,15 @@ class V extends React.Component {
 
   _renderSeenTag(item) {
     if (!item.seen_at) {
-      return null;
+      return (
+        <Text
+          style={{
+            fontSize: 12,
+            color: Color.Purple,
+          }}>
+          Just now
+        </Text>
+      );
     }
     return (
       <Text
@@ -143,14 +151,15 @@ class V extends React.Component {
           }}>
           <Text
             style={{
-              color: Color.BorderLightGrey,
+              color: Color.Purple,
               fontWeight: 'bold',
               fontSize: 18,
               marginBottom: 20,
             }}>
             You have no notifications
           </Text>
-          <Icon name="thumbs-down" size={20} color={Color.BorderLightGrey} />
+          <Text style={{color: Color.BorderLightGrey, fontSize: 14, marginBottom: 20}}>For now...</Text>
+          <Icon name="thumbs-up" size={20} color={Color.BorderLightGrey} />
         </View>
       );
     }
@@ -181,9 +190,9 @@ class V extends React.Component {
                 }}>
                 <View
                   style={{
-                    backgroundColor: Color.White,
+                    backgroundColor: !item.seen_at ? '#f2e9f9' : Color.White,
                     borderBottomWidth: 1,
-                    borderBottomColor: Color.BorderLightGrey,
+                    borderBottomColor: !item.seen_at ? Color.Purple : Color.BorderLightGrey,
                     height: 80,
                     width: '100%',
                     flexDirection: 'row',
@@ -224,7 +233,7 @@ class V extends React.Component {
                         alignItems: 'center',
                         flexDirection: 'row',
                       }}>
-                      <Icon name={'check'} size={15} color={Color.BorderLightGrey} />
+                      <Icon name={'check'} size={15} color={!item.seen_at ? Color.Purple : Color.BorderLightGrey} />
                       {this._renderSeenTag(item)}
                     </View>
                   </View>
@@ -241,11 +250,12 @@ class V extends React.Component {
 
 const mapStateToProps = function (state) {
   const notifications = getStateForKey('state.notifications.list.items', state);
+  const sorted = Object.values(notifications).sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
   return {
     user: getStateForKey('state.session.user', state),
     getNotificationsPending: getStateForKey('state.notifications.list.pending', state),
     getNotificationsError: getStateForKey('state.notifications.list.error', state),
-    notifications: Object.values(notifications),
+    notifications: sorted,
   };
 };
 

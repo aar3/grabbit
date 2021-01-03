@@ -121,6 +121,43 @@ class V extends React.Component {
       );
     }
 
+    if (this.props.activeRewards.length === 0) {
+      return (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              color: Color.Purple,
+              fontWeight: 'bold',
+              fontSize: 18,
+            }}>
+            Welcome to Grabbit!
+          </Text>
+          <Text
+            style={{
+              color: Color.BorderLightGrey,
+              marginTop: 10,
+              fontWeight: 'bold',
+              fontSize: 18,
+            }}>
+            You don't have any rewards yet
+          </Text>
+          <Text
+            style={{
+              color: Color.BorderLightGrey,
+              marginTop: 10,
+              fontSize: 14,
+            }}>
+            Link an account to get started
+          </Text>
+        </View>
+      );
+    }
+
     return (
       <View
         style={{

@@ -105,6 +105,12 @@ class Setting(BaseModel):
     targeting_enabled = models.IntegerField(default=1)
 
 
+@receiver(post_save, sender=User)
+def create_settings_for_new_user(sender, instance, created, **kwargs):
+    if created:
+        _ = Setting.objects.create(user=instance, keywords=[])
+
+
 @receiver(post_save, sender=Setting)
 def create_notification_for_updated_settings(sender, instance, created, **kwargs):
     if not created:

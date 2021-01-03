@@ -31,7 +31,6 @@ class UserViewSet(viewsets.ViewSet):
 
     def create(self, request):
         params = request.data
-        print(">>> params: ", params)
         code = params.get("invitation_code")
         if code != INVITATION_CODE:
             return Response(data={"details": "Invalid invitation code"}, status=403)
@@ -89,7 +88,7 @@ class NotificationViewSet(BaseModelViewSet):
 
     def list(self, request, pk=None):
         user = get_object_or_404(User, pk=pk)
-        notifications = self.model.objects.filter(user__id=user.id)
+        notifications = self.model.objects.filter(user__id=user.id).order_by("-created_at")
         serializer = self.serializer(notifications, many=True)
         return Response(serializer.data)
 

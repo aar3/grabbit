@@ -41,7 +41,7 @@ export default class V extends React.Component {
             width: 300,
           }}>
           <GrabbitButton
-            onPress={() => Actions.listRewards()}
+            onPress={() => Actions.login()}
             _buttonStyle={{
               backgroundColor: Color.White,
               borderWidth: 1,

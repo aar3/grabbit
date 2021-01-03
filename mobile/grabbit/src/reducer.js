@@ -5,19 +5,20 @@ import {arrayToObject, getStateForKey} from 'grabbit/src/Utils';
 // api sends data over the wire
 const defaultState = {
   session: {
-    user: {
-      id: 3,
-      created_at: '2020-12-28T20:49:15.378923Z',
-      updated_at: null,
-      deleted_at: null,
-      qr_code_url: '',
-      name: 'Rashad Alston',
-      email: 'rashad.a.alston@gmail.com',
-      address_line1: '600 S Spring St',
-      address_line2: 'Los Angeles, CA 90014',
-      current_session_token: '8f710063cffbe962bcf51aec432aff687acd027e41e52589b63bda1ae9903048',
-      phone: '213-222-7624',
-    },
+    // user: {
+    //   id: 3,
+    //   created_at: '2020-12-28T20:49:15.378923Z',
+    //   updated_at: null,
+    //   deleted_at: null,
+    //   qr_code_url: '',
+    //   name: 'Rashad Alston',
+    //   email: 'rashad.a.alston@gmail.com',
+    //   address_line1: '600 S Spring St',
+    //   address_line2: 'Los Angeles, CA 90014',
+    //   current_session_token: '8f710063cffbe962bcf51aec432aff687acd027e41e52589b63bda1ae9903048',
+    //   phone: '213-222-7624',
+    // },
+    user: null,
     authentication: {
       input: {
         login: {

@@ -3,7 +3,6 @@ from rest_framework import routers
 from user.views import (
     UserViewSet,
     user_login,
-    SettingViewSet,
     NotificationViewSet,
     list_all_user_rewards,
     get_user_stats,
