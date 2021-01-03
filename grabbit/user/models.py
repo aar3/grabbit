@@ -101,8 +101,14 @@ class Setting(BaseModel):
         db_table = "settings"
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    metadata = models.JSONField(default=dict)
+    keywords = models.JSONField(default=dict)
     targeting_enabled = models.IntegerField(default=1)
+
+
+@receiver(post_save, sender=User)
+def create_settings_for_new_user(sender, instance, created, **kwargs):
+    if created:
+        _ = Setting.objects.create(user=instance, keywords=[])
 
 
 @receiver(post_save, sender=Setting)

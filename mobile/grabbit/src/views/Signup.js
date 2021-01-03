@@ -71,9 +71,6 @@ class V extends React.Component {
       !invitation_code,
     ];
 
-    console.log(conditions);
-    console.log(this.props.signupData);
-
     signupDisabled = conditions.some((condition) => condition);
 
     this.setState({signupDisabled});

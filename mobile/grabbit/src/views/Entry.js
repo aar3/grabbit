@@ -16,6 +16,7 @@ export default class V extends React.Component {
         style={{
           flex: 1,
           alignItems: 'center',
+          backgroundColor: Color.White,
         }}>
         <View
           style={{

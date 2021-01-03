@@ -88,7 +88,7 @@ class NotificationViewSet(BaseModelViewSet):
 
     def list(self, request, pk=None):
         user = get_object_or_404(User, pk=pk)
-        notifications = self.model.objects.filter(user__id=user.id)
+        notifications = self.model.objects.filter(user__id=user.id).order_by("-created_at")
         serializer = self.serializer(notifications, many=True)
         return Response(serializer.data)
 
@@ -150,3 +150,15 @@ def get_user_stats(request, pk=None):
         )
 
     return Response(data=stats)
+
+
+class SettingViewSet(BaseModelViewSet):
+    model = Setting
+    serializer = SettingSerializer
+    authentication_classes = [TokenAuthentication]
+
+    def list(self, request, pk=None):
+        user = get_object_or_404(User, pk=pk)
+        settings = Setting.objects.filter(user__id=user.id).order_by("-created_at")[0]
+        serializer = SettingSerializer(settings)
+        return Response(serializer.data)

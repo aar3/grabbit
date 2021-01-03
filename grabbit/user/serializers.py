@@ -40,4 +40,4 @@ class NotificationSerializer(BaseModelSerializer):
 class SettingSerializer(BaseModelSerializer):
     class Meta:
         model = Setting
-        fields = ["id", "created_at", "updated_at", "deleted_at", "user_id", "metadata"]
+        fields = ["id", "created_at", "updated_at", "deleted_at", "user_id", "keywords", "targeting_enabled"]

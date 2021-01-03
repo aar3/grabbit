@@ -47,4 +47,9 @@ export default {
     GetNotificationsError: 'GetNotificationsError',
     GetNotificationsSuccess: 'GetNotificationsSuccess',
   },
+  Settings: {
+    GetUserSettingsPending: 'GetUserSettingsPending',
+    GetUserSettingsError: 'GetUserSettingsError',
+    GetUserSettingsSuccess: 'GetUserSettingsSuccess',
+  },
 };

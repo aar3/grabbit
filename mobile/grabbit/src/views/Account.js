@@ -145,19 +145,19 @@ class V extends React.Component {
         style={{
           // borderWidth: 1,
           // borderColor: 'blue',
-          // height: 350,
           width: '80%',
-          marginTop: 50,
+          marginTop: 20,
         }}>
         <TouchableOpacity onPress={() => Actions.settings()}>
           <Icon
-            style={{
-              position: 'absolute',
-              right: 0,
-            }}
             name={'more-horizontal'}
             color={Color.White}
-            size={24}
+            size={20}
+            style={{
+              position: 'absolute',
+              right: 10,
+              top: -10,
+            }}
           />
         </TouchableOpacity>
         <Text
@@ -186,26 +186,6 @@ class V extends React.Component {
           }}>
           {missedOpportunitiesMsg}
         </Text>
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: 40,
-          }}>
-          <GrabbitButton
-            onPress={() => {
-              console.log('refreshing account info');
-            }}
-            _buttonStyle={{
-              backgroundColor: Color.White,
-            }}
-            titleStyle={{
-              color: Color.Purple,
-              fontWeight: 'bold',
-            }}
-            title="Refresh Account Info"
-          />
-        </View>
       </View>
     );
   }
@@ -215,14 +195,17 @@ class V extends React.Component {
       <View
         style={{
           flex: 1,
+          // borderColor: 'blue',
+          // borderWidth: 1,
           alignItems: 'center',
           justifyContent: 'center',
         }}>
         <ImageBackground
           style={{
             width: '110%',
-            height: 400,
-            height: 450,
+            height: 350,
+            position: 'absolute',
+            top: 0,
             padding: 10,
             // overflow: 'hidden',
             alignItems: 'center',
@@ -245,6 +228,7 @@ class V extends React.Component {
           style={{
             // borderWidth: 1,
             // borderColor: 'red',
+            marginTop: 285,
             width: '100%',
             height: 400,
           }}>
@@ -259,6 +243,7 @@ class V extends React.Component {
                 <TouchableOpacity>
                   <View
                     style={{
+                      backgroundColor: Color.White,
                       borderBottomWidth: 1,
                       borderBottomColor: Color.BorderLightGrey,
                       height: 80,
