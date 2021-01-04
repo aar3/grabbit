@@ -17,8 +17,7 @@ export default class Router_ extends React.Component {
     return (
       <Router>
         <Switch>
-          <Route exact path="/" component={HomeTemplate} />
-          <Route exact path="/welcome" component={EntryTemplate} />
+          <Route exact path="/" component={EntryTemplate} />
           <Route exact path="/login" component={LoginTemplate} />
           <Route exact path="/signup" component={SignupTemplate} />
           <Route exact path="/merchant/new" component={CreateMerchantTemplate} />
