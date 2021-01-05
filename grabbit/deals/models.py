@@ -2,19 +2,20 @@ import hashlib
 from django.db import models
 from user.models import User
 from lib.models import BaseModel
+from lib.const import EMPTY_IMAGE_URL
 
 
 class Deal(BaseModel):
     class Meta:
         db_table = "deals"
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     value = models.CharField(max_length=255)
     discount = models.CharField(max_length=255)
     merchant_name = models.CharField(max_length=255)
     url = models.CharField(max_length=255)
-    img_url = models.CharField(max_length=255)
+    img_url = models.CharField(max_length=255, default=EMPTY_IMAGE_URL)
     description = models.TextField(null=True)
     uid = models.CharField(max_length=255)
 

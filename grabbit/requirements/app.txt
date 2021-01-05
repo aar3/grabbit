@@ -17,6 +17,8 @@ redis
 requests
 qrcode
 plaid-python
+bs4
+html5lib
 
 numpy
 sklearn
