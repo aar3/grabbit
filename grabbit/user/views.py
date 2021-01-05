@@ -76,35 +76,22 @@ def list_all_user_rewards(request, pk=None):
     return Response(serializer.data)
 
 
-class SettingViewSet(BaseModelViewSet):
-    model = Setting
-    serializers = SettingSerializer
+@api_view(["GET"])
+@authentication_classes([TokenAuthentication])
+def list_all_user_notifications(request, pk=None):
+    user = get_object_or_404(User, pk=pk)
+    notifications = Notification.objects.filter(user__id=user.id).order_by("-created_at")
+    serializer = NotificationSerializer(notifications, many=True)
+    return Response(serializer.data)
 
 
-class NotificationViewSet(BaseModelViewSet):
-    model = Notification
-    serializer = NotificationSerializer
-    authentication_classes = [TokenAuthentication]
-
-    def list(self, request, pk=None):
-        user = get_object_or_404(User, pk=pk)
-        notifications = self.model.objects.filter(user__id=user.id).order_by("-created_at")
-        serializer = self.serializer(notifications, many=True)
-        return Response(serializer.data)
-
-    # FIXME: we only need to update and return items that have seen_at=None, and the reducer
-    # on the client needs to know that the incoming update operation is an "inplace" and not
-    # a "replace"
-    def create(self, request, pk=None):
-        user = get_object_or_404(User, pk=pk)
-        notifications = self.model.objects.filter(user__id=user.id)
-        for notification in notifications:
-            notification.seen_at = timezone.now()
-
-        self.model.objects.bulk_update(notifications, fields=["seen_at"])
-        instances = self.model.objects.filter(user__id=user.id)
-        serializer = self.serializer(instances, many=True)
-        return Response(serializer.data)
+@api_view(["PUT"])
+@authentication_classes([TokenAuthentication])
+def set_notifications_as_seen(request, pk=None):
+    user = get_object_or_404(User, pk=pk)
+    notifications = Notification.objects.filter(user__id=user.id).order_by("-created_at")
+    serializer = NotificationSerializer(notifications, many=True)
+    return Response(serializer.data)
 
 
 @api_view(["GET"])
@@ -117,7 +104,17 @@ def get_user_stats(request, pk=None):
     user = get_object_or_404(User, pk=pk)
     rewards = Reward.objects.filter(owner_user__id=user.id, is_active=False)
     unique_merchants = set([reward.code.campaign.merchant.id for reward in rewards])
-    stats = {}
+    stats = {
+        # IMPORTANT: We have to get some of this data from the merchant integration
+        "total_spend": 0,
+        "avg_discount": 0.0,
+        "time_elapsed": 30,
+        "conversions": 0,
+        "impressions": 0,
+        "unique_merchants": 0,
+        "top_merchant": {"name": "N/A", "total_spend": 0, "avg_discount": 0.0, "conversions": 0,},
+        "missed_opportunities": {"expiries": 0, "time_elapsed": 30, "potential_spend": 0, "avg_discount": 0,},
+    }
 
     if unique_merchants:
         mid = most_common(unique_merchants)

@@ -27,7 +27,7 @@ import {
   NotificationsView,
 } from 'grabbit/src/views';
 
-class Router_ extends React.Component {
+export default class Router_ extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -149,16 +149,16 @@ class Router_ extends React.Component {
   }
 }
 
-const mapStateToProps = function (state) {
-  const notifications = Object.values(getStateForKey('state.notifications.list.items', state));
-  const unseenNotifications = notifications.filter((item) => !item.seen_at);
-  return {
-    hasUnseenNotifications: unseenNotifications.length > 0,
-    user: getStateForKey('state.session.user', state),
-  };
-};
+// const mapStateToProps = function (state) {
+//   const notifications = Object.values(getStateForKey('state.notifications.list.items', state));
+//   const unseenNotifications = notifications.filter((item) => !item.seen_at);
+//   return {
+//     hasUnseenNotifications: unseenNotifications.length > 0,
+//     user: getStateForKey('state.session.user', state),
+//   };
+// };
 
-export default connect(mapStateToProps)(Router_);
+// export default connect(mapStateToProps)(Router_);
 
 const MyTransitionSpec = {
   duration: 0,

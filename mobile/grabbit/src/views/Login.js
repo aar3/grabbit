@@ -186,7 +186,7 @@ class V extends React.Component {
               onPress={() => {
                 const {area_code, prefix, line_number} = this.props.loginData;
                 return this.props.postUserLogin({
-                  endpoint: '/user/login/',
+                  endpoint: '/users/login/',
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',

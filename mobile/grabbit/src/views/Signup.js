@@ -294,7 +294,7 @@ class V extends React.Component {
                     },
                   );
                   const options = {
-                    endpoint: '/users/',
+                    endpoint: '/users/accounts/',
                     method: 'POST',
                     headers: {
                       'Content-Type': 'application/json',
