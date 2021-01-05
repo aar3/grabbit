@@ -20,5 +20,4 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", include("user.urls")),
     path("api/v1/", include("plaid_local.urls")),
-    path("api/v1/", include("merchant.urls")),
 ]

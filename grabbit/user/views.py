@@ -8,8 +8,6 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from user.models import User, Login, Notification, Setting
 from user.serializers import UserSerializer, NotificationSerializer, SettingSerializer
-from merchant.models import Reward
-from merchant.serializers import RewardSerializer
 from lib.middlewares import TokenAuthentication
 from lib.views import BaseModelViewSet
 from lib.utils import average, most_common
@@ -69,11 +67,8 @@ def user_login(request):
 
 @api_view(["GET"])
 @authentication_classes([TokenAuthentication])
-def list_all_user_rewards(request, pk=None):
-    user = get_object_or_404(User, pk=pk)
-    rewards = Reward.objects.filter(owner_user__id=user.id)
-    serializer = RewardSerializer(rewards, many=True)
-    return Response(serializer.data)
+def list_all_user_deals(request, pk=None):
+    pass
 
 
 @api_view(["GET"])
@@ -97,56 +92,7 @@ def set_notifications_as_seen(request, pk=None):
 @api_view(["GET"])
 @authentication_classes([TokenAuthentication])
 def get_user_stats(request, pk=None):
-
-    from merchant.models import Merchant
-    from merchant.serializers import MerchantSerializer
-
-    user = get_object_or_404(User, pk=pk)
-    rewards = Reward.objects.filter(owner_user__id=user.id, is_active=False)
-    unique_merchants = set([reward.code.campaign.merchant.id for reward in rewards])
-    stats = {
-        # IMPORTANT: We have to get some of this data from the merchant integration
-        "total_spend": 0,
-        "avg_discount": 0.0,
-        "time_elapsed": 30,
-        "conversions": 0,
-        "impressions": 0,
-        "unique_merchants": 0,
-        "top_merchant": {"name": "N/A", "total_spend": 0, "avg_discount": 0.0, "conversions": 0,},
-        "missed_opportunities": {"expiries": 0, "time_elapsed": 30, "potential_spend": 0, "avg_discount": 0,},
-    }
-
-    if unique_merchants:
-        mid = most_common(unique_merchants)
-        instance = Merchant.objects.get(pk=mid)
-        top_merchant = MerchantSerializer(instance).data
-
-        stats = {
-            # IMPORTANT: We have to get some of this data from the merchant integration
-            "total_spend": 0,
-            "avg_discount": average([reward.code.value for reward in rewards]),
-            "time_elapsed": 30,
-            "conversions": len([reward for reward in rewards if reward.redeemed_at]),
-            "impressions": len(rewards),
-            "unique_merchants": len(unique_merchants),
-            "top_merchant": top_merchant,
-            "missed_opportunities": {
-                "expiries": len([reward.__dict__ for reward in rewards if not reward.redeemed_at]),
-                "time_elapsed": 30,
-                "potential_spend": 0,
-                "avg_discount": average([reward.code.value for reward in rewards if not reward.redeemed_at]),
-            },
-        }
-
-        stats["top_merchant"]["total_spend"] = 0
-        stats["top_merchant"]["avg_discount"] = average(
-            [reward.code.value for reward in rewards if reward.redeemed_at and reward.code.campaign.merchant.id == mid]
-        )
-        stats["top_merchant"]["conversions"] = len(
-            [reward for reward in rewards if reward.code.campaign.merchant.id == mid]
-        )
-
-    return Response(data=stats)
+    return Response(status=200)
 
 
 class SettingViewSet(BaseModelViewSet):
