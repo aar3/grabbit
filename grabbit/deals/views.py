@@ -5,12 +5,18 @@ from django.shortcuts import get_object_or_404
 from lib.views import BaseModelViewSet
 from user.models import User
 from user.views import BaseUserNestedViewSet
-from deals.models import Deal
-from deals.serializers import DealSerializer
+from deals.models import UserDeal, Deal
+from deals.serializers import DealSerializer, UserDealSerializer
 from lib.middlewares import TokenAuthentication
 
 
-class DealViewSet(BaseUserNestedViewSet):
+class UserDealViewSet(BaseUserNestedViewSet):
+    model = UserDeal
+    serializer = UserDealSerializer
+    authentication_classes = [TokenAuthentication]
+
+
+class DealViewSet(BaseModelViewSet):
     model = Deal
     serializer = DealSerializer
     authentication_classes = [TokenAuthentication]

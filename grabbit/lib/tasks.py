@@ -8,6 +8,7 @@ from deals.models import Deal
 
 task_manager = Celery("lib.tasks", backend=config.CELERY_RESULT_BACKEND, broker=config.CELERY_BROKER)
 
+
 class BaseScraper:
     # NOTE: domain mult inclue protocol: https://slickdeals.net
     def __init__(self, domain, start=None):
@@ -17,24 +18,28 @@ class BaseScraper:
         self.soup = None
         self.headers = {}
         self.timeout = 3
+        self.max_tasks = 1
 
     def scrape(self):
+        tasks = 0
         self.queue.append(self.start or self.domain)
-        while self.queue:
+        while self.queue and tasks < self.max_tasks:
             url = self.queue.popleft()
             response = requests.get(url, headers=self.headers, timeout=self.timeout)
-            if not 200 < response.status_code < 300:
-                self._handle_unsuccessful_scrape_attempt(url)
+            if not 200 <= response.status_code < 300:
+                self._handle_unsuccessful_scrape_attempt(url, response)
                 continue
 
             self.soup = BeautifulSoup(response.content, "html5lib")
             associated_links = self.soup.find_all("a", href=True)
-            associated_links_on_domain = list(filter(lambda url: url.startsWith(self.domain), associated_links))
-            for link in associated_links_on_domain:
-                self.queue.append(link)
+            # associated_links_on_domain = list(filter(lambda url: url and url.startsWith(self.domain), associated_links))
+            # for link in associated_links_on_domain:
+            #     self.queue.append(link)
 
-    def _handle_unsuccessful_scrape_attempt(self, url):
-        raise NotImplementedError
+            self._process_soup(url)
+
+    def _handle_unsuccessful_scrape_attempt(self, url, response):
+        print("Scraping {} return invalid response code: {}".format(url, response.status_code))
 
 
 class SlickDealsScraper(BaseScraper):
@@ -46,10 +51,11 @@ class SlickDealsScraper(BaseScraper):
         value = self._extract_product_value()
         merchant_name = self._extract_merchant_name()
         discount = self._extract_product_discount()
+        img_url = self._extract_product_img_url()
         title = self._extract_product_title()
 
-        deal = Deal.objects.create(
-            title=self._extract_product_title(),
+        _ = Deal.objects.create(
+            title=title,
             value=value,
             discount=discount,
             description=description,
@@ -107,10 +113,10 @@ class SlickDealsScraper(BaseScraper):
         return old_price_tags_text[0]
 
     def _extract_product_img_url(self):
-        main_images = soup.find_all("img", {"id": "mainImage"})
+        main_images = self.soup.find_all("img", {"id": "mainImage"})
         if not main_images:
             return None
-        main_image_contens = [x.get("src") for x in a]
+        main_image_contens = [x.get("src") for x in main_images]
         if not main_image_contens:
             return None
 
@@ -128,4 +134,3 @@ class SlickDealsScraper(BaseScraper):
 
         top_description = descriptions_without_class_attrs[0]
         return top_description.split("\n")[0]
-

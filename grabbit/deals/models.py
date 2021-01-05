@@ -9,7 +9,6 @@ class Deal(BaseModel):
     class Meta:
         db_table = "deals"
 
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     value = models.CharField(max_length=255)
     discount = models.CharField(max_length=255)
@@ -23,3 +22,11 @@ class Deal(BaseModel):
         # NOTE: assuming these values are reliably consistent
         payload = self.title.lower() + str(self.value) + self.merchant_name.lower()
         self.uid = hashlib.sha256(payload.encode()).hexdigest()
+
+
+class UserDeal(BaseModel):
+    class Meta:
+        db_table = "user_deals"
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    deal = models.ForeignKey(Deal, on_delete=models.CASCADE)
