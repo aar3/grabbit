@@ -8,6 +8,7 @@ from lib.views import BaseModelViewSet
 from lib.middlewares import TokenAuthentication
 from lib.const import PLAID_DATE_FORMAT
 from user.models import User
+from user.views import BaseUserNestedViewSet
 from grabbit.config import config
 from plaid_local.models import LinkToken, Link
 from plaid_local.tasks import scrape_transactions_for_user
@@ -15,7 +16,7 @@ from plaid_local.serializers import LinkTokenSerializer, LinkSerializer
 from plaid_local import PlaidClient
 
 
-class LinkTokenViewSet(BaseModelViewSet):
+class LinkTokenViewSet(BaseUserNestedViewSet):
     model = LinkToken
     serializer = LinkTokenSerializer
     authentication_classes = [TokenAuthentication]
@@ -28,7 +29,6 @@ class LinkTokenViewSet(BaseModelViewSet):
             "client_name": config.NAME,
             "country_codes": ["US"],
             "language": "en",
-            # "webhook": config.PLAID.CREATE_LINK_WEBHOOK,
             "link_customization_name": "default",
             "account_filters": {"depository": {"account_subtypes": ["checking", "savings"],},},
         }
@@ -40,16 +40,10 @@ class LinkTokenViewSet(BaseModelViewSet):
         return Response(serializer.data)
 
 
-class LinkViewSet(BaseModelViewSet):
+class LinkViewSet(BaseUserNestedViewSet):
     model = Link
     serializer = LinkSerializer
     authentication_classes = [TokenAuthentication]
-
-    def list(self, request, pk=None):
-        user = get_object_or_404(User, pk=pk)
-        links = self.model.objects.filter(user__id=user.id)
-        serializer = self.serializer(links, many=True)
-        return Response(serializer.data)
 
 
 @csrf_exempt
@@ -80,14 +74,3 @@ def handle_link_auth_success(request, pk=None):
 
     serializer = LinkSerializer(instance)
     return Response(serializer.data)
-
-
-@api_view(["POST"])
-@authentication_classes([TokenAuthentication])
-def process_user_transactions(request, pk=None):
-    user = get_object_or_404(User, pk=pk)
-    start_date = dt.datetime.strptime(request.data["start_date"], PLAID_DATE_FORMAT)
-    end_date = dt.datetime.strptime(request.data["end_date"], PLAID_DATE_FORMAT)
-    _ = scrape_transactions_for_user.apply_async(args=(user.id, start_date, end_date))
-    # TODO: scrape_transactions_for_user(user.id, start_date, end_date)
-    return Response(data={"details": "ok"}, status=200)

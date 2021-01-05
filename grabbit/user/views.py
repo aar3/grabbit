@@ -50,8 +50,27 @@ class UserViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 
+class BaseUserNestedViewSet(BaseModelViewSet):
+    def list(self, request, user_id=None):
+        user = get_object_or_404(User, pk=user_id)
+        links = self.model.objects.filter(user__id=user.id)
+        serializer = self.serializer(links, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, user_id=None, pk=None):
+        instance = get_object_or_404(self.model, pk=pk, user__id=user_id)
+        serializer = self.serializer(instance)
+        return Response(serializer.data)
+
+
+class NotificationViewSet(BaseUserNestedViewSet):
+    model = Notification
+    serializer = NotificationSerializer
+    authentication_classes = [TokenAuthentication]
+
+
 @api_view(["POST"])
-def user_login(request):
+def post_user_login(request):
     remote_addr = request.META.get("REMOTE_ADDR")
     user_agent = request.META.get("HTTP_USER_AGENT")
     user = get_object_or_404(User, phone=request.data["phone"])
@@ -73,24 +92,6 @@ def list_all_user_deals(request, pk=None):
 
 @api_view(["GET"])
 @authentication_classes([TokenAuthentication])
-def list_all_user_notifications(request, pk=None):
-    user = get_object_or_404(User, pk=pk)
-    notifications = Notification.objects.filter(user__id=user.id).order_by("-created_at")
-    serializer = NotificationSerializer(notifications, many=True)
-    return Response(serializer.data)
-
-
-@api_view(["PUT"])
-@authentication_classes([TokenAuthentication])
-def set_notifications_as_seen(request, pk=None):
-    user = get_object_or_404(User, pk=pk)
-    notifications = Notification.objects.filter(user__id=user.id).order_by("-created_at")
-    serializer = NotificationSerializer(notifications, many=True)
-    return Response(serializer.data)
-
-
-@api_view(["GET"])
-@authentication_classes([TokenAuthentication])
 def get_user_stats(request, pk=None):
     return Response(status=200)
 
@@ -100,8 +101,9 @@ class SettingViewSet(BaseModelViewSet):
     serializer = SettingSerializer
     authentication_classes = [TokenAuthentication]
 
-    def list(self, request, pk=None):
-        user = get_object_or_404(User, pk=pk)
+    def list(self, request, user_id=None):
+        user = get_object_or_404(User, pk=user_id)
+        # FIXME: There should never be more than a single setting per user
         settings = Setting.objects.filter(user__id=user.id).order_by("-created_at")[0]
         serializer = SettingSerializer(settings)
         return Response(serializer.data)

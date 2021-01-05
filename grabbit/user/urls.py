@@ -1,23 +1,22 @@
 from django.urls import path, include, re_path
 from rest_framework import routers
-from user.views import (
-    UserViewSet,
-    user_login,
-    list_all_user_rewards,
-    list_all_user_notifications,
-    set_notifications_as_seen,
-    get_user_stats,
-    SettingViewSet,
-)
+from user.views import UserViewSet, SettingViewSet, NotificationViewSet, post_user_login, get_user_stats
+from plaid_local.views import LinkViewSet, LinkTokenViewSet, handle_link_auth_success
+from deals.views import UserDealViewSet
 
 router = routers.DefaultRouter()
 router.register(r"accounts", UserViewSet, basename="user")
-router.register(r"(\d+)/settings", SettingViewSet, basename="setting")
+router.register(r"^(?P<user_id>\w+)/settings", SettingViewSet, basename="setting")
+router.register(r"^(?P<user_id>\w+)/deals", UserDealViewSet, basename="user-deal")
+router.register(r"^(?P<user_id>\w+)/notifications", NotificationViewSet, basename="notification")
+
+plaid_router = routers.DefaultRouter()
+plaid_router.register(r"links", LinkViewSet, basename="link")
+plaid_router.register(r"link-tokens", LinkTokenViewSet, basename="link-token")
 
 urlpatterns = [
     path("users/", include(router.urls)),
-    path("users/login/", user_login),
-    re_path(r"users/(\d+)/rewards/", list_all_user_rewards),
-    re_path(r"users/(\d+)/notifications/", list_all_user_notifications),
-    re_path(r"users/(\d+)/stats/", get_user_stats),
+    path("users/login/", post_user_login),
+    re_path(r"users/(?P<user_id>\w+)/stats/", get_user_stats),
+    re_path(r"users/(?P<user_id>\w+)/plaid/", include(plaid_router.urls)),
 ]
