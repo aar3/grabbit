@@ -22,6 +22,3 @@ class BaseModel(models.Model):
     def delete(self):
         self.deleted_at = timezone.now
         super().delete()
-
-    def to_dict(self):
-        return dict([(field.verbose_name, field.value_from_object(self)) for field in self.__class.__meta.fields])

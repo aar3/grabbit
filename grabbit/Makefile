@@ -74,7 +74,7 @@ start_prod \
 test
 
 
-APPS = user plaid_local merchant
+APPS = user plaid_local deals
 
 
 format:

@@ -24,7 +24,7 @@ class BaseModelViewSet(viewsets.ViewSet):
         serializer = self.serializer(queryset, many=True)
         return Response(serializer.data)
 
-    def retrieve(self, request, pk=None):
+    def retrieve(self, request, pk=None, *args, **kwargs):
         instance = get_object_or_404(self.model.objects.filter(pk=pk))
         serializer = self.serializer(instance)
         return Response(serializer.data)

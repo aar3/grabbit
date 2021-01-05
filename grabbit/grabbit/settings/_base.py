@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "user",
     "grabbit",
     "plaid_local",
+    "deals",
     "corsheaders",
     "rest_framework",
     "django.contrib.admin",
