@@ -1,11 +1,16 @@
 import hashlib
 from django.db import models
+from django.dispatch import receiver
+from django.db.models.signals import pre_save
 from user.models import User
+from deals.managers import DealManager
 from lib.models import BaseModel
 from lib.const import EMPTY_IMAGE_URL
 
 
 class Deal(BaseModel):
+    objects = DealManager()
+
     class Meta:
         db_table = "deals"
 
@@ -22,6 +27,12 @@ class Deal(BaseModel):
         # NOTE: assuming these values are reliably consistent
         payload = self.title.lower() + str(self.value) + self.merchant_name.lower()
         self.uid = hashlib.sha256(payload.encode()).hexdigest()
+
+    def save(self):
+        other = Deal.objects.filter(uid=self.uid)
+        if other:
+            return -1
+        super(Deal, self).save()
 
 
 class UserDeal(BaseModel):

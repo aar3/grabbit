@@ -5,6 +5,7 @@ django[argon2]
 gunicorn
 django-utils
 celery
+gevent
 
 psycopg2
 psycopg2-binary

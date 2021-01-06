@@ -23,7 +23,7 @@ CMD_DJANGO_MAKE_MIGRATIONS = ./manage.py makemigrations
 CMD_DJANGO_MIGRATE = ./manage.py migrate
 
 # start app locally
-CMD_START_APP_DEV = cd . && gunicorn $(APP_NAME).wsgi:application -w 1 -b 0.0.0.0:8000 --reload --log-level DEBUG
+CMD_START_APP_DEV = cd . && gunicorn $(APP_NAME).wsgi:application --workers=3 -b 0.0.0.0:8000 --reload --log-level DEBUG --worker-class=gevent  --timeout=120 --worker-connections=1000
 CMD_START_APP_PROD = cd . && gunicorn $(APP_NAME).wsgi:application -w 2 -b 0.0.0.0:8000 --log-level DEBUG
 
 # bootstrap environment
