@@ -3,8 +3,12 @@ import {View, Image, Text, TouchableOpacity} from 'react-native';
 import {Color} from 'grabbit/src/Const';
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
+import PlaidLink from 'react-native-plaid-link-sdk';
+import {connect} from 'react-redux';
+import ReduxActions from 'grabbit/src/Actions';
+import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
 
-export class BasicTopNavigationBar extends React.Component {
+class BasicTopNavigationBar extends React.Component {
   _renderBackButton() {
     if (this.props.backButton) {
       return (
@@ -62,7 +66,7 @@ export class BasicTopNavigationBar extends React.Component {
   }
 }
 
-export class AccountTopNavigationBar extends React.Component {
+class AccountTopNavigationBar extends React.Component {
   render() {
     return (
       <View
@@ -82,7 +86,7 @@ export class AccountTopNavigationBar extends React.Component {
             marginTop: 50,
             justifyContent: 'space-evenly',
           }}>
-          <TouchableOpacity onPress={() => Actions.listRewards()}>
+          <TouchableOpacity onPress={() => Actions.listDeal()}>
             <View
               style={{
                 // borderWidth: 1,
@@ -120,7 +124,7 @@ export class AccountTopNavigationBar extends React.Component {
   }
 }
 
-export class MainTopNavigationBar extends React.Component {
+class MainTopNavigationBar extends React.Component {
   render() {
     return (
       <View
@@ -152,7 +156,7 @@ export class MainTopNavigationBar extends React.Component {
             }}>
             {null}
           </View>
-          <TouchableOpacity onPress={() => Actions.listRewards()}>
+          <TouchableOpacity onPress={() => Actions.listDeal()}>
             <View
               style={{
                 // borderWidth: 1,
@@ -187,3 +191,134 @@ export class MainTopNavigationBar extends React.Component {
     );
   }
 }
+
+class LinkAccountTopNavigationBar extends React.Component {
+  _handleExit(data) {
+    console.log('exit: ', data);
+  }
+
+  async _handleOnSuccess(data) {
+    const options = {
+      method: 'POST',
+      endpoint: `/plaid/${this.props.user.id}/link-token-success/`,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Session-Token': this.props.user.current_session_token,
+      },
+      data,
+    };
+
+    return this.props.handleLinkSuccess(options);
+  }
+
+  _renderButton() {
+    if (this.props.getLinkTokenError) {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            console.log('clicked');
+          }}>
+          <Icon name={'x'} size={20} color={Color.ReadableGreyText} />
+        </TouchableOpacity>
+      );
+    }
+
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          console.log('clicked');
+        }}>
+        <PlaidLink
+          content
+          token={this.props.linkToken}
+          onSuccess={(data) => this._handleOnSuccess(data)}
+          onExit={(data) => this._handleExit()}>
+          <Icon name={'plus'} size={20} color={Color.ReadableGreyText} />
+        </PlaidLink>
+      </TouchableOpacity>
+    );
+  }
+
+  render() {
+    return (
+      <View
+        style={{
+          // borderWidth: 1,
+          // borderColor: 'orange',
+          flexDirection: 'row',
+          height: 90,
+          backgroundColor: '#fff',
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderBottomWidth: 1,
+          borderBottomColor: Color.BorderLightGrey,
+          width: '100%',
+        }}>
+        <View
+          style={{
+            // borderWidth: 1,
+            // borderColor: 'pink',
+            alignItems: 'center',
+            marginTop: 40,
+            justifyContent: 'center',
+          }}>
+          <Text
+            style={{
+              fontWeight: 'bold',
+              fontSize: 16,
+              color: Color.ReadableGreyText,
+            }}>
+            {this.props.title}
+          </Text>
+        </View>
+        <View
+          style={{
+            // borderWidth: 1,
+            // borderColor: 'red',
+            height: 40,
+            width: 40,
+            right: 20,
+            position: 'absolute',
+            top: 45,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          {this._renderButton()}
+        </View>
+      </View>
+    );
+  }
+}
+
+const mapStateToProps = function (state) {
+  return {
+    getLinkTokenError: getStateForKey('state.plaid.link_token.error', state),
+    linkToken: getStateForKey('state.plaid.link_token.link_token', state),
+  };
+};
+
+const mapDispatchToProps = function (dispatch) {
+  return {
+    handleLinkSuccess: async function (options) {
+      const {data, error} = await httpRequest(options);
+      if (error) {
+        return dispatch({
+          type: ReduxActions.Plaid.HandleLinkTokenError,
+          payload: error,
+        });
+      }
+
+      return dispatch({
+        type: ReduxActions.Plaid.HandleLinkTokenSuccess,
+        payload: data,
+      });
+    },
+  };
+};
+
+module.exports = {
+  BasicTopNavigationBar: connect(mapStateToProps, mapDispatchToProps)(BasicTopNavigationBar),
+  MainTopNavigationBar: connect(mapStateToProps, mapDispatchToProps)(MainTopNavigationBar),
+  AccountTopNavigationBar: connect(mapStateToProps, mapDispatchToProps)(AccountTopNavigationBar),
+  LinkAccountTopNavigationBar: connect(mapStateToProps, mapDispatchToProps)(LinkAccountTopNavigationBar),
+};

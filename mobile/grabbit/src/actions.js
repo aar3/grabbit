@@ -13,11 +13,11 @@ export default {
     PostUserSignupError: 'PostUserSignupError',
     PostUserSignupSuccess: 'PostUserSignupSuccess',
   },
-  Rewards: {
-    GetUserRewardsPending: 'GetUserRewardsPending',
-    GetUserRewardsSuccess: 'GetUserRewardsSuccess',
-    GetUserRewardsError: 'GetUserRewardsError',
-    SetFocusedReward: 'SetFocusedReward',
+  Deals: {
+    GetUserDealsPending: 'GetUserDealsPending',
+    GetUserDealsSuccess: 'GetUserDealsSuccess',
+    GetUserDealsError: 'GetUserDealsError',
+    SetFocusedDeal: 'SetFocusedDeal',
   },
   Plaid: {
     GetLinkTokenPending: 'GetLinkTokenPending',

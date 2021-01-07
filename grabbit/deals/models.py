@@ -3,14 +3,11 @@ from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import pre_save
 from user.models import User
-from deals.managers import DealManager
 from lib.models import BaseModel
 from lib.const import EMPTY_IMAGE_URL
 
 
 class Deal(BaseModel):
-    objects = DealManager()
-
     class Meta:
         db_table = "deals"
 

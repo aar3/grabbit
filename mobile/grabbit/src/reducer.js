@@ -5,20 +5,20 @@ import {arrayToObject, getStateForKey} from 'grabbit/src/Utils';
 // api sends data over the wire
 const defaultState = {
   session: {
-    // user: {
-    //   id: 3,
-    //   created_at: '2020-12-28T20:49:15.378923Z',
-    //   updated_at: null,
-    //   deleted_at: null,
-    //   qr_code_url: '',
-    //   name: 'Rashad Alston',
-    //   email: 'rashad.a.alston@gmail.com',
-    //   address_line1: '600 S Spring St',
-    //   address_line2: 'Los Angeles, CA 90014',
-    //   current_session_token: '8f710063cffbe962bcf51aec432aff687acd027e41e52589b63bda1ae9903048',
-    //   phone: '213-222-7624',
-    // },
-    user: null,
+    user: {
+      id: 3,
+      created_at: '2020-12-28T20:49:15.378923Z',
+      updated_at: null,
+      deleted_at: null,
+      qr_code_url: '',
+      name: 'Rashad Alston',
+      email: 'rashad.a.alston@gmail.com',
+      address_line1: '600 S Spring St',
+      address_line2: 'Los Angeles, CA 90014',
+      current_session_token: '8f710063cffbe962bcf51aec432aff687acd027e41e52589b63bda1ae9903048',
+      phone: '213-222-7624',
+    },
+    // user: null,
     authentication: {
       input: {
         login: {
@@ -44,7 +44,7 @@ const defaultState = {
       error: null,
     },
   },
-  rewards: {
+  deals: {
     inactive: {},
     list: {
       pending: false,
@@ -400,13 +400,13 @@ export default function (state = defaultState, action) {
     // RewardsList
     // ********************************************
 
-    case ReduxActions.Rewards.GetUserRewardsError: {
+    case ReduxActions.Deals.GetUserDealsError: {
       return {
         ...state,
-        rewards: {
-          ...state.rewards,
+        deals: {
+          ...state.deals,
           list: {
-            ...state.rewards.list,
+            ...state.deals.list,
             error: payload,
             pending: false,
           },
@@ -414,13 +414,13 @@ export default function (state = defaultState, action) {
       };
     }
 
-    case ReduxActions.Rewards.GetUserRewardsSuccess: {
+    case ReduxActions.Deals.GetUserDealsSuccess: {
       return {
         ...state,
-        rewards: {
-          ...state.rewards,
+        deals: {
+          ...state.deals,
           list: {
-            ...state.rewards.list,
+            ...state.deals.list,
             items: payload,
             pending: false,
             error: null,
@@ -429,13 +429,13 @@ export default function (state = defaultState, action) {
       };
     }
 
-    case ReduxActions.Rewards.GetUserRewardsPending: {
+    case ReduxActions.Deals.GetUserDealsPending: {
       return {
         ...state,
-        rewards: {
-          ...state.rewards,
+        deals: {
+          ...state.deals,
           list: {
-            ...state.rewards.list,
+            ...state.deals.list,
             pending: true,
             error: null,
           },
@@ -443,11 +443,11 @@ export default function (state = defaultState, action) {
       };
     }
 
-    case ReduxActions.Rewards.SetFocusedReward: {
+    case ReduxActions.Deals.SetFocusedDeal: {
       return {
         ...state,
-        rewards: {
-          ...state.rewards,
+        deals: {
+          ...state.deals,
           focused: payload,
         },
       };

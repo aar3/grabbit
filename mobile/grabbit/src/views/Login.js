@@ -252,7 +252,7 @@ const mapDispatchToProps = (dispatch) => {
         payload: data,
       });
 
-      return Actions.listRewards();
+      return Actions.listDeal();
     },
 
     updateLoginValue: function (key, value) {

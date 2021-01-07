@@ -25,14 +25,6 @@ class V extends React.Component {
   }
 
   async componentDidMount() {
-    // return this.props.setNotificationsSeen({
-    //   endpoint: `/users/${this.props.user.id}/notifications/`,
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'X-Session-Token': this.props.user.current_session_token,
-    //   },
-    // });
     return this.props.getNotifications(this.options);
   }
 
@@ -194,7 +186,7 @@ class V extends React.Component {
                     backgroundColor: !item.seen_at ? '#f2e9f9' : Color.White,
                     borderBottomWidth: 1,
                     borderBottomColor: !item.seen_at ? Color.Purple : Color.BorderLightGrey,
-                    height: 80,
+                    height: 60,
                     width: '100%',
                     flexDirection: 'row',
                     // justifyContent: 'center',
@@ -204,12 +196,15 @@ class V extends React.Component {
                     style={{
                       justifyContent: 'center',
                       alignItems: 'center',
-                      height: 60,
-                      width: 60,
-                      // borderWidth: 1,
-                      // borderColor: 'green',
+                      height: 40,
+                      width: 40,
+                      borderRadius: 100,
+                      marginLeft: 20,
+                      backgroundColor: !item.seen_at ? Color.White : 'transparent',
+                      borderWidth: 1,
+                      borderColor: !item.seen_at ? Color.Purple : Color.BorderLightGrey,
                     }}>
-                    <Icon name={item.icon} color={Color.Purple} size={30} />
+                    <Icon name={item.icon} color={Color.Purple} size={20} />
                   </View>
                   <View
                     style={{

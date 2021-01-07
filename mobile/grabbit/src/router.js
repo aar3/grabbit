@@ -9,13 +9,14 @@ import {
   BasicTopNavigationBar,
   MainTopNavigationBar,
   AccountTopNavigationBar,
+  LinkAccountTopNavigationBar,
 } from 'grabbit/src/components/navigation/Top';
 import {getStateForKey, NewNotificationIcon} from 'grabbit/src/Utils';
 import {
   EntryView,
   LoginView,
   SignupView,
-  ListRewardsView,
+  ListDealsView,
   LinkAccountView,
   AccountView,
   RewardFocusView,
@@ -44,7 +45,6 @@ export default class Router_ extends React.Component {
             gesturesEnabled={false}
             drawerLockMode="locked-closed"
             hideNavBar={true}
-            initial={!this.props.user}
           />
           <Scene
             key="login"
@@ -62,7 +62,6 @@ export default class Router_ extends React.Component {
             title="Sign Up"
             hideNavBar={true}
           />
-          <Scene key="rewardFocus" component={RewardFocusView} title="Reward Focus" hideNavBar={true} />
           <Scene
             key="settings"
             backButton={true}
@@ -71,36 +70,26 @@ export default class Router_ extends React.Component {
             hideNavBar={false}
             navBar={BasicTopNavigationBar}
           />
-          <Scene
-            key="contact"
-            component={ContactView}
-            title="Contact"
-            hideNavBar={false}
-            navBar={BasicTopNavigationBar}
-          />
-          <Scene key="about" component={AboutView} title="About" hideNavBar={false} navBar={BasicTopNavigationBar} />
-          <Scene key="terms" component={TermsView} title="Terms" hideNavBar={false} navBar={BasicTopNavigationBar} />
-          <Scene key="privacy" component={PrivacyView} title="Privacy Policy" hideNavBar={false} />
           <Tabs
             key="tabRoot"
             showLabel={false}
             tabBarPosition={'bottom'}
             hideNavBar={true}
             activeBackgroundColor={Color.White}
-            initial={this.props.user}
+            initial
             lazy>
             <Scene
               navBar={MainTopNavigationBar}
-              title={'Rewards'}
+              title={'Deals'}
               hideNavBar={false}
-              key="listRewards"
+              key="listDeal"
               icon={({focused}) => (
                 <Icon name={'menu'} size={TabIconSize} color={focused ? Color.Purple : Color.ReadableGreyText} />
               )}
-              component={ListRewardsView}
+              component={ListDealsView}
             />
             <Scene
-              navBar={BasicTopNavigationBar}
+              navBar={LinkAccountTopNavigationBar}
               title={'Linked Accounts'}
               hideNavBar={false}
               key="linkAccount"
@@ -132,7 +121,7 @@ export default class Router_ extends React.Component {
               }}
               component={NotificationsView}
             />
-            <Scene
+            {/* <Scene
               navBar={AccountTopNavigationBar}
               title={'Account'}
               hideNavBar={true}
@@ -141,7 +130,7 @@ export default class Router_ extends React.Component {
                 <Icon name={'user'} size={TabIconSize} color={focused ? Color.Purple : Color.ReadableGreyText} />
               )}
               component={AccountView}
-            />
+            /> */}
           </Tabs>
         </Stack>
       </Router>

@@ -42,7 +42,7 @@ class UserViewSet(viewsets.ViewSet):
 
     @authentication_classes([TokenAuthentication])
     def update(self, request, pk=None):
-        instance = get_object_or_404(self.model.objects.filter(pk=pk))
+        instance = get_object_or_404(self.model, pk=pk)
         instance.__dict__.update(request.data)
         instance.save()
 
