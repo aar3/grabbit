@@ -19,7 +19,7 @@ class V extends React.Component {
 
   get options() {
     return {
-      endpoint: `/users/${this.props.user.id}/rewards/`,
+      endpoint: `/users/${this.props.user.id}/deals/`,
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -29,7 +29,7 @@ class V extends React.Component {
   }
 
   async componentDidMount() {
-    return this.props.getUserRewards(this.options);
+    return this.props.getUserDeals(this.options);
   }
 
   _renderExpiryTag(item) {
@@ -59,11 +59,11 @@ class V extends React.Component {
   }
 
   _onRefresh() {
-    return this.props.getUserRewardViaFlatList(this.options);
+    return this.props.refreshViaFlatList(this.options);
   }
 
   render() {
-    if (this.props.getRewardsPending && !this.state.flatListReloading) {
+    if (this.props.getDealsPending && !this.state.flatListReloading) {
       return (
         <View
           style={{
@@ -85,7 +85,7 @@ class V extends React.Component {
       );
     }
 
-    if (this.props.getRewardsError) {
+    if (this.props.getDealsError) {
       return (
         <View
           style={{
@@ -102,9 +102,9 @@ class V extends React.Component {
             Whoops, there was an error
           </Text>
           <Text style={{fontSize: 14, fontWeight: 'bold', marginTop: 10, color: Color.BorderLightGrey}}>
-            {this.props.getRewardsError.details}
+            {this.props.getDealsError.details}
           </Text>
-          <TouchableOpacity onPress={() => this.props.getUserRewards(this.options)}>
+          <TouchableOpacity onPress={() => this.props.getUserDeals(this.options)}>
             <Icon style={{marginTop: 20}} name={'rotate-ccw'} size={24} color={Color.BorderLightGrey} />
           </TouchableOpacity>
           <Text style={{color: Color.BorderLightGrey}}>Try Again</Text>
@@ -112,7 +112,7 @@ class V extends React.Component {
       );
     }
 
-    if (this.props.activeRewards.length === 0) {
+    if (this.props.deals.length === 0) {
       return (
         <View
           style={{
@@ -135,7 +135,7 @@ class V extends React.Component {
               fontWeight: 'bold',
               fontSize: 18,
             }}>
-            You don't have any rewards yet
+            You don't have any deals yet
           </Text>
           <Text
             style={{
@@ -157,36 +157,36 @@ class V extends React.Component {
           alignItems: 'center',
         }}>
         <FlatList
-          data={this.props.activeRewards}
+          data={this.props.deals}
           style={{
             width: '100%',
           }}
-          refreshing={this.props.getRewardsPending}
+          refreshing={this.props.getDealsPending}
           onRefresh={() => this._onRefresh()}
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
             return (
-              <TouchableOpacity onPress={() => this.props.focusReward(item)}>
+              <TouchableOpacity onPress={() => {}}>
                 <View
                   style={{
                     backgroundColor: Color.White,
                     borderBottomWidth: 1,
                     borderBottomColor: Color.BorderLightGrey,
-                    height: 80,
+                    height: 60,
                     alignItems: 'center',
                     flexDirection: 'row',
                   }}>
                   <View
                     style={{
-                      // borderWidth: 1,
-                      // borderColor: 'red',
+                      borderWidth: 1,
+                      borderColor: Color.BorderLightGrey,
                       height: 40,
                       width: 40,
                       marginLeft: 20,
                       overflow: 'hidden',
                       borderRadius: 100,
                     }}>
-                    <Image source={{uri: item.data.code.campaign.merchant.image_url}} style={{height: 40, width: 40}} />
+                    <Image source={{uri: item.deal.img_url}} style={{height: 40, width: 40}} />
                   </View>
                   <View
                     style={{
@@ -202,9 +202,9 @@ class V extends React.Component {
                         fontSize: 13,
                         color: Color.ReadableGreyText,
                       }}>
-                      {item.data.code.description}
+                      {item.deal.description}
                     </Text>
-                    {this._renderExpiryTag(item)}
+                    {/* {this._renderExpiryTag(item)} */}
                   </View>
                   <Icon style={{marginLeft: 20}} name={'chevron-right'} size={20} color={Color.BorderLightGrey} />
                 </View>
@@ -218,77 +218,55 @@ class V extends React.Component {
 }
 
 const mapStateToProps = function (state) {
-  const rewards = getStateForKey('state.rewards.list.items', state).map((item) => new Reward(item));
-  const activeRewards = rewards.filter((reward) => !reward.expired());
   return {
     user: getStateForKey('state.session.user', state),
-    activeRewards,
-    getRewardsPending: getStateForKey('state.rewards.list.pending', state),
-    getRewardsError: getStateForKey('state.rewards.list.error', state),
+    deals: getStateForKey('state.deals.list.items', state),
+    getDealsPending: getStateForKey('state.deals.list.pending', state),
+    getDealsError: getStateForKey('state.deals.list.error', state),
   };
 };
 
 const mapDispatchToProps = function (dispatch) {
   return {
-    getNotifications: async function (options) {
-      dispatch({
-        type: ReduxActions.Notifications.GetNotificationsPending,
-      });
-
+    // NOTE: Remove the pending state so it doesn't clash with default FlatList loading image
+    refreshViaFlatList: async function (options) {
       const {data, error} = await httpRequest(options);
-
       if (error) {
         return dispatch({
-          type: ReduxActions.Notifications.GetNotificationsError,
+          type: ReduxActions.Deals.GetUserDealsError,
           payload: error,
         });
       }
 
       return dispatch({
-        type: ReduxActions.Notifications.GetNotificationsSuccess,
+        type: ReduxActions.Deals.GetUserDealsSuccess,
         payload: data,
       });
     },
 
-    // Remove the pending state so it doesn't clash with default FlatList loading image
-    getUserRewardViaFlatList: async function (options) {
-      const {data, error} = await httpRequest(options);
-      if (error) {
-        return dispatch({
-          type: ReduxActions.Rewards.GetUserRewardsError,
-          payload: error,
-        });
-      }
-
-      return dispatch({
-        type: ReduxActions.Rewards.GetUserRewardsSuccess,
-        payload: data,
-      });
-    },
-
-    getUserRewards: async function (options) {
+    getUserDeals: async function (options) {
       dispatch({
-        type: ReduxActions.Rewards.GetUserRewardsPending,
+        type: ReduxActions.Deals.GetUserDealsPending,
       });
 
       const {data, error} = await httpRequest(options);
       if (error) {
         return dispatch({
-          type: ReduxActions.Rewards.GetUserRewardsError,
+          type: ReduxActions.Deals.GetUserDealsError,
           payload: error,
         });
       }
 
       return dispatch({
-        type: ReduxActions.Rewards.GetUserRewardsSuccess,
+        type: ReduxActions.Deals.GetUserDealsSuccess,
         payload: data,
       });
     },
 
-    focusReward: function (reward) {
+    focusReward: function (deal) {
       dispatch({
-        type: ReduxActions.Rewards.SetFocusedReward,
-        payload: reward,
+        type: ReduxActions.Deals.SetFocusedDeal,
+        payload: deal,
       });
 
       return Actions.rewardFocus();

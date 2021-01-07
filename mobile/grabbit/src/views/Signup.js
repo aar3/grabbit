@@ -355,7 +355,7 @@ const mapDispatchToProps = function (dispatch) {
         payload: data,
       });
 
-      return Actions.listRewards();
+      return Actions.listDeal();
     },
     updateSignupValue: function (key, value) {
       return dispatch({

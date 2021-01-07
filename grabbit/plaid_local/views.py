@@ -21,10 +21,10 @@ class LinkTokenViewSet(BaseUserNestedViewSet):
     serializer = LinkTokenSerializer
     authentication_classes = [TokenAuthentication]
 
-    def create(self, request):
-        user = get_object_or_404(User, phone=request.data["user_id"])
+    def create(self, request, user_id):
+        user = get_object_or_404(User, pk=user_id)
         configs = {
-            "user": {"client_user_id": request.data["user_id"],},
+            "user": {"client_user_id": user_id},
             "products": ["auth", "transactions"],
             "client_name": config.NAME,
             "country_codes": ["US"],
@@ -45,6 +45,14 @@ class LinkViewSet(BaseUserNestedViewSet):
     serializer = LinkSerializer
     authentication_classes = [TokenAuthentication]
 
+    def update(self, request, pk=None, user_id=None):
+        _ = get_object_or_404(User, pk=user_id)
+        instance = get_object_or_404(self.model, pk=pk)
+        instance.__dict__.update(request.data)
+        instance.save()
+
+        serializer = self.serializer(instance)
+        return Response(serializer.data)
 
 @csrf_exempt
 @api_view(["POST"])

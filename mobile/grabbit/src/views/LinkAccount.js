@@ -9,30 +9,12 @@ import ReduxActions from 'grabbit/src/Actions';
 import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
 import {GrabbitButton} from 'grabbit/src/components/Basic';
 import {ToggleStyle} from 'grabbit/src/Styles';
-import {Color} from 'grabbit/src/Const';
+import {Color, BankLogos} from 'grabbit/src/Const';
 
 class V extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-  }
-
-  async _handleOnSuccess(data) {
-    const options = {
-      method: 'POST',
-      endpoint: `/plaid/${this.props.user.id}/link-token-success/`,
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Session-Token': this.props.user.current_session_token,
-      },
-      data,
-    };
-
-    return this.props.handleLinkSuccess(options);
-  }
-
-  _handleExit(data) {
-    console.log('exit: ', data);
   }
 
   get linkTokenOptions() {
@@ -52,7 +34,7 @@ class V extends React.Component {
   get userLinksOptions() {
     return {
       method: 'GET',
-      endpoint: `/plaid/${this.props.user.id}/links/`,
+      endpoint: `/users/${this.props.user.id}/plaid/links/`,
       headers: {
         'Content-Type': 'application/json',
         'X-Session-Token': this.props.user.current_session_token,
@@ -65,7 +47,7 @@ class V extends React.Component {
 
     await this.props.getLinkToken({
       method: 'POST',
-      endpoint: '/plaid/link-tokens/',
+      endpoint: `/users/${this.props.user.id}/plaid/link-tokens/`,
       headers: {
         'Content-Type': 'application/json',
         'X-Session-Token': this.props.user.current_session_token,
@@ -105,107 +87,6 @@ class V extends React.Component {
         </View>
       );
     });
-  }
-
-  _renderPlaidButton() {
-    if (this.props.getLinkTokenError) {
-      return (
-        <TouchableOpacity onPress={() => this.props.getLinkToken(this.linkTokenOptions)}>
-          <View
-            style={{
-              // borderWidth: 1,
-              // borderColor: 'blue',
-              justifyContent: 'center',
-              alignItems: 'center',
-              // position: 'absolute',
-              backgroundColor: Color.ErrorRed,
-              bottom: 10,
-              width: 300,
-              borderRadius: 50,
-              height: 50,
-              shadowColor: '#000',
-              shadowOffset: {
-                width: 1,
-                height: -1,
-              },
-              shadowOpacity: 0.5,
-              shadowRadius: 5.84,
-              elevation: 5,
-            }}>
-            <Text
-              style={{
-                color: Color.White,
-              }}>
-              Couldn't get your account info.
-            </Text>
-          </View>
-        </TouchableOpacity>
-      );
-    }
-
-    if (!this.props.linkToken) {
-      return (
-        <View
-          style={{
-            // borderWidth: 1,
-            // borderColor: 'green',
-            // justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: 20,
-          }}>
-          <ImageBackground
-            source={require('./../../assets/imgs/Loading-Transparent-Cropped.gif')}
-            style={{
-              // borderWidth: 1,
-              // borderColor: 'red',
-              height: 50,
-              width: 50,
-              marginBottom: 20,
-            }}></ImageBackground>
-        </View>
-      );
-    }
-    return (
-      <View
-        style={{
-          // borderWidth: 1,
-          // borderColor: 'blue',
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'absolute',
-          backgroundColor: Color.Purple,
-          bottom: 10,
-          width: 300,
-          borderRadius: 50,
-          height: 50,
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 1,
-            height: -1,
-          },
-          shadowOpacity: 0.5,
-          shadowRadius: 5.84,
-          elevation: 5,
-        }}>
-        <PlaidLink
-          content
-          token={this.props.linkToken}
-          onSuccess={(data) => this._handleOnSuccess(data)}
-          onExit={(data) => this._handleExit()}>
-          <Text
-            style={{
-              color: Color.White,
-              fontWeight: 'bold',
-            }}>
-            Add Account
-          </Text>
-        </PlaidLink>
-      </View>
-    );
-  }
-
-  _onRefresh() {
-    return this.props.getUserLinksViaFlatList(this.userLinksOptions);
   }
 
   render() {
@@ -306,7 +187,6 @@ class V extends React.Component {
               You unfortunately won't be able to use Grabbit until you link at least 1 account
             </Text>
           </View>
-          {this._renderPlaidButton()}
         </View>
       );
     }
@@ -321,13 +201,14 @@ class V extends React.Component {
             width: '100%',
             // borderWidth: 1,
             // borderColor: 'red',
-            maxHeight: 240 * this.props.accounts.length,
+            // maxHeight: 240 * this.props.accounts.length,
           }}
           refreshing={this.props.getUserLinksPending}
           onRefresh={() => this._onRefresh()}
           data={this.props.accounts}
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
+            const bankLogo = BankLogos[item.institution_name] || BankLogos.Default;
             return (
               <View
                 style={{
@@ -335,33 +216,25 @@ class V extends React.Component {
                   borderBottomWidth: 1,
                   borderBottomColor: Color.BorderLightGrey,
                   padding: 10,
+                  height: 70,
                   width: '100%',
                 }}>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    color: Color.BorderLightGrey,
-                    fontWeight: 'bold',
-                    marginTop: 10,
-                    marginLeft: 65,
-                    marginBottom: 10,
-                  }}>
-                  {item.institution_name}
-                </Text>
                 <View
                   style={{
                     // borderColor: 'green',
                     // borderWidth: 1,
                     flexDirection: 'row',
+                    alignItems: 'center',
                     width: '100%',
                   }}>
                   <ImageBackground
                     source={{
-                      uri: 'https://image.shutterstock.com/image-vector/bank-icon-logo-vector-260nw-399995245.jpg',
+                      uri: bankLogo,
                     }}
                     style={{
-                      height: 50,
-                      width: 50,
+                      height: 40,
+                      width: 40,
+                      marginLeft: 20,
                       borderWidth: 1,
                       borderColor: Color.BorderLightGrey,
                       borderRadius: 100,
@@ -371,18 +244,23 @@ class V extends React.Component {
                     style={{
                       // borderWidth: 1,
                       // borderColor: 'red',
-                      justifyContent: 'center',
+                      marginLeft: 20,
                       width: 250,
-                      alignItems: 'center',
                     }}>
-                    {this._renderAccountMetadata(item.accounts)}
                     <Text
                       style={{
-                        textAlign: 'center',
-                        fontSize: 12,
+                        fontSize: 16,
                         marginTop: 10,
-                        marginBottom: 5,
+                        fontWeight: 'bold',
                         color: Color.ReadableGreyText,
+                      }}>
+                      {item.institution_name}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 11,
+                        marginTop: 5,
+                        color: Color.BorderLightGrey,
                       }}>
                       Last Updated: {(item.updated_at || item.created_at).substring(0, 10)}
                     </Text>
@@ -393,17 +271,17 @@ class V extends React.Component {
                       // borderColor: 'green',
                       justifyContent: 'center',
                       alignItems: 'center',
-                      marginLeft: 20,
+                      // marginLeft: 20,
                     }}>
                     <ToggleSwitch
                       isOn={Boolean(item.active)}
                       onColor={ToggleStyle.On}
                       offColor={ToggleStyle.Off}
                       label={null}
-                      size="large"
+                      size="medium"
                       onToggle={() =>
                         this.props.updateLinkStatus({
-                          endpoint: `/plaid/${this.props.user.id}/links/${item.id}/`,
+                          endpoint: `/users/${this.props.user.id}/plaid/links/${item.id}/`,
                           method: 'PUT',
                           headers: {
                             'Content-Type': 'application/json',
@@ -421,7 +299,6 @@ class V extends React.Component {
             );
           }}
         />
-        {this._renderPlaidButton()}
       </View>
     );
   }

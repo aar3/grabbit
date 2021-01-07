@@ -7,3 +7,10 @@ EMPTY_IMAGE_URL = "https://www.generationsforpeace.org/wp-content/uploads/2018/0
 
 
 SLICKDEALS_SCRAPER_START_URL = "https://slickdeals.net/f/14750294-15-count-1-4-oz-fiber-one-chewy-bars-mega-pack-oats-and-chocolate-4-57-0-30-each-w-s-s-free-shipping-w-prime-or-on-orders-over-25?src=frontpage"
+
+
+class Scrapers:
+    SlickDeals = "slickeals"
+    Target = "target"
+    Amazon = "amazon"
+    Nike = "nike"

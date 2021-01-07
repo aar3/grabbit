@@ -23,9 +23,9 @@ class DealSerializer(BaseModelSerializer):
 
 
 class UserDealSerializer(BaseModelSerializer):
-    user = UserSerializer(read_only=True)
+    # user = UserSerializer(read_only=True)
     deal = DealSerializer(read_only=True)
 
     class Meta:
-        model = Deal
-        fields = ["id", "created_at", "updated_at", "deleted_at", "user", "deal"]
+        model = UserDeal
+        fields = ["id", "created_at", "updated_at", "deleted_at", "user_id", "deal"]
