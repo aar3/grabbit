@@ -37,6 +37,7 @@ class ThreadedScraper(abc.ABC):
             "queue": 0,
             "max_tasks": self.max_tasks,
             "duplicate_tasks": 0,
+            "failed_tasks": 0,
         }
         self.lock = threading.Lock()
         self.timeout = 3
@@ -63,11 +64,7 @@ class ThreadedScraper(abc.ABC):
         response = requests.get(link)
 
         if not 200 <= response.status_code < 300:
-            self._handle_unsuccessful_scrape_attempt(link, response)
-            with self.lock:
-                self.info["total_tasks"] += 1
-            logger.info("INFO - %s", json.dumps(self.info))
-            return
+            return self._handle_unsuccessful_scrape_attempt(link, response)
 
         self.soup = BeautifulSoup(response.content, "html5lib")
         associated_links = self.soup.find_all("a", href=True)
@@ -156,6 +153,10 @@ class ThreadedScraper(abc.ABC):
         raise NotImplementedError
 
     def _handle_unsuccessful_scrape_attempt(self, url, response):
+        with self.lock:
+            self.info["total_tasks"] += 1
+            self.info["failed_tasks"] += 1
+        logger.info("INFO - %s", json.dumps(self.info))
         logger.info("Scraping %s return invalid response code: %s", url, response.status_code)
 
 
