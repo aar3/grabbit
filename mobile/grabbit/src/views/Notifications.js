@@ -4,8 +4,9 @@ import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import {Actions} from 'react-native-router-flux';
 import ReduxActions from 'grabbit/src/Actions';
-import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
+import {getStateForKey, httpRequest, to12HourTime} from 'grabbit/src/Utils';
 import {Color} from 'grabbit/src/Const';
+import {Error} from 'grabbit/src/components/FlatList';
 
 class V extends React.Component {
   constructor(props) {
@@ -39,8 +40,9 @@ class V extends React.Component {
           // borderWidth: 1,
           width: 25,
           height: 25,
+          marginLeft: 20,
         }}>
-        <Icon name={'chevron-right'} size={20} color={!item.seen_at ? Color.Purple : Color.BorderLightGrey} />
+        <Icon name={'chevron-right'} size={15} color={Color.ReadableGreyText} />
       </View>
     );
   }
@@ -54,20 +56,23 @@ class V extends React.Component {
       return (
         <Text
           style={{
-            fontSize: 12,
-            color: Color.Purple,
+            fontSize: 11,
+            color: Color.ReadableGreyText,
           }}>
           Just now
         </Text>
       );
     }
+    // const date = item.seen_at.substr(0, 10);
+    const time = to12HourTime(item.seen_at.substr(11, 5));
     return (
       <Text
         style={{
-          fontSize: 12,
-          color: Color.BorderLightGrey,
+          fontSize: 10,
+          color: Color.ReadableGreyText,
+          marginLeft: 5,
         }}>
-        Seen At {item.seen_at.substr(0, 10)}
+        Seen at {time}
       </Text>
     );
   }
@@ -105,32 +110,7 @@ class V extends React.Component {
 
     if (this.props.getNotificationsError) {
       return (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Text
-            style={{
-              fontWeight: 'bold',
-              fontSize: 18,
-              color: Color.Purple,
-            }}>
-            Doh, looks like there was an error
-          </Text>
-          <Text
-            style={{
-              marginTop: 5,
-              color: Color.BorderLightGrey,
-            }}>
-            {this.props.getNotificationsError.details}
-          </Text>
-          <TouchableOpacity onPress={() => this.props.getNotifications(this.options)}>
-            <Icon style={{marginTop: 20}} name={'rotate-ccw'} size={24} color={Color.BorderLightGrey} />
-          </TouchableOpacity>
-          <Text style={{color: Color.BorderLightGrey, marginTop: 20}}>Try Again</Text>
-        </View>
+        <Error error={this.props.getNotificationsError} onTryAgain={() => this.props.getNotifications(this.options)} />
       );
     }
 
@@ -183,13 +163,12 @@ class V extends React.Component {
                 }}>
                 <View
                   style={{
-                    backgroundColor: !item.seen_at ? '#f2e9f9' : Color.White,
+                    backgroundColor: Color.White,
                     borderBottomWidth: 1,
-                    borderBottomColor: !item.seen_at ? Color.Purple : Color.BorderLightGrey,
-                    height: 60,
-                    width: '100%',
+                    borderBottomColor: Color.BorderLightGrey,
                     flexDirection: 'row',
                     // justifyContent: 'center',
+                    height: 70,
                     alignItems: 'center',
                   }}>
                   <View
@@ -200,11 +179,11 @@ class V extends React.Component {
                       width: 40,
                       borderRadius: 100,
                       marginLeft: 20,
-                      backgroundColor: !item.seen_at ? Color.White : 'transparent',
+                      backgroundColor: Color.White,
                       borderWidth: 1,
-                      borderColor: !item.seen_at ? Color.Purple : Color.BorderLightGrey,
+                      borderColor: Color.BorderLightGrey,
                     }}>
-                    <Icon name={item.icon} color={Color.Purple} size={20} />
+                    <Icon name={item.icon} color={Color.ReadableGreyText} size={20} />
                   </View>
                   <View
                     style={{
@@ -212,11 +191,21 @@ class V extends React.Component {
                       // borderColor: 'blue',
                       width: 280,
                       marginLeft: 20,
+                      marginBottom: 10,
                     }}>
                     <Text
                       style={{
                         marginTop: 10,
                         fontSize: 13,
+                        fontWeight: '400',
+                        color: Color.ReadableGreyText,
+                      }}>
+                      {item.title}
+                    </Text>
+                    <Text
+                      style={{
+                        marginTop: 3,
+                        fontSize: 11,
                         color: Color.ReadableGreyText,
                       }}>
                       {item.text}
@@ -229,7 +218,7 @@ class V extends React.Component {
                         alignItems: 'center',
                         flexDirection: 'row',
                       }}>
-                      <Icon name={'check'} size={15} color={!item.seen_at ? Color.Purple : Color.BorderLightGrey} />
+                      <Icon name={'check'} size={15} color={Color.ReadableGreyText} />
                       {this._renderSeenTag(item)}
                     </View>
                   </View>

@@ -1,12 +1,23 @@
 import React from 'react';
-import {View, Text, FlatList, Image, TouchableOpacity, ImageBackground} from 'react-native';
+import {View, Text, FlatList, Image, TouchableOpacity, ImageBackground, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
 import ReduxActions from 'grabbit/src/Actions';
-import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
-import {Color} from 'grabbit/src/Const';
-import {Reward} from 'grabbit/src/Models';
+import {getStateForKey, httpRequest, formatDiscount} from 'grabbit/src/Utils';
+import {Color, Font} from 'grabbit/src/Const';
+import {Error} from 'grabbit/src/components/FlatList';
+
+const titleStyle = {
+  fontWeight: 'bold',
+  fontSize: 18,
+  marginTop: 10,
+  fontFamily: Font,
+  // textTransform: 'uppercase',
+  marginLeft: 20,
+  marginBottom: 10,
+  // color: Color.Purple,
+};
 
 class V extends React.Component {
   constructor(props) {
@@ -86,30 +97,7 @@ class V extends React.Component {
     }
 
     if (this.props.getDealsError) {
-      return (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Text
-            style={{
-              color: Color.Purple,
-              fontSize: 18,
-              fontWeight: 'bold',
-            }}>
-            Whoops, there was an error
-          </Text>
-          <Text style={{fontSize: 14, fontWeight: 'bold', marginTop: 10, color: Color.BorderLightGrey}}>
-            {this.props.getDealsError.details}
-          </Text>
-          <TouchableOpacity onPress={() => this.props.getUserDeals(this.options)}>
-            <Icon style={{marginTop: 20}} name={'rotate-ccw'} size={24} color={Color.BorderLightGrey} />
-          </TouchableOpacity>
-          <Text style={{color: Color.BorderLightGrey}}>Try Again</Text>
-        </View>
-      );
+      return <Error error={this.props.getDealsError} onTryAgain={() => this.props.getUserDeals(this.options)} />;
     }
 
     if (this.props.deals.length === 0) {
@@ -153,12 +141,127 @@ class V extends React.Component {
       <View
         style={{
           flex: 1,
-          justifyContent: 'center',
           alignItems: 'center',
         }}>
+        {/* <Text style={titleStyle}>Top Picks for You</Text> */}
+        <FlatList
+          horizontal
+          data={this.props.deals}
+          style={{
+            // borderWidth: 1,
+            // borderColor: 'blue',
+            maxHeight: 130,
+            width: '100%',
+          }}
+          refreshing={this.props.getDealsPending}
+          onRefresh={() => this._onRefresh()}
+          keyExtractor={(_item, index) => index.toString()}
+          renderItem={({item, index}) => {
+            return (
+              <View
+                style={{
+                  height: 130,
+                  width: 130,
+                  borderRadius: 5,
+                  marginLeft: 10,
+                  overflow: 'hidden',
+                  borderColor: Color.BorderLightGrey,
+                  borderWidth: 1,
+                }}>
+                <View
+                  style={{
+                    // borderWidth: 1,
+                    // borderColor: 'red',
+                    overflow: 'hidden',
+                  }}>
+                  <Image source={{uri: item.deal.img_url}} style={{height: 130, width: 130}} />
+                  <View
+                    style={{
+                      backgroundColor: Color.White,
+                      borderColor: Color.BorderLightGrey,
+                      borderColor: 'green',
+                      borderWidth: 1,
+                      opacity: 0.8,
+                      minWidth: 60,
+                      height: 30,
+                      position: 'absolute',
+                      bottom: 0,
+                      shadowColor: '#000',
+                      shadowOffset: {
+                        width: 2,
+                        height: 2,
+                      },
+                      shadowOpacity: 0.25,
+                      shadowRadius: 3.84,
+                      elevation: 5,
+                      right: 0,
+                      flexDirection: 'row',
+                    }}>
+                    <View
+                      style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        width: 30,
+                        height: 30,
+                        borderWidth: 1,
+                        borderColor: 'green',
+                      }}>
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+                          fontFamily: Font,
+                          fontSize: 14,
+                        }}>
+                        ${Number(item.deal.value).toFixed(0)}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        backgroundColor: Color.ErrorRed,
+                        padding: 5,
+                        height: 30,
+                        position: 'absolute',
+                        bottom: -1,
+                        right: -1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        // width: 30,
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 'bold',
+                          fontFamily: Font,
+                          color: Color.White,
+                          // textDecorationLine: 'line-through',
+                          // textDecorationStyle: 'solid',
+                        }}>
+                        {`$${formatDiscount(item.deal.discount)} `}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            );
+          }}
+        />
+        {/* 
+        <View
+          style={{
+            borderWidth: 1,
+            borderColor: 'green',
+            width: 300,
+            marginTop: 20,
+            height: 300,
+          }}></View> */}
+        <Text style={titleStyle}>Other things you might like</Text>
         <FlatList
           data={this.props.deals}
           style={{
+            // borderWidth: 1,
+            // borderColor: 'blue',
+            maxHeight: 300,
             width: '100%',
           }}
           refreshing={this.props.getDealsPending}
@@ -170,11 +273,14 @@ class V extends React.Component {
                 <View
                   style={{
                     backgroundColor: Color.White,
-                    borderBottomWidth: 1,
-                    borderBottomColor: Color.BorderLightGrey,
+                    borderWidth: 1,
+                    borderColor: Color.BorderLightGrey,
                     height: 60,
                     alignItems: 'center',
                     flexDirection: 'row',
+                    borderBottomRightRadius: 10,
+                    borderTopRightRadius: 10,
+                    marginBottom: 10,
                   }}>
                   <View
                     style={{
@@ -200,6 +306,7 @@ class V extends React.Component {
                     <Text
                       style={{
                         fontSize: 13,
+                        fontFamily: Font,
                         color: Color.ReadableGreyText,
                       }}>
                       {item.deal.description}

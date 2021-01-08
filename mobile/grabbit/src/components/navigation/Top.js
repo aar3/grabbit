@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Image, Text, TouchableOpacity} from 'react-native';
+import {View, Image, Text, TouchableOpacity, ImageBackground} from 'react-native';
 import {Color} from 'grabbit/src/Const';
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
@@ -169,7 +169,7 @@ class MainTopNavigationBar extends React.Component {
                 justifyContent: 'center',
               }}>
               <Image
-                source={require('./../../../assets/imgs/Grabbit_Gradient_Letters_111x500.png')}
+                source={require('./../../../assets/imgs/Grabbit_Black_Letters_111x500.png')}
                 style={{height: 27, width: 122}}
               />
             </View>
@@ -212,13 +212,26 @@ class LinkAccountTopNavigationBar extends React.Component {
   }
 
   _renderButton() {
+    if (this.props.getLinkTokenPending) {
+      return (
+        <ImageBackground
+          source={require('./../../../assets/imgs/Loading-Transparent-Cropped.gif')}
+          style={{
+            // borderWidth: 1,
+            // borderColor: 'red',
+            height: 30,
+            width: 30,
+          }}></ImageBackground>
+      );
+    }
+
     if (this.props.getLinkTokenError) {
       return (
         <TouchableOpacity
           onPress={() => {
             console.log('clicked');
           }}>
-          <Icon name={'x'} size={20} color={Color.ReadableGreyText} />
+          <Icon name={'x'} size={20} color={Color.ErrorRed} />
         </TouchableOpacity>
       );
     }
@@ -292,6 +305,7 @@ class LinkAccountTopNavigationBar extends React.Component {
 
 const mapStateToProps = function (state) {
   return {
+    getLinkTokenPending: getStateForKey('state.plaid.link_token.pending', state),
     getLinkTokenError: getStateForKey('state.plaid.link_token.error', state),
     linkToken: getStateForKey('state.plaid.link_token.link_token', state),
   };

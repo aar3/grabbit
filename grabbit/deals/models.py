@@ -1,8 +1,8 @@
 import hashlib
 from django.db import models
 from django.dispatch import receiver
-from django.db.models.signals import pre_save
-from user.models import User
+from django.db.models.signals import pre_save, post_save
+from user.models import User, Notification
 from lib.models import BaseModel
 from lib.const import EMPTY_IMAGE_URL
 
@@ -38,3 +38,15 @@ class UserDeal(BaseModel):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     deal = models.ForeignKey(Deal, on_delete=models.CASCADE)
+
+
+@receiver(post_save, sender=UserDeal)
+def create_notification_for_new_user_deal(sender, instance, created, **kwargs):
+    if created:
+        _ = Notification.objects.create(
+            user=instance.user,
+            icon="dollar-sign",
+            route_key="dealFocus",
+            title="New deal match",
+            text="We found a new deal for you",
+        )

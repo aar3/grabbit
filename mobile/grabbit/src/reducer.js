@@ -48,7 +48,9 @@ const defaultState = {
     inactive: {},
     list: {
       pending: false,
-      error: null,
+      error: {
+        details: 'There was an error',
+      },
       items: [],
     },
     focused: null,
@@ -102,7 +104,7 @@ const defaultState = {
       list: {},
     },
     link_token: {
-      pending: false,
+      pending: true,
       error: null,
       link_token: null,
     },

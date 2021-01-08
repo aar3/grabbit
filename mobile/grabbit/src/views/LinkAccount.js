@@ -1,7 +1,8 @@
 import React from 'react';
-import {View, Text, FlatList, Image, ImageBackground, TouchableOpacity} from 'react-native';
+import {View, Text, FlatList, Image, ImageBackground, TouchableOpacity, TouchableHighlight} from 'react-native';
 import ToggleSwitch from 'toggle-switch-react-native';
 import {connect} from 'react-redux';
+import Swipeable from 'react-native-swipeable';
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
 import PlaidLink from 'react-native-plaid-link-sdk';
@@ -9,7 +10,36 @@ import ReduxActions from 'grabbit/src/Actions';
 import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
 import {GrabbitButton} from 'grabbit/src/components/Basic';
 import {ToggleStyle} from 'grabbit/src/Styles';
+import {Error} from 'grabbit/src/components/FlatList';
 import {Color, BankLogos} from 'grabbit/src/Const';
+
+const rightButtons = [
+  <TouchableOpacity
+    onPress={() => {
+      console.log('removing');
+    }}>
+    <View
+      style={{
+        backgroundColor: Color.ErrorRed,
+        marginLeft: 20,
+        height: 70,
+        justifyContent: 'center',
+        // alignItems: 'center',
+        width: '100%',
+        position: 'relative',
+        top: -10,
+      }}>
+      <Text
+        style={{
+          marginLeft: 5,
+          color: Color.White,
+          fontWeight: 'bold',
+        }}>
+        Remove
+      </Text>
+    </View>
+  </TouchableOpacity>,
+];
 
 class V extends React.Component {
   constructor(props) {
@@ -58,37 +88,6 @@ class V extends React.Component {
     });
   }
 
-  _renderAccountMetadata(accounts = []) {
-    return accounts.map((item, index) => {
-      return (
-        <View
-          key={index.toString()}
-          style={{
-            // borderWidth: 1,
-            // borderColor: Color.ReadableGreyText,
-            padding: 10,
-            borderRadius: 10,
-            // marginBottom: 10,
-          }}>
-          <Text
-            style={{
-              color: Color.ReadableGreyText,
-              // marginBottom: 5,
-            }}>
-            Account Name: {item.name}
-          </Text>
-          <Text
-            style={{
-              color: Color.ReadableGreyText,
-              marginBottom: 5,
-            }}>
-            Account ID: XXXX{item.id.substring(0, 10)}
-          </Text>
-        </View>
-      );
-    });
-  }
-
   render() {
     if (this.props.getUserLinksPending) {
       return (
@@ -122,30 +121,7 @@ class V extends React.Component {
 
     if (this.props.getUserLinkError) {
       return (
-        <View
-          style={{
-            // borderWidth: 1,
-            // borderColor: 'red',
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Text
-            style={{
-              color: Color.Purple,
-              fontWeight: 'bold',
-              fontSize: 18,
-            }}>
-            Ouch, there was a hiccup
-          </Text>
-          <Text style={{fontSize: 14, marginTop: 10, fontWeight: 'bold', color: Color.BorderLightGrey}}>
-            {this.props.getUserLinkError.details}
-          </Text>
-          <TouchableOpacity onPress={() => this.props.getUserLinks(this.userLinksOptions)}>
-            <Icon style={{marginTop: 20}} name={'rotate-ccw'} size={24} color={Color.BorderLightGrey} />
-          </TouchableOpacity>
-          <Text style={{color: Color.BorderLightGrey}}>Try Again</Text>
-        </View>
+        <Error error={this.props.getUserLinkError} onTryAgain={() => this.props.getUserLinks(this.userLinksOptions)} />
       );
     }
 
@@ -208,7 +184,7 @@ class V extends React.Component {
           data={this.props.accounts}
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
-            const bankLogo = BankLogos[item.institution_name] || BankLogos.Default;
+            const bankMetadata = BankLogos[item.institution_name] || BankLogos.Default;
             return (
               <View
                 style={{
@@ -219,82 +195,84 @@ class V extends React.Component {
                   height: 70,
                   width: '100%',
                 }}>
-                <View
-                  style={{
-                    // borderColor: 'green',
-                    // borderWidth: 1,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    width: '100%',
-                  }}>
-                  <ImageBackground
-                    source={{
-                      uri: bankLogo,
-                    }}
-                    style={{
-                      height: 40,
-                      width: 40,
-                      marginLeft: 20,
-                      borderWidth: 1,
-                      borderColor: Color.BorderLightGrey,
-                      borderRadius: 100,
-                      overflow: 'hidden',
-                    }}></ImageBackground>
+                <Swipeable leftContent={<Text>Hello world</Text>} useNativeDriver={true} rightButtons={rightButtons}>
                   <View
                     style={{
-                      // borderWidth: 1,
-                      // borderColor: 'red',
-                      marginLeft: 20,
-                      width: 250,
-                    }}>
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        marginTop: 10,
-                        fontWeight: 'bold',
-                        color: Color.ReadableGreyText,
-                      }}>
-                      {item.institution_name}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 11,
-                        marginTop: 5,
-                        color: Color.BorderLightGrey,
-                      }}>
-                      Last Updated: {(item.updated_at || item.created_at).substring(0, 10)}
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      // borderWidth: 1,
                       // borderColor: 'green',
-                      justifyContent: 'center',
+                      // borderWidth: 1,
+                      flexDirection: 'row',
                       alignItems: 'center',
-                      // marginLeft: 20,
+                      width: '100%',
                     }}>
-                    <ToggleSwitch
-                      isOn={Boolean(item.active)}
-                      onColor={ToggleStyle.On}
-                      offColor={ToggleStyle.Off}
-                      label={null}
-                      size="medium"
-                      onToggle={() =>
-                        this.props.updateLinkStatus({
-                          endpoint: `/users/${this.props.user.id}/plaid/links/${item.id}/`,
-                          method: 'PUT',
-                          headers: {
-                            'Content-Type': 'application/json',
-                            'X-Session-Token': this.props.user.current_session_token,
-                          },
-                          data: Object.assign({}, item, {
-                            active: item.active === 1 ? 0 : 1,
-                          }),
-                        })
-                      }
-                    />
+                    <ImageBackground
+                      source={{
+                        uri: bankMetadata.img_url,
+                      }}
+                      style={{
+                        height: 40,
+                        width: 40,
+                        marginLeft: 20,
+                        // borderWidth: 1,
+                        // borderColor: bankMetadata.color,
+                        borderRadius: 100,
+                        overflow: 'hidden',
+                      }}></ImageBackground>
+                    <View
+                      style={{
+                        // borderWidth: 1,
+                        // borderColor: 'red',
+                        marginLeft: 20,
+                        width: 250,
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          marginTop: 10,
+                          // fontWeight: 'bold',
+                          color: bankMetadata.color,
+                        }}>
+                        {item.institution_name}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 11,
+                          marginTop: 5,
+                          color: bankMetadata.color,
+                        }}>
+                        Last Updated: {(item.updated_at || item.created_at).substring(0, 10)}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        // borderWidth: 1,
+                        // borderColor: 'green',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        // marginLeft: 20,
+                      }}>
+                      <ToggleSwitch
+                        isOn={Boolean(item.active)}
+                        onColor={ToggleStyle.On}
+                        offColor={ToggleStyle.Off}
+                        label={null}
+                        size="medium"
+                        onToggle={() =>
+                          this.props.updateLinkStatus({
+                            endpoint: `/users/${this.props.user.id}/plaid/links/${item.id}/`,
+                            method: 'PUT',
+                            headers: {
+                              'Content-Type': 'application/json',
+                              'X-Session-Token': this.props.user.current_session_token,
+                            },
+                            data: Object.assign({}, item, {
+                              active: item.active === 1 ? 0 : 1,
+                            }),
+                          })
+                        }
+                      />
+                    </View>
                   </View>
-                </View>
+                </Swipeable>
               </View>
             );
           }}

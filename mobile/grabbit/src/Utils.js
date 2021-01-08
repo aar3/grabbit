@@ -70,3 +70,16 @@ export function NewNotificationIcon(focused) {
     </View>
   );
 }
+
+export const formatDiscount = function (discount) {
+  return Number(discount.substr(1)).toFixed(0);
+};
+
+export const to12HourTime = function (t) {
+  let [hour, minute] = t.split(':');
+  if (hour > 12) {
+    hour = hour - 12;
+  }
+
+  return `${parseInt(hour, 10)}:${minute}`;
+};

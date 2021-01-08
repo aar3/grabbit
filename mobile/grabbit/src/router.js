@@ -84,7 +84,7 @@ export default class Router_ extends React.Component {
               hideNavBar={false}
               key="listDeal"
               icon={({focused}) => (
-                <Icon name={'menu'} size={TabIconSize} color={focused ? Color.Purple : Color.ReadableGreyText} />
+                <Icon name={'menu'} size={TabIconSize} color={focused ? Color.Black : Color.BorderLightGrey} />
               )}
               component={ListDealsView}
             />
@@ -94,11 +94,7 @@ export default class Router_ extends React.Component {
               hideNavBar={false}
               key="linkAccount"
               icon={({focused}) => (
-                <Icon
-                  name={'toggle-right'}
-                  size={TabIconSize}
-                  color={focused ? Color.Purple : Color.ReadableGreyText}
-                />
+                <Icon name={'toggle-right'} size={TabIconSize} color={focused ? Color.Black : Color.BorderLightGrey} />
               )}
               component={LinkAccountView}
             />
@@ -115,7 +111,7 @@ export default class Router_ extends React.Component {
                   <Icon
                     name={'message-circle'}
                     size={TabIconSize}
-                    color={focused ? Color.Purple : Color.ReadableGreyText}
+                    color={focused ? Color.Black : Color.BorderLightGrey}
                   />
                 );
               }}
@@ -127,7 +123,7 @@ export default class Router_ extends React.Component {
               hideNavBar={true}
               key="account"
               icon={({focused}) => (
-                <Icon name={'user'} size={TabIconSize} color={focused ? Color.Purple : Color.ReadableGreyText} />
+                <Icon name={'user'} size={TabIconSize} color={focused ? Color.Black : Color.BorderLightGrey} />
               )}
               component={AccountView}
             /> */}
