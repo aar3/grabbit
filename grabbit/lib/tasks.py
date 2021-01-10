@@ -17,6 +17,19 @@ from analytics.models import ScraperStats
 task_manager = Celery("lib.tasks", backend=settings.CELERY_RESULT_BACKEND, broker=settings.CELERY_BROKER)
 
 
+START_URLS = {
+    "slickdeals": "https://slickdeals.net/f/14750294-15-count-1-4-oz-fiber-one-chewy-bars-mega-pack-oats-and-chocolate-4-57-0-30-each-w-s-s-free-shipping-w-prime-or-on-orders-over-25?src=frontpage",
+    "target": "https://www.target.com/p/powerbeats-pro-true-wireless-in-ear-earphones/-/A-78362035?preselect=54610898#lnk=sametab",
+}
+
+
+class SCRAPERS:
+    SlickDeals = "slickdeals"
+    Target = "target"
+    Amazon = "amazon"
+    Nike = "nike"
+
+
 class LockedQueue(collections.deque):
     def __init__(self, *args, **kwargs):
         super(LockedQueue, self).__init__(*args, **kwargs)
@@ -33,11 +46,13 @@ class ThreadedScraper(abc.ABC):
         IMG_URL = EMPTY_IMAGE_URL
         IMG_URLS = []
 
-    def __init__(self, domain, max_handles=10, max_tasks=10):
+    def __init__(self, domain, name, max_handles=10, max_tasks=10):
         self.domain = domain
         self.queue = LockedQueue()
         self.max_handles = max_handles
         self.max_tasks = max_tasks
+        self.name = name
+        self.start = self._set_start_url()
         self.session = requests.session()
         self.soup = None
         self._handles = []
@@ -53,6 +68,12 @@ class ThreadedScraper(abc.ABC):
         }
         self.lock = threading.Lock()
         self.timeout = 3
+
+    def _set_start_url(self):
+        deals = Deal.objects.filter(scraper=self.name).order_by("-created_at")
+        if not deals:
+            return getattr(START_URLS, self.name)
+        return deals[0].url
 
     def run(self):
         self.queue.append(self.start)
@@ -116,6 +137,7 @@ class ThreadedScraper(abc.ABC):
             img_urls = self._extract_all_product_img_urls(url)
             title = self._extract_product_title(url)
 
+            # NOTE: keep this here for debugging
             # data = {
             #     "description": description,
             #     "current_value": current_value,
@@ -192,9 +214,9 @@ class ThreadedScraper(abc.ABC):
 
 
 class SlickDealsScraper(ThreadedScraper):
-    def __init__(self, domain, max_handles=10, max_tasks=10):
-        super(SlickDealsScraper, self).__init__(domain, max_handles, max_tasks)
-        self.start = "https://slickdeals.net/f/14750294-15-count-1-4-oz-fiber-one-chewy-bars-mega-pack-oats-and-chocolate-4-57-0-30-each-w-s-s-free-shipping-w-prime-or-on-orders-over-25?src=frontpage"
+    def __init__(self, domain, name, max_handles=10, max_tasks=10):
+        super(SlickDealsScraper, self).__init__(domain, name, max_handles, max_tasks)
+        self.name = name
 
     def _get_associated_product_links(self, url):
         associated_links = self.soup.find_all("a", href=True)
@@ -284,9 +306,9 @@ class SlickDealsScraper(ThreadedScraper):
 
 class TargetScraper(ThreadedScraper):
     # NOTE: https://stackoverflow.com/a/59011424/4701228
-    def __init__(self, domain, max_handles=10, max_tasks=10):
-        super(TargetScraper, self).__init__(domain, max_handles, max_tasks)
-        self.start = "https://www.target.com/p/powerbeats-pro-true-wireless-in-ear-earphones/-/A-78362035?preselect=54610898#lnk=sametab"
+    def __init__(self, domain, name, max_handles=10, max_tasks=10):
+        super(TargetScraper, self).__init__(domain, name, max_handles, max_tasks)
+        self.name = name
         self.visitor_id = None
         self.store_id = None
 
@@ -434,16 +456,17 @@ class TargetScraper(ThreadedScraper):
 class AmazonScraper(ThreadedScraper):
     def __init__(self, domain, max_handles=10, max_tasks=10):
         super(AmazonScraper, self).__init__(domain, max_handles, max_tasks)
+        self.name = SCRAPERS.Amazon
 
 
 @task_manager.task
 def slickdeals_scraper():
-    scraper = SlickDealsScraper(domain="https://slickdeals.net")
+    scraper = SlickDealsScraper(domain="https://slickdeals.net", name=SCRAPERS.SlickDeals)
     scraper.run()
 
 
 @task_manager.task
 def target_scraper():
-    scraper = TargetScraper(domain="https://target.com", max_handles=10, max_tasks=10)
+    scraper = TargetScraper(domain="https://target.com", name=SCRAPERS.Target)
     scraper.set_redsky_api_cookies()
     scraper.run()

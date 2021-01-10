@@ -2,13 +2,10 @@ import React from 'react';
 import {View, Text, FlatList, Alert, ImageBackground, TouchableOpacity} from 'react-native';
 import ToggleSwitch from 'toggle-switch-react-native';
 import {connect} from 'react-redux';
-import Swipeable from 'react-native-swipeable';
-import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
 import PlaidLink from 'react-native-plaid-link-sdk';
 import ReduxActions from 'grabbit/src/Actions';
 import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
-import {GrabbitButton} from 'grabbit/src/components/Basic';
 import {ToggleStyle} from 'grabbit/src/Styles';
 import {Error} from 'grabbit/src/components/FlatList';
 import {Color, BankLogos} from 'grabbit/src/Const';
@@ -71,7 +68,6 @@ class V extends React.Component {
       <ImageBackground
         source={require('./../../assets/imgs/Loading-Transparent-Cropped.gif')}
         style={{
-          // marginTop: 20,
           // borderWidth: 1,
           // borderColor: 'red',
           height: 40,
