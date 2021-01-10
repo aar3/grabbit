@@ -20,6 +20,7 @@ class BaseModelViewSet(viewsets.ViewSet):
 
     def list(self, request):
         params = request.query_params.dict()
+        params["delete_at"] = None
         queryset = self.model.objects.filter(**params)
         serializer = self.serializer(queryset, many=True)
         return Response(serializer.data)
@@ -50,11 +51,11 @@ class BaseModelViewSet(viewsets.ViewSet):
         instance = get_object_or_404(self.model.objects.filter(pk=pk))
         instance.__dict__.update(request.data)
         instance.save()
-
         serializer = self.serializer(instance)
         return Response(serializer.data)
 
     def destroy(self, request, pk=None):
         instance = get_object_or_404(self.model.objects.filter(pk=pk))
         instance.delete()
-        return Response(status=200)
+        serializer = self.serializer(instance)
+        return Response(serializer.data)

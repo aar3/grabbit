@@ -1,4 +1,5 @@
 import datetime as dt
+from django.conf import settings
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
@@ -9,7 +10,6 @@ from lib.middlewares import TokenAuthentication
 from lib.const import PLAID_DATE_FORMAT
 from user.models import User
 from user.views import BaseUserNestedViewSet
-from grabbit.config import config
 from plaid_local.models import LinkToken, Link
 from plaid_local.tasks import scrape_transactions_for_user
 from plaid_local.serializers import LinkTokenSerializer, LinkSerializer
@@ -26,7 +26,7 @@ class LinkTokenViewSet(BaseUserNestedViewSet):
         configs = {
             "user": {"client_user_id": user_id},
             "products": ["auth", "transactions"],
-            "client_name": config.NAME,
+            "client_name": settings.PLAID_NAME,
             "country_codes": ["US"],
             "language": "en",
             "link_customization_name": "default",
@@ -58,8 +58,8 @@ class LinkViewSet(BaseUserNestedViewSet):
 @csrf_exempt
 @api_view(["POST"])
 @authentication_classes([TokenAuthentication])
-def handle_link_auth_success(request, pk=None):
-    user = get_object_or_404(User, pk=pk)
+def handle_link_auth_success(request, user_id=None):
+    user = get_object_or_404(User, pk=user_id)
     public_token = request.data["public_token"]
     institution_name = request.data["metadata"]["institution"]["institution_name"]
     institution_id = request.data["metadata"]["institution"]["institution_id"]

@@ -19,7 +19,7 @@ export default {
     GetUserDealsError: 'GetUserDealsError',
     SetFocusedDeal: 'SetFocusedDeal',
   },
-  Plaid: {
+  Accounts: {
     GetLinkTokenPending: 'GetLinkTokenPending',
     GetLinkTokenSuccess: 'GetLinkTokenSuccess',
     GetLinkTokenError: 'GetLinkTokenError',
@@ -31,9 +31,13 @@ export default {
     HandleLinkTokenSuccess: 'HandleLinkTokenSuccess',
     HandleLinkTokenError: 'HandleLinkTokenError',
 
-    UpdateLinkAccountStatusPending: 'UpdateLinkAccountStatusPending',
-    UpdateLinkAccountStatusSuccess: 'UpdateLinkAccountStatusSuccess',
-    UpdateLinkAccountStatusError: 'UpdateLinkAccountStatusError',
+    UpdatePlaidAccountStatusPending: 'UpdatePlaidAccountStatusPending',
+    UpdatePlaidAccountStatusSuccess: 'UpdatePlaidAccountStatusSuccess',
+    UpdatePlaidAccountStatusError: 'UpdatePlaidAccountStatusError',
+
+    DeleteAccountPending: 'DeleteAccountPending',
+    DeleteAccountSuccess: 'DeleteAccountSuccess',
+    DeleteAccountError: 'DeleteAccountError',
   },
 
   Stats: {

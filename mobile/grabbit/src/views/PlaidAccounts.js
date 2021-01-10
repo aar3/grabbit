@@ -1,45 +1,14 @@
 import React from 'react';
-import {View, Text, FlatList, Image, ImageBackground, TouchableOpacity, TouchableHighlight} from 'react-native';
+import {View, Text, FlatList, Alert, ImageBackground, TouchableOpacity} from 'react-native';
 import ToggleSwitch from 'toggle-switch-react-native';
 import {connect} from 'react-redux';
-import Swipeable from 'react-native-swipeable';
-import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
 import PlaidLink from 'react-native-plaid-link-sdk';
 import ReduxActions from 'grabbit/src/Actions';
 import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
-import {GrabbitButton} from 'grabbit/src/components/Basic';
 import {ToggleStyle} from 'grabbit/src/Styles';
 import {Error} from 'grabbit/src/components/FlatList';
 import {Color, BankLogos} from 'grabbit/src/Const';
-
-const rightButtons = [
-  <TouchableOpacity
-    onPress={() => {
-      console.log('removing');
-    }}>
-    <View
-      style={{
-        backgroundColor: Color.ErrorRed,
-        marginLeft: 20,
-        height: 70,
-        justifyContent: 'center',
-        // alignItems: 'center',
-        width: '100%',
-        position: 'relative',
-        top: -10,
-      }}>
-      <Text
-        style={{
-          marginLeft: 5,
-          color: Color.White,
-          fontWeight: 'bold',
-        }}>
-        Remove
-      </Text>
-    </View>
-  </TouchableOpacity>,
-];
 
 class V extends React.Component {
   constructor(props) {
@@ -70,6 +39,55 @@ class V extends React.Component {
         'X-Session-Token': this.props.user.current_session_token,
       },
     };
+  }
+
+  _onRefresh() {
+    return this.props.getUserLinks(this.userLinksOptions);
+  }
+
+  _handleExit(data) {
+    console.log('exit: ', data);
+  }
+
+  _renderAddButton() {
+    if (this.props.linkToken) {
+      return (
+        <TouchableOpacity onPress={() => {}}>
+          <PlaidLink
+            content
+            token={this.props.linkToken}
+            onSuccess={(data) => this._handleOnSuccess(data)}
+            onExit={(data) => this._handleExit()}>
+            <Icon name="plus-circle" size={30} color={Color.BorderLightGrey} />
+          </PlaidLink>
+        </TouchableOpacity>
+      );
+    }
+
+    return (
+      <ImageBackground
+        source={require('./../../assets/imgs/Loading-Transparent-Cropped.gif')}
+        style={{
+          // borderWidth: 1,
+          // borderColor: 'red',
+          height: 40,
+          width: 40,
+        }}></ImageBackground>
+    );
+  }
+
+  async _handleOnSuccess(data) {
+    const options = {
+      method: 'POST',
+      endpoint: `/users/${this.props.user.id}/plaid/link-token-success/`,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Session-Token': this.props.user.current_session_token,
+      },
+      data,
+    };
+
+    return this.props.handleLinkSuccess(options);
   }
 
   async componentDidMount() {
@@ -177,7 +195,7 @@ class V extends React.Component {
             width: '100%',
             // borderWidth: 1,
             // borderColor: 'red',
-            // maxHeight: 240 * this.props.accounts.length,
+            maxHeight: 80 * this.props.accounts.length,
           }}
           refreshing={this.props.getUserLinksPending}
           onRefresh={() => this._onRefresh()}
@@ -186,16 +204,60 @@ class V extends React.Component {
           renderItem={({item, index}) => {
             const bankMetadata = BankLogos[item.institution_name] || BankLogos.Default;
             return (
-              <View
-                style={{
-                  backgroundColor: Color.White,
-                  borderBottomWidth: 1,
-                  borderBottomColor: Color.BorderLightGrey,
-                  padding: 10,
-                  height: 70,
-                  width: '100%',
+              <TouchableOpacity
+                onPress={() => {
+                  Alert.alert(
+                    'Remove Account',
+                    `Would you like to permanently delete your ${item.institution_name} account integration?`,
+                    [
+                      {
+                        text: 'Yes',
+                        onPress: () => {
+                          Alert.alert(
+                            'Confirm',
+                            `Are your sure you\'d like to remove your ${item.institution_name} account integration?`,
+                            [
+                              {
+                                text: 'Yes',
+                                onPress: () => {
+                                  return this.props.deleteAccount({
+                                    endpoint: `/users/${this.props.user.id}/plaid/links/${item.id}/`,
+                                    method: 'DELETE',
+                                    headers: {
+                                      'Content-Type': 'application/json',
+                                      'X-Session-Token': this.props.user.current_session_token,
+                                    },
+                                  });
+                                },
+                              },
+                              {
+                                text: 'No',
+                                onPress: () => console.log('Cancel Pressed'),
+                                style: 'cancel',
+                              },
+                            ],
+                            {cancelable: false},
+                          );
+                        },
+                      },
+                      {
+                        text: 'No',
+                        onPress: () => console.log('Cancel Pressed'),
+                        style: 'cancel',
+                      },
+                    ],
+                    {cancelable: false},
+                  );
                 }}>
-                <Swipeable leftContent={<Text>Hello world</Text>} useNativeDriver={true} rightButtons={rightButtons}>
+                <View
+                  style={{
+                    backgroundColor: Color.White,
+                    borderBottomWidth: 1,
+                    borderBottomColor: Color.BorderLightGrey,
+                    padding: 10,
+                    height: 70,
+                    width: '100%',
+                  }}>
                   <View
                     style={{
                       // borderColor: 'green',
@@ -212,8 +274,6 @@ class V extends React.Component {
                         height: 40,
                         width: 40,
                         marginLeft: 20,
-                        // borderWidth: 1,
-                        // borderColor: bankMetadata.color,
                         borderRadius: 100,
                         overflow: 'hidden',
                       }}></ImageBackground>
@@ -228,7 +288,6 @@ class V extends React.Component {
                         style={{
                           fontSize: 16,
                           marginTop: 10,
-                          // fontWeight: 'bold',
                           color: bankMetadata.color,
                         }}>
                         {item.institution_name}
@@ -248,7 +307,6 @@ class V extends React.Component {
                         // borderColor: 'green',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        // marginLeft: 20,
                       }}>
                       <ToggleSwitch
                         isOn={Boolean(item.active)}
@@ -272,27 +330,29 @@ class V extends React.Component {
                       />
                     </View>
                   </View>
-                </Swipeable>
-              </View>
+                </View>
+              </TouchableOpacity>
             );
           }}
         />
+
+        {this._renderAddButton()}
       </View>
     );
   }
 }
 
 const mapStateToProps = function (state) {
-  const accountList = getStateForKey('state.plaid.links.list', state);
+  const accountList = getStateForKey('state.accounts.plaid.links.list', state);
   return {
     user: getStateForKey('state.session.user', state),
-    showPlaidModal: getStateForKey('state.plaid.show_modal', state),
+    showPlaidModal: getStateForKey('state.accounts.plaid.show_modal', state),
     accounts: Object.values(accountList),
-    getLinkTokenPending: getStateForKey('state.plaid.link_token.pending', state),
-    getLinkTokenError: getStateForKey('state.plaid.link_token.error', state),
-    linkToken: getStateForKey('state.plaid.link_token.link_token', state),
-    getUserLinksPending: getStateForKey('state.plaid.links.pending', state),
-    getUserLinkError: getStateForKey('state.plaid.links.error', state),
+    getLinkTokenPending: getStateForKey('state.accounts.plaid.link_token.pending', state),
+    getLinkTokenError: getStateForKey('state.accounts.plaid.link_token.error', state),
+    linkToken: getStateForKey('state.accounts.plaid.link_token.link_token', state),
+    getUserLinksPending: getStateForKey('state.accounts.plaid.links.pending', state),
+    getUserLinkError: getStateForKey('state.accounts.plaid.links.error', state),
   };
 };
 
@@ -300,19 +360,19 @@ const mapDispatchToProps = function (dispatch) {
   return {
     getLinkToken: async function (options) {
       dispatch({
-        type: ReduxActions.Plaid.GetLinkTokenPending,
+        type: ReduxActions.Accounts.GetLinkTokenPending,
       });
 
       const {data, error} = await httpRequest(options);
       if (error) {
         return dispatch({
-          type: ReduxActions.Plaid.GetLinkTokenError,
+          type: ReduxActions.Accounts.GetLinkTokenError,
           payload: error,
         });
       }
 
       return dispatch({
-        type: ReduxActions.Plaid.GetLinkTokenSuccess,
+        type: ReduxActions.Accounts.GetLinkTokenSuccess,
         payload: data,
       });
     },
@@ -322,52 +382,52 @@ const mapDispatchToProps = function (dispatch) {
       const {data, error} = await httpRequest(options);
       if (error) {
         return dispatch({
-          type: ReduxActions.Plaid.GetUserLinksError,
+          type: ReduxActions.Accounts.GetUserLinksError,
           payload: error,
         });
       }
 
       return dispatch({
-        type: ReduxActions.Plaid.GetUserLinksSuccess,
+        type: ReduxActions.Accounts.GetUserLinksSuccess,
         payload: data,
       });
     },
 
     getUserLinks: async function (options) {
       dispatch({
-        type: ReduxActions.Plaid.GetUserLinksPending,
+        type: ReduxActions.Accounts.GetUserLinksPending,
       });
 
       const {data, error} = await httpRequest(options);
       if (error) {
         return dispatch({
-          type: ReduxActions.Plaid.GetUserLinksError,
+          type: ReduxActions.Accounts.GetUserLinksError,
           payload: error,
         });
       }
 
       return dispatch({
-        type: ReduxActions.Plaid.GetUserLinksSuccess,
+        type: ReduxActions.Accounts.GetUserLinksSuccess,
         payload: data,
       });
     },
 
     updateLinkStatus: async function (options) {
       dispatch({
-        type: ReduxActions.Plaid.UpdateLinkAccountStatusPending,
+        type: ReduxActions.Accounts.UpdatePlaidAccountStatusPending,
       });
 
       const {data, error} = await httpRequest(options);
 
       if (error) {
         return dispatch({
-          type: ReduxActions.Plaid.UpdateLinkAccountStatusError,
+          type: ReduxActions.Accounts.UpdatePlaidAccountStatusError,
           payload: error,
         });
       }
 
       return dispatch({
-        type: ReduxActions.Plaid.UpdateLinkAccountStatusSuccess,
+        type: ReduxActions.Accounts.UpdatePlaidAccountStatusSuccess,
         payload: data,
       });
     },
@@ -376,13 +436,32 @@ const mapDispatchToProps = function (dispatch) {
       const {data, error} = await httpRequest(options);
       if (error) {
         return dispatch({
-          type: ReduxActions.Plaid.HandleLinkTokenError,
+          type: ReduxActions.Accounts.HandleLinkTokenError,
           payload: error,
         });
       }
 
       return dispatch({
-        type: ReduxActions.Plaid.HandleLinkTokenSuccess,
+        type: ReduxActions.Accounts.HandleLinkTokenSuccess,
+        payload: data,
+      });
+    },
+
+    deleteAccount: async function (options) {
+      dispatch({
+        type: ReduxActions.Accounts.DeleteAccountPending,
+      });
+
+      const {data, error} = await httpRequest(options);
+      if (error) {
+        return dispatch({
+          type: ReduxActions.Accounts.DeleteAccountError,
+          payload: error,
+        });
+      }
+
+      return dispatch({
+        type: ReduxActions.Accounts.DeleteAccountSuccess,
         payload: data,
       });
     },

@@ -142,7 +142,7 @@ class V extends React.Component {
           flex: 1,
           alignItems: 'center',
         }}>
-        <Text style={titleStyle}>Featured</Text>
+        {/* <Text style={titleStyle}>Featured</Text> */}
         <FlatList
           horizontal
           data={this.props.deals}
@@ -197,7 +197,8 @@ class V extends React.Component {
                           width: 150,
                           fontWeight: '600',
                           position: 'relative',
-                          top: 20,
+                          top: 10,
+                          left: -10,
                           zIndex: 999,
                           color: Color.ReadableGreyText,
                           flexDirection: 'row',

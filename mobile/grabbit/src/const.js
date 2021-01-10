@@ -36,6 +36,11 @@ export const BankLogos = {
     img_url: 'https://image.shutterstock.com/image-vector/bank-icon-logo-vector-260nw-399995245.jpg',
     color: '#000',
   },
+  'Bank of America': {
+    img_url: 'https://static.wikia.nocookie.net/earthmc2820/images/3/34/Bofa_lo1_digital_v-1.png',
+    // color: '#D5132F',
+    color: '#0051A5',
+  },
 };
 
 export const Font = 'Arial';

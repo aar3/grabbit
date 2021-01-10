@@ -29,7 +29,6 @@ SECRET_KEY = "m_p@ge^xkt@7^kdiys0*--wb0lsa*d*r&@)7*s0#2e-)2%(8$l"
 # SECURITY WARNING: don"t run with debug turned on in production!
 DEBUG = True
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -118,10 +117,39 @@ USE_TZ = True
 STATIC_URL = "/static/"
 
 
-REDIS_HOST = "redis"
-REDIS_PORT = 6379
+IP = os.environ["IP"]
+PORT = os.environ["PORT"]
+
+#################################################################
+# Redis
+#################################################################
+
+REDIS_HOST = "localhost"
+REDIS_DEFAULT_PORT = 6379
+REDIS_CACHE_LAYER_PORT = 6380
 REDIS_DB = 0
 
+#################################################################
+# Plaid
+#################################################################
+
+PLAID_NAME = "Grabbit"
+PLAID_CLIENT_ID = os.environ["PLAID_CLIENT_ID"]
+PLAID_CLIENT_SECRET = os.environ["PLAID_SECRET"]
+PLAID_ENV = os.environ["PLAID_ENV"]
+
+
+#################################################################
+# Task queues
+#################################################################
+
+CELERY_BROKER = os.environ["CELERY_BROKER_URL"]
+CELERY_RESULT_BACKEND = os.environ["CELERY_RESULT_BACKEND"]
+
+
+#################################################################
+# CORS
+#################################################################
 
 CORS_ALLOW_METHODS = [
     "DELETE",
@@ -151,8 +179,16 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ORIGIN_WHITELIST = ()
 
+
+#################################################################
+# Google Cloud
+#################################################################
+
 GOOGLE_PROJECT_ID = os.environ["GOOGLE_PROJECT_ID"]
 
+#################################################################
+# Logging
+#################################################################
 
 LOGGING = {
     "version": 1,

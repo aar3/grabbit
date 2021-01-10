@@ -9,65 +9,25 @@ import {connect} from 'react-redux';
 import ReduxActions from 'grabbit/src/Actions';
 import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
 
-class BasicTopNavigationBar extends React.Component {
-  _renderBackButton() {
-    if (this.props.backButton) {
-      return (
-        <View
-          style={{
-            //  borderWidth: 1,
-            //  borderColor: 'red',
-            position: 'absolute',
-            left: 10,
-            top: 50,
-          }}>
-          <TouchableOpacity onPress={() => Actions.pop()}>
-            <Icon name={'chevron-left'} color={Color.Black} size={25} />
-          </TouchableOpacity>
-        </View>
-      );
+class MainTopNavigationBar extends React.Component {
+  _renderNewNotificationIcon() {
+    if (!this.props.hasNewNotification) {
+      return;
     }
-  }
-
-  render() {
     return (
       <View
         style={{
-          // borderWidth: 1,
-          // borderColor: 'orange',
-          flexDirection: 'row',
-          height: 90,
-          backgroundColor: '#fff',
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderBottomWidth: 1,
-          borderBottomColor: Color.BorderLightGrey,
-          width: '100%',
-        }}>
-        {this._renderBackButton()}
-        <View
-          style={{
-            // borderWidth: 1,
-            // borderColor: 'pink',
-            alignItems: 'center',
-            marginTop: 40,
-            justifyContent: 'center',
-          }}>
-          <Text
-            style={{
-              fontWeight: 'bold',
-              fontSize: 16,
-              color: Color.Black,
-            }}>
-            {this.props.title}
-          </Text>
-        </View>
-      </View>
+          height: 10,
+          width: 10,
+          borderRadius: 100,
+          position: 'absolute',
+          top: 3,
+          right: 0,
+          zIndex: 999,
+          backgroundColor: Color.HotPink,
+        }}></View>
     );
   }
-}
-
-class MainTopNavigationBar extends React.Component {
   render() {
     return (
       <View
@@ -94,7 +54,7 @@ class MainTopNavigationBar extends React.Component {
               source={require('./../../../assets/imgs/Grabbit_Black_Letters_111x500.png')}
               style={{
                 height: 24,
-                width: 117,
+                width: 108,
               }}></ImageBackground>
           </TouchableOpacity>
           <View
@@ -126,7 +86,18 @@ class MainTopNavigationBar extends React.Component {
               justifyContent: 'center',
             }}>
             <TouchableOpacity onPress={() => Actions.notifications()}>
-              <Icon name="chatbubble-outline" size={25} type="MaterialIcons" color={Color.Black} />
+              <View
+                style={
+                  {
+                    // borderWidth: 1,
+                    // borderColor: 'red',
+                    // height: 30,
+                    // width: 30,
+                  }
+                }>
+                {this._renderNewNotificationIcon()}
+                <Icon name="chatbubble-outline" size={25} type="MaterialIcons" color={Color.Black} />
+              </View>
             </TouchableOpacity>
           </View>
         </View>
@@ -135,48 +106,16 @@ class MainTopNavigationBar extends React.Component {
   }
 }
 
-//       <TouchableOpacity
-//         onPress={() => {
-//           console.log('clicked');
-//         }}>
-//         <PlaidLink
-//           content
-//           token={this.props.linkToken}
-//           onSuccess={(data) => this._handleOnSuccess(data)}
-//           onExit={(data) => this._handleExit()}>
-//           <Icon name={'plus'} size={20} color={Color.ReadableGreyText} />
-//         </PlaidLink>
-//       </TouchableOpacity>
-
 const mapStateToProps = function (state) {
   return {
-    hasNewNotification: false,
-    getLinkTokenPending: getStateForKey('state.plaid.link_token.pending', state),
-    getLinkTokenError: getStateForKey('state.plaid.link_token.error', state),
-    linkToken: getStateForKey('state.plaid.link_token.link_token', state),
+    hasNewNotification: true,
   };
 };
 
 const mapDispatchToProps = function (dispatch) {
-  return {
-    handleLinkSuccess: async function (options) {
-      const {data, error} = await httpRequest(options);
-      if (error) {
-        return dispatch({
-          type: ReduxActions.Plaid.HandleLinkTokenError,
-          payload: error,
-        });
-      }
-
-      return dispatch({
-        type: ReduxActions.Plaid.HandleLinkTokenSuccess,
-        payload: data,
-      });
-    },
-  };
+  return {};
 };
 
 module.exports = {
-  BasicTopNavigationBar: connect(mapStateToProps, mapDispatchToProps)(BasicTopNavigationBar),
   MainTopNavigationBar: connect(mapStateToProps, mapDispatchToProps)(MainTopNavigationBar),
 };

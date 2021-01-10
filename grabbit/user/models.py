@@ -4,12 +4,13 @@ import hashlib
 import random
 import datetime as dt
 from django.db import models
+from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from lib.models import BaseModel
-from lib.utils import make_qrcode
+from lib.utils import make_qrcode, random_string
 from lib.cloud import GoogleCloudService
-from lib.redis import RedisClient, SessionToken
+from lib.redis import DefaultRedis
 from user.managers import UserManager
 
 
@@ -24,14 +25,10 @@ class User(BaseModel):
     email = models.CharField(max_length=255, unique=True)
     name = models.CharField(max_length=255, null=True)
     username = models.CharField(max_length=255)
-    address_line1 = models.CharField(max_length=255, null=True)
-    address_line2 = models.CharField(max_length=255, null=True)
     phone = models.CharField(max_length=255, null=True)
     secret = models.CharField(max_length=255)
     salt = models.IntegerField()
     current_session_token = models.CharField(max_length=255)
-    user_meta = models.JSONField(default=dict)
-    user_type = models.IntegerField()
     qr_code_url = models.CharField(max_length=255)
 
     def matches_secret(self, other):
@@ -52,7 +49,7 @@ def create_session_for_new_user(sender, instance, created, **kwargs):
     if created:
         session = SessionToken(user_id=instance.id)
         key = session.key[:]
-        _ = RedisClient.set(key, session.serialize())
+        _ = DefaultRedis.set(key, session.serialize())
 
         instance.current_session_token = key
         instance.save()
@@ -62,6 +59,36 @@ def create_session_for_new_user(sender, instance, created, **kwargs):
 def create_new_account_notification(sender, instance, created, **kwargs):
     if created:
         _ = Notification.objects.create(user=instance, icon="user", text="Welcome to Grabbit!")
+
+
+class SessionToken:
+    def __init__(self, **kwargs):
+        self.key = self._make_key()
+        self.user_id = kwargs.get("user_id")
+        self._expiry = timezone.now() + dt.timedelta(hours=12)
+
+        if kwargs.get("data"):
+            self.deserialize(kwargs["data"])
+
+    def expired(self):
+        return timezone.now() >= self._expiry
+
+    def serialize(self):
+        expiry = self._expiry.strftime("%Y-%m-%d %H:%M:%S")
+        return "\x001".join([self.key, str(self.user_id), expiry]).encode()
+
+    def deserialize(self, data):
+        key, user_id, expiry = data.decode().split("\x001")
+        self.key = key
+        self.user_id = int(user_id)
+        self._expiry = dt.datetime.strptime(expiry, "%Y-%m-%d %H:%M:%S")
+
+    def _make_key(self):
+        s = random_string(n=40)
+        return hashlib.sha256(s.encode()).hexdigest()
+
+    def __eq__(self, other):
+        return self.key == other.key
 
 
 # @receiver(post_save, sender=User)

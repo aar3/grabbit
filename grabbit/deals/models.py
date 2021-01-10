@@ -16,6 +16,7 @@ class Deal(BaseModel):
     original_value = models.CharField(max_length=255)
     merchant_name = models.CharField(max_length=255)
     url = models.CharField(max_length=255)
+    scraper = models.CharField(max_length=255)
     img_url = models.CharField(max_length=255, default=EMPTY_IMAGE_URL)
     all_img_urls = models.JSONField(default=dict)
     description = models.TextField(null=True)

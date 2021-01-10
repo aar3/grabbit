@@ -7,10 +7,11 @@ import {
   LoginView,
   SignupView,
   ListDealsView,
-  LinkAccountView,
+  PlaidAccountsView,
   AccountView,
   RewardFocusView,
   SettingsView,
+  AccountTypeView,
   NotificationsView,
 } from 'grabbit/src/views';
 
@@ -56,7 +57,6 @@ export default class Router_ extends React.Component {
             navigationBarStyle={{
               backgroundColor: Color.TopNavBackground,
             }}
-            // navBar={BasicTopNavigationBar}
           />
           <Scene
             key="account"
@@ -74,8 +74,9 @@ export default class Router_ extends React.Component {
             key="listDeal"
             component={ListDealsView}
           />
-          <Scene title={'Link Account'} hideNavBar={false} key="linkAccount" component={LinkAccountView} />
+          <Scene title={'Plaid Accounts'} hideNavBar={false} key="plaidAccounts" component={PlaidAccountsView} />
           <Scene title={'Notifications'} hideNavBar={false} key="notifications" component={NotificationsView} />
+          <Scene title={'Links'} hideNavBar={false} key="accountType" component={AccountTypeView} />
         </Stack>
       </Router>
     );
