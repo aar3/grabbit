@@ -29,6 +29,7 @@ class NotificationSerializer(BaseModelSerializer):
             "updated_at",
             "deleted_at",
             "text",
+            "title",
             "expiry",
             "user_id",
             "route_key",

@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from lib.models import BaseModel
-from user.models import User
+from user.models import User, Notification
 
 
 class LinkToken(BaseModel):
@@ -41,7 +41,20 @@ def create_notification_for_new_link(sender, instance, created, **kwargs):
             route_key="linkAccount",
             metadata={"instance": serializer.data},
             icon="credit-card",
+            title="New Account Link",
             text=f"Your new {instance.institution_name} account is now live on Grabbit!",
+        )
+
+
+@receiver(post_save, sender=Link)
+def create_notification_for_updated_link(sender, instance, created, **kwargs):
+    if not created:
+        _ = Notification.objects.create(
+            user=instance.user,
+            icon="toggle-right",
+            route_key="linkAccount",
+            title="Account updated",
+            text=f"We've updated your {instance.institution_name} account",
         )
 
 

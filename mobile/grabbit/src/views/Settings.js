@@ -120,7 +120,7 @@ class V extends React.Component {
             style={{
               fontWeight: 'bold',
               fontSize: 18,
-              color: Color.Purple,
+              color: Color.ReadableGreyText,
             }}>
             Doh, looks like there was an error
           </Text>
@@ -231,7 +231,15 @@ class V extends React.Component {
             discounts using proprietary technology. Below is a rough idea of the type of profile on you that we’ve built
             using your data.
           </Text>
-          <Text style={[textSection, {color: Color.Purple}]}>{this.props.profile.keywords.join(', ')}</Text>
+          <Text
+            style={[
+              textSection,
+              {
+                color: Color.LessReadableGreyText,
+              },
+            ]}>
+            {this.props.profile.keywords.join(', ')}
+          </Text>
           <Text style={[textSection, {marginBottom: 20}]}>
             Remember, this is a ephemeral profile built using data that changes over time. This data is NOT personally
             identifiable, and as always, your data is safe with us.

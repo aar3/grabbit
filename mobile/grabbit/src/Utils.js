@@ -70,3 +70,26 @@ export function NewNotificationIcon(focused) {
     </View>
   );
 }
+
+export const formatOriginalPrice = function (item) {
+  console.log('> ITEM: ', item);
+  // NOTE:
+  const d = Number(item.deal.discount.substr(1));
+  console.log('D IS > ', d);
+  if (d < 1) {
+    const x = item.deal.value * d + item.deal.value;
+    console.log('> X IS > ', x);
+    return Number(x).toFixed(0);
+  }
+
+  return Number(item.deal.discount.substr(1)).toFixed(0);
+};
+
+export const to12HourTime = function (t) {
+  let [hour, minute] = t.split(':');
+  if (hour > 12) {
+    hour = hour - 12;
+  }
+
+  return `${parseInt(hour, 10)}:${minute}`;
+};

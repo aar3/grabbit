@@ -89,6 +89,7 @@ class Notification(BaseModel):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, default="Untitled")
     icon = models.CharField(max_length=255, default="user")
     expiry = models.DateTimeField(null=True)
     route_key = models.CharField(max_length=255, null=True)
@@ -115,5 +116,9 @@ def create_settings_for_new_user(sender, instance, created, **kwargs):
 def create_notification_for_updated_settings(sender, instance, created, **kwargs):
     if not created:
         _ = Notification.objects.create(
-            user=instance.user, icon="unlock", route_key="settings", text="You've updated your profile settings"
+            user=instance.user,
+            icon="unlock",
+            route_key="settings",
+            title="Profile Update",
+            text="You've updated your profile settings",
         )

@@ -48,7 +48,9 @@ const defaultState = {
     inactive: {},
     list: {
       pending: false,
-      error: null,
+      error: {
+        details: 'There was an error',
+      },
       items: [],
     },
     focused: null,
@@ -102,7 +104,7 @@ const defaultState = {
       list: {},
     },
     link_token: {
-      pending: false,
+      pending: true,
       error: null,
       link_token: null,
     },
@@ -111,6 +113,24 @@ const defaultState = {
       error: null,
       pending: false,
     },
+  },
+  account: {
+    links: [
+      {
+        id: 0,
+        title: 'Link an account',
+        icon: 'toggle-right',
+        description: 'Link one of your external accounts to your Grabbit profile',
+        routeKey: 'linkAccount',
+      },
+      {
+        id: 1,
+        title: 'Settings',
+        icon: 'settings',
+        description: 'Change your Grabbit account Settings',
+        routeKey: 'settings',
+      },
+    ],
   },
 };
 

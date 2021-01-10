@@ -54,6 +54,7 @@ class LinkViewSet(BaseUserNestedViewSet):
         serializer = self.serializer(instance)
         return Response(serializer.data)
 
+
 @csrf_exempt
 @api_view(["POST"])
 @authentication_classes([TokenAuthentication])

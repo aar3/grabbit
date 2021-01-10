@@ -4,7 +4,7 @@ from rest_framework.viewsets import ViewSet
 from django.shortcuts import get_object_or_404
 from lib.views import BaseModelViewSet
 from lib.const import Scrapers
-from lib.tasks import task_manager, execute_scrape_tasks, SlickDealsScraper
+from lib.tasks import task_manager, slickdeals_scraper, target_scraper
 from lib.middlewares import TokenAuthentication
 from user.models import User
 from user.views import BaseUserNestedViewSet
@@ -25,7 +25,12 @@ class DealViewSet(BaseModelViewSet):
 
 
 @api_view(["POST"])
-def init_slickdeals_scraper(request):
-    if request.data["scraper"] == Scrapers.SlickDeals:
-        execute_scrape_tasks.apply_async()
+def init_slickdeals_scraper(_):
+    slickdeals_scraper.apply_async()
+    return Response(status=200, data={"details": "Starting scrape tasks"})
+
+
+@api_view(["POST"])
+def init_target_scraper(_):
+    target_scraper()
     return Response(status=200, data={"details": "Starting scrape tasks"})

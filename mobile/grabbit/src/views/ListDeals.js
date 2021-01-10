@@ -1,12 +1,22 @@
 import React from 'react';
-import {View, Text, FlatList, Image, TouchableOpacity, ImageBackground} from 'react-native';
+import {View, Text, FlatList, Image, TouchableOpacity, ImageBackground, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
 import ReduxActions from 'grabbit/src/Actions';
-import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
-import {Color} from 'grabbit/src/Const';
-import {Reward} from 'grabbit/src/Models';
+import {getStateForKey, httpRequest, formatOriginalPrice} from 'grabbit/src/Utils';
+import {Color, Font} from 'grabbit/src/Const';
+import {Error} from 'grabbit/src/components/FlatList';
+
+const titleStyle = {
+  fontWeight: '400',
+  fontSize: 18,
+  marginTop: 10,
+  fontFamily: Font,
+  textTransform: 'uppercase',
+  marginLeft: 20,
+  marginBottom: 10,
+};
 
 class V extends React.Component {
   constructor(props) {
@@ -86,30 +96,7 @@ class V extends React.Component {
     }
 
     if (this.props.getDealsError) {
-      return (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Text
-            style={{
-              color: Color.Purple,
-              fontSize: 18,
-              fontWeight: 'bold',
-            }}>
-            Whoops, there was an error
-          </Text>
-          <Text style={{fontSize: 14, fontWeight: 'bold', marginTop: 10, color: Color.BorderLightGrey}}>
-            {this.props.getDealsError.details}
-          </Text>
-          <TouchableOpacity onPress={() => this.props.getUserDeals(this.options)}>
-            <Icon style={{marginTop: 20}} name={'rotate-ccw'} size={24} color={Color.BorderLightGrey} />
-          </TouchableOpacity>
-          <Text style={{color: Color.BorderLightGrey}}>Try Again</Text>
-        </View>
-      );
+      return <Error error={this.props.getDealsError} onTryAgain={() => this.props.getUserDeals(this.options)} />;
     }
 
     if (this.props.deals.length === 0) {
@@ -122,7 +109,7 @@ class V extends React.Component {
           }}>
           <Text
             style={{
-              color: Color.Purple,
+              color: Color.Black,
               fontWeight: 'bold',
               fontSize: 18,
             }}>
@@ -130,18 +117,18 @@ class V extends React.Component {
           </Text>
           <Text
             style={{
-              color: Color.BorderLightGrey,
-              marginTop: 10,
+              color: Color.LessReadableGreyText,
+              marginTop: 5,
               fontWeight: 'bold',
-              fontSize: 18,
+              fontSize: 16,
             }}>
             You don't have any deals yet
           </Text>
           <Text
             style={{
-              color: Color.BorderLightGrey,
+              color: Color.LessReadableGreyText,
               marginTop: 10,
-              fontSize: 14,
+              fontSize: 12,
             }}>
             Link an account to get started
           </Text>
@@ -153,58 +140,299 @@ class V extends React.Component {
       <View
         style={{
           flex: 1,
-          justifyContent: 'center',
           alignItems: 'center',
         }}>
+        <Text style={titleStyle}>Featured</Text>
         <FlatList
+          horizontal
           data={this.props.deals}
           style={{
+            borderWidth: 1,
+            backgroundColor: Color.TopNavBackground,
+            borderColor: Color.BorderLightGrey,
+            maxHeight: 240,
             width: '100%',
           }}
           refreshing={this.props.getDealsPending}
           onRefresh={() => this._onRefresh()}
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
+            const discount = Number(
+              ((item.deal.original_value - item.deal.current_value) / item.deal.current_value) * 100,
+            ).toFixed(0);
             return (
-              <TouchableOpacity onPress={() => {}}>
+              <TouchableOpacity
+                onPress={() => {
+                  console.log('cliked');
+                }}>
+                <View
+                  style={{
+                    height: 200,
+                    width: 200,
+                    borderRadius: 5,
+                    marginTop: 20,
+                    backgroundColor: Color.White,
+                    marginLeft: 10,
+                    borderColor: Color.BorderLightGrey,
+                    borderWidth: 1,
+                  }}>
+                  <View
+                    style={{
+                      // borderWidth: 1,
+                      // borderColor: 'orange',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <View
+                      style={
+                        {
+                          // borderWidth: 1,
+                          // borderColor: 'red',
+                        }
+                      }>
+                      <View
+                        style={{
+                          // borderWidth: 1,
+                          // borderColor: 'red',
+                          width: 150,
+                          fontWeight: '600',
+                          position: 'relative',
+                          top: 20,
+                          zIndex: 999,
+                          color: Color.ReadableGreyText,
+                          flexDirection: 'row',
+                        }}>
+                        <Text
+                          style={{
+                            fontWeight: '600',
+                            color: Color.ReadableGreyText,
+                          }}>
+                          {item.deal.title}
+                        </Text>
+                      </View>
+                      <Image
+                        source={{uri: item.deal.img_url}}
+                        style={{
+                          // borderWidth: 1,
+                          // borderColor: 'blue',
+                          height: 145,
+                          width: 145,
+                        }}
+                      />
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      backgroundColor: Color.White,
+                      borderColor: Color.BorderLightGrey,
+                      opacity: 0.8,
+                      // borderColor: 'green',
+                      // borderWidth: 1,
+                      height: 30,
+                      position: 'absolute',
+                      top: 170,
+                      shadowColor: '#000',
+                      borderTopRightRadius: 8,
+                      borderTopLeftRadius: 8,
+                      backgroundColor: '#5c903f',
+                      shadowOffset: {
+                        width: 2,
+                        height: 2,
+                      },
+                      shadowOpacity: 0.25,
+                      shadowRadius: 4.84,
+                      elevation: 5,
+                      flexDirection: 'row',
+                    }}>
+                    <View
+                      style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderTopLeftRadius: 8,
+                        height: 30,
+                        marginLeft: 10,
+                        opacity: 0.6,
+                        // borderWidth: 1,
+                        // borderColor: 'green',
+                      }}>
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+
+                          fontFamily: Font,
+                          fontSize: 14,
+                          color: Color.White,
+                        }}>
+                        ${Number(item.deal.current_value).toFixed(0)}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        backgroundColor: Color.HotPink,
+                        padding: 5,
+                        height: 30,
+                        marginLeft: 5,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 'bold',
+                          fontFamily: Font,
+                          color: Color.White,
+                        }}>
+                        ${Number(item.deal.original_value).toFixed(0)}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        backgroundColor: Color.Purple,
+                        padding: 5,
+                        height: 30,
+                        borderTopRightRadius: 8,
+                        // marginLeft: 5,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 'bold',
+                          fontFamily: Font,
+                          color: Color.White,
+                        }}>
+                        {discount}%
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            );
+          }}
+        />
+
+        {/* <Text style={[
+          titleStyle,
+          {
+            marginBottom: 20
+          }]}>Other things you might like</Text> */}
+        <FlatList
+          data={this.props.deals}
+          style={{
+            // borderWidth: 1,
+            // borderColor: 'blue',
+            width: '100%',
+            backgroundColor: Color.TopNavBackground,
+            borderTopWidth: 1,
+            borderTopColor: Color.BorderLightGrey,
+          }}
+          refreshing={this.props.getDealsPending}
+          onRefresh={() => this._onRefresh()}
+          keyExtractor={(_item, index) => index.toString()}
+          renderItem={({item, index}) => {
+            const size = 90;
+            const shortDescription =
+              item.deal.description.length > size
+                ? `${item.deal.description.substr(0, size)}...`
+                : item.deal.description;
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  console.log('clicked');
+                }}>
                 <View
                   style={{
                     backgroundColor: Color.White,
                     borderBottomWidth: 1,
                     borderBottomColor: Color.BorderLightGrey,
-                    height: 60,
+                    marginBottom: 10,
                     alignItems: 'center',
+                    padding: 10,
+                    backgroundColor: Color.White,
                     flexDirection: 'row',
+                    borderBottomRightRadius: 10,
+                    borderTopRightRadius: 10,
                   }}>
                   <View
                     style={{
                       borderWidth: 1,
                       borderColor: Color.BorderLightGrey,
-                      height: 40,
-                      width: 40,
-                      marginLeft: 20,
+                      backgroundColor: Color.White,
+                      height: 70,
+                      width: 70,
+                      marginLeft: 10,
                       overflow: 'hidden',
-                      borderRadius: 100,
+                      borderRadius: 10,
                     }}>
-                    <Image source={{uri: item.deal.img_url}} style={{height: 40, width: 40}} />
+                    <Image source={{uri: item.deal.img_url}} style={{height: 60, width: 60}} />
                   </View>
                   <View
                     style={{
                       marginLeft: 20,
-                      height: 40,
                       width: '65%',
                       justifyContent: 'center',
                       // borderWidth: 1,
                       // borderColor: 'blue',
                     }}>
+                    <View
+                      style={{
+                        // borderWidth: 1,
+                        // borderColor: 'green',
+                        flexDirection: 'row',
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          fontFamily: Font,
+                          fontWeight: '500',
+                          marginBottom: 5,
+                          color: Color.LessReadableGreyText,
+                        }}>
+                        {item.deal.merchant_name}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          position: 'absolute',
+                          right: 60,
+                          // color: '#5c903f',
+                          color: Color.ReadableGreyText,
+                        }}>
+                        {item.deal.current_value}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          position: 'absolute',
+                          right: 10,
+                          color: Color.ErrorRed,
+                          textDecorationLine: 'line-through',
+                        }}>
+                        {item.deal.original_value}
+                      </Text>
+                    </View>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        fontFamily: Font,
+                        fontWeight: '500',
+                        marginTop: 5,
+                        color: Color.ReadableGreyText,
+                        marginBottom: 10,
+                        color: Color.ReadableGreyText,
+                      }}>
+                      {item.deal.title}
+                    </Text>
                     <Text
                       style={{
                         fontSize: 13,
-                        color: Color.ReadableGreyText,
+                        fontFamily: Font,
+                        color: Color.LessReadableGreyText,
                       }}>
-                      {item.deal.description}
+                      {shortDescription}
                     </Text>
-                    {/* {this._renderExpiryTag(item)} */}
                   </View>
                   <Icon style={{marginLeft: 20}} name={'chevron-right'} size={20} color={Color.BorderLightGrey} />
                 </View>
