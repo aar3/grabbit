@@ -388,7 +388,7 @@ class V extends React.Component {
                           fontFamily: Font,
                           fontWeight: '500',
                           marginBottom: 5,
-                          color: Color.ReadableGreyText,
+                          color: Color.LessReadableGreyText,
                         }}>
                         {item.deal.merchant_name}
                       </Text>
@@ -415,14 +415,26 @@ class V extends React.Component {
                     </View>
                     <Text
                       style={{
+                        fontSize: 12,
+                        fontFamily: Font,
+                        fontWeight: '500',
+                        marginTop: 5,
+                        color: Color.ReadableGreyText,
+                        marginBottom: 10,
+                        color: Color.ReadableGreyText,
+                      }}>
+                      {item.deal.title}
+                    </Text>
+                    <Text
+                      style={{
                         fontSize: 13,
                         fontFamily: Font,
-                        color: Color.ReadableGreyText,
+                        color: Color.LessReadableGreyText,
                       }}>
                       {shortDescription}
                     </Text>
                   </View>
-                  <Icon style={{marginLeft: 30}} name={'chevron-right'} size={20} color={Color.BorderLightGrey} />
+                  <Icon style={{marginLeft: 20}} name={'chevron-right'} size={20} color={Color.BorderLightGrey} />
                 </View>
               </TouchableOpacity>
             );
