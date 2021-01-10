@@ -20,5 +20,6 @@ class BaseModel(models.Model):
 
     # pylint: disable=arguments-differ
     def delete(self):
+        self.updated_at = timezone.now
         self.deleted_at = timezone.now
-        super().delete()
+        self.save()

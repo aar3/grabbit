@@ -19,4 +19,5 @@ urlpatterns = [
     path("users/login/", post_user_login),
     re_path(r"users/(?P<user_id>\w+)/stats/", get_user_stats),
     re_path(r"users/(?P<user_id>\w+)/plaid/", include(plaid_router.urls)),
+    re_path(r"users/(?P<user_id>\w+)/plaid/link-token-success", handle_link_auth_success),
 ]

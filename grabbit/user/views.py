@@ -45,7 +45,6 @@ class UserViewSet(viewsets.ViewSet):
         instance = get_object_or_404(self.model, pk=pk)
         instance.__dict__.update(request.data)
         instance.save()
-
         serializer = self.serializer(instance)
         return Response(serializer.data)
 
@@ -62,11 +61,33 @@ class BaseUserNestedViewSet(BaseModelViewSet):
         serializer = self.serializer(instance)
         return Response(serializer.data)
 
+    def destroy(self, request, user_id=None, pk=None):
+        _ = get_object_or_404(User, pk=user_id)
+        instance = get_object_or_404(self.model, pk=pk)
+        instance.delete()
+        serializer = self.serializer(instance)
+        return Response(serializer.data)
+
+    def update(self, request, user_id=None, pk=None):
+        _ = get_object_or_404(User, pk=user_id)
+        instance = get_object_or_404(self.model, pk=pk)
+        instance.__dict__.update(request.data)
+        instance.save()
+        serializer = self.serializer(instance)
+        return Response(serializer.data)
+
 
 class NotificationViewSet(BaseUserNestedViewSet):
     model = Notification
     serializer = NotificationSerializer
     authentication_classes = [TokenAuthentication]
+
+    def list(self, request, user_id=None):
+        user = get_object_or_404(User, pk=user_id)
+        self.model.objects.filter(user__id=user.id, seen_at=None).update(seen_at=timezone.now())
+        instances = self.model.objects.filter(user__id=user.id)
+        serializer = self.serializer(instances, many=True)
+        return Response(serializer.data)
 
 
 @api_view(["POST"])
@@ -96,7 +117,7 @@ def get_user_stats(request, pk=None):
     return Response(status=200)
 
 
-class SettingViewSet(BaseModelViewSet):
+class SettingViewSet(BaseUserNestedViewSet):
     model = Setting
     serializer = SettingSerializer
     authentication_classes = [TokenAuthentication]

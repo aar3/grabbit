@@ -8,13 +8,13 @@ import re
 import requests
 from celery import Celery
 from bs4 import BeautifulSoup
-from grabbit.config import config
+from django.conf import settings
 from grabbit import logger
 from deals.models import Deal
 from lib.const import EMPTY_IMAGE_URL
 from analytics.models import ScraperStats
 
-task_manager = Celery("lib.tasks", backend=config.CELERY_RESULT_BACKEND, broker=config.CELERY_BROKER)
+task_manager = Celery("lib.tasks", backend=settings.CELERY_RESULT_BACKEND, broker=settings.CELERY_BROKER)
 
 
 class LockedQueue(collections.deque):
@@ -73,7 +73,7 @@ class ThreadedScraper(abc.ABC):
 
                 self._handles.append(handle)
 
-        _ = ScraperStats.objects.create(self.info)
+        _ = ScraperStats.objects.create(name=self.domain, metadata=self.info)
 
     def download_and_process_link_contents(self, link):
         response = self.session.get(link)

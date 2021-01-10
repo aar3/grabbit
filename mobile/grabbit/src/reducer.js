@@ -97,22 +97,33 @@ const defaultState = {
       items: {},
     },
   },
-  plaid: {
-    links: {
-      pending: false,
-      error: null,
-      list: {},
+  accounts: {
+    plaid: {
+      links: {
+        pending: false,
+        error: null,
+        list: {},
+      },
+      link_token: {
+        pending: true,
+        error: null,
+        link_token: null,
+      },
+      show_modal: true,
     },
-    link_token: {
-      pending: true,
-      error: null,
-      link_token: null,
-    },
-    show_modal: true,
     update: {
       error: null,
       pending: false,
     },
+    types: [
+      {
+        id: 0,
+        title: 'Plaid',
+        img_url: 'https://d25hn4jiqx5f7l.cloudfront.net/companies/logos/original/plaid_1542702784.jpg',
+        description: 'Link your bank account via the Plaid API',
+        routeKey: 'plaidAccounts',
+      },
+    ],
   },
   account: {
     links: [
@@ -121,7 +132,7 @@ const defaultState = {
         title: 'Link an account',
         icon: 'toggle-right',
         description: 'Link one of your external accounts to your Grabbit profile',
-        routeKey: 'linkAccount',
+        routeKey: 'accountType',
       },
       {
         id: 1,
@@ -258,31 +269,135 @@ export default function (state = defaultState, action) {
     }
 
     // ********************************************
-    // Plaid
+    // Accounts
     // ********************************************
-    case ReduxActions.Plaid.GetUserLinksSuccess: {
+    case ReduxActions.Accounts.DeleteAccountSuccess: {
+      const list = state.accounts.plaid.links;
+      delete list[payload.id];
+
+      return {
+        ...state,
+        accounts: {
+          ...state.accounts,
+          pending: false,
+          error: null,
+          plaid: {
+            ...state.accounts.plaid,
+            links: {
+              ...state.accounts.plaid.links,
+              list,
+            },
+          },
+        },
+      };
+    }
+
+    case ReduxActions.Accounts.DeleteAccountError: {
+      return {
+        ...state,
+        accounts: {
+          ...state.accounts,
+          pending: false,
+          error: payload,
+        },
+      };
+    }
+
+    case ReduxActions.Accounts.DeleteAccountPending: {
+      return {
+        ...state,
+        accounts: {
+          ...state.accounts,
+          pending: true,
+          error: null,
+        },
+      };
+    }
+
+    case ReduxActions.Accounts.GetUserLinksSuccess: {
       const list = arrayToObject(payload, 'id');
       return {
         ...state,
-        plaid: {
-          ...state.plaid,
-          links: {
-            ...state.plaid.links,
-            pending: false,
-            error: null,
-            list,
+        accounts: {
+          ...state.accounts,
+          plaid: {
+            ...state.accounts.plaid,
+            links: {
+              ...state.accounts.plaid.links,
+              pending: false,
+              error: null,
+              list,
+            },
           },
         },
       };
     }
 
-    case ReduxActions.Plaid.GetUserLinksError: {
+    case ReduxActions.Accounts.GetUserLinksError: {
       return {
         ...state,
-        plaid: {
-          ...state.plaid,
-          links: {
-            ...state.plaid.links,
+        accounts: {
+          ...state.accounts,
+          plaid: {
+            ...state.accounts.plaid,
+            links: {
+              ...state.accounts.plaid.links,
+              pending: false,
+              error: payload,
+            },
+          },
+        },
+      };
+    }
+
+    case ReduxActions.Accounts.GetUserLinksPending: {
+      return {
+        ...state,
+        accounts: {
+          ...state.accounts,
+          plaid: {
+            ...state.accounts.plaid,
+            links: {
+              ...state.accounts.plaid.links,
+              pending: true,
+              error: null,
+            },
+          },
+        },
+      };
+    }
+
+    case ReduxActions.Accounts.UpdatePlaidAccountStatusSuccess: {
+      return {
+        ...state,
+        accounts: {
+          ...state.accounts,
+          plaid: {
+            ...state.accounts.plaid,
+            links: {
+              ...state.accounts.plaid.links,
+              list: {
+                ...state.accounts.plaid.links.list,
+                [payload.id]: payload,
+              },
+            },
+          },
+          update: {
+            ...state.accounts.update,
+            pending: false,
+            error: null,
+          },
+        },
+      };
+    }
+
+    case ReduxActions.Accounts.UpdatePlaidAccountStatusError: {
+      return {
+        ...state,
+        accounts: {
+          ...state.accounts,
+          update: {
+            ...state.accounts.update,
             pending: false,
             error: payload,
           },
@@ -290,13 +405,13 @@ export default function (state = defaultState, action) {
       };
     }
 
-    case ReduxActions.Plaid.GetUserLinksPending: {
+    case ReduxActions.Accounts.UpdatePlaidAccountStatusPending: {
       return {
         ...state,
-        plaid: {
-          ...state.plaid,
-          links: {
-            ...state.plaid.links,
+        accounts: {
+          ...state.accounts,
+          update: {
+            ...state.accounts.update,
             pending: true,
             error: null,
           },
@@ -304,122 +419,82 @@ export default function (state = defaultState, action) {
       };
     }
 
-    case ReduxActions.Plaid.UpdateLinkAccountStatusSuccess: {
+    case ReduxActions.Accounts.HandleLinkTokenSuccess: {
       return {
         ...state,
-        plaid: {
-          ...state.plaid,
-          // Update both the pending state, and the PUT response payload
-          links: {
-            ...state.plaid.links,
-            list: {
-              ...state.plaid.links.list,
-              [payload.id]: payload,
-            },
-          },
-          update: {
-            ...state.plaid.links.update,
-            pending: false,
-            error: null,
-          },
-        },
-      };
-    }
-
-    case ReduxActions.Plaid.UpdateLinkAccountStatusError: {
-      return {
-        ...state,
-        plaid: {
-          ...state.plaid,
-          update: {
-            ...state.plaid.links.update,
-            pending: false,
-            error: payload,
-          },
-        },
-      };
-    }
-
-    case ReduxActions.Plaid.UpdateLinkAccountStatusPending: {
-      return {
-        ...state,
-        plaid: {
-          ...state.plaid,
-          update: {
-            ...state.plaid.links.update,
-            pending: true,
-            error: null,
-          },
-        },
-      };
-    }
-
-    case ReduxActions.Plaid.HandleLinkTokenSuccess: {
-      return {
-        ...state,
-        plaid: {
-          ...state.plaid,
-          // Index the new account to the accounts object
-          links: {
-            ...state.plaid.links,
-            list: {
-              ...state.plaid.links.list,
-              [payload.id]: payload,
+        accounts: {
+          ...state.accounts,
+          plaid: {
+            ...state.accounts.plaid,
+            links: {
+              ...state.accounts.plaid.links,
+              list: {
+                ...state.accounts.plaid.links.list,
+                [payload.id]: payload,
+              },
             },
           },
         },
       };
     }
 
-    case ReduxActions.Plaid.HandleLinkTokenError:
-    case ReduxActions.Plaid.GetLinkTokenError: {
+    case ReduxActions.Accounts.HandleLinkTokenError:
+    case ReduxActions.Accounts.GetLinkTokenError: {
       return {
         ...state,
-        plaid: {
-          ...state.plaid,
-          link_token: {
-            ...state.plaid.link_token,
-            pending: false,
-            error: payload,
+        accounts: {
+          ...state.accounts,
+          plaid: {
+            ...state.accounts.plaid,
+            link_token: {
+              ...state.accounts.plaid.link_token,
+              pending: false,
+              error: payload,
+            },
           },
         },
       };
     }
 
-    case ReduxActions.Plaid.GetLinkTokenSuccess: {
+    case ReduxActions.Accounts.GetLinkTokenSuccess: {
       const {token} = payload;
       return {
         ...state,
-        plaid: {
-          ...state.plaid,
-          link_token: {
-            ...state.plaid.link_token,
-            pending: false,
-            error: null,
-            link_token: token,
+        accounts: {
+          ...state.accounts,
+          plaid: {
+            ...state.accounts.plaid,
+            link_token: {
+              ...state.accounts.plaid.link_token,
+              pending: false,
+              error: null,
+              link_token: token,
+            },
           },
         },
       };
     }
 
-    case ReduxActions.Plaid.GetLinkTokenPending: {
+    case ReduxActions.Accounts.GetLinkTokenPending: {
       return {
         ...state,
-        plaid: {
-          ...state.plaid,
-          link_token: {
-            ...state.plaid.link_token,
-            pending: true,
-            error: null,
+        accounts: {
+          ...state.accounts,
+          plaid: {
+            ...state.accounts.plaid,
+            link_token: {
+              ...state.accounts.plaid.link_token,
+              pending: true,
+              error: null,
+            },
           },
         },
       };
     }
 
     // ********************************************
-    // RewardsList
+    // Deal list
     // ********************************************
-
     case ReduxActions.Deals.GetUserDealsError: {
       return {
         ...state,

@@ -54,31 +54,10 @@ export function arrayToObject(arr, keyedBy) {
   return obj;
 }
 
-export function NewNotificationIcon(focused) {
-  return (
-    <View>
-      <View
-        style={{
-          backgroundColor: Color.ErrorRed,
-          zIndex: 1,
-          borderRadius: 100,
-          height: 10,
-          width: 10,
-          position: 'absolute',
-        }}></View>
-      <Icon name="message-circle" size={20} color={focused ? Color.Purple : Color.ReadableGreyText} />
-    </View>
-  );
-}
-
 export const formatOriginalPrice = function (item) {
-  console.log('> ITEM: ', item);
-  // NOTE:
   const d = Number(item.deal.discount.substr(1));
-  console.log('D IS > ', d);
   if (d < 1) {
     const x = item.deal.value * d + item.deal.value;
-    console.log('> X IS > ', x);
     return Number(x).toFixed(0);
   }
 
@@ -86,10 +65,12 @@ export const formatOriginalPrice = function (item) {
 };
 
 export const to12HourTime = function (t) {
+  let meridian = 'AM';
   let [hour, minute] = t.split(':');
   if (hour > 12) {
     hour = hour - 12;
+    meridian = 'PM';
   }
 
-  return `${parseInt(hour, 10)}:${minute}`;
+  return `${parseInt(hour, 10)}:${minute} ${meridian}`;
 };

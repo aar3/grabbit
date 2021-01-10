@@ -63,8 +63,7 @@ class V extends React.Component {
         </Text>
       );
     }
-    // const date = item.seen_at.substr(0, 10);
-    const time = to12HourTime(item.seen_at.substr(11, 5));
+    const time = item.seen_at.substr(0, 10);
     return (
       <Text
         style={{
@@ -72,7 +71,7 @@ class V extends React.Component {
           color: Color.ReadableGreyText,
           marginLeft: 5,
         }}>
-        Seen at {time}
+        {time}
       </Text>
     );
   }
@@ -143,11 +142,14 @@ class V extends React.Component {
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
+          backgroundColor: Color.TopNavBackground,
         }}>
         <FlatList
           data={this.props.notifications}
           style={{
+            marginTop: 10,
             width: '100%',
+            backgroundColor: Color.TopNavBackground,
           }}
           refreshing={this.props.getNotificationsPending}
           onRefresh={() => this._onRefresh()}
@@ -164,9 +166,11 @@ class V extends React.Component {
                 <View
                   style={{
                     backgroundColor: Color.White,
+                    padding: 10,
                     borderBottomWidth: 1,
                     borderBottomColor: Color.BorderLightGrey,
                     flexDirection: 'row',
+                    marginBottom: 10,
                     // justifyContent: 'center',
                     height: 70,
                     alignItems: 'center',

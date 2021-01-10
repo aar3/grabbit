@@ -38,7 +38,7 @@ def create_notification_for_new_link(sender, instance, created, **kwargs):
         serializer = LinkSerializer(instance)
         _ = Notification.objects.create(
             user=instance.user,
-            route_key="linkAccount",
+            route_key="plaidAccounts",
             metadata={"instance": serializer.data},
             icon="credit-card",
             title="New Account Link",
@@ -52,7 +52,7 @@ def create_notification_for_updated_link(sender, instance, created, **kwargs):
         _ = Notification.objects.create(
             user=instance.user,
             icon="toggle-right",
-            route_key="linkAccount",
+            route_key="plaidAccounts",
             title="Account updated",
             text=f"We've updated your {instance.institution_name} account",
         )
