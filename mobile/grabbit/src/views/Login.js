@@ -182,7 +182,7 @@ class V extends React.Component {
               placeholder="**********"
             />
             <GrabbitButton
-              disabled={this.state.loginDisabled}
+              // disabled={this.state.loginDisabled}
               onPress={() => {
                 const {area_code, prefix, line_number} = this.props.loginData;
                 return this.props.postUserLogin({

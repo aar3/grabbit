@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
 import ReduxActions from 'grabbit/src/Actions';
-import {getStateForKey, httpRequest, formatDiscount} from 'grabbit/src/Utils';
+import {getStateForKey, httpRequest, formatOriginalPrice} from 'grabbit/src/Utils';
 import {Color, Font} from 'grabbit/src/Const';
 import {Error} from 'grabbit/src/components/FlatList';
 
@@ -110,7 +110,7 @@ class V extends React.Component {
           }}>
           <Text
             style={{
-              color: Color.Purple,
+              color: Color.Black,
               fontWeight: 'bold',
               fontSize: 18,
             }}>
@@ -118,18 +118,18 @@ class V extends React.Component {
           </Text>
           <Text
             style={{
-              color: Color.BorderLightGrey,
-              marginTop: 10,
+              color: Color.LessReadableGreyText,
+              marginTop: 5,
               fontWeight: 'bold',
-              fontSize: 18,
+              fontSize: 16,
             }}>
             You don't have any deals yet
           </Text>
           <Text
             style={{
-              color: Color.BorderLightGrey,
+              color: Color.LessReadableGreyText,
               marginTop: 10,
-              fontSize: 14,
+              fontSize: 12,
             }}>
             Link an account to get started
           </Text>
@@ -179,10 +179,9 @@ class V extends React.Component {
                     style={{
                       backgroundColor: Color.White,
                       borderColor: Color.BorderLightGrey,
-                      borderColor: 'green',
-                      borderWidth: 1,
+                      // borderColor: 'green',
+                      // borderWidth: 1,
                       opacity: 0.8,
-                      minWidth: 60,
                       height: 30,
                       position: 'absolute',
                       bottom: 0,
@@ -194,17 +193,18 @@ class V extends React.Component {
                       shadowOpacity: 0.25,
                       shadowRadius: 3.84,
                       elevation: 5,
-                      right: 0,
+                      // right: 0,
                       flexDirection: 'row',
+                      justifyContent: 'flex-end',
                     }}>
                     <View
                       style={{
                         justifyContent: 'center',
                         alignItems: 'center',
-                        width: 30,
                         height: 30,
-                        borderWidth: 1,
-                        borderColor: 'green',
+                        marginLeft: 10,
+                        // borderWidth: 1,
+                        // borderColor: 'green',
                       }}>
                       <Text
                         style={{
@@ -221,12 +221,9 @@ class V extends React.Component {
                         backgroundColor: Color.ErrorRed,
                         padding: 5,
                         height: 30,
-                        position: 'absolute',
-                        bottom: -1,
-                        right: -1,
+                        marginLeft: 5,
                         justifyContent: 'center',
                         alignItems: 'center',
-                        // width: 30,
                       }}>
                       <Text
                         style={{
@@ -237,7 +234,7 @@ class V extends React.Component {
                           // textDecorationLine: 'line-through',
                           // textDecorationStyle: 'solid',
                         }}>
-                        {`$${formatDiscount(item.deal.discount)} `}
+                        {`$${formatOriginalPrice(item)} `}
                       </Text>
                     </View>
                   </View>
@@ -261,26 +258,31 @@ class V extends React.Component {
           style={{
             // borderWidth: 1,
             // borderColor: 'blue',
-            maxHeight: 300,
             width: '100%',
           }}
           refreshing={this.props.getDealsPending}
           onRefresh={() => this._onRefresh()}
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
+            const size = 90;
+            const shortDescription =
+              item.deal.description.length > size
+                ? `${item.deal.description.substr(0, size)}...`
+                : item.deal.description;
             return (
               <TouchableOpacity onPress={() => {}}>
                 <View
                   style={{
                     backgroundColor: Color.White,
-                    borderWidth: 1,
-                    borderColor: Color.BorderLightGrey,
-                    height: 60,
+                    borderBottomWidth: 1,
+                    borderBottomColor: Color.BorderLightGrey,
+                    // height: 60,
                     alignItems: 'center',
+                    padding: 10,
                     flexDirection: 'row',
                     borderBottomRightRadius: 10,
                     borderTopRightRadius: 10,
-                    marginBottom: 10,
+                    // marginBottom: 10,
                   }}>
                   <View
                     style={{
@@ -297,7 +299,6 @@ class V extends React.Component {
                   <View
                     style={{
                       marginLeft: 20,
-                      height: 40,
                       width: '65%',
                       justifyContent: 'center',
                       // borderWidth: 1,
@@ -307,9 +308,19 @@ class V extends React.Component {
                       style={{
                         fontSize: 13,
                         fontFamily: Font,
+                        fontWeight: '500',
+                        marginBottom: 5,
                         color: Color.ReadableGreyText,
                       }}>
-                      {item.deal.description}
+                      {item.deal.merchant_name}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 13,
+                        fontFamily: Font,
+                        color: Color.ReadableGreyText,
+                      }}>
+                      {shortDescription}
                     </Text>
                     {/* {this._renderExpiryTag(item)} */}
                   </View>

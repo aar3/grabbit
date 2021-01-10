@@ -70,7 +70,26 @@ export default class Router_ extends React.Component {
             hideNavBar={false}
             navBar={BasicTopNavigationBar}
           />
-          <Tabs
+          <Scene
+            key="account"
+            // backButton={true}
+            component={AccountView}
+            title="Account"
+            hideNavBar={false}
+            // navBar={MainTopNavigationBar}
+          />
+          <Scene
+            navBar={MainTopNavigationBar}
+            title="Home"
+            hideNavBar={false}
+            initial
+            key="listDeal"
+            icon={({focused}) => (
+              <Icon name={'menu'} size={TabIconSize} color={focused ? Color.Black : Color.BorderLightGrey} />
+            )}
+            component={ListDealsView}
+          />
+          {/* <Tabs
             key="tabRoot"
             showLabel={false}
             tabBarPosition={'bottom'}
@@ -117,7 +136,7 @@ export default class Router_ extends React.Component {
               }}
               component={NotificationsView}
             />
-            {/* <Scene
+            <Scene
               navBar={AccountTopNavigationBar}
               title={'Account'}
               hideNavBar={true}
@@ -126,8 +145,8 @@ export default class Router_ extends React.Component {
                 <Icon name={'user'} size={TabIconSize} color={focused ? Color.Black : Color.BorderLightGrey} />
               )}
               component={AccountView}
-            /> */}
-          </Tabs>
+            />
+          </Tabs> */}
         </Stack>
       </Router>
     );

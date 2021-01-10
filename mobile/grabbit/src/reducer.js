@@ -114,6 +114,24 @@ const defaultState = {
       pending: false,
     },
   },
+  account: {
+    links: [
+      {
+        id: 0,
+        title: 'Link an account',
+        icon: 'toggle-right',
+        description: 'Link one of your external accounts to your Grabbit profile',
+        routKey: null,
+      },
+      {
+        id: 1,
+        title: 'Settings',
+        icon: 'settings',
+        description: 'Change your Grabbit account Settings',
+        routeKey: 'settings',
+      },
+    ],
+  },
 };
 
 export default function (state = defaultState, action) {

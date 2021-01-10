@@ -3,6 +3,7 @@ export const Color = {
   BorderLightGrey: '#D0D4D9',
   InfoTextBlue: '#007AFF',
   ReadableGreyText: '#64686C',
+  LessReadableGreyText: '#a0a4a8',
   White: '#FFFF',
   Black: '#000',
   HyperlinkBlue: '#007AFF',

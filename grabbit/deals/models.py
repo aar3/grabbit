@@ -12,17 +12,18 @@ class Deal(BaseModel):
         db_table = "deals"
 
     title = models.CharField(max_length=255)
-    value = models.CharField(max_length=255)
-    discount = models.CharField(max_length=255)
+    current_value = models.CharField(max_length=255)
+    original_value = models.CharField(max_length=255)
     merchant_name = models.CharField(max_length=255)
     url = models.CharField(max_length=255)
     img_url = models.CharField(max_length=255, default=EMPTY_IMAGE_URL)
+    all_img_urls = models.JSONField(default=dict)
     description = models.TextField(null=True)
     uid = models.CharField(max_length=255)
 
     def set_uid(self):
         # NOTE: assuming these values are reliably consistent
-        payload = self.title.lower() + str(self.value) + self.merchant_name.lower()
+        payload = self.title.lower() + str(self.current_value) + self.merchant_name.lower()
         self.uid = hashlib.sha256(payload.encode()).hexdigest()
 
     def save(self):
