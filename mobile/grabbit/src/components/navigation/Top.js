@@ -2,7 +2,8 @@ import React from 'react';
 import {View, Image, Text, TouchableOpacity, ImageBackground} from 'react-native';
 import {Color} from 'grabbit/src/Const';
 import {Actions} from 'react-native-router-flux';
-import Icon from 'react-native-vector-icons/Feather';
+// IMPORTANT: https://stackoverflow.com/a/55040425/4701228
+import Icon from 'react-native-vector-icons/Ionicons';
 import PlaidLink from 'react-native-plaid-link-sdk';
 import {connect} from 'react-redux';
 import ReduxActions from 'grabbit/src/Actions';
@@ -73,8 +74,8 @@ class MainTopNavigationBar extends React.Component {
         style={{
           // borderWidth: 1,
           // borderColor: 'orange',
-          height: 90,
-          backgroundColor: '#f0f0f0',
+          height: 85,
+          backgroundColor: Color.TopNavBackground,
           borderBottomWidth: 1,
           borderBottomColor: Color.BorderLightGrey,
         }}>
@@ -85,26 +86,33 @@ class MainTopNavigationBar extends React.Component {
             flexDirection: 'row',
             marginTop: 40,
             height: 40,
+            justifyContent: 'center',
             alignItems: 'center',
           }}>
           <TouchableOpacity onPress={() => Actions.listDeal()}>
-            <View
+            <ImageBackground
+              source={require('./../../../assets/imgs/Grabbit_Black_Letters_111x500.png')}
               style={{
-                borderWidth: 1,
-                borderColor: 'green',
-                // height: 40,
-                // width: 40,
-                marginLeft: 20,
-                overflow: 'hidden',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Image
-                source={require('./../../../assets/imgs/Grabbit_Black_Letters_111x500.png')}
-                style={{height: 24, width: 117}}
-              />
-            </View>
+                height: 24,
+                width: 117,
+              }}></ImageBackground>
           </TouchableOpacity>
+          <View
+            style={{
+              // borderWidth: 1,
+              // borderColor: 'red',
+              borderRadius: 50,
+              position: 'absolute',
+              right: 50,
+              height: 40,
+              width: 40,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <TouchableOpacity onPress={() => Actions.account()}>
+              <Icon name="person-outline" size={25} type="MaterialIcons" color={Color.Black} />
+            </TouchableOpacity>
+          </View>
           <View
             style={{
               // borderWidth: 1,
@@ -117,8 +125,8 @@ class MainTopNavigationBar extends React.Component {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-            <TouchableOpacity onPress={() => Actions.account()}>
-              <Icon name="user" size={25} color={Color.Black} />
+            <TouchableOpacity onPress={() => Actions.notifications()}>
+              <Icon name="chatbubble-outline" size={25} type="MaterialIcons" color={Color.Black} />
             </TouchableOpacity>
           </View>
         </View>
@@ -127,51 +135,6 @@ class MainTopNavigationBar extends React.Component {
   }
 }
 
-// class LinkAccountTopNavigationBar extends React.Component {
-//   _handleExit(data) {
-//     console.log('exit: ', data);
-//   }
-
-//   async _handleOnSuccess(data) {
-//     const options = {
-//       method: 'POST',
-//       endpoint: `/plaid/${this.props.user.id}/link-token-success/`,
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'X-Session-Token': this.props.user.current_session_token,
-//       },
-//       data,
-//     };
-
-//     return this.props.handleLinkSuccess(options);
-//   }
-
-//   _renderButton() {
-//     if (this.props.getLinkTokenPending) {
-//       return (
-//         <ImageBackground
-//           source={require('./../../../assets/imgs/Loading-Transparent-Cropped.gif')}
-//           style={{
-//             // borderWidth: 1,
-//             // borderColor: 'red',
-//             height: 30,
-//             width: 30,
-//           }}></ImageBackground>
-//       );
-//     }
-
-//     if (this.props.getLinkTokenError) {
-//       return (
-//         <TouchableOpacity
-//           onPress={() => {
-//             console.log('clicked');
-//           }}>
-//           <Icon name={'x'} size={20} color={Color.ErrorRed} />
-//         </TouchableOpacity>
-//       );
-//     }
-
-//     return (
 //       <TouchableOpacity
 //         onPress={() => {
 //           console.log('clicked');
@@ -184,62 +147,10 @@ class MainTopNavigationBar extends React.Component {
 //           <Icon name={'plus'} size={20} color={Color.ReadableGreyText} />
 //         </PlaidLink>
 //       </TouchableOpacity>
-//     );
-//   }
-
-//   render() {
-//     return (
-//       <View
-//         style={{
-//           // borderWidth: 1,
-//           // borderColor: 'orange',
-//           flexDirection: 'row',
-//           height: 90,
-//           backgroundColor: '#fff',
-//           justifyContent: 'center',
-//           alignItems: 'center',
-//           borderBottomWidth: 1,
-//           borderBottomColor: Color.BorderLightGrey,
-//           width: '100%',
-//         }}>
-//         <View
-//           style={{
-//             // borderWidth: 1,
-//             // borderColor: 'pink',
-//             alignItems: 'center',
-//             marginTop: 40,
-//             justifyContent: 'center',
-//           }}>
-//           <Text
-//             style={{
-//               fontWeight: 'bold',
-//               fontSize: 16,
-//               color: Color.ReadableGreyText,
-//             }}>
-//             {this.props.title}
-//           </Text>
-//         </View>
-//         <View
-//           style={{
-//             // borderWidth: 1,
-//             // borderColor: 'red',
-//             height: 40,
-//             width: 40,
-//             right: 20,
-//             position: 'absolute',
-//             top: 45,
-//             alignItems: 'center',
-//             justifyContent: 'center',
-//           }}>
-//           {this._renderButton()}
-//         </View>
-//       </View>
-//     );
-//   }
-// }
 
 const mapStateToProps = function (state) {
   return {
+    hasNewNotification: false,
     getLinkTokenPending: getStateForKey('state.plaid.link_token.pending', state),
     getLinkTokenError: getStateForKey('state.plaid.link_token.error', state),
     linkToken: getStateForKey('state.plaid.link_token.link_token', state),

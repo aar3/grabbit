@@ -121,7 +121,7 @@ const defaultState = {
         title: 'Link an account',
         icon: 'toggle-right',
         description: 'Link one of your external accounts to your Grabbit profile',
-        routKey: null,
+        routeKey: 'linkAccount',
       },
       {
         id: 1,

@@ -9,6 +9,7 @@ export const Color = {
   HyperlinkBlue: '#007AFF',
   ErrorRed: '#FF0000',
   HotPink: '#E20086',
+  TopNavBackground: '#f0f0f0',
 };
 
 export const TabIconSize = 24;

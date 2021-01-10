@@ -14,7 +14,6 @@ class V extends React.Component {
   }
 
   render() {
-    console.log(this.props.links);
     return (
       <View
         style={{

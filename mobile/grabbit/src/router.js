@@ -1,17 +1,7 @@
 import React from 'react';
-import {View} from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
-import {connect} from 'react-redux';
-import ReduxActions from 'grabbit/src/Actions';
 import {Router, Scene, Stack, Tabs} from 'react-native-router-flux';
-import {Color, TabIconSize} from 'grabbit/src/Const';
-import {
-  BasicTopNavigationBar,
-  MainTopNavigationBar,
-  AccountTopNavigationBar,
-  LinkAccountTopNavigationBar,
-} from 'grabbit/src/components/navigation/Top';
-import {getStateForKey, NewNotificationIcon} from 'grabbit/src/Utils';
+import {Color} from 'grabbit/src/Const';
+import {MainTopNavigationBar} from 'grabbit/src/components/navigation/Top';
 import {
   EntryView,
   LoginView,
@@ -21,10 +11,6 @@ import {
   AccountView,
   RewardFocusView,
   SettingsView,
-  ContactView,
-  AboutView,
-  TermsView,
-  PrivacyView,
   NotificationsView,
 } from 'grabbit/src/views';
 
@@ -64,105 +50,37 @@ export default class Router_ extends React.Component {
           />
           <Scene
             key="settings"
-            backButton={true}
             component={SettingsView}
             title="Settings"
             hideNavBar={false}
-            navBar={BasicTopNavigationBar}
+            navigationBarStyle={{
+              backgroundColor: Color.TopNavBackground,
+            }}
+            // navBar={BasicTopNavigationBar}
           />
           <Scene
             key="account"
-            // backButton={true}
             component={AccountView}
-            title="Account"
+            navigationBarStyle={{
+              backgroundColor: Color.TopNavBackground,
+            }}
             hideNavBar={false}
-            // navBar={MainTopNavigationBar}
           />
           <Scene
             navBar={MainTopNavigationBar}
-            title="Home"
+            title=""
             hideNavBar={false}
             initial
             key="listDeal"
-            icon={({focused}) => (
-              <Icon name={'menu'} size={TabIconSize} color={focused ? Color.Black : Color.BorderLightGrey} />
-            )}
             component={ListDealsView}
           />
-          {/* <Tabs
-            key="tabRoot"
-            showLabel={false}
-            tabBarPosition={'bottom'}
-            hideNavBar={true}
-            activeBackgroundColor={Color.White}
-            initial
-            lazy>
-            <Scene
-              navBar={MainTopNavigationBar}
-              title={'Deals'}
-              hideNavBar={false}
-              key="listDeal"
-              icon={({focused}) => (
-                <Icon name={'menu'} size={TabIconSize} color={focused ? Color.Black : Color.BorderLightGrey} />
-              )}
-              component={ListDealsView}
-            />
-            <Scene
-              navBar={LinkAccountTopNavigationBar}
-              title={'Linked Accounts'}
-              hideNavBar={false}
-              key="linkAccount"
-              icon={({focused}) => (
-                <Icon name={'toggle-right'} size={TabIconSize} color={focused ? Color.Black : Color.BorderLightGrey} />
-              )}
-              component={LinkAccountView}
-            />
-            <Scene
-              navBar={MainTopNavigationBar}
-              title={'Notifications'}
-              hideNavBar={false}
-              key="notifications"
-              icon={({focused}) => {
-                if (this.props.hasUnseenNotifications) {
-                  return <NewNotificationIcon focused={focused} />;
-                }
-                return (
-                  <Icon
-                    name={'message-circle'}
-                    size={TabIconSize}
-                    color={focused ? Color.Black : Color.BorderLightGrey}
-                  />
-                );
-              }}
-              component={NotificationsView}
-            />
-            <Scene
-              navBar={AccountTopNavigationBar}
-              title={'Account'}
-              hideNavBar={true}
-              key="account"
-              icon={({focused}) => (
-                <Icon name={'user'} size={TabIconSize} color={focused ? Color.Black : Color.BorderLightGrey} />
-              )}
-              component={AccountView}
-            />
-          </Tabs> */}
+          <Scene title={'Link Account'} hideNavBar={false} key="linkAccount" component={LinkAccountView} />
+          <Scene title={'Notifications'} hideNavBar={false} key="notifications" component={NotificationsView} />
         </Stack>
       </Router>
     );
   }
 }
-
-// const mapStateToProps = function (state) {
-//   const notifications = Object.values(getStateForKey('state.notifications.list.items', state));
-//   const unseenNotifications = notifications.filter((item) => !item.seen_at);
-//   return {
-//     hasUnseenNotifications: unseenNotifications.length > 0,
-//     user: getStateForKey('state.session.user', state),
-//   };
-// };
-
-// export default connect(mapStateToProps)(Router_);
 
 const MyTransitionSpec = {
   duration: 0,
