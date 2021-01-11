@@ -47,7 +47,7 @@ class V extends React.Component {
                       borderRadius: 100,
                       overflow: 'hidden',
                     }}
-                    source={{uri: item.img_url}}
+                    source={{uri: item.img_url, cache: 'force-cache'}}
                   />
                   <View
                     style={{
