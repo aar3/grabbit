@@ -13,8 +13,6 @@ class UserSerializer(BaseModelSerializer):
             "qr_code_url",
             "name",
             "email",
-            "address_line1",
-            "address_line2",
             "current_session_token",
             "phone",
         ]

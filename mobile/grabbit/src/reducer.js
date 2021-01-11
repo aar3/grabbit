@@ -13,8 +13,6 @@ const defaultState = {
       qr_code_url: '',
       name: 'Rashad Alston',
       email: 'rashad.a.alston@gmail.com',
-      address_line1: '600 S Spring St',
-      address_line2: 'Los Angeles, CA 90014',
       current_session_token: '8f710063cffbe962bcf51aec432aff687acd027e41e52589b63bda1ae9903048',
       phone: '213-222-7624',
     },

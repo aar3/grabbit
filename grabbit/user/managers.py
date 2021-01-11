@@ -5,17 +5,14 @@ from lib.managers import BaseManager
 class UserManager(BaseManager):
     # kwargs includes invitation_code
     def create(
-        self, email, name, secret, phone, username, user_type=0, address_line1=None, address_line2=None, *args, **kwargs
+        self, email, name, secret, phone, username, *args, **kwargs
     ):
 
         user = self.model(
             email=email,
             name=name,
             phone=phone,
-            user_type=user_type,
             username=username,
-            address_line1=address_line1,
-            address_line2=address_line2,
         )
 
         user.set_salt()

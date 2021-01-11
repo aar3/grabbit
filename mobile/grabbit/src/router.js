@@ -1,5 +1,6 @@
 import React from 'react';
-import {Router, Scene, Stack, Tabs} from 'react-native-router-flux';
+import {StyleSheet} from 'react-native';
+import {Router, Scene, Stack} from 'react-native-router-flux';
 import {Color} from 'grabbit/src/Const';
 import {MainTopNavigationBar} from 'grabbit/src/components/navigation/Top';
 import {
@@ -15,6 +16,7 @@ import {
   NotificationsView,
 } from 'grabbit/src/views';
 
+
 export default class Router_ extends React.Component {
   constructor(props) {
     super(props);
@@ -29,6 +31,7 @@ export default class Router_ extends React.Component {
             key="entry"
             component={EntryView}
             title="Entry"
+            // initial
             gesturesEnabled={false}
             drawerLockMode="locked-closed"
             hideNavBar={true}
@@ -54,16 +57,13 @@ export default class Router_ extends React.Component {
             component={SettingsView}
             title="Settings"
             hideNavBar={false}
-            navigationBarStyle={{
-              backgroundColor: Color.TopNavBackground,
-            }}
+            navigationBarStyle={styles.NavbarContainer}
           />
           <Scene
             key="account"
             component={AccountView}
-            navigationBarStyle={{
-              backgroundColor: Color.TopNavBackground,
-            }}
+            title="Account"
+            navigationBarStyle={styles.NavbarContainer}
             hideNavBar={false}
           />
           <Scene
@@ -74,9 +74,28 @@ export default class Router_ extends React.Component {
             key="listDeal"
             component={ListDealsView}
           />
-          <Scene title={'Plaid Accounts'} hideNavBar={false} key="plaidAccounts" component={PlaidAccountsView} />
-          <Scene title={'Notifications'} hideNavBar={false} key="notifications" component={NotificationsView} />
-          <Scene title={'Links'} hideNavBar={false} key="accountType" component={AccountTypeView} />
+          <Scene 
+            title={'Plaid Accounts'} 
+            hideNavBar={false} 
+            key="plaidAccounts" 
+            navigationBarStyle={styles.NavbarContainer}
+            component={PlaidAccountsView}
+          />
+          <Scene 
+            title={'Notifications'} 
+            hideNavBar={false} 
+            key="notifications" 
+            navigationBarStyle={styles.NavbarContainer}
+            component={NotificationsView} 
+          />
+          <Scene 
+            title={'Links'} 
+            hideNavBar={false} 
+            key="accountType" 
+            component={AccountTypeView}
+            navigationBarStyle={styles.NavbarContainer}
+            style={styles}
+          />
         </Stack>
       </Router>
     );
@@ -114,3 +133,11 @@ const transitionConfig = function () {
     },
   };
 };
+
+
+const styles = StyleSheet.create({
+  NavbarContainer: {
+    marginTop: 10,
+    backgroundColor: Color.TopNavBackground,
+  },
+});
