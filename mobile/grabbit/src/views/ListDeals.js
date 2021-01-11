@@ -150,6 +150,7 @@ class V extends React.Component {
             borderWidth: 1,
             backgroundColor: Color.TopNavBackground,
             borderColor: Color.BorderLightGrey,
+            borderBottomWidth: 0,
             maxHeight: 240,
             width: '100%',
           }}
@@ -252,7 +253,6 @@ class V extends React.Component {
                         borderTopLeftRadius: 8,
                         height: 30,
                         marginLeft: 10,
-                        opacity: 0.6,
                         // borderWidth: 1,
                         // borderColor: 'green',
                       }}>
@@ -260,7 +260,6 @@ class V extends React.Component {
                         style={{
                           fontWeight: 'bold',
                           textAlign: 'center',
-
                           fontFamily: Font,
                           fontSize: 14,
                           color: Color.White,

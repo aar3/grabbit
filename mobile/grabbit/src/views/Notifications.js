@@ -172,7 +172,7 @@ class V extends React.Component {
                     flexDirection: 'row',
                     marginBottom: 10,
                     // justifyContent: 'center',
-                    height: 70,
+                    // height: 70,
                     alignItems: 'center',
                   }}>
                   <View
