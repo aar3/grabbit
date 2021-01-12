@@ -143,7 +143,7 @@ PLAID_ENV = os.environ["PLAID_ENV"]
 # Task queues
 #################################################################
 
-CELERY_BROKER = os.environ["CELERY_BROKER_URL"]
+CELERY_BROKER = os.environ["CELERY_BROKER"]
 CELERY_RESULT_BACKEND = os.environ["CELERY_RESULT_BACKEND"]
 
 

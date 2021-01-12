@@ -44,8 +44,8 @@ CMD_DOCKER_START_CI = docker-compose -f docker-compose.ci.yml up
 CMD_DOCKER_STOP_CI = docker-compose -f docker-compose.ci.yml down -v
 
 
-CMD_CELERY_START = celery -A lib.tasks worker -l INFO --without-gossip
-CMD_START_FLOWER = celery flower -A lib.tasks --address=127.0.0.1 --port=5555
+CMD_CELERY_START = celery -A lib.celery worker -l INFO --without-gossip
+CMD_START_FLOWER = celery flower -A lib.celery --address=127.0.0.1 --port=5555
 
 .PHONY: format \
 bootstrap_env \
@@ -101,10 +101,10 @@ install_lock:
 freeze:
 	$(CMD_PIP_FREEZE)
 
-start_dev: create_logs install_lock migrate
+dev: create_logs install_lock migrate
 	$(CMD_START_APP_DEV)
 
-start_prod: create_logs install_lock migrate
+prod: create_logs install_lock migrate
 	$(CMD_START_APP_PROD)
 
 show_migrations:
@@ -153,6 +153,6 @@ docker_stop_ci:
 flower:
 	$(CMD_START_FLOWER)
 
-celery_start:
+celery:
 	$(CMD_CELERY_START)
 	

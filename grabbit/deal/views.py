@@ -7,7 +7,7 @@ from lib.const import Scrapers
 from lib.middlewares import TokenAuthentication, ScraperAuthentication
 from user.models import User
 from user.views import BaseUserNestedViewSet
-from deal.models import UserDeal, Deal
+from deal.models import Deal, UserDeal
 from deal.serializers import DealSerializer, UserDealSerializer
 
 

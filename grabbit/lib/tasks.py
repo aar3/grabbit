@@ -7,15 +7,13 @@ import threading
 from urllib import parse
 import re
 import requests
-from django.conf import settings
-from celery import Celery
 from bs4 import BeautifulSoup
 from grabbit import logger
-from deal.models import Deal
-from lib.const import EMPTY_IMAGE_URL
-from scraper.models import ScraperStats
 
-task_manager = Celery("lib.tasks", backend=settings.CELERY_RESULT_BACKEND, broker=settings.CELERY_BROKER)
+# from scraper.models import ScraperStats
+# from deal.models import Deal
+from lib.const import EMPTY_IMAGE_URL
+
 
 START_URLS = {
     "slickdeals": "https://slickdeals.net/f/14750294-15-count-1-4-oz-fiber-one-chewy-bars-mega-pack-oats-and-chocolate-4-57-0-30-each-w-s-s-free-shipping-w-prime-or-on-orders-over-25?src=frontpage",
@@ -73,12 +71,16 @@ class ThreadedScraper(abc.ABC):
         self.timeout = 3
 
     def _set_start_url(self):
+        from deal.models import Deal
+
         deals = Deal.objects.filter(scraper=self.name).order_by("-created_at")
         if not deals:
             return getattr(START_URLS, self.name)
         return deals[0].url
 
     def run(self):
+        from scraper.models import ScraperStats
+
         self.queue.append(self.start)
         successful_tasks = self.info["successful_tasks"]
 
@@ -128,6 +130,8 @@ class ThreadedScraper(abc.ABC):
                     logger.error("Could not delete dead thread: %s", str(err))
 
     def build_and_save_deal(self, url):
+        from deal.models import Deal
+
         description = self._extract_product_description(url)
         current_value, original_value = self._extract_product_value_and_discount(url)
 
@@ -461,16 +465,3 @@ class AmazonScraper(ThreadedScraper):
     def __init__(self, domain, max_handles=10, max_tasks=10):
         super(AmazonScraper, self).__init__(domain, max_handles, max_tasks)
         self.name = SCRAPERS.AMAZON
-
-
-@task_manager.task
-def slickdeals_scraper():
-    scraper = SlickDealsScraper(domain="https://slickdeals.net", name=SCRAPERS.SLICK_DEALS)
-    scraper.run()
-
-
-@task_manager.task
-def target_scraper():
-    scraper = TargetScraper(domain="https://target.com", name=SCRAPERS.TARGET)
-    scraper.set_redsky_api_cookies()
-    scraper.run()
