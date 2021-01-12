@@ -1,7 +1,7 @@
 import pytest
 from lib.tasks import SlickDealsScraper
 from lib.const import SLICKDEALS_SCRAPER_START_URL
-from deals.models import Deal
+from deal.models import Deal
 
 
 class TestSlickDealsScraper:

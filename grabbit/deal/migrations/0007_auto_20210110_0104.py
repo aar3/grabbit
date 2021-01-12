@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("deals", "0006_deal_all_img_urls"),
+        ("deal", "0006_deal_all_img_urls"),
     ]
 
     operations = [

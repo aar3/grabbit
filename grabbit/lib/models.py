@@ -1,9 +1,7 @@
 # pylint: disable=unused-argument
-
 from django.db import models
 from django.utils import timezone
-
-from lib.managers import *
+from lib.managers import BaseManager
 
 
 class BaseModel(models.Model):

@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("user", "0015_auto_20210103_0046"),
-        ("deals", "0004_deal_user"),
+        ("deal", "0004_deal_user"),
     ]
 
     operations = [
@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 ("created_at", models.DateTimeField(default=django.utils.timezone.now, null=True)),
                 ("updated_at", models.DateTimeField(null=True)),
                 ("deleted_at", models.DateTimeField(null=True)),
-                ("deal", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="deals.deal")),
+                ("deal", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="deal.deal")),
                 ("user", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="user.user")),
             ],
             options={"db_table": "user_deals",},

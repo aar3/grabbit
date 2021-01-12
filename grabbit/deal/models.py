@@ -3,8 +3,8 @@ from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save
 from user.models import User, Notification
-from lib.models import BaseModel
 from lib.const import EMPTY_IMAGE_URL
+from lib.models import BaseModel
 
 
 class Deal(BaseModel):

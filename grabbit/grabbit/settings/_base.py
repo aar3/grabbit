@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     "grabbit",
     "analytics",
     "plaid_local",
-    "deals",
+    "deal",
+    "scraper",
     "corsheaders",
     "rest_framework",
     "django.contrib.admin",
@@ -124,10 +125,9 @@ PORT = os.environ["PORT"]
 # Redis
 #################################################################
 
-REDIS_HOST = "localhost"
+REDIS_HOST = "redis"
 REDIS_DEFAULT_PORT = 6379
 REDIS_CACHE_LAYER_PORT = 6380
-REDIS_DB = 0
 
 #################################################################
 # Plaid
@@ -214,3 +214,6 @@ LOGGING = {
         "django.db.backends": {"handlers": ["console", "file"], "level": "WARNING", "propagate": False,},
     },
 }
+
+
+ENGINEERING_USER_MASTER_TOKEN = os.environ["ENGINEERING_USER_MASTER_TOKEN"]

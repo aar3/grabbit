@@ -7,7 +7,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("user", "0015_auto_20210103_0046"),
-        ("deals", "0003_auto_20210105_0328"),
+        ("deal", "0003_auto_20210105_0328"),
     ]
 
     operations = [

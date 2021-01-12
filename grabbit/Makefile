@@ -74,7 +74,7 @@ start_prod \
 test
 
 
-APPS = user plaid_local deals analytics
+APPS = user plaid_local deal analytics scraper
 
 
 format:
