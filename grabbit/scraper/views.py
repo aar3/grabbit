@@ -21,5 +21,5 @@ def init_target_scraper_task(_):
 @api_view(["POST"])
 @authentication_classes([ScraperAuthentication])
 def init_amazon_scraper_task(_):
-    amazon_scraper_task()
+    amazon_scraper_task.apply_async()
     return Response(status=200, data={"details": "Starting Amazon scraper"})

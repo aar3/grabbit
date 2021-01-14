@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
                         max_length=255,
                     ),
                 ),
-                ("keywords", models.JSONField(default=list)),
+                # ("keywords", models.JSONField(default=list)),
                 ("all_img_urls", models.JSONField(default=list)),
                 ("description", models.TextField(null=True)),
                 ("uid", models.CharField(max_length=255)),

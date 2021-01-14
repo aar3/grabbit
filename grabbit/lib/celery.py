@@ -20,7 +20,7 @@ def target_scraper_task():
     scraper.run()
 
 
-# @task_manager.task
+@task_manager.task
 def amazon_scraper_task():
     scraper = AmazonScraper()
     scraper.run()

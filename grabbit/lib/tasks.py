@@ -50,12 +50,12 @@ class LockedQueue(collections.deque):
 
 
 class ThreadedScraper(abc.ABC):
-    def __init__(self, domain, max_handles=10, max_tasks=10):
+    def __init__(self, name, domain, max_handles=10, max_tasks=10):
         self.domain = domain
         self.queue = LockedQueue()
         self.max_handles = max_handles
         self.max_tasks = max_tasks
-        self.name = None
+        self.name = name
         self.start = self._set_start_url()
         self.session = requests.session()
         self.soup = None
@@ -78,7 +78,7 @@ class ThreadedScraper(abc.ABC):
 
         deals = Deal.objects.filter(scraper=self.name).order_by("-created_at")
         if not deals:
-            return getattr(START_URLS, self.name)
+            return START_URLS[self.name]
         return deals[0].url
 
     def run(self):
@@ -142,54 +142,54 @@ class ThreadedScraper(abc.ABC):
         merchant_name = self._extract_merchant_name()
 
         conditions = [
-            (current_value == DefaultValues.Current),
-            (original_value == DefaultValues.Original),
-            (img_url == DefaultValues.ImgURL),
-            (img_urls == DefaultValues.ImgURLs),
-            (description == DefaultValues.Description),
-            (merchant_name == DefaultValues.MerchantName),
+            ((current_value == DefaultValues.Current), "current-price"),
+            ((original_value == DefaultValues.Original), "original-price"),
+            ((img_url == DefaultValues.ImgURL), "img-url"),
+            ((img_urls == DefaultValues.ImgURLs), "img-urls"),
+            ((description == DefaultValues.Description), "description"),
+            ((merchant_name == DefaultValues.MerchantName), "merchant-name"),
         ]
 
-        if any(conditions):
-            return self._handle_unsuccessful_scrape_attempt(url, reason="generic")
+        for condition, reason in conditions:
+            if condition:
+                self._handle_unsuccessful_scrape_attempt(url, reason=reason)
 
         # NOTE: keep this here for debugging
-        data = {
-            "description": description,
-            "current_value": current_value,
-            "merchant_name": merchant_name,
-            "original_value": original_value,
-            "img_url": img_url,
-            "img_urls": img_urls,
-            "title": title,
-        }
+        # data = {
+        #     "description": description,
+        #     "current_value": current_value,
+        #     "merchant_name": merchant_name,
+        #     "original_value": original_value,
+        #     "img_url": img_url,
+        #     "img_urls": img_urls,
+        #     "title": title,
+        # }
+        # print(">>> data", data)
 
-        print(">>> data", data)
+        instance = Deal(
+            title=title,
+            current_value=current_value,
+            original_value=original_value,
+            description=description,
+            merchant_name=merchant_name,
+            img_url=img_url,
+            all_img_urls=img_urls,
+            url=url,
+        )
 
-        # instance = Deal(
-        #     title=title,
-        #     current_value=current_value,
-        #     original_value=original_value,
-        #     description=description,
-        #     merchant_name=merchant_name,
-        #     img_url=img_url,
-        #     all_img_urls=img_urls,
-        #     url=url,
-        # )
+        instance.set_uid()
 
-        # instance.set_uid()
+        exists = Deal.objects.filter(uid=instance.uid)
 
-        # exists = Deal.objects.filter(uid=instance.uid)
+        with self.lock:
+            if not exists:
+                instance.save()
+                logger.info("Processed a new scraped deal: %s", instance.uid)
+                self.info["successful_tasks"] += 1
+                return
 
-        # with self.lock:
-        #     if not exists:
-        #         instance.save()
-        #         logger.info("Processed a new scraped deal: %s", instance.uid)
-        #         self.info["successful_tasks"] += 1
-        #         return
-
-        #     logger.info("Processed a scraped deal that already exists")
-        #     self.info["duplicate_tasks"] += 1
+            logger.info("Processed a scraped deal that already exists")
+            self.info["duplicate_tasks"] += 1
 
     @abc.abstractmethod
     def _get_associated_product_links(self, url):
@@ -237,10 +237,10 @@ class ThreadedScraper(abc.ABC):
 
 
 class SlickDealsScraper(ThreadedScraper):
-    def __init__(self, max_handles=10, max_tasks=10):
-        super(SlickDealsScraper, self).__init__(max_handles, max_tasks)
-        self.domain = Domains.Slickdeals
-        self.name = Scrapers.Slickdeals
+    def __init__(self, name=Scrapers.Slickdeals, domain=Domains.Slickdeals, max_handles=10, max_tasks=10):
+        super(SlickDealsScraper, self).__init__(name, domain, max_handles, max_tasks)
+        self.domain = domain
+        self.name = name
 
     def _get_associated_product_links(self):
         associated_links = self.soup.find_all("a", href=True)
@@ -327,10 +327,10 @@ class SlickDealsScraper(ThreadedScraper):
 
 class TargetScraper(ThreadedScraper):
     # NOTE: https://stackoverflow.com/a/59011424/4701228
-    def __init__(self, max_handles=10, max_tasks=10):
-        super(TargetScraper, self).__init__(max_handles, max_tasks)
-        self.name = Scrapers.Target
-        self.domain = Domains.Target
+    def __init__(self, name=Scrapers.Target, domain=Domains.Target, max_handles=10, max_tasks=10):
+        super(TargetScraper, self).__init__(name, domain, max_handles, max_tasks)
+        self.name = name
+        self.domain = domain
         self.visitor_id = None
         self.store_id = None
 
@@ -466,10 +466,10 @@ class TargetScraper(ThreadedScraper):
 
 
 class AmazonScraper(ThreadedScraper):
-    def __init__(self, max_handles=10, max_tasks=10):
-        super(AmazonScraper, self).__init__(max_handles, max_tasks)
-        self.name = Scrapers.Amazon
-        self.domain = Domains.Amazon
+    def __init__(self, name=Scrapers.Amazon, domain=Domains.Amazon, max_handles=10, max_tasks=10):
+        super(AmazonScraper, self).__init__(name, domain, max_handles, max_tasks)
+        self.name = name
+        self.domain = domain
         self.headers = {
             "cookie": "session-id=131-3306794-6173954; session-id-time=2082787201l; i18n-prefs=USD; ubid-main=135-3690569-1466528; session-token=AUqh2LGYiKoIQ5QHUHh1uwMTH2alpDy9KeSAIz1iV2ND3B3a4BzII3t2xHOpWQ3iu2+A3ZF+OIkMW66jEYuuxYCPEkFfPcE+B7ooZxmoCUPlnWkJyNDQpgarbZWqsuqf/zT7DdOtZSxXW+CqSCcqmYYWDbn0EHJCtonqucZKNMqm+N2PMFW2iWWMuJbRXP1n",
             "referer": "https://www.amazon.com/",
@@ -495,9 +495,7 @@ class AmazonScraper(ThreadedScraper):
         if not lis:
             return DefaultValues.Description
 
-        content = [item.get_text() for item in lis]
-
-        return " ".join([x.get_text().strip("\n") for x in content])
+        return " ".join([item.get_text().strip("\n") for item in lis])
 
     def _extract_merchant_name(self):
         return "Amazon"
@@ -513,7 +511,7 @@ class AmazonScraper(ThreadedScraper):
         discount_td = self.soup.find("td", class_="priceBlockSavingsString")
         if not discount_td:
             return DefaultValues.Current, DefaultValues.Original
-        discount = discount_td.get_text().strip("\n").split(0)[1:]
+        discount = discount_td.get_text().strip("\n").split()[0][1:]
         if not discount:
             return DefaultValues.Current, DefaultValues.Original
 
