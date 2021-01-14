@@ -18,7 +18,8 @@ class Deal(BaseModel):
     url = models.CharField(max_length=255)
     scraper = models.CharField(max_length=255)
     img_url = models.CharField(max_length=255, default=EMPTY_IMAGE_URL)
-    all_img_urls = models.JSONField(default=dict)
+    keywords = models.JSONField(default=list)
+    all_img_urls = models.JSONField(default=list)
     description = models.TextField(null=True)
     uid = models.CharField(max_length=255)
 

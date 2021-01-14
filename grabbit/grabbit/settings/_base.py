@@ -31,13 +31,9 @@ DEBUG = True
 
 # Application definition
 
+DJANGO_APPS = os.environ["DJANGO_APPS"].split(" ")
+
 INSTALLED_APPS = [
-    "user",
-    "grabbit",
-    "analytics",
-    "plaid_local",
-    "deal",
-    "scraper",
     "corsheaders",
     "rest_framework",
     "django.contrib.admin",
@@ -47,6 +43,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
+
+INSTALLED_APPS.extend(DJANGO_APPS)
 
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.Argon2PasswordHasher",

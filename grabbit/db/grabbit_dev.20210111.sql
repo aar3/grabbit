@@ -1837,12 +1837,12 @@ COPY public.notifications (id, created_at, updated_at, deleted_at, text, expiry,
 --
 
 COPY public.reward_codes (id, created_at, updated_at, deleted_at, code, value, is_active, campaign_id, created_by_user_id, description) FROM stdin;
-1	2020-12-28 15:45:08.492833-08	\N	\N	NIKE-XREF	"0.1"	0	3	3	10% off select purchases of White Air Force 1's Unlimited Edition
-2	2020-12-28 15:45:45.808837-08	\N	\N	NIKE-AB45	"0.2"	0	3	3	20% off your next purchase of Nike SwimFit wear
-3	2020-12-28 15:46:10.757611-08	\N	\N	NIKE-EFFE	"0.5"	0	3	3	50% off any item when you purchase a Nike Elite Fit Jacket or similar item
-4	2020-12-28 15:59:58.413333-08	\N	\N	NIKE-XREF	"0.1"	0	4	3	10% off select purchases of White Air Force 1's Unlimited Edition
-5	2020-12-28 16:00:08.39753-08	\N	\N	NIKE-AB45	"0.2"	0	4	3	20% off your next purchase of Nike SwimFit wear
-6	2020-12-28 16:00:18.660018-08	\N	\N	NIKE-EFFE	"0.5"	0	4	3	50% off any item when you purchase a Nike Elite Fit Jacket or similar item
+1	2020-12-28 15:45:08.492833-08	\N	\N	Nike-XREF	"0.1"	0	3	3	10% off select purchases of White Air Force 1's Unlimited Edition
+2	2020-12-28 15:45:45.808837-08	\N	\N	Nike-AB45	"0.2"	0	3	3	20% off your next purchase of Nike SwimFit wear
+3	2020-12-28 15:46:10.757611-08	\N	\N	Nike-EFFE	"0.5"	0	3	3	50% off any item when you purchase a Nike Elite Fit Jacket or similar item
+4	2020-12-28 15:59:58.413333-08	\N	\N	Nike-XREF	"0.1"	0	4	3	10% off select purchases of White Air Force 1's Unlimited Edition
+5	2020-12-28 16:00:08.39753-08	\N	\N	Nike-AB45	"0.2"	0	4	3	20% off your next purchase of Nike SwimFit wear
+6	2020-12-28 16:00:18.660018-08	\N	\N	Nike-EFFE	"0.5"	0	4	3	50% off any item when you purchase a Nike Elite Fit Jacket or similar item
 7	2020-12-28 16:02:52.686148-08	\N	\N	SUPR-XREF	"0.1"	0	5	3	10% off select purchases of Supreme Brands leggings
 8	2020-12-28 16:03:11.10087-08	\N	\N	SUPR-XREF	"0.35"	0	5	3	35% off select purchases of Supreme Brands leggings with purchase of another order
 9	2020-12-28 16:03:32.097289-08	\N	\N	SUPR-XXDD	"0.2"	0	5	3	20% off select purchases of Supreme Brands underwears with purchase of another order

@@ -16,7 +16,6 @@ import {
   NotificationsView,
 } from 'grabbit/src/views';
 
-
 export default class Router_ extends React.Component {
   constructor(props) {
     super(props);
@@ -74,24 +73,24 @@ export default class Router_ extends React.Component {
             key="listDeal"
             component={ListDealsView}
           />
-          <Scene 
-            title={'Plaid Accounts'} 
-            hideNavBar={false} 
-            key="plaidAccounts" 
+          <Scene
+            title={'Plaid Accounts'}
+            hideNavBar={false}
+            key="plaidAccounts"
             navigationBarStyle={styles.NavbarContainer}
             component={PlaidAccountsView}
           />
-          <Scene 
-            title={'Notifications'} 
-            hideNavBar={false} 
-            key="notifications" 
+          <Scene
+            title={'Notifications'}
+            hideNavBar={false}
+            key="notifications"
             navigationBarStyle={styles.NavbarContainer}
-            component={NotificationsView} 
+            component={NotificationsView}
           />
-          <Scene 
-            title={'Links'} 
-            hideNavBar={false} 
-            key="accountType" 
+          <Scene
+            title={'Links'}
+            hideNavBar={false}
+            key="accountType"
             component={AccountTypeView}
             navigationBarStyle={styles.NavbarContainer}
             style={styles}
@@ -133,7 +132,6 @@ const transitionConfig = function () {
     },
   };
 };
-
 
 const styles = StyleSheet.create({
   NavbarContainer: {

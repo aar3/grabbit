@@ -1,6 +1,7 @@
 APP_NAME  = grabbit
 SOURCE = .
 PWD = $(shell pwd)
+APPS = ${DJANGO_APPS}
 REQUIREMENTS_DIR = $(PWD)/requirements
 
 # pip requirements
@@ -58,9 +59,7 @@ dev \
 prod \
 test
 
-
-APPS = user plaid_local deal analytics scraper
-
+# APPS = user plaid_local deal analytics scraper
 
 format:
 	$(CMD_BLACK_FORMAT)
@@ -68,7 +67,10 @@ format:
 lint: format
 	$(foreach dir,$(SOURCE),cd $(dir); $(CMD_PYLINT))
 
-migrate: make_migrations
+makemigrations:
+	$(CMD_DJANGO_MAKE_MIGRATIONS)
+
+migrate: makemigrations
 	$(foreach app,$(APPS), $(CMD_DJANGO_MIGRATE) $(app);)
 
 test: lint migrate
@@ -83,10 +85,10 @@ installock:
 freeze:
 	$(CMD_PIP_FREEZE)
 
-dev: create_logs install_lock migrate
+dev: installock migrate
 	$(CMD_START_APP_DEV)
 
-prod: create_logs install_lock migrate
+prod: installock migrate
 	$(CMD_START_APP_PROD)
 
 flower:
