@@ -31,12 +31,9 @@ DEBUG = True
 
 # Application definition
 
+DJANGO_APPS = os.environ["DJANGO_APPS"].split(" ")
+
 INSTALLED_APPS = [
-    "user",
-    "grabbit",
-    "analytics",
-    "plaid_local",
-    "deals",
     "corsheaders",
     "rest_framework",
     "django.contrib.admin",
@@ -46,6 +43,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
+
+INSTALLED_APPS.extend(DJANGO_APPS)
 
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.Argon2PasswordHasher",
@@ -124,10 +123,9 @@ PORT = os.environ["PORT"]
 # Redis
 #################################################################
 
-REDIS_HOST = "localhost"
+REDIS_HOST = "redis"
 REDIS_DEFAULT_PORT = 6379
 REDIS_CACHE_LAYER_PORT = 6380
-REDIS_DB = 0
 
 #################################################################
 # Plaid
@@ -143,7 +141,7 @@ PLAID_ENV = os.environ["PLAID_ENV"]
 # Task queues
 #################################################################
 
-CELERY_BROKER = os.environ["CELERY_BROKER_URL"]
+CELERY_BROKER = os.environ["CELERY_BROKER"]
 CELERY_RESULT_BACKEND = os.environ["CELERY_RESULT_BACKEND"]
 
 
@@ -214,3 +212,6 @@ LOGGING = {
         "django.db.backends": {"handlers": ["console", "file"], "level": "WARNING", "propagate": False,},
     },
 }
+
+
+ENGINEERING_USER_MASTER_TOKEN = os.environ["ENGINEERING_USER_MASTER_TOKEN"]

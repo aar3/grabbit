@@ -1,5 +1,5 @@
 from lib.serializers import BaseModelSerializer
-from deals.models import Deal, UserDeal
+from deal.models import Deal, UserDeal
 from user.serializers import UserSerializer
 
 

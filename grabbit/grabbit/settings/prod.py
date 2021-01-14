@@ -1,11 +1,14 @@
 import os
 import sys
 import pathlib
-
 from ._base import *
 
 
 DEBUG = False
+
+#################################################################
+# Postgres
+#################################################################
 
 DATABASES = {
     "default": {
@@ -18,9 +21,10 @@ DATABASES = {
     },
 }
 
-PGSQL_USER = DATABASES["default"]["USER"]
-PGSQL_HOST = DATABASES["default"]["HOST"]
-PGSQL_ENVIRONMENT = "prod"
+
+#################################################################
+# Logging
+#################################################################
 
 SOURCE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 LOGS_DIR = pathlib.Path(os.path.join(SOURCE_DIR, "grabbit", "logs"))

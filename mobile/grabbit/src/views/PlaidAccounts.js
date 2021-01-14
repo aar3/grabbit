@@ -269,6 +269,7 @@ class V extends React.Component {
                     <ImageBackground
                       source={{
                         uri: bankMetadata.img_url,
+                        cache: 'force-cache',
                       }}
                       style={{
                         height: 40,

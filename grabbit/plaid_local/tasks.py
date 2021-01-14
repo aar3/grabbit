@@ -1,6 +1,6 @@
 import datetime as dt
 from lib.const import PLAID_DATE_FORMAT
-from lib.tasks import task_manager
+from lib.celery import task_manager
 from plaid_local.models import Link, TransactionTask, Transaction
 from plaid_local import PlaidClient
 from user.models import User

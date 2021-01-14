@@ -3,8 +3,8 @@ from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save
 from user.models import User, Notification
-from lib.models import BaseModel
 from lib.const import EMPTY_IMAGE_URL
+from lib.models import BaseModel
 
 
 class Deal(BaseModel):
@@ -18,7 +18,9 @@ class Deal(BaseModel):
     url = models.CharField(max_length=255)
     scraper = models.CharField(max_length=255)
     img_url = models.CharField(max_length=255, default=EMPTY_IMAGE_URL)
-    all_img_urls = models.JSONField(default=dict)
+    # keywords = models.JSONField(default=list)
+    product_keywords = models.JSONField(default=list)
+    all_img_urls = models.JSONField(default=list)
     description = models.TextField(null=True)
     uid = models.CharField(max_length=255)
 

@@ -1,6 +1,7 @@
 APP_NAME  = grabbit
 SOURCE = .
 PWD = $(shell pwd)
+APPS = ${DJANGO_APPS}
 REQUIREMENTS_DIR = $(PWD)/requirements
 
 # pip requirements
@@ -43,39 +44,22 @@ CMD_DOCKER_STOP_PROD = docker-compose -f docker-compose.prod.yml down -v
 CMD_DOCKER_START_CI = docker-compose -f docker-compose.ci.yml up
 CMD_DOCKER_STOP_CI = docker-compose -f docker-compose.ci.yml down -v
 
-
-CMD_CELERY_START = celery -A lib.tasks worker -l INFO --without-gossip
-CMD_START_FLOWER = celery flower -A lib.tasks --address=127.0.0.1 --port=5555
+CMD_CELERY_START = celery -A lib.celery worker -l INFO --without-gossip
+CMD_START_FLOWER = celery flower -A lib.celery --address=127.0.0.1 --port=5555
 
 .PHONY: format \
-bootstrap_env \
-celery_start \
-create_logs \
-docker_build_dev \
-docker_build_prod \
-docker_clean_all \
-docker_push_dev \
-docker_push_prod \
-docker_start_ci \
-docker_start_dev \
-docker_start_prod \
-docker_stop_ci \
-docker_stop_dev \
-docker_stop_prod \
+celery \
 flower \
 freeze \
 install \
-install_lock \
+installock \
 lint \
 migrate \
-show_migrations \
-start_dev \
-start_prod \
+dev \
+prod \
 test
 
-
-APPS = user plaid_local deals analytics
-
+# APPS = user plaid_local deal analytics scraper
 
 format:
 	$(CMD_BLACK_FORMAT)
@@ -83,10 +67,10 @@ format:
 lint: format
 	$(foreach dir,$(SOURCE),cd $(dir); $(CMD_PYLINT))
 
-make_migrations:
-	$(CMD_DJANGO_MAKE_MIGRATIONS) && $(CMD_DJANGO_SHOW_MIGRATIONS)
+makemigrations:
+	$(CMD_DJANGO_MAKE_MIGRATIONS)
 
-migrate: make_migrations
+migrate: makemigrations
 	$(foreach app,$(APPS), $(CMD_DJANGO_MIGRATE) $(app);)
 
 test: lint migrate
@@ -95,64 +79,21 @@ test: lint migrate
 install:
 	$(CMD_PIP_INSTALL)
 
-install_lock:
+installock:
 	$(CMD_PIP_INSTALL_LOCK)
 
 freeze:
 	$(CMD_PIP_FREEZE)
 
-start_dev: create_logs install_lock migrate
+dev: installock migrate
 	$(CMD_START_APP_DEV)
 
-start_prod: create_logs install_lock migrate
+prod: installock migrate
 	$(CMD_START_APP_PROD)
-
-show_migrations:
-	$(CMD_DJANGO_SHOW_MIGRATIONS)
-
-create_logs:
-	$(CMD_CREATE_LOGS)
-
-bootstrap_env:
-	$(CMD_SOURCE_VIRTUAL_ENV) && $(CMD_PIP_INSTALL_LOCK)
-
-docker_build_dev:
-	$(CMD_DOCKER_BUILD_DEV)
-
-docker_build_prod:
-	$(CMD_DOCKER_BUILD_PROD)
-
-docker_clean_all:
-	$(CMD_DOCKER_CLEAN_ALL)
-
-docker_push_dev: docker_build_dev
-	$(CMD_DOCKER_PUSH_DEV)
-
-docker_push_prod: docker_build_prod
-	$(CMD_DOCKER_PUSH_PROD)
-
-# docker start/stop commands require you to be in the directory of the docker-compose file
-docker_start_dev:
-	$(CMD_DOCKER_START_DEV)
-
-docker_start_prod:
-	$(CMD_DOCKER_START_PROD)
-
-docker_stop_dev:
-	$(CMD_DOCKER_STOP_DEV)
-
-docker_stop_prod:
-	$(CMD_DOCKER_STOP_PROD)
-
-docker_start_ci:
-	$(CMD_DOCKER_START_CI)
-
-docker_stop_ci:
-	$(CMD_DOCKER_STOP_CI)
 
 flower:
 	$(CMD_START_FLOWER)
 
-celery_start:
+celery:
 	$(CMD_CELERY_START)
 	

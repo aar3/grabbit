@@ -9,6 +9,7 @@ export const Color = {
   HyperlinkBlue: '#007AFF',
   ErrorRed: '#FF0000',
   HotPink: '#E20086',
+  InstaBlue: '#3f729b',
   TopNavBackground: '#f0f0f0',
 };
 

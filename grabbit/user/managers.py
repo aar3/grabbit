@@ -4,16 +4,9 @@ from lib.managers import BaseManager
 
 class UserManager(BaseManager):
     # kwargs includes invitation_code
-    def create(
-        self, email, name, secret, phone, username, *args, **kwargs
-    ):
+    def create(self, email, name, secret, phone, username, *args, **kwargs):
 
-        user = self.model(
-            email=email,
-            name=name,
-            phone=phone,
-            username=username,
-        )
+        user = self.model(email=email, name=name, phone=phone, username=username,)
 
         user.set_salt()
         user.set_secret(secret)

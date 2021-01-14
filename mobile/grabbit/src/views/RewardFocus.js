@@ -82,7 +82,7 @@ class V extends React.Component {
               borderColor: 'blue',
             }}>
             <Image
-              source={{uri: this.props.reward.data.code.campaign.merchant.image_url}}
+              source={{uri: this.props.reward.data.code.campaign.merchant.image_url, cache: 'force-cache'}}
               style={{height: 100, width: 100}}
             />
           </View>
@@ -95,7 +95,7 @@ class V extends React.Component {
               height: 127,
             }}>
             <Image
-              source={{uri: this.props.reward.data.qr_code_url || FakeQRCodeURL}}
+              source={{uri: this.props.reward.data.qr_code_url || FakeQRCodeURL, cache: 'force-cache'}}
               style={{height: 125, width: 125}}
             />
           </View>

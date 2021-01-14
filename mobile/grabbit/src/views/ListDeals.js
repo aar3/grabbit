@@ -213,7 +213,7 @@ class V extends React.Component {
                         </Text>
                       </View>
                       <Image
-                        source={{uri: item.deal.img_url}}
+                        source={{uri: item.deal.img_url, cache: 'force-cache'}}
                         style={{
                           // borderWidth: 1,
                           // borderColor: 'blue',
