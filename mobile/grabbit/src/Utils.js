@@ -1,5 +1,4 @@
 import axios from 'axios';
-import ReduxActions from 'grabbit/src/Actions';
 
 export const httpRequest = async function (options) {
   if (!options.endpoint) {
@@ -72,7 +71,7 @@ export const to12HourTime = function (t) {
   return `${parseInt(hour, 10)}:${minute} ${meridian}`;
 };
 
-export class WebSocket_ {
+export class _WebSocket {
   constructor() {
     this.uri = 'ws://localhost:8765';
     this.socket = new WebSocket(this.uri);
@@ -110,4 +109,4 @@ export class WebSocket_ {
   }
 }
 
-export const Websocket = new WebSocket_();
+export const Websocket = new _WebSocket();

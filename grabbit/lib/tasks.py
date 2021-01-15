@@ -6,10 +6,15 @@ import collections
 import threading
 from urllib import parse
 import re
+import django
 import requests
 from bs4 import BeautifulSoup
 from grabbit import logger
 from lib.const import EMPTY_IMAGE_URL
+from deal.models import Deal
+from scraper.models import ScraperStats
+
+django.setup()
 
 START_URLS = {
     "slickdeals": "https://slickdeals.net/f/14750294-15-count-1-4-oz-fiber-one-chewy-bars-mega-pack-oats-and-chocolate-4-57-0-30-each-w-s-s-free-shipping-w-prime-or-on-orders-over-25?src=frontpage",
@@ -64,16 +69,12 @@ class ThreadedScraper(abc.ABC):
         self.timeout = 3
 
     def _set_start_url(self):
-        from deal.models import Deal
-
         deals = Deal.objects.filter(scraper=self.name).order_by("-created_at")
         if not deals:
             return START_URLS[self.name]
         return deals[0].url
 
     def run(self):
-        from scraper.models import ScraperStats
-
         self.queue.append(self.start)
         successful_tasks = self.info["successful_tasks"]
 
@@ -123,8 +124,6 @@ class ThreadedScraper(abc.ABC):
                     logger.error("Could not delete dead thread: %s", str(err))
 
     def build_and_save_deal(self, url):
-        from deal.models import Deal
-
         description = self._extract_product_description()
         current_value, original_value = self._extract_product_value_and_discount(url)
         img_url, img_urls = self._extract_all_product_img_urls()
@@ -196,10 +195,6 @@ class ThreadedScraper(abc.ABC):
     @abc.abstractmethod
     def _extract_product_value_and_discount(self, url):
         raise NotImplementedError
-
-    # @abc.abstractmethod
-    # def _extract_product_img_url(self):
-    #     raise NotImplementedError
 
     @abc.abstractmethod
     def _extract_all_product_img_urls(self):

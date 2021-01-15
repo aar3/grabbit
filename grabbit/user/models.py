@@ -2,6 +2,7 @@
 
 import hashlib
 import random
+import json
 import datetime as dt
 from django.db import models
 from django.utils import timezone
@@ -10,7 +11,7 @@ from django.db.models.signals import post_save
 from lib.models import BaseModel
 from lib.utils import make_qrcode, random_string
 from lib.cloud import GoogleCloudService
-from lib.local_redis import DefaultRedis
+from lib.local_redis import Redis
 from user.managers import UserManager
 
 
@@ -30,6 +31,7 @@ class User(BaseModel):
     salt = models.IntegerField()
     current_session_token = models.CharField(max_length=255)
     qr_code_url = models.CharField(max_length=255)
+    current_websocket_addr = models.CharField(max_length=255, null=True)
 
     def matches_secret(self, other):
         data = other + str(self.salt)
@@ -48,14 +50,21 @@ class User(BaseModel):
 def create_session_for_new_user(sender, instance, created, **kwargs):
     from user.serializers import UserSerializer
 
-    serializer = UserSerializer(instance)
     if created:
+        serializer = UserSerializer(instance)
         key = random_string(n=10)
-        _ = DefaultRedis.set(key, serializer.data)
         instance.current_session_token = key
-    else:
-        _ = DefaultRedis.set(instance.current_session_token, serializer.data)
-    instance.save()
+        _ = Redis.set(key, json.dumps(serializer.data).encode())
+        instance.save()
+
+
+@receiver(post_save, sender=User)
+def update_session_for_existing_user(sender, instance, created, **kwargs):
+    from user.serializers import UserSerializer
+
+    if not created:
+        serializer = UserSerializer(instance)
+        _ = Redis.set(instance.current_session_token, json.dumps(serializer.data).encode())
 
 
 @receiver(post_save, sender=User)

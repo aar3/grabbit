@@ -13,6 +13,7 @@ class V extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.ws = Websocket;
   }
 
   get options() {
@@ -27,8 +28,8 @@ class V extends React.Component {
   }
 
   async componentDidMount() {
-    this.ws = Websocket;
     this.ws.user = this.props.user;
+    this.ws.send({ foo: 'bar' });
     return this.props.getNotifications(this.options);
   }
 
