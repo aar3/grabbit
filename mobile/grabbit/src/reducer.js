@@ -1,5 +1,5 @@
 import ReduxActions from 'grabbit/src/Actions';
-import {arrayToObject, getStateForKey} from 'grabbit/src/Utils';
+import {arrayToObject} from 'grabbit/src/Utils';
 
 // IMPORTANT: all state properties are snake-cased because that's how the python
 // api sends data over the wire
@@ -140,6 +140,10 @@ const defaultState = {
         routeKey: 'settings',
       },
     ],
+  },
+  ws: {
+    connected: false,
+    error: null,
   },
 };
 
@@ -676,6 +680,9 @@ export default function (state = defaultState, action) {
           },
         },
       };
+    }
+    case ReduxActions.GENERIC_ACTION: {
+      return state;
     }
     default: {
       return state;

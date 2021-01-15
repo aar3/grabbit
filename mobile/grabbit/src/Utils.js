@@ -1,8 +1,5 @@
-import React from 'react';
-import {View} from 'react-native';
 import axios from 'axios';
-import Icon from 'react-native-vector-icons/Feather';
-import {Color} from 'grabbit/src/Const';
+import ReduxActions from 'grabbit/src/Actions';
 
 export const httpRequest = async function (options) {
   if (!options.endpoint) {
@@ -74,3 +71,43 @@ export const to12HourTime = function (t) {
 
   return `${parseInt(hour, 10)}:${minute} ${meridian}`;
 };
+
+export class WebSocket_ {
+  constructor() {
+    this.uri = 'ws://localhost:8765';
+    this.socket = new WebSocket(this.uri);
+    this.socket.onopen = () => {
+      console.log(`Web socket client connected at ${this.uri}`);
+      this.socket.send(
+        JSON.stringify({
+          current_session_token: !this.user ? 'XXX' : this.user.current_session_token,
+        }),
+      );
+    };
+
+    this.socket.onmessage = (e) => {
+      console.log('Just received ', e.data);
+      this.dispatchToState(e.data);
+    };
+
+    this.socket.onerror = (e) => {
+      console.log('Websocket error: ', e.message);
+    };
+
+    this.socket.onclose = (e) => {
+      console.log('Peer closed connection: ', e.code, ' ', e.reason);
+    };
+  }
+
+  dispatchToState(data = {}) {
+    console.log('>>>> dispatching ', data, ' to state');
+  }
+
+  send(data = {}) {
+    // IMPORTANT: Nothing should ever be sent without a user being set
+    data['current_session_token'] = this.user.current_session_token;
+    this.socket.send(JSON.stringify(data));
+  }
+}
+
+export const Websocket = new WebSocket_();

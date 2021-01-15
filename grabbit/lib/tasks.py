@@ -30,17 +30,7 @@ class Scrapers:
 class Domains:
     Slickdeals = "https://slickdeals.net"
     Target = "https://target.com"
-    Amazon = "http://amazon.com"
-
-
-class DefaultValues:
-    Description = "No description found for this product."
-    Title = "Unknown product"
-    Current = 0
-    Original = 0
-    MerchantName = "Unknown merchant"
-    ImgURL = EMPTY_IMAGE_URL
-    ImgURLs = []
+    Amazon = "https://amazon.com"
 
 
 class LockedQueue(collections.deque):
@@ -142,17 +132,17 @@ class ThreadedScraper(abc.ABC):
         merchant_name = self._extract_merchant_name()
 
         conditions = [
-            ((current_value == DefaultValues.Current), "current-price"),
-            ((original_value == DefaultValues.Original), "original-price"),
-            ((img_url == DefaultValues.ImgURL), "img-url"),
-            ((img_urls == DefaultValues.ImgURLs), "img-urls"),
-            ((description == DefaultValues.Description), "description"),
-            ((merchant_name == DefaultValues.MerchantName), "merchant-name"),
+            (not current_value, "current-price"),
+            (not original_value, "original-price"),
+            (not img_url, "img-url"),
+            (not img_urls, "img-urls"),
+            (not description, "description"),
+            (not merchant_name, "merchant-name"),
         ]
 
         for condition, reason in conditions:
             if condition:
-                self._handle_unsuccessful_scrape_attempt(url, reason=reason)
+                return self._handle_unsuccessful_scrape_attempt(url, reason=reason)
 
         # NOTE: keep this here for debugging
         # data = {
@@ -250,23 +240,23 @@ class SlickDealsScraper(ThreadedScraper):
     def _extract_product_title(self):
         no_link_crumb_tags = self.soup.find_all("span", class_="nolinkcrumb")
         if not no_link_crumb_tags:
-            return DefaultValues.Title
+            return None
 
         no_link_crumb_tags_content = [x.get_text() for x in no_link_crumb_tags]
         if not no_link_crumb_tags_content:
-            return DefaultValues.Title
+            return None
 
         return no_link_crumb_tags_content[0]
 
     def _extract_product_description(self):
         descriptions = self.soup.find_all("meta", {"name": "description"})
         if not descriptions:
-            return DefaultValues.Description
+            return None
 
         descriptions_without_class_attrs = [x.get("content") for x in descriptions]
 
         if not descriptions_without_class_attrs:
-            return DefaultValues.Description
+            return None
 
         top_description = descriptions_without_class_attrs[0]
         return top_description.split("\n")[0]
@@ -274,17 +264,17 @@ class SlickDealsScraper(ThreadedScraper):
     def _extract_merchant_name(self):
         data_link_tags = self.soup.find_all("a", {"data-link": "dealDetail:Description Link"})
         if not data_link_tags:
-            return DefaultValues.Description
+            return None
 
         data_link_tag_contents = [x.get_text() for x in data_link_tags]
         if not data_link_tag_contents:
-            return DefaultValues.Description
+            return None
 
         return data_link_tag_contents[0]
 
     def _extract_product_value_and_discount(self):
-        current = DefaultValues.Current
-        original = DefaultValues.Original
+        current = None
+        original = None
 
         prices = self.soup.find_all("meta", {"name": "price"})
         if prices:
@@ -304,12 +294,12 @@ class SlickDealsScraper(ThreadedScraper):
     def _extract_all_product_img_urls(self):
         main_images = self.soup.find_all("img", {"id": "mainImage"})
         if not main_images:
-            return DefaultValues.ImgURL
+            return None, None
         main_image_contens = [x.get("src") for x in main_images]
         if not main_image_contens:
-            return DefaultValues.ImgURL
+            return None, None
 
-        return main_image_contens[0], DefaultValues.ImgURLs
+        return main_image_contens[0], main_image_contens
 
     def _is_product_url(self, url):
         path_parts = url.split("/")
@@ -394,7 +384,7 @@ class TargetScraper(ThreadedScraper):
     def _extract_product_description(self):
         description_lis = self.soup.select("li[class*=styles__]")
         if not description_lis:
-            return DefaultValues.Description
+            return None
 
         sentences = []
         for item in description_lis:
@@ -406,8 +396,8 @@ class TargetScraper(ThreadedScraper):
         return " ".join(sentences)
 
     def _extract_product_value_and_discount(self, url):
-        current = DefaultValues.Current
-        original = DefaultValues.Original
+        current = None
+        original = None
 
         pid = self._extract_product_id_from_url(url)
         params = {"pricing_store_id": self.store_id, "key": self.visitor_id}
@@ -423,7 +413,7 @@ class TargetScraper(ThreadedScraper):
 
         if current == original:
             # NOTE: Anything where the max value is equal to the current value is not a deal/discount
-            return DefaultValues.Current, DefaultValues.Original
+            return None, None
 
         return current, original
 
@@ -479,21 +469,21 @@ class AmazonScraper(ThreadedScraper):
     def _extract_product_title(self):
         descriptions = self.soup.find_all("meta", {"name": "description"})
         if not descriptions:
-            return DefaultValues.Description
+            return None
 
         contents = [item.get("content") for item in descriptions]
         if not contents:
-            return DefaultValues.Description
+            return None
 
         return contents[0]
 
     def _extract_product_description(self):
         feature_bullets = self.soup.find("div", id="feature-bullets")
         if not feature_bullets:
-            return DefaultValues.Description
+            return None
         lis = feature_bullets.find_all("span", class_="a-list-item")
         if not lis:
-            return DefaultValues.Description
+            return None
 
         return " ".join([item.get_text().strip("\n") for item in lis])
 
@@ -501,19 +491,19 @@ class AmazonScraper(ThreadedScraper):
         return "Amazon"
 
     def _extract_product_value_and_discount(self, _):
-        current = DefaultValues.Current
-        original = DefaultValues.Original
+        current = None
+        original = None
 
         price_span = self.soup.find("span", id="priceblock_saleprice")
         if not price_span:
-            return DefaultValues.Current, DefaultValues.Original
+            return None, None
         current = float(price_span.get_text()[1:])
         discount_td = self.soup.find("td", class_="priceBlockSavingsString")
         if not discount_td:
-            return DefaultValues.Current, DefaultValues.Original
+            return None, None
         discount = discount_td.get_text().strip("\n").split()[0][1:]
         if not discount:
-            return DefaultValues.Current, DefaultValues.Original
+            return None, None
 
         original = float(discount) + current
         return current, original
@@ -522,7 +512,7 @@ class AmazonScraper(ThreadedScraper):
         scripts = [item.get_text() for item in self.soup.find_all("script")]
         img_scripts = list(filter(lambda item: "ImageBlockATF" in item, scripts))
         if not img_scripts:
-            return DefaultValues.ImgURL, DefaultValues.ImgURLs
+            return None, None
 
         img_script = img_scripts[0]
 
@@ -549,21 +539,4 @@ class AmazonScraper(ThreadedScraper):
     def _get_associated_product_links(self, url):
         normal_links = self.soup.find_all("a", class_="a-link-normal")
         urls = [self.domain + item.get("href") for item in normal_links]
-        return urls
-
-
-# # if __name__ == "__main__":
-
-#     sesh = requests.Session()
-#     r = sesh.get("http://amazon.com")
-#     url = "https://www.amazon.com/TOZO-Wireless-Upgraded-Sleep-Friendly-FastCharging/dp/B07FM8R7J1/ref=sr_1_3?dchild=1&keywords=wireless+charger&qid=1610070173&sr=8-3"
-#     r = sesh.get(url, headers={
-#        "cookie": "session-id=131-3306794-6173954; session-id-time=2082787201l; i18n-prefs=USD; ubid-main=135-3690569-1466528; session-token=AUqh2LGYiKoIQ5QHUHh1uwMTH2alpDy9KeSAIz1iV2ND3B3a4BzII3t2xHOpWQ3iu2+A3ZF+OIkMW66jEYuuxYCPEkFfPcE+B7ooZxmoCUPlnWkJyNDQpgarbZWqsuqf/zT7DdOtZSxXW+CqSCcqmYYWDbn0EHJCtonqucZKNMqm+N2PMFW2iWWMuJbRXP1n",
-#        "referer": "https://www.amazon.com/",
-#        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0",
-#     })
-
-#     soup = BeautifulSoup(r.content, "html5lib")
-#     m = soup.find_all("a", class_="a-link-normal")
-
-#     foo =
+        return list(filter(lambda x: self._is_product_url(x), urls))

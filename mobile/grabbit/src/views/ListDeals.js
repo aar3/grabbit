@@ -288,7 +288,7 @@ class V extends React.Component {
                     </View>
                     <View
                       style={{
-                        backgroundColor: Color.Purple,
+                        backgroundColor: Color.QueenBlue,
                         padding: 5,
                         height: 30,
                         borderTopRightRadius: 8,

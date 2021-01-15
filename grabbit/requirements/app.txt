@@ -23,3 +23,5 @@ html5lib
 
 numpy
 sklearn
+
+websockets

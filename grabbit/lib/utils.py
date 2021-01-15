@@ -11,6 +11,10 @@ def random_string(n=10):
     return "".join(chars)
 
 
+def addr_to_string(addr):
+    return ":".join(map(str, addr))
+
+
 def make_qrcode(s):
     buff = io.BytesIO()
     qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4,)

@@ -10,7 +10,7 @@ from django.db.models.signals import post_save
 from lib.models import BaseModel
 from lib.utils import make_qrcode, random_string
 from lib.cloud import GoogleCloudService
-from lib.redis import DefaultRedis
+from lib.local_redis import DefaultRedis
 from user.managers import UserManager
 
 
@@ -46,49 +46,22 @@ class User(BaseModel):
 
 @receiver(post_save, sender=User)
 def create_session_for_new_user(sender, instance, created, **kwargs):
-    if created:
-        session = SessionToken(user_id=instance.id)
-        key = session.key[:]
-        _ = DefaultRedis.set(key, session.serialize())
+    from user.serializers import UserSerializer
 
+    serializer = UserSerializer(instance)
+    if created:
+        key = random_string(n=10)
+        _ = DefaultRedis.set(key, serializer.data)
         instance.current_session_token = key
-        instance.save()
+    else:
+        _ = DefaultRedis.set(instance.current_session_token, serializer.data)
+    instance.save()
 
 
 @receiver(post_save, sender=User)
 def create_new_account_notification(sender, instance, created, **kwargs):
     if created:
         _ = Notification.objects.create(user=instance, icon="user", text="Welcome to Grabbit!")
-
-
-class SessionToken:
-    def __init__(self, **kwargs):
-        self.key = self._make_key()
-        self.user_id = kwargs.get("user_id")
-        self._expiry = timezone.now() + dt.timedelta(hours=12)
-
-        if kwargs.get("data"):
-            self.deserialize(kwargs["data"])
-
-    def expired(self):
-        return timezone.now() >= self._expiry
-
-    def serialize(self):
-        expiry = self._expiry.strftime("%Y-%m-%d %H:%M:%S")
-        return "\x001".join([self.key, str(self.user_id), expiry]).encode()
-
-    def deserialize(self, data):
-        key, user_id, expiry = data.decode().split("\x001")
-        self.key = key
-        self.user_id = int(user_id)
-        self._expiry = dt.datetime.strptime(expiry, "%Y-%m-%d %H:%M:%S")
-
-    def _make_key(self):
-        s = random_string(n=40)
-        return hashlib.sha256(s.encode()).hexdigest()
-
-    def __eq__(self, other):
-        return self.key == other.key
 
 
 # @receiver(post_save, sender=User)

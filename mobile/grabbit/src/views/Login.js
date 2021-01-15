@@ -198,7 +198,7 @@ class V extends React.Component {
                 });
               }}
               _buttonStyle={{
-                backgroundColor: Color.Purple,
+                backgroundColor: Color.QueenBlue,
               }}
               titleStyle={{
                 color: Color.White,

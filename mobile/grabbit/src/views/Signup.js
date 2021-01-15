@@ -305,7 +305,7 @@ class V extends React.Component {
                   return this.props.postUserSignup(options);
                 }}
                 _buttonStyle={{
-                  backgroundColor: Color.Purple,
+                  backgroundColor: Color.QueenBlue,
                 }}
                 titleStyle={{
                   color: Color.White,

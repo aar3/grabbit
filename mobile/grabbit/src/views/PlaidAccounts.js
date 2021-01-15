@@ -159,7 +159,7 @@ class V extends React.Component {
               // borderWidth: 1,
               width: 300,
             }}>
-            <Text style={{textAlign: 'center', fontWeight: 'bold', fontSize: 18, color: Color.Purple}}>
+            <Text style={{textAlign: 'center', fontWeight: 'bold', fontSize: 18, color: Color.QueenBlue}}>
               You haven't linked any accounts, yet
             </Text>
             <Text
