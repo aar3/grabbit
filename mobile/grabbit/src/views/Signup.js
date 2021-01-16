@@ -32,9 +32,16 @@ class V extends React.Component {
           style={{
             // borderWidth: 1,
             // borderColor: 'blue',
+            justifyContent: 'center',
+            alignItems: 'center',
             marginBottom: 20,
           }}>
-          <Text style={{color: Color.ErrorRed}}>{this.props.signupError.details}</Text>
+          <Text
+            style={{
+              color: Color.ErrorRed,
+            }}>
+            {this.props.signupError.details}
+          </Text>
         </View>
       );
     }
@@ -79,16 +86,23 @@ class V extends React.Component {
   _renderPendingFooter() {
     if (this.props.signupPending) {
       return (
-        <ImageBackground
-          source={require('./../../assets/imgs/Loading-Transparent-Cropped.gif')}
+        <View
           style={{
             // borderWidth: 1,
-            // borderColor: 'red',
-            marginTop: 20,
-            height: 35,
-            width: 35,
-            marginBottom: 20,
-          }}></ImageBackground>
+            // borderColor: 'green',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <ImageBackground
+            source={require('./../../assets/imgs/Loading-Transparent-Cropped.gif')}
+            style={{
+              // borderWidth: 1,
+              // borderColor: 'red',
+              marginTop: 20,
+              height: 35,
+              width: 35,
+            }}></ImageBackground>
+        </View>
       );
     }
   }
@@ -113,7 +127,7 @@ class V extends React.Component {
             keyboardVerticalOffset={150}
             style={{
               flex: 1,
-              paddingTop: 100,
+              paddingTop: 50,
               alignItems: 'center',
               // borderWidth: 1,
               // borderColor: 'red'
@@ -123,26 +137,22 @@ class V extends React.Component {
                 // borderWidth: 1,
                 // borderColor: 'red',
                 width: 300,
-                justifyContent: 'center',
-                alignItems: 'center',
               }}>
-              <View
+              <Text
                 style={{
-                  marginBottom: 20,
-                  height: 50,
-                  width: 50,
+                  marginLeft: 10,
+                  fontWeight: 'bold',
+                  fontSize: 22,
+                  color: Color.QueenBlue,
+                  marginBottom: 40,
                 }}>
-                <Image
-                  source={require('./../../assets/imgs/Grabbit_Gradient_G_300x300.png')}
-                  style={{flex: 1, height: undefined, width: undefined}}
-                />
-              </View>
+                Join Grabbit
+              </Text>
               {this._renderErrorHeader()}
               <View
                 style={{
                   // borderWidth: 1,
                   // borderColor: 'blue',
-                  // justifyContent: 'center',
                   alignItems: 'center',
                   flexDirection: 'row',
                   width: '100%',
@@ -230,7 +240,7 @@ class V extends React.Component {
                   }}
                 />
               </View>
-              <TextInput
+              {/* <TextInput
                 autoCorrect={false}
                 onChangeText={(text) => {
                   this.props.updateSignupValue('username', text);
@@ -240,7 +250,7 @@ class V extends React.Component {
                 label={'Username'}
                 labelStyle={labelStyle}
                 placeholder="@ava"
-              />
+              /> */}
               <TextInput
                 value={this.props.signupData.email}
                 autoCorrect={false}
@@ -316,6 +326,8 @@ class V extends React.Component {
               <View
                 style={{
                   flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}>
                 <Text style={{color: Color.ReadableGreyText}}>Already have an account? </Text>
                 <TouchableOpacity onPress={() => Actions.login()}>
