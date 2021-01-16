@@ -1,5 +1,14 @@
+import {createStore, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
 import ReduxActions from 'grabbit/src/Actions';
-import {arrayToObject} from 'grabbit/src/Utils';
+
+const arrayToObject = function (arr, keyedBy) {
+  const obj = {};
+  arr.forEach((element) => {
+    obj[element[keyedBy]] = element;
+  });
+  return obj;
+};
 
 // IMPORTANT: all state properties are snake-cased because that's how the python
 // api sends data over the wire
@@ -142,7 +151,7 @@ const defaultState = {
   },
 };
 
-export default function (state = defaultState, action) {
+const reducer = function (state = defaultState, action) {
   const {payload, type, key} = action;
   switch (type) {
     // ********************************************
@@ -677,10 +686,13 @@ export default function (state = defaultState, action) {
       };
     }
     case ReduxActions.GENERIC_ACTION: {
+      console.log('>>>>>> ACTION ', action);
       return state;
     }
     default: {
       return state;
     }
   }
-}
+};
+
+export default store = () => createStore(reducer, applyMiddleware(thunk));

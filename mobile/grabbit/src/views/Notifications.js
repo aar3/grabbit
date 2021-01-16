@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import {Button} from 'react-native-elements';
 import {Actions} from 'react-native-router-flux';
 import ReduxActions from 'grabbit/src/Actions';
-import {getStateForKey, httpRequest, Websocket} from 'grabbit/src/Utils';
+import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
 import {Color} from 'grabbit/src/Const';
 import {Error} from 'grabbit/src/components/FlatList';
 
@@ -13,7 +13,6 @@ class V extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.ws = Websocket;
   }
 
   get options() {
@@ -28,7 +27,6 @@ class V extends React.Component {
   }
 
   async componentDidMount() {
-    this.ws.initWithUser(this.props.user);
     return this.props.getNotifications(this.options);
   }
 
