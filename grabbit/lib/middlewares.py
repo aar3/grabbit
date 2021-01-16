@@ -8,6 +8,7 @@ from lib.local_redis import get_redis_instance
 
 redis = get_redis_instance(host=settings.REDIS_HOST, port=settings.REDIS_DEFAULT_PORT)
 
+
 class TokenAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
         token = request.META.get("HTTP_X_SESSION_TOKEN")

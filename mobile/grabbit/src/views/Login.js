@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   ImageBackground,
 } from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 import ReduxActions from 'grabbit/src/Actions';
@@ -43,30 +44,10 @@ class V extends React.Component {
               marginTop: 20,
               height: 35,
               width: 35,
-              marginBottom: 20,
             }}></ImageBackground>
         </View>
       );
     }
-  }
-
-  _validateLoginForm() {
-    let loginDisabled = true;
-    const {secret, area_code, line_number, prefix} = this.props.loginData;
-
-    const conditions = [
-      !area_code,
-      !line_number,
-      !prefix,
-      !secret,
-      area_code && area_code.length !== 3,
-      line_number && line_number.length !== 4,
-      prefix && prefix.length !== 3,
-    ];
-
-    loginDisabled = conditions.some((condition) => condition);
-
-    this.setState({loginDisabled});
   }
 
   _renderErrorHeader() {
@@ -79,7 +60,7 @@ class V extends React.Component {
             // borderColor: 'blue',
             justifyContent: 'center',
             alignItems: 'center',
-            marginBottom: 20,
+            marginBottom: 10,
           }}>
           <Text style={{color: Color.ErrorRed}}>{loginError.details}</Text>
         </View>
@@ -106,104 +87,64 @@ class V extends React.Component {
               paddingLeft: 10,
               width: '100%',
               paddingTop: 10,
-              // alignItems: 'center',
             }}>
             {this._renderErrorHeader()}
             <Text
               style={{
-                marginLeft: 10,
                 fontWeight: 'bold',
                 fontSize: 22,
+                textAlign: 'center',
                 color: Color.QueenBlue,
+                marginBottom: 10,
               }}>
-              Welcome back
+              Logo Here
             </Text>
             <View
               style={{
                 // borderWidth: 1,
                 // borderColor: 'blue',
-                alignItems: 'center',
                 flexDirection: 'row',
                 width: '100%',
-                marginTop: 10,
               }}>
               <TextInput
-                containerStyle={{
-                  width: 70,
-                }}
-                autoCorrect={false}
-                keyboardType={'number-pad'}
+                labelStyle={styles.labelStyle}
                 label={'Phone'}
-                value={this.props.loginData.area_code}
-                labelStyle={styles.labelStyle}
-                inputStyle={{
-                  fontSize: 16,
-                }}
-                placeholder={'555'}
-                onChangeText={(text) => {
-                  this.props.updateLoginValue('area_code', text);
-                  this._validateLoginForm();
-                }}
-              />
-              <Text>-</Text>
-              <TextInput
+                inputStyle={styles.inputStyle}
+                value={this.props.countryCode}
+                onChangeText={() => {}}
                 containerStyle={{
-                  width: 70,
+                  width: 60,
+                  paddingBottom: 5,
+                  height: 60,
                 }}
-                autoCorrect={false}
-                keyboardType={'number-pad'}
-                label={' '}
-                value={this.props.loginData.prefix}
-                placeholder={'555'}
-                labelStyle={styles.labelStyle}
-                inputStyle={{
-                  fontSize: 16,
-                }}
-                onChangeText={(text) => {
-                  this.props.updateLoginValue('prefix', text);
-                  this._validateLoginForm();
-                }}
+                placeholder={''}
               />
-              <Text>-</Text>
               <TextInput
-                containerStyle={{
-                  width: 125,
-                }}
-                autoCorrect={false}
-                keyboardType={'number-pad'}
-                label={' '}
-                placeholder={'5555'}
-                inputStyle={{
-                  fontSize: 16,
-                }}
-                value={this.props.loginData.line_number}
                 labelStyle={styles.labelStyle}
+                label={' '}
+                inputStyle={styles.inputStyle}
+                value={this.props.phone}
                 onChangeText={(text) => {
-                  this.props.updateLoginValue('line_number', text);
-                  this._validateLoginForm();
+                  this.props.updateLoginValue('phone', text);
                 }}
+                placeholder={' '}
               />
             </View>
-            <View
-              style={{
-                // borderWidth: 1,
-                // borderColor: 'blue',
-                width: '100%',
-              }}>
+            <View>
               <TextInput
                 secureTextEntry={true}
                 labelStyle={styles.labelStyle}
                 label={'Password'}
-                inputStyle={{
-                  fontSize: 16,
+                inputStyle={styles.inputStyle}
+                containerStyle={{
+                  width: '90%',
+                  paddingBottom: 5,
+                  marginTop: 10,
+                  height: 60,
                 }}
-                value={this.props.loginData.secret}
+                value={this.props.secret}
                 onChangeText={(text) => {
                   this.props.updateLoginValue('secret', text);
-                  this._validateLoginForm();
-                }}
-                containerStyle={{
-                  width: 400,
                 }}
                 placeholder="**********"
               />
@@ -215,12 +156,10 @@ class V extends React.Component {
                 justifyContent: 'center',
                 width: '100%',
                 alignItems: 'center',
-                marginTop: 5,
+                marginTop: 20,
               }}>
               <GrabbitButton
-                // disabled={this.state.loginDisabled}
                 onPress={() => {
-                  const {area_code, prefix, line_number} = this.props.loginData;
                   return this.props.postUserLogin({
                     endpoint: '/users/login/',
                     method: 'POST',
@@ -228,16 +167,18 @@ class V extends React.Component {
                       'Content-Type': 'application/json',
                     },
                     data: {
-                      phone: `${area_code}-${prefix}-${line_number}`,
-                      secret: this.props.loginData.secret,
+                      phone: this.props.countryCode + this.props.phone,
+                      secret: this.props.secret,
                     },
                   });
                 }}
                 _buttonStyle={{
-                  backgroundColor: Color.QueenBlue,
+                  backgroundColor: Color.White,
+                  borderColor: Color.QueenBlue,
+                  borderWidth: 1,
                 }}
                 titleStyle={{
-                  color: Color.White,
+                  color: Color.QueenBlue,
                   fontWeight: 'bold',
                 }}
                 title="Login"
@@ -251,6 +192,7 @@ class V extends React.Component {
               <Text
                 style={{
                   color: Color.ReadableGreyText,
+                  fontSize: 11,
                 }}>
                 Don't have an account?{' '}
               </Text>
@@ -258,6 +200,7 @@ class V extends React.Component {
                 <Text
                   style={{
                     fontWeight: 'bold',
+                    fontSize: 11,
                     textDecorationLine: 'underline',
                     color: Color.HyperlinkBlue,
                   }}>
@@ -316,7 +259,9 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
   return {
     loginPending: getStateForKey('state.session.authentication.pending', state),
-    loginData: getStateForKey('state.session.authentication.input.login', state),
+    phone: getStateForKey('state.session.authentication.input.login.phone', state),
+    countryCode: getStateForKey('state.session.authentication.input.login.country_code', state),
+    secret: getStateForKey('state.session.authentication.input.login.secret', state),
     loginError: getStateForKey('state.session.authentication.error', state),
   };
 };
@@ -327,5 +272,9 @@ const styles = StyleSheet.create({
   labelStyle: {
     fontWeight: 'normal',
     fontSize: 12,
+  },
+
+  inputStyle: {
+    fontSize: 16,
   },
 });

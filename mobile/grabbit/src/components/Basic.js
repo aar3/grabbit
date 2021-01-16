@@ -31,6 +31,9 @@ export class TextInput extends React.Component {
           containerStyle || {
             width: 300,
             paddingBottom: 5,
+            // borderWidth: 1,
+            // borderColor: 'red',
+            height: 60,
           }
         }
         inputStyle={[

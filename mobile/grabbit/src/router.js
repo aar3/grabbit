@@ -30,7 +30,7 @@ export default class Router_ extends React.Component {
             key="entry"
             component={EntryView}
             title="Entry"
-            initial
+            // initial
             gesturesEnabled={false}
             drawerLockMode="locked-closed"
             hideNavBar={true}
@@ -49,6 +49,7 @@ export default class Router_ extends React.Component {
             gesturesEnabled={false}
             drawerLockMode="locked-closed"
             title="Sign Up"
+            initial
             hideNavBar={true}
           />
           <Scene

@@ -7,6 +7,7 @@ import {
   Image,
   Keyboard,
   ImageBackground,
+  StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from 'react-native';
@@ -34,7 +35,7 @@ class V extends React.Component {
             // borderColor: 'blue',
             justifyContent: 'center',
             alignItems: 'center',
-            marginBottom: 20,
+            marginBottom: 10,
           }}>
           <Text
             style={{
@@ -47,42 +48,6 @@ class V extends React.Component {
     }
   }
 
-  _validateSignupForm() {
-    let signupDisabled = true;
-    const {
-      secret,
-      first_name,
-      last_name,
-      email,
-      username,
-      area_code,
-      line_number,
-      invitation_code,
-      prefix,
-    } = this.props.signupData;
-
-    const conditions = [
-      !secret,
-      secret && secret.length < 5,
-      !first_name,
-      !username,
-      !last_name,
-      !email,
-      email && (!email.includes('@') || !email.includes('.')),
-      !area_code,
-      !line_number,
-      !prefix,
-      area_code && area_code.length !== 3,
-      line_number && line_number.length !== 4,
-      prefix && prefix.length !== 3,
-      !invitation_code,
-    ];
-
-    signupDisabled = conditions.some((condition) => condition);
-
-    this.setState({signupDisabled});
-  }
-
   _renderPendingFooter() {
     if (this.props.signupPending) {
       return (
@@ -92,13 +57,13 @@ class V extends React.Component {
             // borderColor: 'green',
             justifyContent: 'center',
             alignItems: 'center',
+            marginTop: 10,
           }}>
           <ImageBackground
             source={require('./../../assets/imgs/Loading-Transparent-Cropped.gif')}
             style={{
               // borderWidth: 1,
               // borderColor: 'red',
-              marginTop: 20,
               height: 35,
               width: 35,
             }}></ImageBackground>
@@ -136,15 +101,33 @@ class V extends React.Component {
               style={{
                 // borderWidth: 1,
                 // borderColor: 'red',
-                width: 300,
+                width: '90%',
               }}>
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: 'red',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text
+                  style={{
+                    marginLeft: 10,
+                    fontWeight: 'bold',
+                    fontSize: 22,
+                    color: Color.QueenBlue,
+                    marginBottom: 20,
+                  }}>
+                  Logo Here
+                </Text>
+              </View>
               <Text
                 style={{
                   marginLeft: 10,
                   fontWeight: 'bold',
                   fontSize: 22,
                   color: Color.QueenBlue,
-                  marginBottom: 40,
+                  marginBottom: 20,
                 }}>
                 Join Grabbit
               </Text>
@@ -153,185 +136,130 @@ class V extends React.Component {
                 style={{
                   // borderWidth: 1,
                   // borderColor: 'blue',
-                  alignItems: 'center',
                   flexDirection: 'row',
                   width: '100%',
                 }}>
                 <TextInput
-                  autoCorrect={false}
-                  onChangeText={(text) => {
-                    this.props.updateSignupValue('first_name', text);
-                    this._validateSignupForm();
-                  }}
-                  containerStyle={{width: 150}}
-                  label={'First Name'}
-                  labelStyle={labelStyle}
-                  placeholder="Ava"
-                />
-                <TextInput
-                  autoCorrect={false}
-                  onChangeText={(text) => {
-                    this.props.updateSignupValue('last_name', text);
-                    this._validateSignupForm();
-                  }}
-                  containerStyle={{width: 150}}
-                  label={'Last Name'}
-                  labelStyle={labelStyle}
-                  placeholder="Campo"
-                />
-              </View>
-              <View
-                style={{
-                  // borderWidth: 1,
-                  // borderColor: 'blue',
-                  // justifyContent: 'center',
-                  alignItems: 'center',
-                  flexDirection: 'row',
-                  width: '100%',
-                }}>
-                <TextInput
-                  autoCorrect={false}
-                  containerStyle={{
-                    width: 70,
-                  }}
-                  autoCorrect={false}
-                  keyboardType={'number-pad'}
+                  labelStyle={styles.labelStyle}
                   label={'Phone'}
-                  value={this.props.signupData.area_code}
-                  labelStyle={labelStyle}
-                  placeholder={'555'}
-                  onChangeText={(text) => {
-                    this.props.updateSignupValue('area_code', text);
-                    this._validateSignupForm();
-                  }}
-                />
-                <Text>-</Text>
-                <TextInput
-                  autoCorrect={false}
+                  inputStyle={styles.inputStyle}
+                  value={this.props.countryCode}
+                  onChangeText={() => {}}
                   containerStyle={{
-                    width: 70,
+                    width: 60,
+                    paddingBottom: 5,
+                    height: 60,
                   }}
-                  autoCorrect={false}
-                  keyboardType={'number-pad'}
-                  label={' '}
-                  value={this.props.signupData.prefix}
-                  placeholder={'555'}
-                  labelStyle={labelStyle}
-                  onChangeText={(text) => {
-                    this.props.updateSignupValue('prefix', text);
-                    this._validateSignupForm();
-                  }}
+                  placeholder={''}
                 />
-                <Text>-</Text>
                 <TextInput
-                  autoCorrect={false}
-                  containerStyle={{
-                    width: 125,
-                  }}
-                  autoCorrect={false}
-                  keyboardType={'number-pad'}
+                  labelStyle={styles.labelStyle}
                   label={' '}
-                  placeholder={'5555'}
-                  value={this.props.signupData.line_number}
-                  labelStyle={labelStyle}
+                  inputStyle={styles.inputStyle}
+                  value={this.props.phone}
                   onChangeText={(text) => {
-                    this.props.updateSignupValue('line_number', text);
-                    this._validateSignupForm();
+                    this.props.updateSignupValue('phone', text);
                   }}
+                  placeholder={' '}
                 />
               </View>
-              {/* <TextInput
-                autoCorrect={false}
-                onChangeText={(text) => {
-                  this.props.updateSignupValue('username', text);
-                  this._validateSignupForm();
-                }}
-                value={this.props.signupData.username}
-                label={'Username'}
-                labelStyle={labelStyle}
-                placeholder="@ava"
-              /> */}
               <TextInput
-                value={this.props.signupData.email}
+                value={this.props.email}
                 autoCorrect={false}
                 onChangeText={(text) => {
                   this.props.updateSignupValue('email', text);
-                  this._validateSignupForm();
                 }}
                 autoCompleteType={'email'}
                 label={'Email'}
-                labelStyle={labelStyle}
+                inputStyle={styles.inputStyle}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerStyle}
                 placeholder="ava.campo@gmail.com"
               />
               <TextInput
-                value={this.props.signupData.secret}
+                value={this.props.secret}
                 autoCorrect={false}
                 onChangeText={(text) => {
                   this.props.updateSignupValue('secret', text);
-                  this._validateSignupForm();
                 }}
                 secureTextEntry={true}
-                labelStyle={labelStyle}
+                inputStyle={styles.inputStyle}
+                labelStyle={styles.labelStyle}
+                containerStyle={styles.containerStyle}
                 label={'Password'}
                 placeholder="**********"
               />
               <TextInput
-                // value={this.props.signupData.invitation_code}
-                value={this.props.signupData.invitation_code}
+                value={this.props.invitationCode}
+                inputStyle={styles.inputStyle}
                 autoCorrect={false}
                 onChangeText={(text) => {
                   this.props.updateSignupValue('invitation_code', text);
-                  this._validateSignupForm();
                 }}
-                labelStyle={labelStyle}
+                containerStyle={styles.containerStyle}
+                labelStyle={styles.labelStyle}
                 label={'Invitation Code'}
                 placeholder="5-digit code (e.g., XY43D)"
               />
-              <GrabbitButton
-                disabled={this.state.signupDisabled}
-                onPress={() => {
-                  const reducerData = this.props.signupData;
+              <View
+                style={{
+                  // borderWidth: 1,
+                  // borderColor: 'red',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: 10,
+                }}>
+                <GrabbitButton
+                  onPress={() => {
+                    const options = {
+                      endpoint: '/users/accounts/',
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      data: {
+                        email: this.props.email,
+                        secret: this.props.secret,
+                        phone: this.props.countryCode + this.props.phone,
+                        invitation_code: this.props.invitationCode,
+                      },
+                    };
 
-                  const postData = Object.assign(
-                    {},
-                    {
-                      name: `${reducerData.first_name} ${reducerData.last_name}`,
-                      email: reducerData.email,
-                      username: reducerData.username,
-                      secret: reducerData.secret,
-                      phone: `${reducerData.area_code}-${reducerData.prefix}-${reducerData.line_number}`,
-                      invitation_code: reducerData.invitation_code,
-                    },
-                  );
-                  const options = {
-                    endpoint: '/users/accounts/',
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    data: postData,
-                  };
-
-                  return this.props.postUserSignup(options);
-                }}
-                _buttonStyle={{
-                  backgroundColor: Color.QueenBlue,
-                }}
-                titleStyle={{
-                  color: Color.White,
-                  fontWeight: 'bold',
-                }}
-                title="Create Account"
-              />
+                    return this.props.postUserSignup(options);
+                  }}
+                  _buttonStyle={{
+                    backgroundColor: Color.White,
+                    borderWidth: 1,
+                    borderColor: Color.QueenBlue,
+                  }}
+                  titleStyle={{
+                    color: Color.QueenBlue,
+                    fontWeight: 'bold',
+                  }}
+                  title="Create Account"
+                />
+              </View>
               <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Text style={{color: Color.ReadableGreyText}}>Already have an account? </Text>
+                <Text
+                  style={{
+                    color: Color.ReadableGreyText,
+                    fontSize: 11,
+                  }}>
+                  Already have an account?
+                </Text>
                 <TouchableOpacity onPress={() => Actions.login()}>
-                  <Text style={{fontWeight: 'bold', textDecorationLine: 'underline', color: Color.HyperlinkBlue}}>
+                  <Text
+                    style={{
+                      fontWeight: 'bold',
+                      fontSize: 11,
+                      textDecorationLine: 'underline',
+                      color: Color.HyperlinkBlue,
+                    }}>
                     Sign In
                   </Text>
                 </TouchableOpacity>
@@ -381,10 +309,30 @@ const mapDispatchToProps = function (dispatch) {
 
 const mapStateToProps = function (state) {
   return {
+    secret: getStateForKey('state.session.authentication.input.signup.secret', state),
+    email: getStateForKey('state.session.authentication.input.signup.email', state),
+    countryCode: getStateForKey('state.session.authentication.input.signup.country_code', state),
+    invitationCode: getStateForKey('state.session.authentication.input.signup.invitation_code', state),
+    phone: getStateForKey('state.session.authentication.input.signup.phone', state),
     signupPending: getStateForKey('state.session.authentication.pending', state),
     signupError: getStateForKey('state.session.authentication.error', state),
-    signupData: getStateForKey('state.session.authentication.input.signup', state),
   };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(V);
+
+const styles = StyleSheet.create({
+  labelStyle: {
+    fontWeight: 'normal',
+    fontSize: 12,
+  },
+  inputStyle: {
+    fontSize: 16,
+  },
+  containerStyle: {
+    width: '95%',
+    paddingBottom: 5,
+    marginTop: 10,
+    height: 60,
+  },
+});

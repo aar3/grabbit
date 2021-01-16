@@ -33,9 +33,10 @@ class UserViewSet(viewsets.ViewSet):
         if code != INVITATION_CODE:
             return Response(data={"details": "Invalid invitation code"}, status=403)
 
-        instance = self.model.objects.filter(email=params["email"])
+        instance = self.model.objects.filter(phone=params["phone"])
         if instance:
             return Response(status=400, data={"detail": "exists"})
+
         instance = self.model.objects.create(**params)
         serializer = self.serializer(instance)
         return Response(serializer.data)

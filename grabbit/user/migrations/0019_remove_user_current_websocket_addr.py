@@ -6,12 +6,9 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user', '0018_user_current_websocket_addr'),
+        ("user", "0018_user_current_websocket_addr"),
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='user',
-            name='current_websocket_addr',
-        ),
+        migrations.RemoveField(model_name="user", name="current_websocket_addr",),
     ]

@@ -18,6 +18,7 @@ from user.managers import UserManager
 
 redis = get_redis_instance(host=settings.REDIS_HOST, port=settings.REDIS_DEFAULT_PORT)
 
+
 class User(BaseModel):
     class Meta:
         db_table = "users"
@@ -26,15 +27,13 @@ class User(BaseModel):
     is_authenticated = False
     objects = UserManager()
 
-    email = models.CharField(max_length=255, unique=True)
-    name = models.CharField(max_length=255, null=True)
-    username = models.CharField(max_length=255)
-    phone = models.CharField(max_length=255, null=True)
+    email = models.CharField(max_length=255)
+    phone = models.CharField(max_length=255, null=True, unique=True)
     secret = models.CharField(max_length=255)
     salt = models.IntegerField()
     current_session_token = models.CharField(max_length=255)
     qr_code_url = models.CharField(max_length=255)
-    # current_websocket_addr = models.CharField(max_length=255, null=True)
+    invitation_code = models.CharField(max_length=255, null=True)
 
     def matches_secret(self, other):
         data = other + str(self.salt)
@@ -64,6 +63,7 @@ def create_session_for_new_user(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def update_session_for_existing_user(sender, instance, created, **kwargs):
     from user.serializers import UserSerializer
+
     if not created:
         serializer = UserSerializer(instance)
         _ = redis.set(instance.current_session_token, json.dumps(serializer.data).encode())
@@ -126,6 +126,7 @@ def create_settings_for_new_user(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Setting)
 def create_notification_for_updated_settings(sender, instance, created, **kwargs):
     from user.serializers import NotificationSerializer
+
     if not created:
         instance = Notification.objects.create(
             user=instance.user,
@@ -135,6 +136,5 @@ def create_notification_for_updated_settings(sender, instance, created, **kwargs
             text="You've updated your profile settings",
         )
         serializer = NotificationSerializer(instance)
-        # FIXME: Use a UNIX socket to communicate this event back to the websocket process 
+        # FIXME: Use a UNIX socket to communicate this event back to the websocket process
         # send_model_hook_result_via_websocket(instance.user.id, serializer.data, type(instance))
-
