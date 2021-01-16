@@ -5,6 +5,5 @@ from django.conf import settings
 from django.utils import timezone
 from lib.utils import random_string
 
-Redis = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_DEFAULT_PORT)
-
-CacheLayerRedis = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_CACHE_LAYER_PORT)
+def get_redis_instance(host, port):
+    return redis.Redis(host=host, port=port)

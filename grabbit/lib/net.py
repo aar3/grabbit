@@ -1,17 +1,19 @@
 import asyncio
 import json
 import os
+import pickle
 import logging
 import collections
 import django
-from asgiref.sync import sync_to_async
+from django.conf import settings
+from django.apps import apps
+from asgiref.sync import async_to_sync, sync_to_async
 import websockets
-from lib.local_redis import Redis
+from lib.local_redis import get_redis_instance
 from lib.utils import addr_to_string
 
-django.setup()
-
-from user.models import User
+redis = get_redis_instance(host=settings.REDIS_HOST, port=settings.REDIS_DEFAULT_PORT)
+ws_redis = get_redis_instance(host=settings.REDIS_HOST, port=settings.REDIS_WSROUTER_PORT)
 
 handler = logging.StreamHandler()
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -19,15 +21,6 @@ handler.setFormatter(formatter)
 logger = logging.getLogger("websockets")
 logger.addHandler(handler)
 logger.setLevel(logging.INFO)
-
-INIT_HANDSHAKE_TOKEN = "XXX"
-
-
-@sync_to_async
-def save_user_websocket_addr(user_id, client_addr):
-    instance = User.objects.get(pk=user_id)
-    instance.current_websocket_addr = client_addr
-    instance.save()
 
 
 class WebSocketMsg:
@@ -46,48 +39,24 @@ class WebSocketMsg:
         return json.dumps(self.__dict__)
 
 
-class WebSocketRouter:
-    def __init__(self):
-        self.connections = collections.OrderedDict()
+@async_to_sync
+async def send_model_hook_result_via_websocket(user_id, data, model):
+    websocket, client_addr = pickle.loads(ws_redis.get(user_id))
+    response = WebSocketMsg(client_addr)
+    response.status = 200
+    response.details = "success"
+    response.instance = data
+    response.model = model
 
-    def register(self, addr, websocket):
-        logger.info("Registering new client at %s", addr)
-        self.connections[addr] = websocket
-
-    def remove(self, addr):
-        if addr in self:
-            logger.info("Removing client at %s", addr)
-            del self.connections[addr]
-
-    def __contains__(self, addr):
-        return addr in self.connections
-
-
-router = WebSocketRouter()
-
-"""
-1. get instance
-2. build payload
-3. get active websocket for this user
-4. using this websocket, send data to client using protocol message
-5. Done
-
-@reciever(senderpost_save)
-def do_something_in_hook(sendder=Model, instance, *args, **kwargs):
-    user = get_current_active_user()
-    payload = build_protocol_message(instance, user)
-    ws = WebsocketManager.get_socket_for(user)
-    loop.run_until_complete(ws.send(payload))
-"""
+    msg = response.serialize()
+    logger.info(msg)
+    return websocket.send(msg)
 
 
 async def handle_client_redux_connection(websocket, path):
     while True:
         client_addr = addr_to_string(websocket.remote_address)
         logger.debug("New connection at %s from client at %s", path, client_addr)
-
-        if not client_addr in router:
-            router.register(client_addr, websocket)
 
         response = WebSocketMsg(client_addr)
 
@@ -97,29 +66,22 @@ async def handle_client_redux_connection(websocket, path):
             data = json.loads(data)
             token = data["current_session_token"]
 
-            if token == INIT_HANDSHAKE_TOKEN:
-                response.status = 200
-                response.details = "Websocket handshake success"
+            if not token:
+                response.status = 403
+                response.details = "no token"
             else:
-                user = Redis.get(token)
+                user = redis.get(token)
                 if not user:
                     response.status = 403
                     response.details = "No token"
                 else:
                     user = json.loads(user.decode())
-                    # NOTE: since the anonymous INIT_HANDSHAKE_TOKEN is passed when the client websocket
-                    # connects, we'll need to check for an existing websocket on subsequent connections.
-                    # This `instance.current_websocket_addr = client_addr` should only happen once, since
-                    # after the user instance is saved here, the cache for that user entry is busted
-                    if not user.get("current_websocket_address"):
-                        logger.info("Assigning a new websocket to user via %s", client_addr)
-                        # instance = User.objects.get(pk=user["id"])
-                        # instance.current_websocket_addr = client_addr
-                        # instance.save()
-                        await save_user_websocket_addr(user["id"], client_addr)
+                    _ = ws_redis.set(user["id"], pickle.dumps(websocket, client_addr))
+                    user["current_websocket_addr"] = client_addr
+                    _ = redis.set(user["current_session_token"], json.dumps(user).encode())
 
                     response.status = 200
-                    response.details = "Operation successfull"
+                    response.details = "success"
                     response.model = "user"
                     response.user_id = user["id"]
                     response.instance = user

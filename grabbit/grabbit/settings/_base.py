@@ -123,9 +123,11 @@ PORT = os.environ["PORT"]
 # Redis
 #################################################################
 
-REDIS_HOST = "redis"
+# REDIS_HOST = "redis"
+REDIS_HOST = "localhost"
 REDIS_DEFAULT_PORT = 6379
-REDIS_CACHE_LAYER_PORT = 6380
+REDIS_READLAYER_PORT = 6380
+REDIS_WSROUTER_PORT = 6381
 
 #################################################################
 # Plaid

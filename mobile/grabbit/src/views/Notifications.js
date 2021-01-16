@@ -28,8 +28,7 @@ class V extends React.Component {
   }
 
   async componentDidMount() {
-    this.ws.user = this.props.user;
-    this.ws.send({ foo: 'bar' });
+    this.ws.initWithUser(this.props.user);
     return this.props.getNotifications(this.options);
   }
 

@@ -89,6 +89,7 @@ const defaultState = {
     ],
   },
   notifications: {
+    hasNewNotification: false,
     list: {
       pending: false,
       error: null,

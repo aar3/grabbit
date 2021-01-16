@@ -71,17 +71,28 @@ export const to12HourTime = function (t) {
   return `${parseInt(hour, 10)}:${minute} ${meridian}`;
 };
 
-export class _WebSocket {
+export class Websocket_ {
   constructor() {
     this.uri = 'ws://localhost:8765';
+    this.user = null;
+    this.connected = false;
+  }
+
+  initWithUser(user) {
+    this.user = user;
+
+    console.log(`Initializing Websocket with user: ${this.user}`);
+
     this.socket = new WebSocket(this.uri);
     this.socket.onopen = () => {
       console.log(`Web socket client connected at ${this.uri}`);
       this.socket.send(
         JSON.stringify({
-          current_session_token: !this.user ? 'XXX' : this.user.current_session_token,
+          current_session_token: this.user.current_session_token,
         }),
       );
+
+      this.connected = true;
     };
 
     this.socket.onmessage = (e) => {
@@ -109,4 +120,4 @@ export class _WebSocket {
   }
 }
 
-export const Websocket = new _WebSocket();
+export const Websocket = new Websocket_();

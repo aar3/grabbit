@@ -5,15 +5,18 @@ import random
 import json
 import datetime as dt
 from django.db import models
+from django.conf import settings
 from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from lib.models import BaseModel
 from lib.utils import make_qrcode, random_string
 from lib.cloud import GoogleCloudService
-from lib.local_redis import Redis
+from lib.local_redis import get_redis_instance
+from lib.net import send_model_hook_result_via_websocket
 from user.managers import UserManager
 
+redis = get_redis_instance(host=settings.REDIS_HOST, port=settings.REDIS_DEFAULT_PORT)
 
 class User(BaseModel):
     class Meta:
@@ -31,7 +34,7 @@ class User(BaseModel):
     salt = models.IntegerField()
     current_session_token = models.CharField(max_length=255)
     qr_code_url = models.CharField(max_length=255)
-    current_websocket_addr = models.CharField(max_length=255, null=True)
+    # current_websocket_addr = models.CharField(max_length=255, null=True)
 
     def matches_secret(self, other):
         data = other + str(self.salt)
@@ -54,17 +57,16 @@ def create_session_for_new_user(sender, instance, created, **kwargs):
         serializer = UserSerializer(instance)
         key = random_string(n=10)
         instance.current_session_token = key
-        _ = Redis.set(key, json.dumps(serializer.data).encode())
+        _ = redis.set(key, json.dumps(serializer.data).encode())
         instance.save()
 
 
 @receiver(post_save, sender=User)
 def update_session_for_existing_user(sender, instance, created, **kwargs):
     from user.serializers import UserSerializer
-
     if not created:
         serializer = UserSerializer(instance)
-        _ = Redis.set(instance.current_session_token, json.dumps(serializer.data).encode())
+        _ = redis.set(instance.current_session_token, json.dumps(serializer.data).encode())
 
 
 @receiver(post_save, sender=User)
@@ -123,11 +125,16 @@ def create_settings_for_new_user(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Setting)
 def create_notification_for_updated_settings(sender, instance, created, **kwargs):
+    from user.serializers import NotificationSerializer
     if not created:
-        _ = Notification.objects.create(
+        instance = Notification.objects.create(
             user=instance.user,
             icon="unlock",
             route_key="settings",
             title="Profile Update",
             text="You've updated your profile settings",
         )
+        serializer = NotificationSerializer(instance)
+        # FIXME: Use a UNIX socket to communicate this event back to the websocket process 
+        # send_model_hook_result_via_websocket(instance.user.id, serializer.data, type(instance))
+

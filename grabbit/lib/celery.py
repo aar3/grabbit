@@ -2,7 +2,6 @@ from django.conf import settings
 from django.apps import apps
 from celery import Celery
 from lib.tasks import SlickDealsScraper, TargetScraper, AmazonScraper, Scrapers
-from lib.local_redis import CacheLayerRedis
 
 task_manager = Celery("lib.celery", backend=settings.CELERY_RESULT_BACKEND, broker=settings.CELERY_BROKER)
 

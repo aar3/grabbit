@@ -14,7 +14,6 @@ class UserSerializer(BaseModelSerializer):
             "name",
             "email",
             "current_session_token",
-            "current_websocket_addr",
             "phone",
         ]
 

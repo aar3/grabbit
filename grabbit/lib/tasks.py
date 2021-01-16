@@ -11,10 +11,12 @@ import requests
 from bs4 import BeautifulSoup
 from grabbit import logger
 from lib.const import EMPTY_IMAGE_URL
+
+django.setup()
+
 from deal.models import Deal
 from scraper.models import ScraperStats
 
-django.setup()
 
 START_URLS = {
     "slickdeals": "https://slickdeals.net/f/14750294-15-count-1-4-oz-fiber-one-chewy-bars-mega-pack-oats-and-chocolate-4-57-0-30-each-w-s-s-free-shipping-w-prime-or-on-orders-over-25?src=frontpage",
@@ -143,13 +145,14 @@ class ThreadedScraper(abc.ABC):
             if condition:
                 return self._handle_unsuccessful_scrape_attempt(url, reason=reason)
 
-        # NOTE: keep this here for debugging
+        # # NOTE: keep this here for debugging
         # data = {
         #     "description": description,
         #     "current_value": current_value,
         #     "merchant_name": merchant_name,
         #     "original_value": original_value,
         #     "img_url": img_url,
+        #     "scraper": self.name,
         #     "img_urls": img_urls,
         #     "title": title,
         # }
@@ -162,6 +165,7 @@ class ThreadedScraper(abc.ABC):
             description=description,
             merchant_name=merchant_name,
             img_url=img_url,
+            scraper=self.name,
             all_img_urls=img_urls,
             url=url,
         )
@@ -491,8 +495,24 @@ class AmazonScraper(ThreadedScraper):
 
         price_span = self.soup.find("span", id="priceblock_saleprice")
         if not price_span:
-            return None, None
-        current = float(price_span.get_text()[1:])
+            a_offscreens = self.soup.find_all("span", class_="a-offscreen")
+            a_offscreens = [item.get_text() for item in a_offscreens if item.get_text().startswith("$")]
+            if not a_offscreens:
+                buybox = self.soup.find("span", id="price_inside_buybox")
+                if not buybox:
+                    maplemath = self.soup.find("span", {"data-maple-math": "cost"})
+                    if not maplemath:
+                        return None, None
+                    current = maplemath.get_text()[1:]
+                else:
+                    current = buybox.get_text().strip("\n")[1:]
+            else:
+                current = a_offscreens[0][1:]
+        else:
+            current = float(price_span.get_text()[1:])
+
+        # NOTE: Amazon lists the original price so no need to calculate it, in this case
+        # the `original` will be the `discount`
         discount_td = self.soup.find("td", class_="priceBlockSavingsString")
         if not discount_td:
             return None, None
@@ -500,8 +520,7 @@ class AmazonScraper(ThreadedScraper):
         if not discount:
             return None, None
 
-        original = float(discount) + current
-        return current, original
+        return current, discount
 
     def _extract_all_product_img_urls(self):
         scripts = [item.get_text() for item in self.soup.find_all("script")]
@@ -535,3 +554,18 @@ class AmazonScraper(ThreadedScraper):
         normal_links = self.soup.find_all("a", class_="a-link-normal")
         urls = [self.domain + item.get("href") for item in normal_links]
         return list(filter(lambda x: self._is_product_url(x), urls))
+
+
+if __name__ == "__main__":
+
+    response = requests.get(
+        "https://www.amazon.com/Charger-Samsung-Upgraded-Charging-SM-R800/dp/B07H3RZWL2/ref=psdc_11591898011_t4_B08HN2MMYK",
+        headers={
+            "cookie": "session-id=131-3306794-6173954; session-id-time=2082787201l; i18n-prefs=USD; ubid-main=135-3690569-1466528; session-token=AUqh2LGYiKoIQ5QHUHh1uwMTH2alpDy9KeSAIz1iV2ND3B3a4BzII3t2xHOpWQ3iu2+A3ZF+OIkMW66jEYuuxYCPEkFfPcE+B7ooZxmoCUPlnWkJyNDQpgarbZWqsuqf/zT7DdOtZSxXW+CqSCcqmYYWDbn0EHJCtonqucZKNMqm+N2PMFW2iWWMuJbRXP1n",
+            "referer": "https://www.amazon.com/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0",
+        },
+    )
+    soup = BeautifulSoup(response.content, "html5lib")
+    m = soup.find("span", {"data-maple-math": "cost"})
+    print(m.get_text())
