@@ -3,6 +3,7 @@
 import hashlib
 import random
 import json
+import pickle
 import datetime as dt
 from django.db import models
 from django.conf import settings
@@ -10,10 +11,9 @@ from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from lib.models import BaseModel
-from lib.utils import make_qrcode, random_string
+from lib.utils import make_qrcode, random_string, django_unix_client
 from lib.cloud import GoogleCloudService
 from lib.local_redis import get_redis_instance
-from lib.net import send_model_hook_result_via_websocket
 from user.managers import UserManager
 
 redis = get_redis_instance(host=settings.REDIS_HOST, port=settings.REDIS_DEFAULT_PORT)
@@ -136,5 +136,5 @@ def create_notification_for_updated_settings(sender, instance, created, **kwargs
             text="You've updated your profile settings",
         )
         serializer = NotificationSerializer(instance)
-        # FIXME: Use a UNIX socket to communicate this event back to the websocket process
-        # send_model_hook_result_via_websocket(instance.user.id, serializer.data, type(instance))
+        data = pickle.dumps((instance.user.id, serializer.data, instance._meta.verbose_name.lower()))
+        django_unix_client(data)

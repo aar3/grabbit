@@ -71,6 +71,7 @@ export const to12HourTime = function (t) {
   return `${parseInt(hour, 10)}:${minute} ${meridian}`;
 };
 
+
 export class Websocket_ {
   constructor() {
     this.uri = 'ws://localhost:8765';
@@ -81,7 +82,7 @@ export class Websocket_ {
   initWithUser(user) {
     this.user = user;
 
-    console.log(`Initializing Websocket with user: ${this.user}`);
+    console.log(`Initializing Websocket with user: ${this.user.id}`);
 
     this.socket = new WebSocket(this.uri);
     this.socket.onopen = () => {

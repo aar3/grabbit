@@ -105,8 +105,8 @@ class V extends React.Component {
               }}>
               <View
                 style={{
-                  borderWidth: 1,
-                  borderColor: 'red',
+                  // borderWidth: 1,
+                  // borderColor: 'red',
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>

@@ -1,6 +1,7 @@
 import random
 import io
 import string
+import socket
 import collections
 import qrcode
 
@@ -44,3 +45,9 @@ def most_common(arr):
             m = counts[x]
             max_ = x
     return max_
+
+
+def django_unix_client(data):
+    sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    sock.connect("/tmp/django_socket.s")
+    sock.send(data)

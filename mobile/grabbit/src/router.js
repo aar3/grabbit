@@ -49,7 +49,6 @@ export default class Router_ extends React.Component {
             gesturesEnabled={false}
             drawerLockMode="locked-closed"
             title="Sign Up"
-            initial
             hideNavBar={true}
           />
           <Scene
@@ -70,7 +69,7 @@ export default class Router_ extends React.Component {
             navBar={MainTopNavigationBar}
             title=""
             hideNavBar={false}
-            // initial
+            initial
             key="listDeal"
             component={ListDealsView}
           />

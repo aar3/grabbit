@@ -516,11 +516,11 @@ class AmazonScraper(ThreadedScraper):
         discount_td = self.soup.find("td", class_="priceBlockSavingsString")
         if not discount_td:
             return None, None
-        discount = discount_td.get_text().strip("\n").split()[0][1:]
-        if not discount:
+        original = discount_td.get_text().strip("\n").split()[0][1:]
+        if not original:
             return None, None
 
-        return current, discount
+        return current, original
 
     def _extract_all_product_img_urls(self):
         scripts = [item.get_text() for item in self.soup.find_all("script")]
@@ -553,7 +553,7 @@ class AmazonScraper(ThreadedScraper):
     def _get_associated_product_links(self, url):
         normal_links = self.soup.find_all("a", class_="a-link-normal")
         urls = [self.domain + item.get("href") for item in normal_links]
-        return list(filter(lambda x: self._is_product_url(x), urls))
+        return [url for url in urls if self._is_product_url(url)]
 
 
 if __name__ == "__main__":

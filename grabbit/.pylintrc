@@ -158,7 +158,9 @@ disable=print-statement,
         too-many-arguments,
 	  unused-import,
         broad-except,
-        arguments-differ
+        arguments-differ,
+        redefined-outer-name,
+        wrong-import-order,
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
