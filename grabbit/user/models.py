@@ -2,16 +2,21 @@
 
 import hashlib
 import random
+import json
+import pickle
 import datetime as dt
 from django.db import models
+from django.conf import settings
 from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from lib.models import BaseModel
-from lib.utils import make_qrcode, random_string
+from lib.utils import make_qrcode, random_string, django_unix_client
 from lib.cloud import GoogleCloudService
-from lib.redis import DefaultRedis
+from lib.local_redis import get_redis_instance
 from user.managers import UserManager
+
+redis = get_redis_instance(host=settings.REDIS_HOST, port=settings.REDIS_DEFAULT_PORT)
 
 
 class User(BaseModel):
@@ -22,14 +27,13 @@ class User(BaseModel):
     is_authenticated = False
     objects = UserManager()
 
-    email = models.CharField(max_length=255, unique=True)
-    name = models.CharField(max_length=255, null=True)
-    username = models.CharField(max_length=255)
-    phone = models.CharField(max_length=255, null=True)
+    email = models.CharField(max_length=255)
+    phone = models.CharField(max_length=255, null=True, unique=True)
     secret = models.CharField(max_length=255)
     salt = models.IntegerField()
     current_session_token = models.CharField(max_length=255)
     qr_code_url = models.CharField(max_length=255)
+    invitation_code = models.CharField(max_length=255, null=True)
 
     def matches_secret(self, other):
         data = other + str(self.salt)
@@ -46,49 +50,29 @@ class User(BaseModel):
 
 @receiver(post_save, sender=User)
 def create_session_for_new_user(sender, instance, created, **kwargs):
-    if created:
-        session = SessionToken(user_id=instance.id)
-        key = session.key[:]
-        _ = DefaultRedis.set(key, session.serialize())
+    from user.serializers import UserSerializer
 
+    if created:
+        serializer = UserSerializer(instance)
+        key = random_string(n=10)
         instance.current_session_token = key
+        _ = redis.set(key, json.dumps(serializer.data).encode())
         instance.save()
+
+
+@receiver(post_save, sender=User)
+def update_session_for_existing_user(sender, instance, created, **kwargs):
+    from user.serializers import UserSerializer
+
+    if not created:
+        serializer = UserSerializer(instance)
+        _ = redis.set(instance.current_session_token, json.dumps(serializer.data).encode())
 
 
 @receiver(post_save, sender=User)
 def create_new_account_notification(sender, instance, created, **kwargs):
     if created:
         _ = Notification.objects.create(user=instance, icon="user", text="Welcome to Grabbit!")
-
-
-class SessionToken:
-    def __init__(self, **kwargs):
-        self.key = self._make_key()
-        self.user_id = kwargs.get("user_id")
-        self._expiry = timezone.now() + dt.timedelta(hours=12)
-
-        if kwargs.get("data"):
-            self.deserialize(kwargs["data"])
-
-    def expired(self):
-        return timezone.now() >= self._expiry
-
-    def serialize(self):
-        expiry = self._expiry.strftime("%Y-%m-%d %H:%M:%S")
-        return "\x001".join([self.key, str(self.user_id), expiry]).encode()
-
-    def deserialize(self, data):
-        key, user_id, expiry = data.decode().split("\x001")
-        self.key = key
-        self.user_id = int(user_id)
-        self._expiry = dt.datetime.strptime(expiry, "%Y-%m-%d %H:%M:%S")
-
-    def _make_key(self):
-        s = random_string(n=40)
-        return hashlib.sha256(s.encode()).hexdigest()
-
-    def __eq__(self, other):
-        return self.key == other.key
 
 
 # @receiver(post_save, sender=User)
@@ -141,11 +125,16 @@ def create_settings_for_new_user(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Setting)
 def create_notification_for_updated_settings(sender, instance, created, **kwargs):
+    from user.serializers import NotificationSerializer
+
     if not created:
-        _ = Notification.objects.create(
+        instance = Notification.objects.create(
             user=instance.user,
             icon="unlock",
             route_key="settings",
             title="Profile Update",
             text="You've updated your profile settings",
         )
+        serializer = NotificationSerializer(instance)
+        data = pickle.dumps((instance.user.id, serializer.data, instance._meta.verbose_name.lower()))
+        django_unix_client(data)

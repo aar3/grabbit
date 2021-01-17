@@ -52,7 +52,7 @@ class V extends React.Component {
   _renderAddButton() {
     if (this.props.linkToken) {
       return (
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity>
           <PlaidLink
             content
             token={this.props.linkToken}
@@ -159,7 +159,7 @@ class V extends React.Component {
               // borderWidth: 1,
               width: 300,
             }}>
-            <Text style={{textAlign: 'center', fontWeight: 'bold', fontSize: 18, color: Color.Purple}}>
+            <Text style={{textAlign: 'center', fontWeight: 'bold', fontSize: 18, color: Color.QueenBlue}}>
               You haven't linked any accounts, yet
             </Text>
             <Text
@@ -177,9 +177,19 @@ class V extends React.Component {
                 fontSize: 12,
                 textAlign: 'center',
                 marginTop: 10,
+                marginBottom: 10,
               }}>
               You unfortunately won't be able to use Grabbit until you link at least 1 account
             </Text>
+            <TouchableOpacity>
+              <PlaidLink
+                content
+                token={this.props.linkToken}
+                onSuccess={(data) => this._handleOnSuccess(data)}
+                onExit={(data) => this._handleExit()}>
+                <Icon name="plus-circle" size={30} color={Color.BorderLightGrey} />
+              </PlaidLink>
+            </TouchableOpacity>
           </View>
         </View>
       );

@@ -1,8 +1,6 @@
-import React from 'react';
-import {View} from 'react-native';
 import axios from 'axios';
-import Icon from 'react-native-vector-icons/Feather';
-import {Color} from 'grabbit/src/Const';
+import ReduxActions from 'grabbit/src/Actions';
+import Store from 'grabbit/src/Reducer';
 
 export const httpRequest = async function (options) {
   if (!options.endpoint) {
@@ -46,14 +44,6 @@ export const getStateForKey = function (key, state) {
   return curr;
 };
 
-export function arrayToObject(arr, keyedBy) {
-  const obj = {};
-  arr.forEach((element) => {
-    obj[element[keyedBy]] = element;
-  });
-  return obj;
-}
-
 export const formatOriginalPrice = function (item) {
   const d = Number(item.deal.discount.substr(1));
   if (d < 1) {
@@ -74,3 +64,54 @@ export const to12HourTime = function (t) {
 
   return `${parseInt(hour, 10)}:${minute} ${meridian}`;
 };
+
+export class Websocket_ {
+  constructor() {
+    this.uri = 'ws://localhost:8765';
+    this.store = Store();
+    this.user = getStateForKey('state.session.user', this.store.getState());
+    this.socket = new WebSocket(this.uri);
+    this.connected = false;
+
+    console.log(`Initializing Websocket with user: ${this.user.id}`);
+
+    this.socket.onopen = () => {
+      console.log(`Web socket client connected at ${this.uri}`);
+      this.socket.send(
+        JSON.stringify({
+          current_session_token: this.user.current_session_token,
+        }),
+      );
+
+      this.connected = true;
+    };
+
+    this.socket.onmessage = (e) => {
+      console.log('Just received ', e.data);
+      this.dispatchToState(e.data);
+    };
+
+    this.socket.onerror = (e) => {
+      console.log('Websocket error: ', e.message);
+    };
+
+    this.socket.onclose = (e) => {
+      console.log('Peer closed connection: ', e.code, ' ', e.reason);
+    };
+  }
+
+  dispatchToState(data = {}) {
+    this.store.dispatch({
+      type: ReduxActions.GENERIC_ACTION,
+      payload: {foo: 'bar'},
+    });
+  }
+
+  send(data = {}) {
+    // IMPORTANT: Nothing should ever be sent without a user being set
+    data['current_session_token'] = this.user.current_session_token;
+    this.socket.send(JSON.stringify(data));
+  }
+}
+
+export const Websocket = new Websocket_();

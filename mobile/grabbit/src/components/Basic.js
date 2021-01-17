@@ -15,6 +15,7 @@ export class TextInput extends React.Component {
       secureTextEntry,
       value,
       containerStyle,
+      inputStyle,
       autoCompleteType,
     } = this.props;
     return (
@@ -29,11 +30,18 @@ export class TextInput extends React.Component {
         containerStyle={
           containerStyle || {
             width: 300,
+            paddingBottom: 5,
+            // borderWidth: 1,
+            // borderColor: 'red',
+            height: 60,
           }
         }
-        inputStyle={{
-          fontSize: 13,
-        }}
+        inputStyle={[
+          {
+            fontSize: 13,
+          },
+          inputStyle,
+        ]}
         label={label}
         labelStyle={labelStyle}
         placeholder={placeholder}

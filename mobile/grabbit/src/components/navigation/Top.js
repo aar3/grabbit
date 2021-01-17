@@ -108,7 +108,7 @@ class MainTopNavigationBar extends React.Component {
 
 const mapStateToProps = function (state) {
   return {
-    hasNewNotification: true,
+    hasNewNotification: getStateForKey('state.notifications.hasNewNotification', state),
   };
 };
 

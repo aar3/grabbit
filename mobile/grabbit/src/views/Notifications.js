@@ -2,9 +2,10 @@ import React from 'react';
 import {View, Text, ImageBackground, TouchableOpacity, FlatList} from 'react-native';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
+import {Button} from 'react-native-elements';
 import {Actions} from 'react-native-router-flux';
 import ReduxActions from 'grabbit/src/Actions';
-import {getStateForKey, httpRequest, to12HourTime} from 'grabbit/src/Utils';
+import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
 import {Color} from 'grabbit/src/Const';
 import {Error} from 'grabbit/src/components/FlatList';
 
@@ -33,6 +34,22 @@ class V extends React.Component {
     if (!item.route_key) {
       return null;
     }
+
+    if (item.route_key === 'dealFocus') {
+      return (
+        <View
+          style={{
+            borderColor: 'red',
+            borderWidth: 1,
+            width: 25,
+            height: 25,
+            marginLeft: 20,
+          }}>
+          <Button title="Grab It" />
+        </View>
+      );
+    }
+
     return (
       <View
         style={{
@@ -123,7 +140,7 @@ class V extends React.Component {
           }}>
           <Text
             style={{
-              color: Color.Purple,
+              color: Color.QueenBlue,
               fontWeight: 'bold',
               fontSize: 18,
               marginBottom: 20,
@@ -165,6 +182,14 @@ class V extends React.Component {
                 }}>
                 <View
                   style={{
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 2,
+                      height: 2,
+                    },
+                    shadowOpacity: 0.25,
+                    shadowRadius: 2,
+                    elevation: 2,
                     backgroundColor: Color.White,
                     padding: 10,
                     borderBottomWidth: 1,
@@ -193,7 +218,7 @@ class V extends React.Component {
                     style={{
                       // borderWidth: 1,
                       // borderColor: 'blue',
-                      width: 280,
+                      width: 225,
                       marginLeft: 20,
                       marginBottom: 10,
                     }}>
@@ -295,6 +320,12 @@ const mapDispatchToProps = function (dispatch) {
       return dispatch({
         type: ReduxActions.Notifications.GetNotificationsSuccess,
         payload: data,
+      });
+    },
+    testDispatch: function () {
+      return dispatch({
+        type: ReduxActions.GENERIC_ACTION,
+        payload: {foo: 'bar'},
       });
     },
   };

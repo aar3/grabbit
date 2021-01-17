@@ -1,6 +1,7 @@
 import random
 import io
 import string
+import socket
 import collections
 import qrcode
 
@@ -9,6 +10,10 @@ def random_string(n=10):
     char_str = list(string.ascii_letters + string.digits)
     chars = [random.choice(char_str) for _ in range(n)]
     return "".join(chars)
+
+
+def addr_to_string(addr):
+    return ":".join(map(str, addr))
 
 
 def make_qrcode(s):
@@ -40,3 +45,9 @@ def most_common(arr):
             m = counts[x]
             max_ = x
     return max_
+
+
+def django_unix_client(data):
+    sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    sock.connect("/tmp/django_socket.s")
+    sock.send(data)

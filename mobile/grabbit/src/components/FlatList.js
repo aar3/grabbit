@@ -16,7 +16,7 @@ export class Error extends React.Component {
         }}>
         <Text
           style={{
-            color: Color.Purple,
+            color: Color.QueenBlue,
             fontWeight: 'bold',
             fontSize: 18,
           }}>

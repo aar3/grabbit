@@ -18,16 +18,16 @@ export class BottomTabNavigation extends React.Component {
           height: 100,
         }}>
         <View style={tabStyle}>
-          <Icon name={'menu'} size={TabIconSize} color={focused ? Color.Purple : Color.ReadableGreyText} />
+          <Icon name={'menu'} size={TabIconSize} color={focused ? Color.QueenBlue : Color.ReadableGreyText} />
         </View>
         <View style={tabStyle}>
-          <Icon name={'toggle-right'} size={TabIconSize} color={focused ? Color.Purple : Color.ReadableGreyText} />
+          <Icon name={'toggle-right'} size={TabIconSize} color={focused ? Color.QueenBlue : Color.ReadableGreyText} />
         </View>
         <View style={tabStyle}>
-          <Icon name={'message-circle'} size={TabIconSize} color={focused ? Color.Purple : Color.ReadableGreyText} />
+          <Icon name={'message-circle'} size={TabIconSize} color={focused ? Color.QueenBlue : Color.ReadableGreyText} />
         </View>
         <View style={tabStyle}>
-          <Icon name={'user'} size={TabIconSize} color={focused ? Color.Purple : Color.ReadableGreyText} />
+          <Icon name={'user'} size={TabIconSize} color={focused ? Color.QueenBlue : Color.ReadableGreyText} />
         </View>
       </View>
     );

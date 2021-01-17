@@ -11,14 +11,13 @@ class Deal(BaseModel):
     class Meta:
         db_table = "deals"
 
-    title = models.CharField(max_length=255)
+    title = models.TextField()
     current_value = models.CharField(max_length=255)
     original_value = models.CharField(max_length=255)
     merchant_name = models.CharField(max_length=255)
-    url = models.CharField(max_length=255)
+    url = models.TextField()
     scraper = models.CharField(max_length=255)
     img_url = models.CharField(max_length=255, default=EMPTY_IMAGE_URL)
-    # keywords = models.JSONField(default=list)
     product_keywords = models.JSONField(default=list)
     all_img_urls = models.JSONField(default=list)
     description = models.TextField(null=True)

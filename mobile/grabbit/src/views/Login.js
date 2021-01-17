@@ -6,9 +6,11 @@ import {
   Image,
   Keyboard,
   TouchableOpacity,
+  StyleSheet,
   TouchableWithoutFeedback,
   ImageBackground,
 } from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 import ReduxActions from 'grabbit/src/Actions';
@@ -27,37 +29,25 @@ class V extends React.Component {
   _renderPendingFooter() {
     if (this.props.loginPending) {
       return (
-        <ImageBackground
-          source={require('./../../assets/imgs/Loading-Transparent-Cropped.gif')}
+        <View
           style={{
             // borderWidth: 1,
-            // borderColor: 'red',
-            marginTop: 20,
-            height: 35,
-            width: 35,
-            marginBottom: 20,
-          }}></ImageBackground>
+            // borderColor: 'green',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <ImageBackground
+            source={require('./../../assets/imgs/Loading-Transparent-Cropped.gif')}
+            style={{
+              // borderWidth: 1,
+              // borderColor: 'red',
+              marginTop: 20,
+              height: 35,
+              width: 35,
+            }}></ImageBackground>
+        </View>
       );
     }
-  }
-
-  _validateLoginForm() {
-    let loginDisabled = true;
-    const {secret, area_code, line_number, prefix} = this.props.loginData;
-
-    const conditions = [
-      !area_code,
-      !line_number,
-      !prefix,
-      !secret,
-      area_code && area_code.length !== 3,
-      line_number && line_number.length !== 4,
-      prefix && prefix.length !== 3,
-    ];
-
-    loginDisabled = conditions.some((condition) => condition);
-
-    this.setState({loginDisabled});
   }
 
   _renderErrorHeader() {
@@ -68,7 +58,9 @@ class V extends React.Component {
           style={{
             // borderWidth: 1,
             // borderColor: 'blue',
-            marginBottom: 20,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginBottom: 10,
           }}>
           <Text style={{color: Color.ErrorRed}}>{loginError.details}</Text>
         </View>
@@ -77,10 +69,6 @@ class V extends React.Component {
   }
 
   render() {
-    const labelStyle = {
-      fontWeight: 'normal',
-    };
-
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <KeyboardAvoidingView
@@ -88,8 +76,7 @@ class V extends React.Component {
           enabled={true}
           style={{
             flex: 1,
-            // justifyContent: 'center',
-            paddingTop: 200,
+            paddingTop: 50,
             backgroundColor: Color.White,
             alignItems: 'center',
           }}>
@@ -97,122 +84,126 @@ class V extends React.Component {
             style={{
               // borderWidth: 1,
               // borderColor: 'red',
-              width: 300,
-              justifyContent: 'center',
-              alignItems: 'center',
+              paddingLeft: 10,
+              width: '100%',
+              paddingTop: 10,
             }}>
-            <View
-              style={{
-                marginBottom: 20,
-                height: 50,
-                width: 50,
-              }}>
-              <Image
-                source={require('./../../assets/imgs/Grabbit_Gradient_G_300x300.png')}
-                style={{flex: 1, height: undefined, width: undefined}}
-              />
-            </View>
             {this._renderErrorHeader()}
+            <Text
+              style={{
+                fontWeight: 'bold',
+                fontSize: 22,
+                textAlign: 'center',
+                color: Color.QueenBlue,
+                marginBottom: 10,
+              }}>
+              Logo Here
+            </Text>
             <View
               style={{
                 // borderWidth: 1,
                 // borderColor: 'blue',
-                // justifyContent: 'center',
-                alignItems: 'center',
                 flexDirection: 'row',
                 width: '100%',
               }}>
               <TextInput
-                containerStyle={{
-                  width: 70,
-                }}
-                autoCorrect={false}
-                keyboardType={'number-pad'}
+                labelStyle={styles.labelStyle}
                 label={'Phone'}
-                value={this.props.loginData.area_code}
-                labelStyle={labelStyle}
-                placeholder={'555'}
-                onChangeText={(text) => {
-                  this.props.updateLoginValue('area_code', text);
-                  this._validateLoginForm();
-                }}
-              />
-              <Text>-</Text>
-              <TextInput
+                inputStyle={styles.inputStyle}
+                value={this.props.countryCode}
+                onChangeText={() => {}}
                 containerStyle={{
-                  width: 70,
+                  width: 60,
+                  paddingBottom: 5,
+                  height: 60,
                 }}
-                autoCorrect={false}
-                keyboardType={'number-pad'}
-                label={' '}
-                value={this.props.loginData.prefix}
-                placeholder={'555'}
-                labelStyle={labelStyle}
-                onChangeText={(text) => {
-                  this.props.updateLoginValue('prefix', text);
-                  this._validateLoginForm();
-                }}
+                placeholder={''}
               />
-              <Text>-</Text>
               <TextInput
-                containerStyle={{
-                  width: 125,
-                }}
-                autoCorrect={false}
-                keyboardType={'number-pad'}
+                labelStyle={styles.labelStyle}
                 label={' '}
-                placeholder={'5555'}
-                value={this.props.loginData.line_number}
-                labelStyle={labelStyle}
+                inputStyle={styles.inputStyle}
+                value={this.props.phone}
                 onChangeText={(text) => {
-                  this.props.updateLoginValue('line_number', text);
-                  this._validateLoginForm();
+                  this.props.updateLoginValue('phone', text);
                 }}
+                placeholder={' '}
               />
             </View>
-            <TextInput
-              secureTextEntry={true}
-              labelStyle={labelStyle}
-              label={'Password'}
-              value={this.props.loginData.secret}
-              onChangeText={(text) => {
-                this.props.updateLoginValue('secret', text);
-                this._validateLoginForm();
-              }}
-              placeholder="**********"
-            />
-            <GrabbitButton
-              // disabled={this.state.loginDisabled}
-              onPress={() => {
-                const {area_code, prefix, line_number} = this.props.loginData;
-                return this.props.postUserLogin({
-                  endpoint: '/users/login/',
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  data: {
-                    phone: `${area_code}-${prefix}-${line_number}`,
-                    secret: this.props.loginData.secret,
-                  },
-                });
-              }}
-              _buttonStyle={{
-                backgroundColor: Color.Purple,
-              }}
-              titleStyle={{
-                color: Color.White,
-                fontWeight: 'bold',
-              }}
-              title="Login"
-            />
+            <View>
+              <TextInput
+                secureTextEntry={true}
+                labelStyle={styles.labelStyle}
+                label={'Password'}
+                inputStyle={styles.inputStyle}
+                containerStyle={{
+                  width: '90%',
+                  paddingBottom: 5,
+                  marginTop: 10,
+                  height: 60,
+                }}
+                value={this.props.secret}
+                onChangeText={(text) => {
+                  this.props.updateLoginValue('secret', text);
+                }}
+                placeholder="**********"
+              />
+            </View>
+            <View
+              style={{
+                // borderWidth: 1,
+                // borderColor: 'red',
+                justifyContent: 'center',
+                width: '100%',
+                alignItems: 'center',
+                marginTop: 20,
+              }}>
+              <GrabbitButton
+                onPress={() => {
+                  return this.props.postUserLogin({
+                    endpoint: '/users/login/',
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    data: {
+                      phone: this.props.countryCode + this.props.phone,
+                      secret: this.props.secret,
+                    },
+                  });
+                }}
+                _buttonStyle={{
+                  backgroundColor: Color.White,
+                  borderColor: Color.QueenBlue,
+                  borderWidth: 1,
+                }}
+                titleStyle={{
+                  color: Color.QueenBlue,
+                  fontWeight: 'bold',
+                }}
+                title="Login"
+              />
+            </View>
             <View
               style={{
                 flexDirection: 'row',
+                justifyContent: 'center',
               }}>
-              <Text style={{color: Color.ReadableGreyText}}>Don't have an account? </Text>
+              <Text
+                style={{
+                  color: Color.ReadableGreyText,
+                  fontSize: 11,
+                }}>
+                Don't have an account?{' '}
+              </Text>
               <TouchableOpacity onPress={() => Actions.signup()}>
-                <Text style={{fontWeight: 'bold', textDecorationLine: 'underline', color: Color.HyperlinkBlue}}>
+                <Text
+                  style={{
+                    fontWeight: 'bold',
+                    fontSize: 11,
+                    textDecorationLine: 'underline',
+                    color: Color.HyperlinkBlue,
+                  }}>
                   Sign Up
                 </Text>
               </TouchableOpacity>
@@ -268,9 +259,22 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
   return {
     loginPending: getStateForKey('state.session.authentication.pending', state),
-    loginData: getStateForKey('state.session.authentication.input.login', state),
+    phone: getStateForKey('state.session.authentication.input.login.phone', state),
+    countryCode: getStateForKey('state.session.authentication.input.login.country_code', state),
+    secret: getStateForKey('state.session.authentication.input.login.secret', state),
     loginError: getStateForKey('state.session.authentication.error', state),
   };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(V);
+
+const styles = StyleSheet.create({
+  labelStyle: {
+    fontWeight: 'normal',
+    fontSize: 12,
+  },
+
+  inputStyle: {
+    fontSize: 16,
+  },
+});
