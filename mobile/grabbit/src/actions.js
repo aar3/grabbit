@@ -18,6 +18,7 @@ export default {
     GetUserDealsSuccess: 'GetUserDealsSuccess',
     GetUserDealsError: 'GetUserDealsError',
     SetFocusedDeal: 'SetFocusedDeal',
+    ToggleFocusedDealModal: 'ToggleFocusedDealModal',
   },
   Accounts: {
     GetLinkTokenPending: 'GetLinkTokenPending',

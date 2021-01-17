@@ -50,11 +50,14 @@ const defaultState = {
     list: {
       pending: false,
       error: {
-        details: 'There was an error',
+        details: null,
       },
       items: [],
     },
-    focused: null,
+    focused: {
+      show_modal: false,
+      item: null,
+    },
   },
   stats: {
     pending: false,
@@ -142,6 +145,13 @@ const defaultState = {
         icon: 'settings',
         description: 'Change your Grabbit account Settings',
         routeKey: 'settings',
+      },
+      {
+        id: 2,
+        title: 'Droplist',
+        icon: 'bookmark',
+        description: 'View your bookmarked deals',
+        routeKey: 'bookmarks',
       },
     ],
   },
@@ -499,8 +509,21 @@ const reducer = function (state = defaultState, action) {
     }
 
     // ********************************************
-    // Deal list
+    // Deals
     // ********************************************
+    case ReduxActions.Deals.ToggleFocusedDealModal: {
+      const prev = state.deals.focused.show_modal;
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          focused: {
+            ...state.deals.focused,
+            show_modal: !prev,
+          },
+        },
+      };
+    }
     case ReduxActions.Deals.GetUserDealsError: {
       return {
         ...state,
@@ -549,7 +572,11 @@ const reducer = function (state = defaultState, action) {
         ...state,
         deals: {
           ...state.deals,
-          focused: payload,
+          focused: {
+            ...state.deals.focused,
+            item: payload,
+            show_modal: true,
+          },
         },
       };
     }

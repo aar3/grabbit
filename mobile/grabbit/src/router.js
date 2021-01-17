@@ -13,6 +13,7 @@ import {
   RewardFocusView,
   SettingsView,
   AccountTypeView,
+  BookmarksView,
   NotificationsView,
 } from 'grabbit/src/views';
 
@@ -95,6 +96,14 @@ export default class Router_ extends React.Component {
             navigationBarStyle={styles.NavbarContainer}
             style={styles}
           />
+          <Scene
+            title={'Bookmarks'}
+            hideNavBar={false}
+            key="bookmarks"
+            component={BookmarksView}
+            navigationBarStyle={styles.NavbarContainer}
+            style={styles}
+          />
         </Stack>
       </Router>
     );
@@ -135,7 +144,7 @@ const transitionConfig = function () {
 
 const styles = StyleSheet.create({
   NavbarContainer: {
-    marginTop: 10,
+    // marginTop: 5,
     backgroundColor: Color.TopNavBackground,
   },
 });

@@ -1,22 +1,12 @@
 import React from 'react';
-import {View, Text, FlatList, Image, TouchableOpacity, ImageBackground, StyleSheet} from 'react-native';
+import {View, Text, FlatList, Image, TouchableOpacity, ImageBackground} from 'react-native';
 import {connect} from 'react-redux';
-import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
 import ReduxActions from 'grabbit/src/Actions';
-import {getStateForKey, httpRequest, formatOriginalPrice} from 'grabbit/src/Utils';
+import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
 import {Color, Font} from 'grabbit/src/Const';
+import DealFocusModal from 'grabbit/src/components/modals/DealFocus';
 import {Error} from 'grabbit/src/components/FlatList';
-
-const titleStyle = {
-  fontWeight: '400',
-  fontSize: 18,
-  marginTop: 10,
-  fontFamily: Font,
-  textTransform: 'uppercase',
-  marginLeft: 20,
-  marginBottom: 10,
-};
 
 class V extends React.Component {
   constructor(props) {
@@ -40,6 +30,15 @@ class V extends React.Component {
 
   async componentDidMount() {
     return this.props.getUserDeals(this.options);
+  }
+
+  _renderModal() {
+    const modal = <DealFocusModal childRef={(ref) => (this.childRef = ref)} />;
+    if (!this.props.showDealFocusedModal) {
+      return;
+    }
+
+    return modal;
   }
 
   _renderExpiryTag(item) {
@@ -142,7 +141,7 @@ class V extends React.Component {
           flex: 1,
           alignItems: 'center',
         }}>
-        {/* <Text style={titleStyle}>Featured</Text> */}
+        {this._renderModal()}
         <FlatList
           horizontal
           data={this.props.deals}
@@ -162,10 +161,7 @@ class V extends React.Component {
               ((item.deal.original_value - item.deal.current_value) / item.deal.current_value) * 100,
             ).toFixed(0);
             return (
-              <TouchableOpacity
-                onPress={() => {
-                  console.log('cliked');
-                }}>
+              <TouchableOpacity onPress={() => this.props.setFocusedDeal(item)}>
                 <View
                   style={{
                     height: 200,
@@ -313,11 +309,6 @@ class V extends React.Component {
           }}
         />
 
-        {/* <Text style={[
-          titleStyle,
-          {
-            marginBottom: 20
-          }]}>Other things you might like</Text> */}
         <FlatList
           data={this.props.deals}
           style={{
@@ -338,10 +329,7 @@ class V extends React.Component {
                 ? `${item.deal.description.substr(0, size)}...`
                 : item.deal.description;
             return (
-              <TouchableOpacity
-                onPress={() => {
-                  console.log('clicked');
-                }}>
+              <TouchableOpacity onPress={() => this.props.setFocusedDeal(item)}>
                 <View
                   style={{
                     backgroundColor: Color.White,
@@ -451,6 +439,7 @@ const mapStateToProps = function (state) {
     deals: getStateForKey('state.deals.list.items', state),
     getDealsPending: getStateForKey('state.deals.list.pending', state),
     getDealsError: getStateForKey('state.deals.list.error', state),
+    showDealFocusedModal: getStateForKey('state.deals.focused.show_modal', state),
   };
 };
 
@@ -491,13 +480,13 @@ const mapDispatchToProps = function (dispatch) {
       });
     },
 
-    focusReward: function (deal) {
+    setFocusedDeal: function (deal) {
       dispatch({
         type: ReduxActions.Deals.SetFocusedDeal,
         payload: deal,
       });
 
-      return Actions.rewardFocus();
+      // return Actions.rewardFocus();
     },
   };
 };
