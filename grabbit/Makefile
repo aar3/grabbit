@@ -24,25 +24,7 @@ CMD_DJANGO_MAKE_MIGRATIONS = ./manage.py makemigrations
 CMD_DJANGO_MIGRATE = ./manage.py migrate
 
 # start app locally
-CMD_START_APP_DEV = cd . && gunicorn $(APP_NAME).wsgi:application --workers=3 -b 0.0.0.0:8000 --reload --log-level DEBUG --worker-class=gevent  --timeout=120 --worker-connections=1000
-CMD_START_APP_PROD = cd . && gunicorn $(APP_NAME).wsgi:application -w 2 -b 0.0.0.0:8000 --log-level DEBUG
-
-# bootstrap environment
-CMD_SOURCE_VIRTUAL_ENV = source $(SOURCE)/venv/bin/activate
-CMD_CREATE_LOGS = mkdir -pv ./logs && touch ./logs/$(APP_NAME).log
-
-# docker
-CMD_DOCKER_BUILD_DEV = docker build -t ralston3/$(APP_NAME)_api:dev-latest -f Dockerfile.dev .
-CMD_DOCKER_BUILD_PROD = docker build -t ralston3/$(APP_NAME)_api:prod-latest -f Dockerfile.prod .
-CMD_DOCKER_CLEAN_ALL = docker image prune && docker volume prune && docker container stop $(docker ps -aq) && docker container rm $(docker ps -aq)
-CMD_DOCKER_PUSH_DEV = docker push ralston3/$(APP_NAME)_api:dev-latest
-CMD_DOCKER_PUSH_PROD = docker push ralston3/$(APP_NAME)_api:prod-latest
-CMD_DOCKER_START_DEV = docker-compose -f docker-compose.dev.yml up
-CMD_DOCKER_START_PROD = docker-compose -f docker-compose.prod.yml up
-CMD_DOCKER_STOP_DEV = docker-compose -f docker-compose.dev.yml down -v
-CMD_DOCKER_STOP_PROD = docker-compose -f docker-compose.prod.yml down -v
-CMD_DOCKER_START_CI = docker-compose -f docker-compose.ci.yml up
-CMD_DOCKER_STOP_CI = docker-compose -f docker-compose.ci.yml down -v
+CMD_START_DJANGO_DEV = cd . && gunicorn $(APP_NAME).wsgi:application --workers=3 -b 0.0.0.0:8000 --reload --log-level DEBUG --worker-class=gevent  --timeout=120 --worker-connections=1000
 
 CMD_CELERY_START = celery -A lib.celery worker -l INFO --without-gossip
 CMD_START_FLOWER = celery flower -A lib.celery --address=127.0.0.1 --port=5555
@@ -86,10 +68,7 @@ freeze:
 	$(CMD_PIP_FREEZE)
 
 dev: installock migrate
-	$(CMD_START_APP_DEV)
-
-prod: installock migrate
-	$(CMD_START_APP_PROD)
+	$(CMD_START_DJANGO_DEV)
 
 flower:
 	$(CMD_START_FLOWER)

@@ -127,8 +127,7 @@ async def handle_client_redux_connection(websocket, path):
         await websocket.send(msg)
 
 
-if __name__ == "__main__":
-
+def main(*args, **kwargs):
     host = os.environ["WEBSOCKET_HOST"]
     port = os.environ["WEBSOCKET_PORT"]
     loop = asyncio.get_event_loop()
