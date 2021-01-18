@@ -79,6 +79,7 @@ class V extends React.Component {
             paddingTop: 50,
             backgroundColor: Color.White,
             alignItems: 'center',
+            backgroundColor: Color.QueenBlue,
           }}>
           <View
             style={{
@@ -107,6 +108,7 @@ class V extends React.Component {
                 width: '100%',
               }}>
               <TextInput
+                disabled={true}
                 labelStyle={styles.labelStyle}
                 label={'Phone'}
                 inputStyle={styles.inputStyle}
@@ -191,7 +193,7 @@ class V extends React.Component {
               }}>
               <Text
                 style={{
-                  color: Color.ReadableGreyText,
+                  color: Color.White,
                   fontSize: 11,
                 }}>
                 Don't have an account?{' '}
@@ -199,10 +201,10 @@ class V extends React.Component {
               <TouchableOpacity onPress={() => Actions.signup()}>
                 <Text
                   style={{
-                    fontWeight: 'bold',
+                    // fontWeight: 'bold',
                     fontSize: 11,
                     textDecorationLine: 'underline',
-                    color: Color.HyperlinkBlue,
+                    color: Color.White,
                   }}>
                   Sign Up
                 </Text>
@@ -272,6 +274,8 @@ const styles = StyleSheet.create({
   labelStyle: {
     fontWeight: 'normal',
     fontSize: 12,
+    marginBottom: 5,
+    color: Color.White,
   },
 
   inputStyle: {

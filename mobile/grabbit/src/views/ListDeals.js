@@ -150,7 +150,7 @@ class V extends React.Component {
             backgroundColor: Color.TopNavBackground,
             borderColor: Color.BorderLightGrey,
             borderBottomWidth: 0,
-            height: 300,
+            height: 350,
             width: '100%',
           }}
           refreshing={this.props.getDealsPending}
@@ -161,14 +161,14 @@ class V extends React.Component {
               ((item.deal.original_value - item.deal.current_value) / item.deal.current_value) * 100,
             ).toFixed(0);
 
-            const shortTitle = item.deal.title.length > 40 ? `${item.deal.title.substr(0, 40)}...` : item.deal.title;
+            const shortTitle = item.deal.title.length > 50 ? `${item.deal.title.substr(0, 50)}...` : item.deal.title;
 
             return (
               <TouchableOpacity onPress={() => this.props.setFocusedDeal(item)}>
                 <View
                   style={{
-                    height: 200,
-                    width: 200,
+                    height: 250,
+                    width: 230,
                     borderRadius: 5,
                     marginTop: 5,
                     // marginBottom: 40,
@@ -179,34 +179,39 @@ class V extends React.Component {
                   }}>
                   <View
                     style={{
-                      borderWidth: 1,
-                      borderColor: 'orange',
+                      // borderWidth: 1,
+                      // borderColor: 'orange',
                       justifyContent: 'center',
                       alignItems: 'center',
                     }}>
                     <View
                       style={{
-                        borderWidth: 1,
-                        borderColor: 'red',
+                        // borderWidth: 1,
+                        // borderColor: 'red',
                         width: 200,
                         justifyContent: 'center',
                         alignItems: 'center',
                       }}>
                       <View
                         style={{
-                          borderWidth: 1,
-                          borderColor: 'red',
-                          width: 175,
+                          borderBottomColor: Color.BorderLightGrey,
+                          borderBottomWidth: 1,
+                          // borderWidth: 1,
+                          // borderColor: 'red',
+                          width: 200,
                           fontWeight: '600',
                           position: 'relative',
                           top: 5,
+                          paddingBottom: 5,
                           zIndex: 999,
                           color: Color.ReadableGreyText,
                           flexDirection: 'row',
+                          marginBottom: 5,
                         }}>
                         <Text
                           style={{
                             fontWeight: '600',
+                            fontSize: 13,
                             color: Color.ReadableGreyText,
                           }}>
                           {shortTitle}
@@ -215,10 +220,10 @@ class V extends React.Component {
                       <Image
                         source={{uri: item.deal.img_url, cache: 'force-cache'}}
                         style={{
-                          borderWidth: 1,
-                          borderColor: 'blue',
-                          height: 145,
-                          width: 145,
+                          // borderWidth: 1,
+                          // borderColor: 'blue',
+                          height: 200,
+                          width: 200,
                         }}
                       />
                     </View>
@@ -228,11 +233,11 @@ class V extends React.Component {
                       backgroundColor: Color.White,
                       borderColor: Color.BorderLightGrey,
                       opacity: 0.8,
-                      // borderColor: 'green',
-                      // borderWidth: 1,
+                      borderColor: 'green',
+                      borderWidth: 1,
                       height: 30,
                       position: 'absolute',
-                      top: 170,
+                      top: 210,
                       shadowColor: '#000',
                       borderTopRightRadius: 8,
                       borderTopLeftRadius: 8,

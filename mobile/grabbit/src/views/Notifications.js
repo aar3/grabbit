@@ -30,7 +30,7 @@ class V extends React.Component {
     return this.props.getNotifications(this.options);
   }
 
-  _renderMoreInfoButton(item) {
+  _renderActionButton(item) {
     if (!item.route_key) {
       return null;
     }
@@ -160,13 +160,17 @@ class V extends React.Component {
           justifyContent: 'center',
           alignItems: 'center',
           backgroundColor: Color.TopNavBackground,
+          borderWidth: 1,
+          borderColor: 'blue',
         }}>
         <FlatList
           data={this.props.notifications}
           style={{
-            marginTop: 10,
+            // marginTop: 10,
             width: '100%',
             backgroundColor: Color.TopNavBackground,
+            borderWidth: 1,
+            borderColor: 'red',
           }}
           refreshing={this.props.getNotificationsPending}
           onRefresh={() => this._onRefresh()}
@@ -182,22 +186,22 @@ class V extends React.Component {
                 }}>
                 <View
                   style={{
-                    shadowColor: '#000',
-                    shadowOffset: {
-                      width: 2,
-                      height: 2,
-                    },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 2,
-                    elevation: 2,
+                    // shadowColor: '#000',
+                    // shadowOffset: {
+                    //   width: 2,
+                    //   height: 2,
+                    // },
+                    // shadowOpacity: 0.25,
+                    // shadowRadius: 2,
+                    // elevation: 2,
                     backgroundColor: Color.White,
                     padding: 10,
-                    borderBottomWidth: 1,
+                    borderBottomWidth: 0.5,
                     borderBottomColor: Color.BorderLightGrey,
                     flexDirection: 'row',
-                    marginBottom: 10,
+                    // marginBottom: 10,
                     // justifyContent: 'center',
-                    // height: 70,
+                    height: 70,
                     alignItems: 'center',
                   }}>
                   <View
@@ -251,12 +255,19 @@ class V extends React.Component {
                       {this._renderSeenTag(item)}
                     </View>
                   </View>
-                  {this._renderMoreInfoButton(item)}
+                  {this._renderActionButton(item)}
                 </View>
               </TouchableOpacity>
             );
           }}
         />
+        <View
+          style={{
+            borderWidth: 1,
+            borderColor: 'red',
+          }}>
+          <Text>Logo Here</Text>
+        </View>
       </View>
     );
   }

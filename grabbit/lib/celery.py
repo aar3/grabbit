@@ -6,12 +6,6 @@ from lib.tasks import TargetScraper, Scrapers, NikeScraper
 task_manager = Celery("lib.celery", backend=settings.CELERY_RESULT_BACKEND, broker=settings.CELERY_BROKER)
 
 
-# @task_manager.task
-# def slickdeals_scraper_task():
-#     scraper = SlickDealsScraper()
-#     scraper.run()
-
-
 @task_manager.task
 def target_scraper_task():
     scraper = TargetScraper()
@@ -19,12 +13,7 @@ def target_scraper_task():
     scraper.run()
 
 
-# @task_manager.task
-# def amazon_scraper_task():
-#     scraper = AmazonScraper()
-#     scraper.run()
-
-# @task_manager.task
+@task_manager.task
 def nike_scraper_task(start):
     scraper = NikeScraper(start=start)
     scraper.set_cookies()

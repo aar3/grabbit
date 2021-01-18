@@ -44,4 +44,9 @@ export const BankLogos = {
   },
 };
 
+export const MerchantLogos = {
+  Target: 'https://www.anbmedia.com/wp/wp-content/uploads/2019/10/target-logo-1024x780.jpg',
+  Nike: 'https://qph.fs.quoracdn.net/main-qimg-18d801a88c5d4fefd289642da0d074d9.webp',
+};
+
 export const Font = 'Arial';

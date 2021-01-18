@@ -134,7 +134,7 @@ const defaultState = {
     links: [
       {
         id: 2,
-        title: 'Droplist',
+        title: 'Bookmarks',
         icon: 'bookmark',
         description: 'View your bookmarked deals',
         routeKey: 'bookmarks',

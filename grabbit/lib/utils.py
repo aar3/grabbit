@@ -4,6 +4,7 @@ import string
 import socket
 import collections
 import qrcode
+from grabbit import logger
 
 
 def random_string(n=10):
@@ -48,6 +49,9 @@ def most_common(arr):
 
 
 def django_unix_client(data):
-    sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-    sock.connect("/tmp/django_socket.s")
-    sock.send(data)
+    try:
+        sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        sock.connect("/tmp/django_socket.s")
+        sock.send(data)
+    except Exception as err:
+        logger.error("django_unix_client failed with: %s", str(err))

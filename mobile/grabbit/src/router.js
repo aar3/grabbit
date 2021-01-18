@@ -39,6 +39,7 @@ export default class Router_ extends React.Component {
           <Scene
             key="login"
             component={LoginView}
+            // initial
             gesturesEnabled={false}
             drawerLockMode="locked-closed"
             title="Login"

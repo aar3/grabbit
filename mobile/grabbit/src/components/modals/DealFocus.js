@@ -1,9 +1,11 @@
 import React from 'react';
-import {View, Modal, TouchableOpacity, Text} from 'react-native';
+import {View, Modal, TouchableOpacity, Image, Text, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {connect} from 'react-redux';
+import {Button} from 'react-native-elements';
 import ReduxActions from 'grabbit/src/Actions';
-import {Color} from 'grabbit/src/Const';
+import {Color, MerchantLogos} from 'grabbit/src/Const';
+import {GrabbitButton} from 'grabbit/src/components/Basic';
 import {getStateForKey} from 'grabbit/src/Utils';
 
 class M extends React.Component {
@@ -20,6 +22,7 @@ class M extends React.Component {
   }
 
   render() {
+    const merchantLogo = MerchantLogos[this.props.userDeal.deal.merchant_name];
     return (
       <Modal
         animationType={'slid'}
@@ -47,15 +50,15 @@ class M extends React.Component {
               width: 5,
               height: 10,
             },
-            shadowOpacity: 0.75,
+            shadowOpacity: 0.9,
             shadowRadius: 50.84,
             elevation: 10,
           }}>
           <View
             style={{
-              borderWidth: 1,
+              // borderWidth: 1,
+              // borderColor: 'green',
               height: 30,
-              borderColor: 'green',
               width: '100%',
               flexDirection: 'row',
               justifyContent: 'flex-end',
@@ -64,7 +67,95 @@ class M extends React.Component {
               <Icon name="x" size={30} color={Color.BorderLightGrey} />
             </TouchableOpacity>
           </View>
-          <Text>{this.props.userDeal.deal.title}</Text>
+          <View
+            style={{
+              // borderWidth: 1,
+              // borderColor: 'red',
+              padding: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: Color.BorderLightGrey,
+                height: 100,
+                width: 100,
+                borderRadius: 100,
+                overflow: 'hidden',
+              }}>
+              <Image source={{uri: merchantLogo}} style={{width: 100, height: 100}} />
+            </View>
+            <Text
+              style={{
+                marginTop: 20,
+                fontWeight: '600',
+                color: Color.ReadableGreyText,
+              }}>
+              {this.props.userDeal.deal.merchant_name}
+            </Text>
+
+            <Text
+              style={{
+                marginTop: 20,
+                color: Color.ReadableGreyText,
+              }}>
+              {this.props.userDeal.deal.title}
+            </Text>
+
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: Color.BorderLightGrey,
+                marginTop: 20,
+                width: 150,
+                height: 150,
+              }}>
+              <Image source={{uri: this.props.userDeal.deal.img_url}} style={{height: 148, width: 148}} />
+            </View>
+
+            <Text
+              style={{
+                marginTop: 20,
+                color: Color.ReadableGreyText,
+                fontSize: 12,
+                textAlign: 'center',
+              }}>
+              {this.props.userDeal.deal.description}
+            </Text>
+
+            <View
+              style={{
+                // borderWidth: 1,
+                // borderColor: 'green',
+                marginTop: 20,
+              }}>
+              <GrabbitButton
+                _buttonStyle={{
+                  backgroundColor: Color.White,
+                  borderColor: Color.QueenBlue,
+                  borderWidth: 1,
+                }}
+                titleStyle={{
+                  color: Color.QueenBlue,
+                  fontWeight: 'bold',
+                }}
+                title="Bookmark"
+              />
+              <GrabbitButton
+                _buttonStyle={{
+                  backgroundColor: Color.White,
+                  borderColor: Color.QueenBlue,
+                  borderWidth: 1,
+                }}
+                titleStyle={{
+                  color: Color.QueenBlue,
+                  fontWeight: 'bold',
+                }}
+                title="Visit"
+              />
+            </View>
+          </View>
         </View>
       </Modal>
     );
@@ -89,3 +180,22 @@ const mapDispatchToProps = function (dispatch) {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(M);
+
+const styles = StyleSheet.create({
+  footerButton: {
+    width: 300,
+    borderRadius: 100,
+  },
+
+  buttonStyle: {
+    borderWidth: 1,
+    height: 50,
+    borderColor: Color.QueenBlue,
+    backgroundColor: Color.White,
+  },
+
+  footerButtonLabel: {
+    color: Color.QueenBlue,
+    fontWeight: '600',
+  },
+});

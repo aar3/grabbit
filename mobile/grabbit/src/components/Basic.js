@@ -1,6 +1,7 @@
 import React from 'react';
+import {StyleSheet} from 'react-native';
 import {Input, Button} from 'react-native-elements';
-import {buttonStyle, buttonContainerStyle} from 'grabbit/src/Styles';
+import {Color} from 'grabbit/src/Const';
 
 export class TextInput extends React.Component {
   render() {
@@ -16,10 +17,12 @@ export class TextInput extends React.Component {
       value,
       containerStyle,
       inputStyle,
+      disabled,
       autoCompleteType,
     } = this.props;
     return (
       <Input
+        disabled={disabled}
         value={value}
         autoCorrect={autoCorrect}
         keyboardType={keyboardType}
@@ -27,18 +30,34 @@ export class TextInput extends React.Component {
         secureTextEntry={secureTextEntry}
         onChangeText={onChangeText}
         autoCompleteType={autoCompleteType}
+        inputContainerStyle={{
+          borderBottomColor: 'transparent',
+          borderTopColor: 'transparent',
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 2,
+            height: 1,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 10,
+        }}
         containerStyle={
           containerStyle || {
             width: 300,
             paddingBottom: 5,
             // borderWidth: 1,
             // borderColor: 'red',
+            borderRadius: 10,
             height: 60,
           }
         }
         inputStyle={[
           {
             fontSize: 13,
+            backgroundColor: Color.White,
+            borderRadius: 10,
+            padding: 10,
           },
           inputStyle,
         ]}
@@ -57,11 +76,23 @@ export class GrabbitButton extends React.Component {
       <Button
         disabled={disabled}
         onPress={onPress}
-        buttonStyle={[buttonStyle, _buttonStyle]}
-        containerStyle={buttonContainerStyle}
+        buttonStyle={[styles.buttonStyle, _buttonStyle]}
+        containerStyle={styles.buttonContainerStyle}
         titleStyle={titleStyle}
         title={title}
       />
     );
   }
 }
+
+const styles = StyleSheet.create({
+  buttonStyle: {
+    borderRadius: 50,
+    height: 50,
+    width: 300,
+    borderRadius: 100,
+  },
+  buttonContainerStyle: {
+    marginBottom: 10,
+  },
+});
