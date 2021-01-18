@@ -2,13 +2,14 @@ from django.urls import path, include, re_path
 from rest_framework import routers
 from user.views import UserViewSet, SettingViewSet, NotificationViewSet, post_user_login, get_user_stats
 from plaid_local.views import LinkViewSet, LinkTokenViewSet, handle_link_auth_success
-from deal.views import UserDealViewSet
+from deal.views import UserDealViewSet, WatchListViewSet
 
 router = routers.DefaultRouter()
 router.register(r"accounts", UserViewSet, basename="user")
 router.register(r"^(?P<user_id>\w+)/settings", SettingViewSet, basename="setting")
 router.register(r"^(?P<user_id>\w+)/deals", UserDealViewSet, basename="user-deal")
 router.register(r"^(?P<user_id>\w+)/notifications", NotificationViewSet, basename="notification")
+router.register(r"^(?P<user_id>\w+)/watchlists", WatchListViewSet, basename="bookmark")
 
 plaid_router = routers.DefaultRouter()
 plaid_router.register(r"links", LinkViewSet, basename="link")

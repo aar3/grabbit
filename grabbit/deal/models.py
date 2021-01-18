@@ -35,6 +35,14 @@ class Deal(BaseModel):
         super(Deal, self).save()
 
 
+class WatchList(BaseModel):
+    class Meta:
+        db_table = "watchlists"
+
+    deal = models.ForeignKey(Deal, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
 class UserDeal(BaseModel):
     class Meta:
         db_table = "user_deals"

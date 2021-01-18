@@ -150,8 +150,19 @@ class V extends React.Component {
             backgroundColor: Color.TopNavBackground,
             borderColor: Color.BorderLightGrey,
             borderBottomWidth: 0,
-            height: 350,
+            height: 400,
+            marginBottom: 5,
             width: '100%',
+            // borderWidth: 1,
+            // borderColor: 'red',
+            // shadowColor: '#000',
+            // shadowOffset: {
+            //   width: 5,
+            //   height: 10,
+            // },
+            // shadowOpacity: 0.9,
+            // shadowRadius: 50.84,
+            // elevation: 10,
           }}
           refreshing={this.props.getDealsPending}
           onRefresh={() => this._onRefresh()}
@@ -194,14 +205,15 @@ class V extends React.Component {
                       }}>
                       <View
                         style={{
-                          borderBottomColor: Color.BorderLightGrey,
-                          borderBottomWidth: 1,
                           // borderWidth: 1,
                           // borderColor: 'red',
                           width: 200,
                           fontWeight: '600',
                           position: 'relative',
+                          justifyContent: 'center',
+                          alignItems: 'center',
                           top: 5,
+                          height: 40,
                           paddingBottom: 5,
                           zIndex: 999,
                           color: Color.ReadableGreyText,
@@ -220,10 +232,12 @@ class V extends React.Component {
                       <Image
                         source={{uri: item.deal.img_url, cache: 'force-cache'}}
                         style={{
-                          // borderWidth: 1,
-                          // borderColor: 'blue',
-                          height: 200,
-                          width: 200,
+                          borderWidth: 1,
+                          borderColor: Color.BorderLightGrey,
+                          borderRadius: 10,
+                          // marginTop: 2,
+                          height: 175,
+                          width: 175,
                         }}
                       />
                     </View>
@@ -233,11 +247,11 @@ class V extends React.Component {
                       backgroundColor: Color.White,
                       borderColor: Color.BorderLightGrey,
                       opacity: 0.8,
-                      borderColor: 'green',
-                      borderWidth: 1,
+                      // borderColor: 'green',
+                      // borderWidth: 1,
                       height: 30,
                       position: 'absolute',
-                      top: 210,
+                      top: 220,
                       shadowColor: '#000',
                       borderTopRightRadius: 8,
                       borderTopLeftRadius: 8,
@@ -318,6 +332,15 @@ class V extends React.Component {
           }}
         />
 
+        <View
+          style={{
+            // borderWidth: 1,
+            // borderColor: 'red',
+            width: '100%',
+            borderBottomWidth: 1,
+            borderBottomColor: Color.BorderLightGrey,
+          }}></View>
+
         <FlatList
           data={this.props.deals}
           style={{
@@ -344,7 +367,7 @@ class V extends React.Component {
                     backgroundColor: Color.White,
                     borderBottomWidth: 1,
                     borderBottomColor: Color.BorderLightGrey,
-                    marginBottom: 10,
+                    // marginBottom: 10,
                     marginTop: 10,
                     alignItems: 'center',
                     padding: 10,
@@ -358,17 +381,17 @@ class V extends React.Component {
                       borderWidth: 1,
                       borderColor: Color.BorderLightGrey,
                       backgroundColor: Color.White,
-                      height: 70,
-                      width: 70,
-                      marginLeft: 10,
+                      height: 100,
+                      width: 100,
+                      marginLeft: 5,
                       overflow: 'hidden',
                       borderRadius: 10,
                     }}>
                     <Image
                       source={{uri: item.deal.img_url}}
                       style={{
-                        height: 70,
-                        width: 70,
+                        height: 100,
+                        width: 100,
                         // borderWidth: 1,
                         // borderColor: 'red',
                       }}
@@ -439,8 +462,20 @@ class V extends React.Component {
                       }}>
                       {shortDescription}
                     </Text>
+                    <View
+                      style={{
+                        // borderWidth: 1,
+                        // borderColor: 'green',
+                        flexDirection: 'row',
+                        justifyContent: 'flex-end',
+                        marginTop: 5,
+                      }}>
+                      <TouchableOpacity onPress={() => {}}>
+                        <Icon name="bookmark" size={20} color={Color.BorderLightGrey} />
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                  <Icon style={{marginLeft: 20}} name={'chevron-right'} size={20} color={Color.BorderLightGrey} />
+                  <Icon style={{marginLeft: 0}} name={'chevron-right'} size={20} color={Color.BorderLightGrey} />
                 </View>
               </TouchableOpacity>
             );

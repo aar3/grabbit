@@ -9,12 +9,7 @@ import SignupView from 'grabbit/src/views/Signup';
 import SplashView from 'grabbit/src/views/Splash';
 import NotificationsView from 'grabbit/src/views/Notifications';
 import AccountTypeView from 'grabbit/src/views/AccountType';
-import BookmarksView from 'grabbit/src/views/Bookmarks';
-
-// import ContactView from 'grabbit/src/views/support/Contact';
-// import AboutView from 'grabbit/src/views/support/About';
-// import PrivacyView from 'grabbit/src/views/support/Privacy';
-// import TermsView from 'grabbit/src/views/support/Terms';
+import WatchlistView from 'grabbit/src/views/Watchlist';
 
 module.exports = {
   AccountView,
@@ -26,11 +21,7 @@ module.exports = {
   SettingsView,
   SignupView,
   SplashView,
-  // ContactView,
-  // AboutView,
-  // TermsView,
-  // PrivacyView,
   NotificationsView,
-  BookmarksView,
+  WatchlistView,
   AccountTypeView,
 };

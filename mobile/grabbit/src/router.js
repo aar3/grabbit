@@ -10,10 +10,9 @@ import {
   ListDealsView,
   PlaidAccountsView,
   AccountView,
-  RewardFocusView,
   SettingsView,
   AccountTypeView,
-  BookmarksView,
+  WatchlistView,
   NotificationsView,
 } from 'grabbit/src/views';
 
@@ -98,10 +97,10 @@ export default class Router_ extends React.Component {
             style={styles}
           />
           <Scene
-            title={'Bookmarks'}
+            title={'Watchlist'}
             hideNavBar={false}
-            key="bookmarks"
-            component={BookmarksView}
+            key="watchlist"
+            component={WatchlistView}
             navigationBarStyle={styles.NavbarContainer}
             style={styles}
           />
