@@ -133,6 +133,13 @@ const defaultState = {
   account: {
     links: [
       {
+        id: 2,
+        title: 'Droplist',
+        icon: 'bookmark',
+        description: 'View your bookmarked deals',
+        routeKey: 'bookmarks',
+      },
+      {
         id: 0,
         title: 'Link an account',
         icon: 'toggle-right',
@@ -145,13 +152,6 @@ const defaultState = {
         icon: 'settings',
         description: 'Change your Grabbit account Settings',
         routeKey: 'settings',
-      },
-      {
-        id: 2,
-        title: 'Droplist',
-        icon: 'bookmark',
-        description: 'View your bookmarked deals',
-        routeKey: 'bookmarks',
       },
     ],
   },

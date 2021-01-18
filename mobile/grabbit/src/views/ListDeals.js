@@ -150,7 +150,7 @@ class V extends React.Component {
             backgroundColor: Color.TopNavBackground,
             borderColor: Color.BorderLightGrey,
             borderBottomWidth: 0,
-            maxHeight: 240,
+            height: 300,
             width: '100%',
           }}
           refreshing={this.props.getDealsPending}
@@ -160,6 +160,9 @@ class V extends React.Component {
             const discount = Number(
               ((item.deal.original_value - item.deal.current_value) / item.deal.current_value) * 100,
             ).toFixed(0);
+
+            const shortTitle = item.deal.title.length > 40 ? `${item.deal.title.substr(0, 40)}...` : item.deal.title;
+
             return (
               <TouchableOpacity onPress={() => this.props.setFocusedDeal(item)}>
                 <View
@@ -167,7 +170,8 @@ class V extends React.Component {
                     height: 200,
                     width: 200,
                     borderRadius: 5,
-                    marginTop: 20,
+                    marginTop: 5,
+                    // marginBottom: 40,
                     backgroundColor: Color.White,
                     marginLeft: 10,
                     borderColor: Color.BorderLightGrey,
@@ -175,27 +179,27 @@ class V extends React.Component {
                   }}>
                   <View
                     style={{
-                      // borderWidth: 1,
-                      // borderColor: 'orange',
+                      borderWidth: 1,
+                      borderColor: 'orange',
                       justifyContent: 'center',
                       alignItems: 'center',
                     }}>
                     <View
-                      style={
-                        {
-                          // borderWidth: 1,
-                          // borderColor: 'red',
-                        }
-                      }>
+                      style={{
+                        borderWidth: 1,
+                        borderColor: 'red',
+                        width: 200,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
                       <View
                         style={{
-                          // borderWidth: 1,
-                          // borderColor: 'red',
-                          width: 150,
+                          borderWidth: 1,
+                          borderColor: 'red',
+                          width: 175,
                           fontWeight: '600',
                           position: 'relative',
-                          top: 10,
-                          left: -10,
+                          top: 5,
                           zIndex: 999,
                           color: Color.ReadableGreyText,
                           flexDirection: 'row',
@@ -205,14 +209,14 @@ class V extends React.Component {
                             fontWeight: '600',
                             color: Color.ReadableGreyText,
                           }}>
-                          {item.deal.title}
+                          {shortTitle}
                         </Text>
                       </View>
                       <Image
                         source={{uri: item.deal.img_url, cache: 'force-cache'}}
                         style={{
-                          // borderWidth: 1,
-                          // borderColor: 'blue',
+                          borderWidth: 1,
+                          borderColor: 'blue',
                           height: 145,
                           width: 145,
                         }}
@@ -336,6 +340,7 @@ class V extends React.Component {
                     borderBottomWidth: 1,
                     borderBottomColor: Color.BorderLightGrey,
                     marginBottom: 10,
+                    marginTop: 10,
                     alignItems: 'center',
                     padding: 10,
                     backgroundColor: Color.White,
@@ -354,7 +359,15 @@ class V extends React.Component {
                       overflow: 'hidden',
                       borderRadius: 10,
                     }}>
-                    <Image source={{uri: item.deal.img_url}} style={{height: 60, width: 60}} />
+                    <Image
+                      source={{uri: item.deal.img_url}}
+                      style={{
+                        height: 70,
+                        width: 70,
+                        // borderWidth: 1,
+                        // borderColor: 'red',
+                      }}
+                    />
                   </View>
                   <View
                     style={{
@@ -384,11 +397,11 @@ class V extends React.Component {
                         style={{
                           fontSize: 13,
                           position: 'absolute',
-                          right: 60,
+                          right: 80,
                           // color: '#5c903f',
                           color: Color.ReadableGreyText,
                         }}>
-                        {item.deal.current_value}
+                        ${item.deal.current_value}
                       </Text>
                       <Text
                         style={{
@@ -398,7 +411,7 @@ class V extends React.Component {
                           color: Color.ErrorRed,
                           textDecorationLine: 'line-through',
                         }}>
-                        {item.deal.original_value}
+                        ${item.deal.original_value}
                       </Text>
                     </View>
                     <Text

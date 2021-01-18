@@ -13,21 +13,21 @@ from lib.middlewares import ScraperAuthentication
 
 @api_view(["POST"])
 @authentication_classes([ScraperAuthentication])
-def init_target_scraper_task(_):
-    target_scraper_task.apply_async()
+def init_target_scraper_task(request):
+    target_scraper_task.apply_async(request.data.get("start"))
     return Response(status=200, data={"details": "Starting Target scraper"})
 
 
 # @api_view(["POST"])
 # @authentication_classes([ScraperAuthentication])
-# def init_amazon_scraper_task(_):
-#     amazon_scraper_task.apply_async()
+# def init_amazon_scraper_task(request):
+#     amazon_scraper_task.apply_async(request.data.get("start"))
 #     return Response(status=200, data={"details": "Starting Amazon scraper"})
 
 
 @api_view(["POST"])
 @authentication_classes([ScraperAuthentication])
-def init_nike_scraper_task(_):
-    # nike_scraper_task.apply_async()
-    nike_scraper_task()
+def init_nike_scraper_task(request):
+    # nike_scraper_task.apply_async(request.data.get("start"))
+    nike_scraper_task(request.data.get("start"))
     return Response(status=200, data={"details": "Starting Nike scraper"})

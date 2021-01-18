@@ -25,8 +25,8 @@ def target_scraper_task():
 #     scraper.run()
 
 # @task_manager.task
-def nike_scraper_task():
-    scraper = NikeScraper()
+def nike_scraper_task(start):
+    scraper = NikeScraper(start=start)
     scraper.set_cookies()
     scraper.run()
 

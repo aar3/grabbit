@@ -60,13 +60,14 @@ class LockedQueue(collections.deque):
 
 
 class ThreadedScraper(abc.ABC):
-    def __init__(self, name, domain, max_handles=10, max_tasks=10):
+    def __init__(self, name, domain, max_handles=10, max_successful_tasks=10, max_total_tasks=20, **kwargs):
         self.domain = domain
         self.queue = LockedQueue()
         self.max_handles = max_handles
-        self.max_tasks = max_tasks
+        self.max_successful_tasks = max_successful_tasks
+        self.max_total_tasks = max_total_tasks
         self.name = name
-        self.start = self._set_start_url()
+        self.start = self._set_start_url(start=kwargs.get("start"))
         self.session = requests.Session()
         self.soup = None
         self._handles = []
@@ -75,7 +76,8 @@ class ThreadedScraper(abc.ABC):
             "successful_tasks": 0,
             "total_tasks": 0,
             "queue": 0,
-            "max_tasks": self.max_tasks,
+            "max_successful_tasks": self.max_successful_tasks,
+            "max_total_tasks": self.max_total_tasks,
             "duplicate_tasks": 0,
             "unsuccessful_tasks": 0,
             "failed_tasks": 0,
@@ -83,7 +85,9 @@ class ThreadedScraper(abc.ABC):
         self.lock = threading.Lock()
         self.timeout = 3
 
-    def _set_start_url(self):
+    def _set_start_url(self, start):
+        if start:
+            return start
         deals = Deal.objects.filter(scraper=self.name).order_by("-created_at")
         if not deals:
             return START_URLS[self.name]
@@ -91,12 +95,13 @@ class ThreadedScraper(abc.ABC):
 
     def run(self):
         self.queue.append(self.start)
-        successful_tasks = self.info["successful_tasks"]
-
-        while self.queue and successful_tasks < self.max_tasks:
+        # TODO: refactor these property names so they make a bit more sense
+        while self.queue and (
+            (self.info["successful_tasks"] < self.max_successful_tasks)
+            and (self.info["total_tasks"] < self.max_total_tasks)
+        ):
             with self.lock:
                 self.info["queue"] = len(self.queue)
-                successful_tasks = self.info["successful_tasks"]
 
             if len(self._handles) == self.max_handles:
                 self._prune_handles()
@@ -229,6 +234,7 @@ class ThreadedScraper(abc.ABC):
         logger.warning("Successfully scraped a product link that was NOT a deal (due to: %s): %s", reason, url)
         with self.lock:
             self.info["unsuccessful_tasks"] += 1
+            self.info["total_tasks"] += 1
 
     def _handle_failed_scrape_attempt(self, url, response):
         with self.lock:
@@ -329,8 +335,8 @@ class ThreadedScraper(abc.ABC):
 
 class TargetScraper(ThreadedScraper):
     # NOTE: https://stackoverflow.com/a/59011424/4701228
-    def __init__(self, name=Scrapers.Target, domain=Domains.Target):
-        super(TargetScraper, self).__init__(name, domain)
+    def __init__(self, name=Scrapers.Target, domain=Domains.Target, **kwargs):
+        super(TargetScraper, self).__init__(name, domain, **kwargs)
         self.name = name
         self.domain = domain
         self.visitor_id = None
@@ -570,12 +576,32 @@ class TargetScraper(ThreadedScraper):
 
 
 class NikeScraper(ThreadedScraper):
-    def __init__(self, name=Scrapers.Nike, domain=Domains.Nike):
-        super(NikeScraper, self).__init__(name, domain)
+    def __init__(self, name=Scrapers.Nike, domain=Domains.Nike, **kwargs):
+        super(NikeScraper, self).__init__(name, domain, **kwargs)
         self.headers = {
             "referer": "https://www.nike.com/",
             "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0",
         }
+
+    def hydrate_queue_from_deal_page(self):
+        params = {
+            "queryid": "products",
+            "anonymousId": "065E1482E9463E9F731299937D8EA206",
+            "country": "us",
+            "endpoint": "/product_feed/rollup_threads/v2?filter=marketplace(US)&filter=language(en)&filter=employeePrice(true)&filter=attributeIds(5b21a62a-0503-400c-8336-3ccfbff2a684)&anchor=168&consumerChannelId=d9a5bc42-4b9c-4976-858a-f159cf99c647&count=24",
+            "language": "en",
+            "localizedRangeStr": "{lowestPrice} — {highestPrice}",
+        }
+
+        url = "https://api.nike.com/cic/browse/v1"
+        response = requests.get(url, params=params, headers=self.headers)
+        rjson = response.json()
+        for product in rjson["data"]["products"]["products"]:
+            for item in product["colorways"]:
+                url_parts = item["pdpUrl"].split("/")
+                url_parts[0] = self.domain + "/en"
+                url = "/".join(url_parts)
+                self.queue.append(url)
 
     def set_cookies(self):
         self.session.get(self.domain)
@@ -614,7 +640,7 @@ class NikeScraper(ThreadedScraper):
         # where `trW1vK` is the product id
         # The below implementation makes a naive assumption about the url
         parts = url.split("/")
-        id_part = parts[-2] if len(parts) == 6 else parts[-1]
+        id_part = parts[parts.index("t") + 1]
         pid = id_part.split("-")[-1]
         source_tags = self.soup.find_all("source")
         srcsets = [tag.get("srcset") for tag in source_tags]
@@ -646,9 +672,18 @@ class NikeScraper(ThreadedScraper):
 
 if __name__ == "__main__":
 
-    sesh = requests.Session()
+    # url = "https://www.nike.com/t/air-max-tailwind-iv-mens-shoe-fF5q8X/AQ2567-001"
+    # r = requests.get(url)
+    # s = BeautifulSoup(r.content, "html5lib")
+
+    # src = s.find_all("source")
+    # srcsets = [tag.get("srcset") for tag in src]
+
+    # print(srcsets)
+
+    # sesh = requests.Session()
 
     s = NikeScraper()
     s.set_cookies()
-
+    s.hydrate_queue_from_deal_page()
     s.run()
