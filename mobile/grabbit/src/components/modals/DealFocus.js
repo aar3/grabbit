@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Modal, TouchableOpacity, Image, Text, StyleSheet} from 'react-native';
+import {View, Modal, TouchableOpacity, Image, Text, FlatList, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {connect} from 'react-redux';
 import {Button} from 'react-native-elements';
@@ -105,13 +105,34 @@ class M extends React.Component {
 
             <View
               style={{
-                borderWidth: 1,
-                borderColor: Color.BorderLightGrey,
+                // borderWidth: 1,
+                // borderColor: 'red',
                 marginTop: 20,
-                width: 150,
-                height: 150,
+                width: '100%',
+                height: 200,
               }}>
-              <Image source={{uri: this.props.userDeal.deal.img_url}} style={{height: 148, width: 148}} />
+              <FlatList
+                horizontal
+                keyExtractor={(_item, index) => index.toString()}
+                style={{
+                  height: 200,
+                }}
+                data={this.props.userDeal.deal.all_img_urls}
+                renderItem={({item, index}) => {
+                  return (
+                    <Image
+                      source={{uri: item}}
+                      style={{
+                        height: 200,
+                        width: 200,
+                        borderWidth: 1,
+                        borderColor: Color.BorderLightGrey,
+                        marginLeft: 5,
+                      }}
+                    />
+                  );
+                }}
+              />
             </View>
 
             <Text
@@ -140,7 +161,7 @@ class M extends React.Component {
                   color: Color.QueenBlue,
                   fontWeight: 'bold',
                 }}
-                title="Bookmark"
+                title="Add to Watch List"
               />
               <GrabbitButton
                 _buttonStyle={{

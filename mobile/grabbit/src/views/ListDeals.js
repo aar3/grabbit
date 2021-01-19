@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, FlatList, Image, TouchableOpacity, ImageBackground} from 'react-native';
+import {View, Text, FlatList, Image, Modal, TouchableOpacity, ImageBackground} from 'react-native';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import ReduxActions from 'grabbit/src/Actions';
@@ -13,6 +13,7 @@ class V extends React.Component {
     super(props);
     this.state = {
       flatListReloading: false,
+      infoModalVisible: false,
     };
     this._options = {};
   }
@@ -140,6 +141,7 @@ class V extends React.Component {
         style={{
           flex: 1,
           alignItems: 'center',
+          backgroundColor: Color.BorderLightGrey,
         }}>
         {this._renderModal()}
         <FlatList
@@ -148,11 +150,11 @@ class V extends React.Component {
           style={{
             borderWidth: 1,
             backgroundColor: Color.TopNavBackground,
-            borderColor: Color.BorderLightGrey,
+            borderColor: 'green',
             borderBottomWidth: 0,
             height: 400,
-            marginBottom: 5,
             width: '100%',
+            marginBottom: 2,
             // borderWidth: 1,
             // borderColor: 'red',
             // shadowColor: '#000',
@@ -179,15 +181,38 @@ class V extends React.Component {
                 <View
                   style={{
                     height: 250,
-                    width: 230,
+                    width: 250,
                     borderRadius: 5,
                     marginTop: 5,
                     // marginBottom: 40,
                     backgroundColor: Color.White,
-                    marginLeft: 10,
+                    marginLeft: 20,
                     borderColor: Color.BorderLightGrey,
                     borderWidth: 1,
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: -2,
+                      height: 2,
+                    },
+                    shadowOpacity: 0.5,
+                    shadowRadius: 5.84,
+                    elevation: 5,
                   }}>
+                  {/* <Modal 
+                      animationType={'fade'}
+                      transparent={true}
+                      visible={this.state.infoModalVisible}
+                      onRequestClose={() => {
+                        this.setState({ infoModalVisible: false });
+                      }}
+                      >
+                        <View style={{
+                          height: 250,
+                          width: 250,
+                        }}>
+                          <Text>Hi</Text>
+                        </View>
+                      </Modal> */}
                   <View
                     style={{
                       // borderWidth: 1,
@@ -199,132 +224,34 @@ class V extends React.Component {
                       style={{
                         // borderWidth: 1,
                         // borderColor: 'red',
-                        width: 200,
+                        width: 250,
+                        height: 250,
                         justifyContent: 'center',
                         alignItems: 'center',
                       }}>
-                      <View
-                        style={{
-                          // borderWidth: 1,
-                          // borderColor: 'red',
-                          width: 200,
-                          fontWeight: '600',
-                          position: 'relative',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          top: 5,
-                          height: 40,
-                          paddingBottom: 5,
-                          zIndex: 999,
-                          color: Color.ReadableGreyText,
-                          flexDirection: 'row',
-                          marginBottom: 5,
-                        }}>
-                        <Text
-                          style={{
-                            fontWeight: '600',
-                            fontSize: 13,
-                            color: Color.ReadableGreyText,
-                          }}>
-                          {shortTitle}
-                        </Text>
-                      </View>
                       <Image
                         source={{uri: item.deal.img_url, cache: 'force-cache'}}
                         style={{
-                          borderWidth: 1,
-                          borderColor: Color.BorderLightGrey,
-                          borderRadius: 10,
-                          // marginTop: 2,
-                          height: 175,
-                          width: 175,
+                          // borderWidth: 1,
+                          // borderColor: Color.BorderLightGrey,
+                          // borderRadius: 10,
+                          height: 250,
+                          width: 250,
                         }}
                       />
                     </View>
-                  </View>
-                  <View
-                    style={{
-                      backgroundColor: Color.White,
-                      borderColor: Color.BorderLightGrey,
-                      opacity: 0.8,
-                      // borderColor: 'green',
+                    {/* <View style={{
+                      width: 200,
+                      height: 20,
+                      marginTop: 10,
                       // borderWidth: 1,
-                      height: 30,
-                      position: 'absolute',
-                      top: 220,
-                      shadowColor: '#000',
-                      borderTopRightRadius: 8,
-                      borderTopLeftRadius: 8,
-                      backgroundColor: '#5c903f',
-                      shadowOffset: {
-                        width: 2,
-                        height: 2,
-                      },
-                      shadowOpacity: 0.25,
-                      shadowRadius: 4.84,
-                      elevation: 5,
+                      // borderColor: 'green',
                       flexDirection: 'row',
+                      justifyContent: 'space-evenly',
                     }}>
-                    <View
-                      style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderTopLeftRadius: 8,
-                        height: 30,
-                        marginLeft: 10,
-                        // borderWidth: 1,
-                        // borderColor: 'green',
-                      }}>
-                      <Text
-                        style={{
-                          fontWeight: 'bold',
-                          textAlign: 'center',
-                          fontFamily: Font,
-                          fontSize: 14,
-                          color: Color.White,
-                        }}>
-                        ${Number(item.deal.current_value).toFixed(0)}
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        backgroundColor: Color.HotPink,
-                        padding: 5,
-                        height: 30,
-                        marginLeft: 5,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          fontWeight: 'bold',
-                          fontFamily: Font,
-                          color: Color.White,
-                        }}>
-                        ${Number(item.deal.original_value).toFixed(0)}
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        backgroundColor: Color.QueenBlue,
-                        padding: 5,
-                        height: 30,
-                        borderTopRightRadius: 8,
-                        // marginLeft: 5,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          fontWeight: 'bold',
-                          fontFamily: Font,
-                          color: Color.White,
-                        }}>
-                        {discount}%
-                      </Text>
-                    </View>
+                      <Icon name={'heart'} size={20} color={Color.BorderLightGrey}/>
+                      <Icon name={'bookmark'} size={20} color={Color.BorderLightGrey} />
+                    </View> */}
                   </View>
                 </View>
               </TouchableOpacity>
@@ -368,30 +295,38 @@ class V extends React.Component {
                     borderBottomWidth: 1,
                     borderBottomColor: Color.BorderLightGrey,
                     // marginBottom: 10,
-                    marginTop: 10,
+                    marginTop: 20,
                     alignItems: 'center',
                     padding: 10,
                     backgroundColor: Color.White,
                     flexDirection: 'row',
                     borderBottomRightRadius: 10,
                     borderTopRightRadius: 10,
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 2,
+                      height: 2,
+                    },
+                    shadowOpacity: 0.5,
+                    shadowRadius: 5.84,
+                    // elevation: 5,
                   }}>
                   <View
                     style={{
                       borderWidth: 1,
                       borderColor: Color.BorderLightGrey,
                       backgroundColor: Color.White,
-                      height: 100,
-                      width: 100,
-                      marginLeft: 5,
+                      height: 150,
+                      width: 150,
+                      // marginLeft: 5,
                       overflow: 'hidden',
-                      borderRadius: 10,
+                      // borderRadius: 10,
                     }}>
                     <Image
                       source={{uri: item.deal.img_url}}
                       style={{
-                        height: 100,
-                        width: 100,
+                        height: 150,
+                        width: 150,
                         // borderWidth: 1,
                         // borderColor: 'red',
                       }}
@@ -399,8 +334,9 @@ class V extends React.Component {
                   </View>
                   <View
                     style={{
-                      marginLeft: 20,
-                      width: '65%',
+                      marginLeft: 10,
+                      width: 225,
+                      height: 150,
                       justifyContent: 'center',
                       // borderWidth: 1,
                       // borderColor: 'blue',
@@ -424,9 +360,10 @@ class V extends React.Component {
                       <Text
                         style={{
                           fontSize: 13,
-                          position: 'absolute',
-                          right: 80,
+                          // position: 'absolute',
+                          // right: 80,
                           // color: '#5c903f',
+                          marginLeft: 50,
                           color: Color.ReadableGreyText,
                         }}>
                         ${item.deal.current_value}
@@ -434,9 +371,10 @@ class V extends React.Component {
                       <Text
                         style={{
                           fontSize: 13,
-                          position: 'absolute',
-                          right: 10,
+                          // position: 'absolute',
+                          // right: 10,
                           color: Color.ErrorRed,
+                          marginLeft: 20,
                           textDecorationLine: 'line-through',
                         }}>
                         ${item.deal.original_value}
@@ -475,7 +413,7 @@ class V extends React.Component {
                       </TouchableOpacity>
                     </View>
                   </View>
-                  <Icon style={{marginLeft: 0}} name={'chevron-right'} size={20} color={Color.BorderLightGrey} />
+                  {/* <Icon style={{marginLeft: 0}} name={'chevron-right'} size={20} color={Color.BorderLightGrey} /> */}
                 </View>
               </TouchableOpacity>
             );
