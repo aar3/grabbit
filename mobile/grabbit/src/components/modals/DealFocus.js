@@ -109,13 +109,13 @@ class M extends React.Component {
                 // borderColor: 'red',
                 marginTop: 20,
                 width: '100%',
-                height: 200,
+                height: 150,
               }}>
               <FlatList
                 horizontal
                 keyExtractor={(_item, index) => index.toString()}
                 style={{
-                  height: 200,
+                  height: 150,
                 }}
                 data={this.props.userDeal.deal.all_img_urls}
                 renderItem={({item, index}) => {
@@ -123,8 +123,8 @@ class M extends React.Component {
                     <Image
                       source={{uri: item}}
                       style={{
-                        height: 200,
-                        width: 200,
+                        height: 150,
+                        width: 150,
                         borderWidth: 1,
                         borderColor: Color.BorderLightGrey,
                         marginLeft: 5,
@@ -152,6 +152,25 @@ class M extends React.Component {
                 marginTop: 20,
               }}>
               <GrabbitButton
+                disabled={this.props.userDeal.is_on_watchlist}
+                onPress={
+                  this.props.userDeal.is_on_watchlist
+                    ? null
+                    : () =>
+                        this.props.putUserDealOnWatchList({
+                          endpoint: `/users/${this.props.user.id}/deals/${this.props.userDeal.id}/`,
+                          method: 'PUT',
+                          headers: {
+                            'X-Session-Token': this.props.user.current_session_token,
+                            'Content-Type': 'application/json',
+                          },
+                          data: {
+                            user_id: this.props.user.id,
+                            deal_id: this.props.deal.id,
+                            is_on_watchlist: 1,
+                          },
+                        })
+                }
                 _buttonStyle={{
                   backgroundColor: Color.White,
                   borderColor: Color.QueenBlue,
@@ -195,6 +214,25 @@ const mapDispatchToProps = function (dispatch) {
     toggleFocusedDealModal: () => {
       return dispatch({
         type: ReduxActions.Deals.ToggleFocusedDealModal,
+      });
+    },
+    putUserDealOnWatchList: async function (options) {
+      dispatch({
+        type: ReduxActions.Deals.UpdateWatchListItemPending,
+      });
+
+      const {data, error} = await httpRequest(options);
+
+      if (error) {
+        dispatch({
+          type: ReduxActions.Deals.UpdateWatchListItemError,
+          payload: error,
+        });
+      }
+
+      return dispatch({
+        type: ReduxActions.Deals.UpdateWatchListItemSuccess,
+        payload: data,
       });
     },
   };

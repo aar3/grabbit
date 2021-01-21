@@ -36,20 +36,13 @@ class Deal(BaseModel):
         super(Deal, self).save()
 
 
-class WatchList(BaseModel):
-    class Meta:
-        db_table = "watchlists"
-
-    deal = models.ForeignKey(Deal, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-
 class UserDeal(BaseModel):
     class Meta:
         db_table = "user_deals"
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     deal = models.ForeignKey(Deal, on_delete=models.CASCADE)
+    is_on_watchlist = models.IntegerField(default=0)
 
 
 @receiver(post_save, sender=UserDeal)

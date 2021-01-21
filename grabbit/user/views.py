@@ -74,7 +74,7 @@ class BaseUserNestedViewSet(BaseModelViewSet):
 
     def update(self, request, user_id=None, pk=None):
         user = get_object_or_404(User, pk=user_id)
-        instance = self.model.objects.filter(user__id=user.id, pk=pk, deleted_at=None)
+        instance = self.model.objects.get(user__id=user.id, pk=pk, deleted_at=None)
         instance.__dict__.update(request.data)
         instance.save()
         serializer = self.serializer(instance)

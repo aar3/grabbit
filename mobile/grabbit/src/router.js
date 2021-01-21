@@ -12,7 +12,7 @@ import {
   AccountView,
   SettingsView,
   AccountTypeView,
-  WatchlistView,
+  WatchListView,
   NotificationsView,
 } from 'grabbit/src/views';
 
@@ -30,7 +30,7 @@ export default class Router_ extends React.Component {
             key="entry"
             component={EntryView}
             title="Entry"
-            initial
+            // initial
             gesturesEnabled={false}
             drawerLockMode="locked-closed"
             hideNavBar={true}
@@ -70,7 +70,7 @@ export default class Router_ extends React.Component {
             navBar={MainTopNavigationBar}
             title=""
             hideNavBar={false}
-            // initial
+            initial
             key="listDeal"
             component={ListDealsView}
           />
@@ -97,10 +97,10 @@ export default class Router_ extends React.Component {
             style={styles}
           />
           <Scene
-            title={'Watchlist'}
+            title={'Watch List'}
             hideNavBar={false}
-            key="watchlist"
-            component={WatchlistView}
+            key="watchList"
+            component={WatchListView}
             navigationBarStyle={styles.NavbarContainer}
             style={styles}
           />

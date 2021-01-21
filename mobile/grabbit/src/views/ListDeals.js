@@ -148,23 +148,13 @@ class V extends React.Component {
           horizontal
           data={this.props.deals}
           style={{
-            borderWidth: 1,
+            // borderWidth: 1,
+            // borderColor: 'green',
             backgroundColor: Color.TopNavBackground,
-            borderColor: 'green',
             borderBottomWidth: 0,
             height: 400,
             width: '100%',
             marginBottom: 2,
-            // borderWidth: 1,
-            // borderColor: 'red',
-            // shadowColor: '#000',
-            // shadowOffset: {
-            //   width: 5,
-            //   height: 10,
-            // },
-            // shadowOpacity: 0.9,
-            // shadowRadius: 50.84,
-            // elevation: 10,
           }}
           refreshing={this.props.getDealsPending}
           onRefresh={() => this._onRefresh()}
@@ -186,33 +176,11 @@ class V extends React.Component {
                     marginTop: 5,
                     // marginBottom: 40,
                     backgroundColor: Color.White,
-                    marginLeft: 20,
+                    marginLeft: 10,
                     borderColor: Color.BorderLightGrey,
                     borderWidth: 1,
-                    shadowColor: '#000',
-                    shadowOffset: {
-                      width: -2,
-                      height: 2,
-                    },
-                    shadowOpacity: 0.5,
-                    shadowRadius: 5.84,
-                    elevation: 5,
+                    borderRadius: 10,
                   }}>
-                  {/* <Modal 
-                      animationType={'fade'}
-                      transparent={true}
-                      visible={this.state.infoModalVisible}
-                      onRequestClose={() => {
-                        this.setState({ infoModalVisible: false });
-                      }}
-                      >
-                        <View style={{
-                          height: 250,
-                          width: 250,
-                        }}>
-                          <Text>Hi</Text>
-                        </View>
-                      </Modal> */}
                   <View
                     style={{
                       // borderWidth: 1,
@@ -232,26 +200,34 @@ class V extends React.Component {
                       <Image
                         source={{uri: item.deal.img_url, cache: 'force-cache'}}
                         style={{
-                          // borderWidth: 1,
-                          // borderColor: Color.BorderLightGrey,
-                          // borderRadius: 10,
-                          height: 250,
-                          width: 250,
+                          height: 248,
+                          width: 248,
+                          borderRadius: 10,
                         }}
                       />
                     </View>
-                    {/* <View style={{
-                      width: 200,
-                      height: 20,
-                      marginTop: 10,
-                      // borderWidth: 1,
-                      // borderColor: 'green',
-                      flexDirection: 'row',
-                      justifyContent: 'space-evenly',
-                    }}>
-                      <Icon name={'heart'} size={20} color={Color.BorderLightGrey}/>
-                      <Icon name={'bookmark'} size={20} color={Color.BorderLightGrey} />
-                    </View> */}
+                    <View
+                      style={{
+                        backgroundColor: Color.QueenBlue,
+                        opacity: 0.7,
+                        width: 200,
+                        maxHeight: 60,
+                        position: 'absolute',
+                        bottom: 0,
+                        padding: 5,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Text
+                        style={{
+                          fontWeight: 13,
+                          textAlign: 'center',
+                          color: Color.White,
+                          fontWeight: '500',
+                        }}>
+                        {shortTitle}
+                      </Text>
+                    </View>
                   </View>
                 </View>
               </TouchableOpacity>
@@ -294,22 +270,11 @@ class V extends React.Component {
                     backgroundColor: Color.White,
                     borderBottomWidth: 1,
                     borderBottomColor: Color.BorderLightGrey,
-                    // marginBottom: 10,
                     marginTop: 5,
                     alignItems: 'center',
                     padding: 10,
                     backgroundColor: Color.White,
                     flexDirection: 'row',
-                    // borderBottomRightRadius: 10,
-                    // borderTopRightRadius: 10,
-                    // shadowColor: '#000',
-                    // shadowOffset: {
-                    //   width: 2,
-                    //   height: 2,
-                    // },
-                    // shadowOpacity: 0.5,
-                    // shadowRadius: 5.84,
-                    // elevation: 5,
                   }}>
                   <View
                     style={{
@@ -318,9 +283,7 @@ class V extends React.Component {
                       backgroundColor: Color.White,
                       height: 150,
                       width: 150,
-                      // marginLeft: 5,
                       overflow: 'hidden',
-                      // borderRadius: 10,
                     }}>
                     <Image
                       source={{uri: item.deal.img_url}}
@@ -360,9 +323,6 @@ class V extends React.Component {
                       <Text
                         style={{
                           fontSize: 13,
-                          // position: 'absolute',
-                          // right: 80,
-                          // color: '#5c903f',
                           marginLeft: 50,
                           color: Color.ReadableGreyText,
                         }}>
@@ -371,8 +331,6 @@ class V extends React.Component {
                       <Text
                         style={{
                           fontSize: 13,
-                          // position: 'absolute',
-                          // right: 10,
                           color: Color.ErrorRed,
                           marginLeft: 20,
                           textDecorationLine: 'line-through',
@@ -408,12 +366,33 @@ class V extends React.Component {
                         justifyContent: 'flex-end',
                         marginTop: 5,
                       }}>
-                      <TouchableOpacity onPress={() => {}}>
-                        <Icon name="bookmark" size={20} color={Color.BorderLightGrey} />
+                      <TouchableOpacity
+                        onPress={
+                          item.is_on_watchlist
+                            ? null
+                            : () =>
+                                this.props.postNewWatchListItem({
+                                  endpoint: `/users/${this.props.user.id}/deals/${item.id}/`,
+                                  method: 'PUT',
+                                  headers: {
+                                    'X-Session-Token': this.props.user.current_session_token,
+                                    'Content-Type': 'application/json',
+                                  },
+                                  data: {
+                                    user_id: this.props.user.id,
+                                    deal_id: item.deal.id,
+                                    is_on_watchlist: 1,
+                                  },
+                                })
+                        }>
+                        <Icon
+                          name="bookmark"
+                          size={20}
+                          color={item.is_on_watchlist ? Color.QueenBlue : Color.BorderLightGrey}
+                        />
                       </TouchableOpacity>
                     </View>
                   </View>
-                  {/* <Icon style={{marginLeft: 0}} name={'chevron-right'} size={20} color={Color.BorderLightGrey} /> */}
                 </View>
               </TouchableOpacity>
             );
@@ -425,9 +404,10 @@ class V extends React.Component {
 }
 
 const mapStateToProps = function (state) {
+  const deals = getStateForKey('state.deals.list.items', state);
   return {
     user: getStateForKey('state.session.user', state),
-    deals: getStateForKey('state.deals.list.items', state),
+    deals: Object.values(deals),
     getDealsPending: getStateForKey('state.deals.list.pending', state),
     getDealsError: getStateForKey('state.deals.list.error', state),
     showDealFocusedModal: getStateForKey('state.deals.focused.show_modal', state),
@@ -478,6 +458,25 @@ const mapDispatchToProps = function (dispatch) {
       });
 
       // return Actions.rewardFocus();
+    },
+    postNewWatchListItem: async function (options) {
+      dispatch({
+        type: ReduxActions.Deals.UpdateWatchListItemPending,
+      });
+
+      const {data, error} = await httpRequest(options);
+
+      if (error) {
+        dispatch({
+          type: ReduxActions.Deals.UpdateWatchListItemError,
+          payload: error,
+        });
+      }
+
+      return dispatch({
+        type: ReduxActions.Deals.UpdateWatchListItemSuccess,
+        payload: data,
+      });
     },
   };
 };

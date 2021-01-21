@@ -130,6 +130,7 @@ class V extends React.Component {
                 placeholder={''}
               />
               <TextInput
+                keyboardType={'number-pad'}
                 labelStyle={styles.labelStyle}
                 label={' '}
                 inputStyle={styles.inputStyle}

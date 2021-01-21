@@ -49,21 +49,22 @@ const defaultState = {
     inactive: {},
     list: {
       pending: false,
-      error: {
-        details: null,
-      },
-      items: [],
+      error: null,
+      items: {},
     },
     focused: {
       show_modal: false,
       item: null,
     },
+    watch_list: {
+      list: {},
+      pending: false,
+      error: null,
+    },
   },
   stats: {
     pending: false,
-    error: {
-      details: 'Whoops something went wrong',
-    },
+    error: null,
   },
   settings: {
     profile: {
@@ -134,10 +135,10 @@ const defaultState = {
     links: [
       {
         id: 2,
-        title: 'Bookmarks',
+        title: 'Watch List',
         icon: 'bookmark',
-        description: 'View your bookmarked deals',
-        routeKey: 'bookmarks',
+        description: 'View deals on your Watch List',
+        routeKey: 'watchList',
       },
       {
         id: 0,
@@ -511,6 +512,45 @@ const reducer = function (state = defaultState, action) {
     // ********************************************
     // Deals
     // ********************************************
+    case ReduxActions.Deals.UpdateWatchListItemSuccess: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          list: {
+            ...state.deals.list,
+            items: {
+              ...state.deals.list.items,
+              payload,
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.UpdateWatchListItemError: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          watch_list: {
+            ...state.deals.watch_list,
+            error: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.UpdateWatchListItemPending: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          watch_list: {
+            ...state.deals.watch_list,
+            pending: true,
+          },
+        },
+      };
+    }
     case ReduxActions.Deals.ToggleFocusedDealModal: {
       const prev = state.deals.focused.show_modal;
       return {
@@ -539,13 +579,14 @@ const reducer = function (state = defaultState, action) {
     }
 
     case ReduxActions.Deals.GetUserDealsSuccess: {
+      const items = arrayToObject(payload, 'id');
       return {
         ...state,
         deals: {
           ...state.deals,
           list: {
             ...state.deals.list,
-            items: payload,
+            items,
             pending: false,
             error: null,
           },

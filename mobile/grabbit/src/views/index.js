@@ -9,7 +9,7 @@ import SignupView from 'grabbit/src/views/Signup';
 import SplashView from 'grabbit/src/views/Splash';
 import NotificationsView from 'grabbit/src/views/Notifications';
 import AccountTypeView from 'grabbit/src/views/AccountType';
-import WatchlistView from 'grabbit/src/views/Watchlist';
+import WatchListView from 'grabbit/src/views/WatchList';
 
 module.exports = {
   AccountView,
@@ -22,6 +22,6 @@ module.exports = {
   SignupView,
   SplashView,
   NotificationsView,
-  WatchlistView,
+  WatchListView,
   AccountTypeView,
 };

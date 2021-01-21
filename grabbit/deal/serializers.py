@@ -1,5 +1,5 @@
 from lib.serializers import BaseModelSerializer
-from deal.models import Deal, UserDeal, WatchList
+from deal.models import Deal, UserDeal
 from user.serializers import UserSerializer
 
 
@@ -23,24 +23,9 @@ class DealSerializer(BaseModelSerializer):
         ]
 
 
-class WatchListSerializer(BaseModelSerializer):
-    deal = DealSerializer(read_only=True)
-
-    class Meta:
-        model = WatchList
-        fields = [
-            "id",
-            "created_at",
-            "updated_at",
-            "deleted_at",
-            "user_id",
-            "deal",
-        ]
-
-
 class UserDealSerializer(BaseModelSerializer):
     deal = DealSerializer(read_only=True)
 
     class Meta:
         model = UserDeal
-        fields = ["id", "created_at", "updated_at", "deleted_at", "user_id", "deal"]
+        fields = ["id", "created_at", "updated_at", "deleted_at", "user_id", "deal", "is_on_watchlist"]

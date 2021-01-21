@@ -19,6 +19,9 @@ export default {
     GetUserDealsError: 'GetUserDealsError',
     SetFocusedDeal: 'SetFocusedDeal',
     ToggleFocusedDealModal: 'ToggleFocusedDealModal',
+    UpdateWatchListItemPending: 'UpdateWatchListItemPending',
+    UpdateWatchListItemError: 'UpdateWatchListItemError',
+    UpdateWatchListItemSuccess: 'UpdateWatchListItemSuccess',
   },
   Accounts: {
     GetLinkTokenPending: 'GetLinkTokenPending',

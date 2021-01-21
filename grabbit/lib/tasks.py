@@ -24,6 +24,7 @@ START_URLS = {
     "target": "https://www.target.com/p/powerbeats-pro-true-wireless-in-ear-earphones/-/A-78362035?preselect=54610898#lnk=sametab",
     "amazon": "https://www.amazon.com/TOZO-Wireless-Upgraded-Sleep-Friendly-FastCharging/dp/B07FM8R7J1/ref=sr_1_3?dchild=1&keywords=wireless+charger&qid=1610070173&sr=8-3",
     "nike": "https://www.nike.com/t/air-max-270-react-womens-shoe-trW1vK/CZ6685-100",
+    "fentybeauty": "https://www.fentybeauty.com/two-lil-stunnas-mini-longwear-fluid-lip-color-duo/47670.html",
 }
 
 WAIT = 1.0
@@ -42,6 +43,7 @@ class Scrapers:
     Target = "target"
     Amazon = "amazon"
     Nike = "nike"
+    FentyBeauty = "fentybeauty"
 
 
 class Domains:
@@ -49,6 +51,7 @@ class Domains:
     Target = "https://target.com"
     Amazon = "https://amazon.com"
     Nike = "https://nike.com"
+    FentyBeauty = "https://fentybeauty.com"
 
 
 class LockedQueue(collections.deque):
@@ -459,7 +462,7 @@ class NikeScraper(ThreadedScraper):
         pid = id_part.split("-")[-1]
         source_tags = self.soup.find_all("source")
         srcsets = [tag.get("srcset") for tag in source_tags]
-        imgs = [src for src in srcsets if src and pid in src]
+        imgs = list(set([src for src in srcsets if src and pid in src]))
         if not imgs:
             return None, None
         return imgs[0], imgs
@@ -485,20 +488,47 @@ class NikeScraper(ThreadedScraper):
         return [item["pdpURL"] for item in data]
 
 
+class FentyBeautyScraper(ThreadedScraper):
+    def __init__(self, name=Scrapers.FentyBeauty, domain=Domains.FentyBeauty, **kwargs):
+        super(FentyBeautyScraper, self).__init__(name, domain, **kwargs)
+
+    def _product_title(self):
+        name = self.soup.find("h1", {"itemprop": "name"})
+        if not name:
+            return None
+        return name.get_text().strip("\n")
+
+    def _extract_product_description(self):
+        description = self.soup.find("div", {"itemprop": "description"})
+        if not description:
+            return None
+        ptags = description.find_all("p")
+        description = " ".join([p.get_text() for p in ptags])
+
+        pdp_steps = self.soup.find("ul", {"class": "pdp-steps"})
+        if not pdp_steps:
+            return description
+        lis = pdp_steps.find_all("li")
+        pdp_description = " ".join([li.get_text() for li in lis])
+
+        return description + "\n\n" + pdp_description
+
+
 if __name__ == "__main__":
 
-    # url = "https://www.nike.com/t/air-max-tailwind-iv-mens-shoe-fF5q8X/AQ2567-001"
-    # r = requests.get(url)
-    # s = BeautifulSoup(r.content, "html5lib")
+    r = requests.get(START_URLS["fentybeauty"])
+    s = BeautifulSoup(r.content, "html5lib")
 
-    # src = s.find_all("source")
-    # srcsets = [tag.get("srcset") for tag in src]
+    t = s.find("div", {"itemprop": "description"})
+    ptags = t.find_all("p")
+    d = " ".join([p.get_text() for p in ptags])
 
-    # print(srcsets)
+    ul = s.find("ul", {"class": "pdp-steps"})
+    lis = ul.find_all("li")
+    d2 = " ".join([li.get_text() for li in lis])
 
-    # sesh = requests.Session()
-
-    s = NikeScraper()
-    s.set_cookies()
-    s.hydrate_queue_from_deal_page()
-    s.run()
+    print(d + "\n" + d2)
+    # s = NikeScraper()
+    # s.set_cookies()
+    # s.hydrate_queue_from_deal_page()
+    # s.run()
