@@ -87,7 +87,6 @@ export class GrabbitButton extends React.Component {
 
 const styles = StyleSheet.create({
   buttonStyle: {
-    borderRadius: 50,
     height: 50,
     width: 300,
     borderRadius: 100,

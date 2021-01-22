@@ -20,7 +20,7 @@ class BaseModelViewSet(viewsets.ViewSet):
 
     def list(self, request):
         params = request.query_params.dict()
-        params["delete_at"] = None
+        params["deleted_at"] = None
         queryset = self.model.objects.filter(**params)
         serializer = self.serializer(queryset, many=True)
         return Response(serializer.data)

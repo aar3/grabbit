@@ -3,8 +3,8 @@ from lib.managers import BaseManager
 
 
 class UserManager(BaseManager):
-    def create(self, email, secret, phone, invitation_code):
-        user = self.model(email=email, phone=phone, invitation_code=invitation_code)
+    def create(self, email, secret, phone):
+        user = self.model(email=email, phone=phone)
         user.set_salt()
         user.set_secret(secret)
         user.save()

@@ -39,13 +39,28 @@ class V extends React.Component {
       return (
         <View
           style={{
-            borderColor: 'red',
-            borderWidth: 1,
-            width: 25,
-            height: 25,
-            marginLeft: 20,
+            // borderColor: 'red',
+            // borderWidth: 1,
+            width: 75,
+            height: 40,
+            marginLeft: 5,
           }}>
-          <Button title="Grab It" />
+          <Button
+            buttonStyle={{
+              backgroundColor: Color.QueenBlue,
+              borderRadius: 10,
+            }}
+            containerStyle={{
+              width: 75,
+              height: 40,
+            }}
+            title="Grab It"
+            titleStyle={{
+              color: Color.White,
+              fontWeight: '600',
+              fontSize: 12,
+            }}
+          />
         </View>
       );
     }
@@ -147,7 +162,14 @@ class V extends React.Component {
             }}>
             You have no notifications
           </Text>
-          <Text style={{color: Color.BorderLightGrey, fontSize: 14, marginBottom: 20}}>For now...</Text>
+          <Text
+            style={{
+              color: Color.BorderLightGrey,
+              fontSize: 14,
+              marginBottom: 20,
+            }}>
+            For now...
+          </Text>
           <Icon name="thumbs-up" size={20} color={Color.BorderLightGrey} />
         </View>
       );
@@ -157,20 +179,19 @@ class V extends React.Component {
       <View
         style={{
           flex: 1,
-          justifyContent: 'center',
           alignItems: 'center',
           backgroundColor: Color.TopNavBackground,
-          borderWidth: 1,
-          borderColor: 'blue',
+          // borderWidth: 1,
+          // borderColor: 'blue',
         }}>
         <FlatList
           data={this.props.notifications}
           style={{
-            // marginTop: 10,
             width: '100%',
             backgroundColor: Color.TopNavBackground,
-            borderWidth: 1,
-            borderColor: 'red',
+            // borderWidth: 1,
+            // borderColor: 'red',
+            maxHeight: 70 * this.props.notifications.length,
           }}
           refreshing={this.props.getNotificationsPending}
           onRefresh={() => this._onRefresh()}
@@ -186,21 +207,11 @@ class V extends React.Component {
                 }}>
                 <View
                   style={{
-                    // shadowColor: '#000',
-                    // shadowOffset: {
-                    //   width: 2,
-                    //   height: 2,
-                    // },
-                    // shadowOpacity: 0.25,
-                    // shadowRadius: 2,
-                    // elevation: 2,
                     backgroundColor: Color.White,
                     padding: 10,
                     borderBottomWidth: 0.5,
                     borderBottomColor: Color.BorderLightGrey,
                     flexDirection: 'row',
-                    // marginBottom: 10,
-                    // justifyContent: 'center',
                     height: 70,
                     alignItems: 'center',
                   }}>
@@ -263,10 +274,17 @@ class V extends React.Component {
         />
         <View
           style={{
-            borderWidth: 1,
-            borderColor: 'red',
+            // borderWidth: 1,
+            // borderColor: 'red',
+            marginTop: 20,
           }}>
-          <Text>Logo Here</Text>
+          <Text
+            style={{
+              color: Color.ReadableGreyText,
+              fontWeight: 'bold',
+            }}>
+            Logo Here
+          </Text>
         </View>
       </View>
     );

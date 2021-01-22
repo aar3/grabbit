@@ -115,3 +115,22 @@ export class Websocket_ {
 }
 
 export const Websocket = new Websocket_();
+
+export const httpStateUpdate = async function (dispatch, options, prefix) {
+  dispatch({
+    type: `${prefix}Pending`,
+  });
+
+  const {data, error} = await httpRequest(options);
+  if (error) {
+    return dispatch({
+      type: `${prefix}Error`,
+      payload: error,
+    });
+  }
+
+  return dispatch({
+    type: `${prefix}Success`,
+    payload: data,
+  });
+};

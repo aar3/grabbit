@@ -13,10 +13,11 @@ def target_scraper_task():
     scraper.run()
 
 
-@task_manager.task
-def nike_scraper_task(start):
+# @task_manager.task
+def nike_scraper_task(start=None):
     scraper = NikeScraper(start=start)
     scraper.set_cookies()
+    scraper.hydrate_queue_from_deal_page()
     scraper.run()
 
 

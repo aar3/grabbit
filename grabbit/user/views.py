@@ -37,6 +37,8 @@ class UserViewSet(viewsets.ViewSet):
         if instance:
             return Response(status=400, data={"detail": "exists"})
 
+        del params["invitation_code"]
+
         instance = self.model.objects.create(**params)
         serializer = self.serializer(instance)
         return Response(serializer.data)

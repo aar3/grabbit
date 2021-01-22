@@ -3,7 +3,7 @@ import {View, Text, FlatList, Image, Modal, TouchableOpacity, ImageBackground} f
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import ReduxActions from 'grabbit/src/Actions';
-import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
+import {getStateForKey, httpRequest, httpStateUpdate} from 'grabbit/src/Utils';
 import {Color, Font} from 'grabbit/src/Const';
 import DealFocusModal from 'grabbit/src/components/modals/DealFocus';
 import {Error} from 'grabbit/src/components/FlatList';
@@ -31,6 +31,146 @@ class V extends React.Component {
 
   async componentDidMount() {
     return this.props.getUserDeals(this.options);
+  }
+
+  _renderMatchedDealsFlatList() {
+    if (this.props.matchedDeals.length === 0) {
+      return (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: Color.QueenBlue,
+          }}>
+          <Text
+            style={{
+              color: Color.White,
+              fontWeight: 'bold',
+              fontSize: 18,
+            }}>
+            Welcome to Grabbit!
+          </Text>
+          <Text
+            style={{
+              color: Color.White,
+              marginTop: 5,
+              fontWeight: 'bold',
+              fontSize: 16,
+            }}>
+            We haven't found any any deals for you yet.
+          </Text>
+          <Text
+            style={{
+              color: Color.White,
+              marginTop: 10,
+              fontSize: 12,
+            }}>
+            Link an account to get started
+          </Text>
+          <View
+            style={{
+              borderWidth: 1,
+              borderColor: 'red',
+              height: 50,
+              width: 50,
+              marginTop: 20,
+            }}>
+            <Text>Image here</Text>
+          </View>
+        </View>
+      );
+    }
+    <FlatList
+      horizontal
+      data={this.props.matchedDeals}
+      style={{
+        // borderWidth: 1,
+        // borderColor: 'green',
+        backgroundColor: Color.TopNavBackground,
+        borderBottomWidth: 0,
+        height: 400,
+        width: '100%',
+        marginBottom: 2,
+      }}
+      refreshing={this.props.getDealsPending}
+      onRefresh={() => this._onRefresh()}
+      keyExtractor={(_item, index) => index.toString()}
+      renderItem={({item, index}) => {
+        const discount = Number(
+          ((item.deal.original_value - item.deal.current_value) / item.deal.current_value) * 100,
+        ).toFixed(0);
+
+        const shortTitle = item.deal.title.length > 50 ? `${item.deal.title.substr(0, 50)}...` : item.deal.title;
+
+        return (
+          <TouchableOpacity onPress={() => this.props.setFocusedDeal(item)}>
+            <View
+              style={{
+                height: 250,
+                width: 250,
+                borderRadius: 5,
+                marginTop: 5,
+                // marginBottom: 40,
+                backgroundColor: Color.White,
+                marginLeft: 10,
+                borderColor: Color.BorderLightGrey,
+                borderWidth: 1,
+                borderRadius: 10,
+              }}>
+              <View
+                style={{
+                  // borderWidth: 1,
+                  // borderColor: 'orange',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <View
+                  style={{
+                    // borderWidth: 1,
+                    // borderColor: 'red',
+                    width: 250,
+                    height: 250,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Image
+                    source={{uri: item.deal.img_url, cache: 'force-cache'}}
+                    style={{
+                      height: 248,
+                      width: 248,
+                      borderRadius: 10,
+                    }}
+                  />
+                </View>
+                <View
+                  style={{
+                    backgroundColor: Color.QueenBlue,
+                    opacity: 0.7,
+                    width: 200,
+                    maxHeight: 60,
+                    position: 'absolute',
+                    bottom: 0,
+                    padding: 5,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Text
+                    style={{
+                      fontWeight: 13,
+                      textAlign: 'center',
+                      color: Color.White,
+                      fontWeight: '500',
+                    }}>
+                    {shortTitle}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </TouchableOpacity>
+        );
+      }}
+    />;
   }
 
   _renderModal() {
@@ -99,43 +239,6 @@ class V extends React.Component {
       return <Error error={this.props.getDealsError} onTryAgain={() => this.props.getUserDeals(this.options)} />;
     }
 
-    if (this.props.deals.length === 0) {
-      return (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Text
-            style={{
-              color: Color.Black,
-              fontWeight: 'bold',
-              fontSize: 18,
-            }}>
-            Welcome to Grabbit!
-          </Text>
-          <Text
-            style={{
-              color: Color.LessReadableGreyText,
-              marginTop: 5,
-              fontWeight: 'bold',
-              fontSize: 16,
-            }}>
-            You don't have any deals yet
-          </Text>
-          <Text
-            style={{
-              color: Color.LessReadableGreyText,
-              marginTop: 10,
-              fontSize: 12,
-            }}>
-            Link an account to get started
-          </Text>
-        </View>
-      );
-    }
-
     return (
       <View
         style={{
@@ -144,97 +247,7 @@ class V extends React.Component {
           backgroundColor: Color.BorderLightGrey,
         }}>
         {this._renderModal()}
-        <FlatList
-          horizontal
-          data={this.props.deals}
-          style={{
-            // borderWidth: 1,
-            // borderColor: 'green',
-            backgroundColor: Color.TopNavBackground,
-            borderBottomWidth: 0,
-            height: 400,
-            width: '100%',
-            marginBottom: 2,
-          }}
-          refreshing={this.props.getDealsPending}
-          onRefresh={() => this._onRefresh()}
-          keyExtractor={(_item, index) => index.toString()}
-          renderItem={({item, index}) => {
-            const discount = Number(
-              ((item.deal.original_value - item.deal.current_value) / item.deal.current_value) * 100,
-            ).toFixed(0);
-
-            const shortTitle = item.deal.title.length > 50 ? `${item.deal.title.substr(0, 50)}...` : item.deal.title;
-
-            return (
-              <TouchableOpacity onPress={() => this.props.setFocusedDeal(item)}>
-                <View
-                  style={{
-                    height: 250,
-                    width: 250,
-                    borderRadius: 5,
-                    marginTop: 5,
-                    // marginBottom: 40,
-                    backgroundColor: Color.White,
-                    marginLeft: 10,
-                    borderColor: Color.BorderLightGrey,
-                    borderWidth: 1,
-                    borderRadius: 10,
-                  }}>
-                  <View
-                    style={{
-                      // borderWidth: 1,
-                      // borderColor: 'orange',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <View
-                      style={{
-                        // borderWidth: 1,
-                        // borderColor: 'red',
-                        width: 250,
-                        height: 250,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      <Image
-                        source={{uri: item.deal.img_url, cache: 'force-cache'}}
-                        style={{
-                          height: 248,
-                          width: 248,
-                          borderRadius: 10,
-                        }}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        backgroundColor: Color.QueenBlue,
-                        opacity: 0.7,
-                        width: 200,
-                        maxHeight: 60,
-                        position: 'absolute',
-                        bottom: 0,
-                        padding: 5,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}>
-                      <Text
-                        style={{
-                          fontWeight: 13,
-                          textAlign: 'center',
-                          color: Color.White,
-                          fontWeight: '500',
-                        }}>
-                        {shortTitle}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            );
-          }}
-        />
-
+        {this._renderMatchedDealsFlatList()}
         <View
           style={{
             // borderWidth: 1,
@@ -245,7 +258,7 @@ class V extends React.Component {
           }}></View>
 
         <FlatList
-          data={this.props.deals}
+          data={this.props.matchedDeals}
           style={{
             // borderWidth: 1,
             // borderColor: 'blue',
@@ -264,7 +277,13 @@ class V extends React.Component {
                 ? `${item.deal.description.substr(0, size)}...`
                 : item.deal.description;
             return (
-              <TouchableOpacity onPress={() => this.props.setFocusedDeal(item)}>
+              <TouchableOpacity
+                onPress={() =>
+                  this.props.dispatch({
+                    type: ReduxActions.Deals.SetFocusedDeal,
+                    payload: item.deal,
+                  })
+                }>
                 <View
                   style={{
                     backgroundColor: Color.White,
@@ -371,19 +390,21 @@ class V extends React.Component {
                           item.is_on_watchlist
                             ? null
                             : () =>
-                                this.props.postNewWatchListItem({
-                                  endpoint: `/users/${this.props.user.id}/deals/${item.id}/`,
-                                  method: 'PUT',
-                                  headers: {
-                                    'X-Session-Token': this.props.user.current_session_token,
-                                    'Content-Type': 'application/json',
-                                  },
-                                  data: {
-                                    user_id: this.props.user.id,
-                                    deal_id: item.deal.id,
-                                    is_on_watchlist: 1,
-                                  },
-                                })
+                                this.props.dispatch(() =>
+                                  httpStateUpdate({
+                                    endpoint: `/users/${this.props.user.id}/deals/${item.id}/`,
+                                    method: 'PUT',
+                                    headers: {
+                                      'X-Session-Token': this.props.user.current_session_token,
+                                      'Content-Type': 'application/json',
+                                    },
+                                    data: {
+                                      user_id: this.props.user.id,
+                                      deal_id: item.deal.id,
+                                      is_on_watchlist: 1,
+                                    },
+                                  }),
+                                )
                         }>
                         <Icon
                           name="bookmark"
@@ -404,12 +425,14 @@ class V extends React.Component {
 }
 
 const mapStateToProps = function (state) {
-  const deals = getStateForKey('state.deals.list.items', state);
+  const deals = getStateForKey('state.deals.all.items', state);
+  const matchedDeals = getStateForKey('state.deals.matches.items', state);
+
   return {
     user: getStateForKey('state.session.user', state),
-    deals: Object.values(deals),
-    getDealsPending: getStateForKey('state.deals.list.pending', state),
-    getDealsError: getStateForKey('state.deals.list.error', state),
+    matchedDeals: Object.values(matchedDeals),
+    getDealsPending: getStateForKey('state.deals.all.pending', state),
+    getDealsError: getStateForKey('state.deals.all.error', state),
     showDealFocusedModal: getStateForKey('state.deals.focused.show_modal', state),
   };
 };
@@ -431,6 +454,10 @@ const mapDispatchToProps = function (dispatch) {
         payload: data,
       });
     },
+
+    // getUserDeals: async function(options, prefix) {
+    //   return httpStateUpdate(dispatch, options, prefix);
+    // },
 
     getUserDeals: async function (options) {
       dispatch({

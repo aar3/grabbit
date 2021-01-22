@@ -10,7 +10,6 @@ class UserSerializer(BaseModelSerializer):
             "created_at",
             "updated_at",
             "deleted_at",
-            "qr_code_url",
             "email",
             "current_session_token",
             "phone",

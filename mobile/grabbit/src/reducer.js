@@ -47,7 +47,7 @@ const defaultState = {
   },
   deals: {
     inactive: {},
-    list: {
+    all: {
       pending: false,
       error: null,
       items: {},
@@ -58,6 +58,11 @@ const defaultState = {
     },
     watch_list: {
       list: {},
+      pending: false,
+      error: null,
+    },
+    matches: {
+      items: {},
       pending: false,
       error: null,
     },
