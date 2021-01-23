@@ -10,9 +10,9 @@ import {
   ListDealsView,
   PlaidAccountsView,
   AccountView,
-  RewardFocusView,
   SettingsView,
   AccountTypeView,
+  WatchListView,
   NotificationsView,
 } from 'grabbit/src/views';
 
@@ -38,6 +38,7 @@ export default class Router_ extends React.Component {
           <Scene
             key="login"
             component={LoginView}
+            // initial
             gesturesEnabled={false}
             drawerLockMode="locked-closed"
             title="Login"
@@ -95,6 +96,14 @@ export default class Router_ extends React.Component {
             navigationBarStyle={styles.NavbarContainer}
             style={styles}
           />
+          <Scene
+            title={'Watch List'}
+            hideNavBar={false}
+            key="watchList"
+            component={WatchListView}
+            navigationBarStyle={styles.NavbarContainer}
+            style={styles}
+          />
         </Stack>
       </Router>
     );
@@ -135,7 +144,7 @@ const transitionConfig = function () {
 
 const styles = StyleSheet.create({
   NavbarContainer: {
-    marginTop: 10,
+    // marginTop: 5,
     backgroundColor: Color.TopNavBackground,
   },
 });

@@ -32,8 +32,6 @@ class User(BaseModel):
     secret = models.CharField(max_length=255)
     salt = models.IntegerField()
     current_session_token = models.CharField(max_length=255)
-    qr_code_url = models.CharField(max_length=255)
-    invitation_code = models.CharField(max_length=255, null=True)
 
     def matches_secret(self, other):
         data = other + str(self.salt)

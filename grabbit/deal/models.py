@@ -1,5 +1,7 @@
 import hashlib
+import datetime as dt
 from django.db import models
+from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save
 from user.models import User, Notification
@@ -16,35 +18,53 @@ class Deal(BaseModel):
     original_value = models.CharField(max_length=255)
     merchant_name = models.CharField(max_length=255)
     url = models.TextField()
+    category = models.JSONField(default=list)
     scraper = models.CharField(max_length=255)
     img_url = models.CharField(max_length=255, default=EMPTY_IMAGE_URL)
+    price_history = models.JSONField(default=list)
+    expired_on = models.DateTimeField(null=True)
     product_keywords = models.JSONField(default=list)
     all_img_urls = models.JSONField(default=list)
     description = models.TextField(null=True)
     uid = models.CharField(max_length=255)
 
     def set_uid(self):
-        # NOTE: assuming these values are reliably consistent
-        payload = self.title.lower() + str(self.current_value) + self.merchant_name.lower()
-        self.uid = hashlib.sha256(payload.encode()).hexdigest()
+        # NOTE: assuming the URL is a reliably consistent identifier
+        self.uid = hashlib.sha256(self.url.encode()).hexdigest()
 
-    def save(self):
-        other = Deal.objects.filter(uid=self.uid)
+    def save(self, other=None):
+        # NOTE: If we run into a deal that we've already scraped, bump this current instance's
+        # info to the the price_history list, and update the `other` deal accordingly
         if other:
-            return -1
+            now = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            other.price_history.append({"current": other.current_value, "original": other.original_value, "date": now})
+
+            other.current_value = self.current_value
+            other.original_value = self.original_value
+            other.save()
+            return None
         super(Deal, self).save()
 
+    def last_scraped_today(self):
+        # pylint: disable=unsubscriptable-object
+        last_update = self.price_history[-1]["date"] if self.current_value else self.created_at
+        if isinstance(last_update, str):
+            last_update = dt.datetime.strptime(last_update, "%Y-%m-%d %H:%M:%S")
+        delta = dt.datetime.now() - last_update
+        return delta.days < 1
 
-class UserDeal(BaseModel):
+
+class MatchedDeal(BaseModel):
     class Meta:
-        db_table = "user_deals"
+        db_table = "matched_deals"
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     deal = models.ForeignKey(Deal, on_delete=models.CASCADE)
+    is_on_watchlist = models.IntegerField(default=0)
 
 
-@receiver(post_save, sender=UserDeal)
-def create_notification_for_new_user_deal(sender, instance, created, **kwargs):
+@receiver(post_save, sender=MatchedDeal)
+def create_notification_for_new_matched_deal(sender, instance, created, **kwargs):
     if created:
         _ = Notification.objects.create(
             user=instance.user,
@@ -53,3 +73,11 @@ def create_notification_for_new_user_deal(sender, instance, created, **kwargs):
             title="New deal match",
             text="We found a new deal for you",
         )
+
+
+class WatchList(BaseModel):
+    class Meta:
+        db_table = "watch_list"
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    deal = models.ForeignKey(Deal, on_delete=models.CASCADE)

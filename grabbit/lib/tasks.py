@@ -1,6 +1,7 @@
 import abc
 import string
 import json
+import datetime as dt
 import time
 import collections
 import threading
@@ -22,22 +23,18 @@ START_URLS = {
     "slickdeals": "https://slickdeals.net/f/14750294-15-count-1-4-oz-fiber-one-chewy-bars-mega-pack-oats-and-chocolate-4-57-0-30-each-w-s-s-free-shipping-w-prime-or-on-orders-over-25?src=frontpage",
     "target": "https://www.target.com/p/powerbeats-pro-true-wireless-in-ear-earphones/-/A-78362035?preselect=54610898#lnk=sametab",
     "amazon": "https://www.amazon.com/TOZO-Wireless-Upgraded-Sleep-Friendly-FastCharging/dp/B07FM8R7J1/ref=sr_1_3?dchild=1&keywords=wireless+charger&qid=1610070173&sr=8-3",
+    "nike": "https://www.nike.com/t/air-max-270-react-womens-shoe-trW1vK/CZ6685-100",
+    "fenty-beauty": "https://www.fentybeauty.com/two-lil-stunnas-mini-longwear-fluid-lip-color-duo/47670.html",
 }
 
-WAIT = 1.0
+INTEGER_ONLY_REGEX = re.compile(r"[^\d.]+")
 
 
-class Scrapers:
-    Slickdeals = "slickdeals"
-    Target = "target"
-    Amazon = "amazon"
-    Nike = "nike"
-
-
-class Domains:
-    Slickdeals = "https://slickdeals.net"
-    Target = "https://target.com"
-    Amazon = "https://amazon.com"
+def cookie_dict_to_str(d):
+    items = []
+    for key, value in d.items():
+        items.append(key + "=" + value)
+    return "; ".join(items)
 
 
 class LockedQueue(collections.deque):
@@ -47,30 +44,41 @@ class LockedQueue(collections.deque):
 
 
 class ThreadedScraper(abc.ABC):
-    def __init__(self, name, domain, max_handles=10, max_tasks=10):
+    def __init__(
+        self, name, domain, max_handles=10, max_successful_tasks=10, max_total_tasks=20, timeout=3, sleep=1, start=None
+    ):
         self.domain = domain
         self.queue = LockedQueue()
         self.max_handles = max_handles
-        self.max_tasks = max_tasks
+        self.max_successful_tasks = max_successful_tasks
+        self.max_total_tasks = max_total_tasks
         self.name = name
-        self.start = self._set_start_url()
-        self.session = requests.session()
+        self.start = self._set_start_url(start)
+        self.session = requests.Session()
         self.soup = None
         self._handles = []
         self.headers = {}
         self.info = {
+            "started_at": dt.datetime.now().strftime("%Y-%m-%d %H:%M:%s"),
             "successful_tasks": 0,
             "total_tasks": 0,
             "queue": 0,
-            "max_tasks": self.max_tasks,
+            "successes_with_updates": 0,
+            "too_recent_duplicates": 0,
+            "max_successful_tasks": self.max_successful_tasks,
+            "max_total_tasks": self.max_total_tasks,
             "duplicate_tasks": 0,
-            "unsuccessful_tasks": 0,
+            "bad_tasks": 0,
             "failed_tasks": 0,
+            "finished_at": None,
         }
         self.lock = threading.Lock()
-        self.timeout = 3
+        self.timeout = timeout
+        self.sleep = sleep
 
-    def _set_start_url(self):
+    def _set_start_url(self, start):
+        if start:
+            return start
         deals = Deal.objects.filter(scraper=self.name).order_by("-created_at")
         if not deals:
             return START_URLS[self.name]
@@ -78,39 +86,44 @@ class ThreadedScraper(abc.ABC):
 
     def run(self):
         self.queue.append(self.start)
-        successful_tasks = self.info["successful_tasks"]
-
-        while self.queue and successful_tasks < self.max_tasks:
+        start = time.time()
+        while self.queue and (
+            (self.info["successful_tasks"] < self.max_successful_tasks)
+            and (self.info["total_tasks"] < self.max_total_tasks)
+        ):
             with self.lock:
                 self.info["queue"] = len(self.queue)
-                successful_tasks = self.info["successful_tasks"]
 
             if len(self._handles) == self.max_handles:
                 self._prune_handles()
             else:
-                link = self.queue.popleft()
-                handle = threading.Thread(target=self.download_and_process_link_contents, args=(link,), daemon=True)
+                url = self.queue.popleft()
+                handle = threading.Thread(target=self.download_and_process_url_contents, args=(url,), daemon=True)
                 handle.start()
                 handle.join()
 
                 self._handles.append(handle)
 
-        _ = ScraperStats.objects.create(name=self.domain, metadata=self.info)
-        time.sleep(WAIT)
+        with self.lock:
+            self.info["finished_at"] = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%s")
+            self.info["runtime"] = time.time() - start
 
-    def download_and_process_link_contents(self, url):
+        _ = ScraperStats.objects.create(name=self.domain, metadata=self.info)
+        time.sleep(self.sleep)
+
+    def download_and_process_url_contents(self, url):
         response = self.session.get(url, headers=self.headers)
 
         if not 200 <= response.status_code < 300:
-            return self._handle_failed_scrape_attempt(url, response)
+            return self._handle_failed_scrape(url, response)
 
         self.soup = BeautifulSoup(response.content, "html5lib")
-        product_links = self._get_associated_product_links(url)
-        logger.info("Found %s product links from the associated url", len(product_links))
+        product_urls = self._related_urls(url)
+        logger.info("Found %s product links from the associated url", len(product_urls))
 
         with self.queue.lock:
-            for url in product_links:
-                self.queue.append(url)
+            for x in product_urls:
+                self.queue.append(x)
 
         self.build_and_save_deal(url)
         with self.lock:
@@ -126,30 +139,28 @@ class ThreadedScraper(abc.ABC):
                     logger.error("Could not delete dead thread: %s", str(err))
 
     def build_and_save_deal(self, url):
-        description = self._extract_product_description()
-        current_value, original_value = self._extract_product_value_and_discount(url)
-        img_url, img_urls = self._extract_all_product_img_urls()
-        title = self._extract_product_title()
-        merchant_name = self._extract_merchant_name()
+        description = self._product_description()
+        current_value, original_value = self._price_metadata(url)
+        img_url, img_urls = self._product_imgs(url)
+        title = self._product_title()
 
         conditions = [
-            (not current_value, "current-price"),
-            (not original_value, "original-price"),
+            (not current_value, "price"),
+            (not original_value, "price"),
             (not img_url, "img-url"),
             (not img_urls, "img-urls"),
             (not description, "description"),
-            (not merchant_name, "merchant-name"),
         ]
 
         for condition, reason in conditions:
             if condition:
-                return self._handle_unsuccessful_scrape_attempt(url, reason=reason)
+                return self._handle_bad_scrape(url, reason=reason)
 
         # # NOTE: keep this here for debugging
         # data = {
         #     "description": description,
         #     "current_value": current_value,
-        #     "merchant_name": merchant_name,
+        #     "merchant_name": self.name,
         #     "original_value": original_value,
         #     "img_url": img_url,
         #     "scraper": self.name,
@@ -163,7 +174,7 @@ class ThreadedScraper(abc.ABC):
             current_value=current_value,
             original_value=original_value,
             description=description,
-            merchant_name=merchant_name,
+            merchant_name=self.merchant_name,
             img_url=img_url,
             scraper=self.name,
             all_img_urls=img_urls,
@@ -172,158 +183,88 @@ class ThreadedScraper(abc.ABC):
 
         instance.set_uid()
 
-        exists = Deal.objects.filter(uid=instance.uid)
-
         with self.lock:
-            if not exists:
+            try:
+                other = Deal.objects.get(uid=instance.uid)
+                if other.last_scraped_today():
+                    logger.info(
+                        "Processed a scraped deal that already exists (however it was scraped too recently to update): %s",
+                        url,
+                    )
+                    self.info["duplicate_tasks"] += 1
+                    self.info["too_recent_duplicates"] += 1
+                    return
+
+                instance.save(other=other)
+                logger.info("Processed a scraped deal that already exists (updating price history): %s", url)
+                self.info["successes_with_updates"] += 1
+                self.info["successful_tasks"] += 1
+            except Deal.DoesNotExist:
                 instance.save()
                 logger.info("Processed a new scraped deal: %s", instance.uid)
                 self.info["successful_tasks"] += 1
                 return
 
-            logger.info("Processed a scraped deal that already exists")
-            self.info["duplicate_tasks"] += 1
-
     @abc.abstractmethod
-    def _get_associated_product_links(self, url):
+    def hydrate_queue_from_deal_page(self):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _extract_product_title(self):
+    def _related_urls(self, url):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _extract_merchant_name(self):
+    def _product_title(self):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _extract_product_value_and_discount(self, url):
+    def _price_metadata(self, url):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _extract_all_product_img_urls(self):
+    def _product_id_from_url(self, url):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def _extract_product_description(self):
+    def _product_imgs(self, url):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def _product_description(self):
         raise NotImplementedError
 
     @abc.abstractmethod
     def _is_product_url(self, url):
         raise NotImplementedError
 
-    def _handle_unsuccessful_scrape_attempt(self, url, reason):
+    def _handle_bad_scrape(self, url, reason):
         logger.warning("Successfully scraped a product link that was NOT a deal (due to: %s): %s", reason, url)
         with self.lock:
-            self.info["unsuccessful_tasks"] += 1
+            self.info["bad_tasks"] += 1
 
-    def _handle_failed_scrape_attempt(self, url, response):
+    def _handle_failed_scrape(self, url, response):
         with self.lock:
-            self.info["total_tasks"] += 1
             self.info["failed_tasks"] += 1
+            self.info["bad_tasks"] += 1
         logger.info("INFO - %s", json.dumps(self.info))
         logger.info("Scraping %s return invalid response code: %s", url, response.status_code)
 
 
-class SlickDealsScraper(ThreadedScraper):
-    def __init__(self, name=Scrapers.Slickdeals, domain=Domains.Slickdeals, max_handles=10, max_tasks=10):
-        super(SlickDealsScraper, self).__init__(name, domain, max_handles, max_tasks)
-        self.domain = domain
-        self.name = name
-
-    def _get_associated_product_links(self):
-        associated_links = self.soup.find_all("a", href=True)
-        product_links = list(filter(lambda x: self._is_product_url(x.get("href")), associated_links))
-        return [self.domain + link for link in product_links]
-
-    def _extract_product_title(self):
-        no_link_crumb_tags = self.soup.find_all("span", class_="nolinkcrumb")
-        if not no_link_crumb_tags:
-            return None
-
-        no_link_crumb_tags_content = [x.get_text() for x in no_link_crumb_tags]
-        if not no_link_crumb_tags_content:
-            return None
-
-        return no_link_crumb_tags_content[0]
-
-    def _extract_product_description(self):
-        descriptions = self.soup.find_all("meta", {"name": "description"})
-        if not descriptions:
-            return None
-
-        descriptions_without_class_attrs = [x.get("content") for x in descriptions]
-
-        if not descriptions_without_class_attrs:
-            return None
-
-        top_description = descriptions_without_class_attrs[0]
-        return top_description.split("\n")[0]
-
-    def _extract_merchant_name(self):
-        data_link_tags = self.soup.find_all("a", {"data-link": "dealDetail:Description Link"})
-        if not data_link_tags:
-            return None
-
-        data_link_tag_contents = [x.get_text() for x in data_link_tags]
-        if not data_link_tag_contents:
-            return None
-
-        return data_link_tag_contents[0]
-
-    def _extract_product_value_and_discount(self):
-        current = None
-        original = None
-
-        prices = self.soup.find_all("meta", {"name": "price"})
-        if prices:
-            price_values = [x.get("content") for x in prices]
-            if price_values:
-                current = price_values[0]
-
-        old_price_tags = self.soup.find_all("span", class_="oldListPrice")
-        if old_price_tags:
-            old_price_tags_text = [x.get_text() for x in old_price_tags]
-            if old_price_tags_text:
-                price_tag = old_price_tags_text[0]
-                original = price_tag[1:] if price_tag[0] == "$" else price_tag
-
-        return current, original
-
-    def _extract_all_product_img_urls(self):
-        main_images = self.soup.find_all("img", {"id": "mainImage"})
-        if not main_images:
-            return None, None
-        main_image_contens = [x.get("src") for x in main_images]
-        if not main_image_contens:
-            return None, None
-
-        return main_image_contens[0], main_image_contens
-
-    def _is_product_url(self, url):
-        path_parts = url.split("/")
-        if len(path_parts) < 2 or path_parts[1] != "f":
-            return False
-
-        product_number = path_parts[2].split("-")[0]
-
-        try:
-            result = path_parts[1] == "f" and product_number.isdigit()
-        except Exception as err:
-            logger.info("Error parsing product url:%s ", str(err))
-        return result
-
-
 class TargetScraper(ThreadedScraper):
     # NOTE: https://stackoverflow.com/a/59011424/4701228
-    def __init__(self, name=Scrapers.Target, domain=Domains.Target, max_handles=10, max_tasks=10):
-        super(TargetScraper, self).__init__(name, domain, max_handles, max_tasks)
+    def __init__(self, name="target", domain="https://target.com", **kwargs):
+        super(TargetScraper, self).__init__(name, domain, **kwargs)
         self.name = name
+        self.merchant_name = "Target"
         self.domain = domain
         self.visitor_id = None
         self.store_id = None
 
-    def _get_associated_product_links(self, url):
+    def hydrate_queue_from_deal_page(self):
+        # https://www.target.com/c/electronics-deals/-/N-556x9Zwtqd4Ztcob7ZsvzkjZ5xp41?type=products
+        pass
+
+    def _related_urls(self, url):
         pid = self._extract_product_id_from_url(url)
         params = {
             "key": "ff457966e64d5e877fdbad070f276d18ecec4a01",
@@ -372,15 +313,19 @@ class TargetScraper(ThreadedScraper):
                     location = locations[0]
                     if location:
                         self.store_id = location.get("location_id")
+                        return logger.info("set_redsky_api_cookies was successful")
+        logger.info("set_redsky_api_cookies didn't properly set the store_id and visitor_id")
 
-    def _extract_merchant_name(self):
-        return "Target"
+    # def _merchant_name(self):
+    #     return "Target"
 
-    def _extract_product_title(self):
+    def _product_title(self):
         title = self.soup.find("title", {"data-react-helmet": "true"})
-        return title.get_text().split(":")[0]
+        text = title.get_text()
+        x = text.find(":")
+        return text[:x]
 
-    def _extract_product_description(self):
+    def _product_description(self):
         description_lis = self.soup.select("li[class*=styles__]")
         if not description_lis:
             return None
@@ -394,11 +339,11 @@ class TargetScraper(ThreadedScraper):
 
         return " ".join(sentences)
 
-    def _extract_product_value_and_discount(self, url):
+    def _price_metadata(self, url):
         current = None
         original = None
 
-        pid = self._extract_product_id_from_url(url)
+        pid = self._product_id_from_url(url)
         params = {"pricing_store_id": self.store_id, "key": self.visitor_id}
         response = requests.get(f"http://redsky.target.com/web/pdp_location/v1/tcin/{pid}", params=params)
         price_metadata = response.json()["price"]
@@ -416,7 +361,8 @@ class TargetScraper(ThreadedScraper):
 
         return current, original
 
-    def _extract_product_id_from_url(self, url):
+    def _product_id_from_url(self, url):
+        # FIXME: this needs to be done using just string search
         parts = url.split("/")
         id_part = None
         for i, part in enumerate(parts):
@@ -434,7 +380,7 @@ class TargetScraper(ThreadedScraper):
                 break
         return int(pid)
 
-    def _extract_all_product_img_urls(self):
+    def _product_imgs(self, url):
         pictures = self.soup.find_all("picture", {"style": "width:100%"})
         if not pictures:
             return None
@@ -447,6 +393,7 @@ class TargetScraper(ThreadedScraper):
         return imgs[0], imgs
 
     def _is_product_url(self, url):
+        # FIXME: This needs to use just string search
         parts = url.split("/")
         for part in parts:
             if part.startswith("A-"):
@@ -454,118 +401,226 @@ class TargetScraper(ThreadedScraper):
         return False
 
 
-class AmazonScraper(ThreadedScraper):
-    def __init__(self, name=Scrapers.Amazon, domain=Domains.Amazon, max_handles=10, max_tasks=10):
-        super(AmazonScraper, self).__init__(name, domain, max_handles, max_tasks)
-        self.name = name
-        self.domain = domain
+class NikeScraper(ThreadedScraper):
+    def __init__(self, name="nike", domain="https://nike.com", **kwargs):
+        super(NikeScraper, self).__init__(name, domain, **kwargs)
+        self.merchant_name = "Nike"
         self.headers = {
-            "cookie": "session-id=131-3306794-6173954; session-id-time=2082787201l; i18n-prefs=USD; ubid-main=135-3690569-1466528; session-token=AUqh2LGYiKoIQ5QHUHh1uwMTH2alpDy9KeSAIz1iV2ND3B3a4BzII3t2xHOpWQ3iu2+A3ZF+OIkMW66jEYuuxYCPEkFfPcE+B7ooZxmoCUPlnWkJyNDQpgarbZWqsuqf/zT7DdOtZSxXW+CqSCcqmYYWDbn0EHJCtonqucZKNMqm+N2PMFW2iWWMuJbRXP1n",
-            "referer": "https://www.amazon.com/",
+            "referer": "https://www.nike.com/",
             "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0",
         }
 
-    def _extract_product_title(self):
-        descriptions = self.soup.find_all("meta", {"name": "description"})
-        if not descriptions:
+    def hydrate_queue_from_deal_page(self):
+        params = {
+            "queryid": "products",
+            "anonymousId": "065E1482E9463E9F731299937D8EA206",
+            "country": "us",
+            "endpoint": "/product_feed/rollup_threads/v2?filter=marketplace(US)&filter=language(en)&filter=employeePrice(true)&filter=attributeIds(5b21a62a-0503-400c-8336-3ccfbff2a684)&anchor=168&consumerChannelId=d9a5bc42-4b9c-4976-858a-f159cf99c647&count=24",
+            "language": "en",
+            "localizedRangeStr": "{lowestPrice} — {highestPrice}",
+        }
+
+        url = "https://api.nike.com/cic/browse/v1"
+        response = requests.get(url, params=params, headers=self.headers)
+        rjson = response.json()
+        for product in rjson["data"]["products"]["products"]:
+            for item in product["colorways"]:
+                # FIXME: This needs to be done using just string/vec replace
+                url_parts = item["pdpUrl"].split("/")
+                url_parts[0] = self.domain + "/en"
+                url = "/".join(url_parts)
+                self.queue.append(url)
+
+    def set_cookies(self):
+        self.session.get(self.domain)
+        cookie_str = cookie_dict_to_str(self.session.cookies.get_dict())
+        self.headers["cookie"] = cookie_str
+
+    def _product_title(self):
+        title = self.soup.find("h1", {"id": "pdp_product_title", "data-test": "product-title"})
+        if not title:
             return None
+        return title.get_text()
 
-        contents = [item.get("content") for item in descriptions]
-        if not contents:
+    def _product_description(self):
+        description = self.soup.find("div", {"class": "description-preview"})
+        if not description:
             return None
+        return description.get_text()
 
-        return contents[0]
-
-    def _extract_product_description(self):
-        feature_bullets = self.soup.find("div", id="feature-bullets")
-        if not feature_bullets:
-            return None
-        lis = feature_bullets.find_all("span", class_="a-list-item")
-        if not lis:
-            return None
-
-        return " ".join([item.get_text().strip("\n") for item in lis])
-
-    def _extract_merchant_name(self):
-        return "Amazon"
-
-    def _extract_product_value_and_discount(self, _):
-        current = None
-        original = None
-
-        price_span = self.soup.find("span", id="priceblock_saleprice")
-        if not price_span:
-            a_offscreens = self.soup.find_all("span", class_="a-offscreen")
-            a_offscreens = [item.get_text() for item in a_offscreens if item.get_text().startswith("$")]
-            if not a_offscreens:
-                buybox = self.soup.find("span", id="price_inside_buybox")
-                if not buybox:
-                    maplemath = self.soup.find("span", {"data-maple-math": "cost"})
-                    if not maplemath:
-                        return None, None
-                    current = maplemath.get_text()[1:]
-                else:
-                    current = buybox.get_text().strip("\n")[1:]
-            else:
-                current = a_offscreens[0][1:]
-        else:
-            current = float(price_span.get_text()[1:])
-
-        # NOTE: Amazon lists the original price so no need to calculate it, in this case
-        # the `original` will be the `discount`
-        discount_td = self.soup.find("td", class_="priceBlockSavingsString")
-        if not discount_td:
-            return None, None
-        original = discount_td.get_text().strip("\n").split()[0][1:]
+    def _price_metadata(self, url):
+        empty = (None, None)
+        original = self.soup.find("div", {"class": "product-price", "data-test": "product-price"})
         if not original:
-            return None, None
-
+            return empty
+        original = INTEGER_ONLY_REGEX.sub("", original.get_text())
+        current = self.soup.find("div", {"class": "product-price", "data-test": "product-price-reduced"})
+        if not current:
+            return empty
+        current = INTEGER_ONLY_REGEX.sub("", current.get_text())
         return current, original
 
-    def _extract_all_product_img_urls(self):
-        scripts = [item.get_text() for item in self.soup.find_all("script")]
-        img_scripts = list(filter(lambda item: "ImageBlockATF" in item, scripts))
-        if not img_scripts:
+    def _product_imgs(self, url):
+        # NOTE: Nike url format https://www.nike.com/t/air-max-270-react-womens-shoe-trW1vK/CZ6685-100
+        # where `trW1vK` is the product id
+        # The below implementation makes a naive assumption about the url
+
+        pid = self._product_id_from_url(url)
+        source_tags = self.soup.find_all("source")
+        srcsets = [tag.get("srcset") for tag in source_tags]
+        imgs = list(set([src for src in srcsets if src and pid in src]))
+        if not imgs:
             return None, None
+        return imgs[0], imgs
 
-        img_script = img_scripts[0]
-
-        curr = img_script
-        img_urls = []
-        done = False
-
-        while not done:
-            end = curr.find(".jpg") + 4
-            if end == 3:
-                done = True
-            tmp = curr[:end]
-            start = tmp.find("https")
-            img_url = tmp[start:end]
-            img_urls.append(img_url)
-            curr = curr[end:]
-
-        return img_urls[0], img_urls
+    def _product_id_from_url(self, url):
+        # FIXME: this needs to be done using string search
+        parts = url.split("/")
+        id_part = parts[parts.index("t") + 1]
+        return id_part.split("-")[-1]
 
     def _is_product_url(self, url):
         parts = url.split("/")
-        return "dp" in parts
+        return "t" in parts
 
-    def _get_associated_product_links(self, url):
-        normal_links = self.soup.find_all("a", class_="a-link-normal")
-        urls = [self.domain + item.get("href") for item in normal_links]
+    def _related_urls(self, url):
+        params = {
+            "appid": "NIKE01US",
+            "tk": "76418023697193940",
+            "sg": "1",
+            "bx": "true",
+            "sc": "product_rr",
+            "language": "en",
+            "currencycode": "USD",
+            "ur": url,
+        }
+        response = self.session.get("https://www.res-x.com/ws/r2/Resonance.aspx", params=params, headers=self.headers)
+        data = "[" + response.text + "]"
+        data = json.loads(data)
+        return [item["pdpURL"] for item in data]
+
+
+class FentyBeautyScraper(ThreadedScraper):
+    def __init__(self, name="fenty-beauty", domain="https://fentybeauty.com", **kwargs):
+        super(FentyBeautyScraper, self).__init__(name, domain, **kwargs)
+        self.merchant_name = "Fenty Beauty"
+
+    def hydrate_queue_from_deal_page(self):
+        response = self.session.get("https://www.fentybeauty.com/sale")
+        soup = BeautifulSoup(response.content, "html5lib")
+        product_titles = soup.find_all("div", {"class": "product-tile"})
+        link_items = [tile.find("a", {"itemprop": "url"}) for tile in product_titles]
+        hrefs = [item.get("href") for item in link_items]
+        return [url for url in hrefs if self._is_product_url(url)]
+
+    def _product_title(self):
+        name = self.soup.find("h1", {"itemprop": "name"})
+        if not name:
+            return None
+        return name.get_text().strip("\n")
+
+    def _product_description(self):
+        description = self.soup.find("div", {"itemprop": "description"})
+        if not description:
+            return None
+        ptags = description.find_all("p")
+        description = " ".join([p.get_text() for p in ptags])
+
+        pdp_steps = self.soup.find("ul", {"class": "pdp-steps"})
+        if not pdp_steps:
+            return description
+        lis = pdp_steps.find_all("li")
+        pdp_description = " ".join([li.get_text() for li in lis])
+
+        return description + "\n\n" + pdp_description
+
+    def _price_metadata(self, url):
+        empty = (None, None)
+        hidden_spans = self.soup.find_all("span", {"class": "visually-hidden"})
+
+        if not hidden_spans:
+            return empty
+
+        original_parent = [span for span in hidden_spans if span.get_text().lower() == "original price:"]
+        if not original_parent:
+            return empty
+
+        original_parent = original_parent[0]
+
+        original_meta = original_parent.find_next_sibling("span")
+        if not original_meta:
+            return empty
+
+        original = original_meta.find("meta", {"itemprop": "price"})
+        if not original:
+            return empty
+
+        current_parent = [span for span in hidden_spans if span.get_text().lower() == "sale price:"]
+        if not current_parent:
+            return empty
+
+        if not current_parent:
+            return empty
+
+        current_parent = current_parent[0]
+
+        current_meta = current_parent.find_next_sibling("span")
+        if not current_meta:
+            return empty
+
+        current = current_meta.find("meta", {"itemprop": "price"})
+        if not current:
+            return empty
+
+        return current.get("content"), original.get("content")
+
+    def _product_id_from_url(self, url):
+        # FIXME: This should use string search
+        url_parts = url.split("/")
+        id_part = url_parts[4]
+        pid = id_part.split(".")[0]
+        return pid
+
+    def _product_imgs(self, url):
+        imgs = self.soup.find_all("img")
+        sources = self.soup.find_all("source")
+        img_sets = list(set([img.get("data-srcset") for img in imgs]))
+        source_sets = list(set([src.get("srcset") for src in sources]))
+        aggregate = img_sets + source_sets
+
+        pid = self._product_id_from_url(url)
+
+        processed = []
+        for img_url in aggregate:
+            if not img_url or not pid in img_url:
+                continue
+
+            url_without_params = img_url.split("?")[0]
+            processed.append(url_without_params)
+
+        processed = list(set(processed))
+        return processed[0], processed
+
+    def _is_product_url(self, url):
+        pid = self._product_id_from_url(url)
+        return pid.isdigit()
+
+    def _related_urls(self, url):
+        recommendations = self.soup.find("ul", {"id": "carousel-recommendations"})
+        lis = recommendations.find_all("li", {"class": ["item", "grid-tile", "custom-tile", "slick-slide"]})
+        hrefs = [li.find("a", attrs={"itemprop": "url", "class": ["thumb-link", "product-link"]}) for li in lis]
+        urls = [a.get("href") for a in hrefs]
         return [url for url in urls if self._is_product_url(url)]
 
 
 if __name__ == "__main__":
 
-    response = requests.get(
-        "https://www.amazon.com/Charger-Samsung-Upgraded-Charging-SM-R800/dp/B07H3RZWL2/ref=psdc_11591898011_t4_B08HN2MMYK",
-        headers={
-            "cookie": "session-id=131-3306794-6173954; session-id-time=2082787201l; i18n-prefs=USD; ubid-main=135-3690569-1466528; session-token=AUqh2LGYiKoIQ5QHUHh1uwMTH2alpDy9KeSAIz1iV2ND3B3a4BzII3t2xHOpWQ3iu2+A3ZF+OIkMW66jEYuuxYCPEkFfPcE+B7ooZxmoCUPlnWkJyNDQpgarbZWqsuqf/zT7DdOtZSxXW+CqSCcqmYYWDbn0EHJCtonqucZKNMqm+N2PMFW2iWWMuJbRXP1n",
-            "referer": "https://www.amazon.com/",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0",
-        },
-    )
-    soup = BeautifulSoup(response.content, "html5lib")
-    m = soup.find("span", {"data-maple-math": "cost"})
-    print(m.get_text())
+    # s = FentyBeautyScraper()
+    # s.run()
+    r = requests.get("https://www.fentybeauty.com/sale")
+    s = BeautifulSoup(r.content, "html5lib")
+    f1 = s.find_all("div", {"class": "product-tile"})
+    f2 = [item.find("a", {"itemprop": "url"}) for item in f1]
+    f3 = [item.get("href") for item in f2]
+
+    print(f3)

@@ -47,20 +47,29 @@ const defaultState = {
   },
   deals: {
     inactive: {},
-    list: {
+    all: {
       pending: false,
-      error: {
-        details: 'There was an error',
-      },
-      items: [],
+      error: null,
+      items: {},
     },
-    focused: null,
+    focused: {
+      show_modal: false,
+      item: null,
+    },
+    watch_list: {
+      list: {},
+      pending: false,
+      error: null,
+    },
+    matches: {
+      items: {},
+      pending: false,
+      error: null,
+    },
   },
   stats: {
     pending: false,
-    error: {
-      details: 'Whoops something went wrong',
-    },
+    error: null,
   },
   settings: {
     profile: {
@@ -130,12 +139,19 @@ const defaultState = {
   account: {
     links: [
       {
-        id: 0,
-        title: 'Link an account',
-        icon: 'toggle-right',
-        description: 'Link one of your external accounts to your Grabbit profile',
-        routeKey: 'accountType',
+        id: 2,
+        title: 'Watch List',
+        icon: 'bookmark',
+        description: 'View deals on your Watch List',
+        routeKey: 'watchList',
       },
+      // {
+      //   id: 0,
+      //   title: 'Link an account',
+      //   icon: 'toggle-right',
+      //   description: 'Link one of your external accounts to your Grabbit profile',
+      //   routeKey: 'accountType',
+      // },
       {
         id: 1,
         title: 'Settings',
@@ -499,8 +515,148 @@ const reducer = function (state = defaultState, action) {
     }
 
     // ********************************************
-    // Deal list
+    // Deals
     // ********************************************
+    case ReduxActions.Deals.GetWatchListSuccess: {
+      const items = arrayToObject(payload, 'id');
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          watch_list: {
+            ...state.deals.watch_list,
+            pending: false,
+            error: null,
+            list: {
+              ...state.deals.watch_list.list,
+              ...items,
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.GetWatchListError: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          watch_list: {
+            ...state.deals.watch_list,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.GetWatchListPending: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          watch_list: {
+            ...state.deals.watch_list,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.GetDealsSuccess: {
+      const items = arrayToObject(payload, 'id');
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          all: {
+            ...state.deals.all,
+            pending: false,
+            error: null,
+            items: {
+              ...state.deals.all.items,
+              ...items,
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.GetDealsError: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          all: {
+            ...state.deals.all,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.GetDealsPending: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          all: {
+            ...state.deals.all,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.UpdateWatchListItemSuccess: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          watch_list: {
+            ...state.deals.watch_list,
+            list: {
+              ...state.deals.watch_list.list,
+              payload,
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.UpdateWatchListItemError: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          watch_list: {
+            ...state.deals.watch_list,
+            error: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.UpdateWatchListItemPending: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          watch_list: {
+            ...state.deals.watch_list,
+            pending: true,
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.ToggleFocusedDealModal: {
+      const prev = state.deals.focused.show_modal;
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          focused: {
+            ...state.deals.focused,
+            show_modal: !prev,
+          },
+        },
+      };
+    }
     case ReduxActions.Deals.GetUserDealsError: {
       return {
         ...state,
@@ -516,13 +672,14 @@ const reducer = function (state = defaultState, action) {
     }
 
     case ReduxActions.Deals.GetUserDealsSuccess: {
+      const items = arrayToObject(payload, 'id');
       return {
         ...state,
         deals: {
           ...state.deals,
           list: {
             ...state.deals.list,
-            items: payload,
+            items,
             pending: false,
             error: null,
           },
@@ -549,7 +706,11 @@ const reducer = function (state = defaultState, action) {
         ...state,
         deals: {
           ...state.deals,
-          focused: payload,
+          focused: {
+            ...state.deals.focused,
+            item: payload,
+            show_modal: true,
+          },
         },
       };
     }

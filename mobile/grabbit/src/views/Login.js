@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import {Actions} from 'react-native-router-flux';
+import Icon from 'react-native-vector-icons/Feather';
 import {connect} from 'react-redux';
 import ReduxActions from 'grabbit/src/Actions';
 import {TextInput, GrabbitButton} from 'grabbit/src/components/Basic';
@@ -62,7 +63,14 @@ class V extends React.Component {
             alignItems: 'center',
             marginBottom: 10,
           }}>
-          <Text style={{color: Color.ErrorRed}}>{loginError.details}</Text>
+          <Text
+            style={{
+              color: Color.White,
+              textDecorationStyle: 'solid',
+              fontWeight: 'bold',
+            }}>
+            {loginError.details}
+          </Text>
         </View>
       );
     }
@@ -79,6 +87,7 @@ class V extends React.Component {
             paddingTop: 50,
             backgroundColor: Color.White,
             alignItems: 'center',
+            backgroundColor: Color.QueenBlue,
           }}>
           <View
             style={{
@@ -107,6 +116,7 @@ class V extends React.Component {
                 width: '100%',
               }}>
               <TextInput
+                disabled={true}
                 labelStyle={styles.labelStyle}
                 label={'Phone'}
                 inputStyle={styles.inputStyle}
@@ -120,6 +130,7 @@ class V extends React.Component {
                 placeholder={''}
               />
               <TextInput
+                keyboardType={'number-pad'}
                 labelStyle={styles.labelStyle}
                 label={' '}
                 inputStyle={styles.inputStyle}
@@ -154,35 +165,48 @@ class V extends React.Component {
                 // borderWidth: 1,
                 // borderColor: 'red',
                 justifyContent: 'center',
-                width: '100%',
+                width: '90%',
                 alignItems: 'center',
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
                 marginTop: 20,
               }}>
-              <GrabbitButton
-                onPress={() => {
-                  return this.props.postUserLogin({
-                    endpoint: '/users/login/',
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    data: {
-                      phone: this.props.countryCode + this.props.phone,
-                      secret: this.props.secret,
-                    },
-                  });
-                }}
-                _buttonStyle={{
+              <View
+                style={{
+                  // borderWidth: 1,
+                  // borderColor: 'blue',
+                  height: 50,
+                  borderRadius: 100,
+                  width: 50,
+                  justifyContent: 'center',
+                  alignItems: 'center',
                   backgroundColor: Color.White,
-                  borderColor: Color.QueenBlue,
-                  borderWidth: 1,
-                }}
-                titleStyle={{
-                  color: Color.QueenBlue,
-                  fontWeight: 'bold',
-                }}
-                title="Login"
-              />
+                  shadowColor: '#000',
+                  shadowOffset: {
+                    width: 2,
+                    height: -2,
+                  },
+                  shadowOpacity: 0.5,
+                  shadowRadius: 3.84,
+                  elevation: 10,
+                }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    return this.props.postUserLogin({
+                      endpoint: '/users/login/',
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      data: {
+                        phone: this.props.countryCode + this.props.phone,
+                        secret: this.props.secret,
+                      },
+                    });
+                  }}>
+                  <Icon name={'chevron-right'} size={40} color={Color.QueenBlue} />
+                </TouchableOpacity>
+              </View>
             </View>
             <View
               style={{
@@ -191,7 +215,7 @@ class V extends React.Component {
               }}>
               <Text
                 style={{
-                  color: Color.ReadableGreyText,
+                  color: Color.White,
                   fontSize: 11,
                 }}>
                 Don't have an account?{' '}
@@ -199,10 +223,10 @@ class V extends React.Component {
               <TouchableOpacity onPress={() => Actions.signup()}>
                 <Text
                   style={{
-                    fontWeight: 'bold',
+                    // fontWeight: 'bold',
                     fontSize: 11,
                     textDecorationLine: 'underline',
-                    color: Color.HyperlinkBlue,
+                    color: Color.White,
                   }}>
                   Sign Up
                 </Text>
@@ -272,6 +296,8 @@ const styles = StyleSheet.create({
   labelStyle: {
     fontWeight: 'normal',
     fontSize: 12,
+    marginBottom: 5,
+    color: Color.White,
   },
 
   inputStyle: {

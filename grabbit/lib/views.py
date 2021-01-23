@@ -9,6 +9,8 @@ from django.shortcuts import get_object_or_404
 from lib.models import BaseModel
 from lib.middlewares import TokenAuthentication
 
+PAGE_SIZE = 10
+
 
 class BaseAPIView(APIView):
     pass
@@ -20,9 +22,16 @@ class BaseModelViewSet(viewsets.ViewSet):
 
     def list(self, request):
         params = request.query_params.dict()
-        params["delete_at"] = None
-        queryset = self.model.objects.filter(**params)
-        serializer = self.serializer(queryset, many=True)
+
+        # FIXME: ideally we woudn't copy this around
+        page = params.get("page")
+        if page:
+            page = int(page)
+            del params["page"]
+
+        qs = self.model.objects.filter(**params, deleted_at=None)
+        qs = self._paginated_queryset(qs, page=page)
+        serializer = self.serializer(qs, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None, *args, **kwargs):
@@ -59,3 +68,18 @@ class BaseModelViewSet(viewsets.ViewSet):
         instance.delete()
         serializer = self.serializer(instance)
         return Response(serializer.data)
+
+    def _paginated_queryset(self, queryset, page):
+        start, end = self._page_indices(page)
+        if not end:
+            return queryset
+        return queryset[start:end]
+
+    def _page_indices(self, page=None):
+        page_size = 10
+        start = 0
+        end = None
+        if page:
+            start = page_size * (page - 1)
+            end = start + page_size
+        return start, end

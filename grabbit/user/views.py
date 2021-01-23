@@ -37,6 +37,8 @@ class UserViewSet(viewsets.ViewSet):
         if instance:
             return Response(status=400, data={"detail": "exists"})
 
+        del params["invitation_code"]
+
         instance = self.model.objects.create(**params)
         serializer = self.serializer(instance)
         return Response(serializer.data)
@@ -53,27 +55,46 @@ class UserViewSet(viewsets.ViewSet):
 class BaseUserNestedViewSet(BaseModelViewSet):
     def list(self, request, user_id=None):
         user = get_object_or_404(User, pk=user_id)
-        links = self.model.objects.filter(user__id=user.id)
-        serializer = self.serializer(links, many=True)
+        params = request.query_params.dict()
+
+        # FIXME: ideally we woudn't copy this around
+        page = params.get("page")
+        if page:
+            page = int(page)
+            del params["page"]
+
+        qs = self.model.objects.filter(user__id=user.id, deleted_at=None)
+        qs = self._paginated_queryset(qs, page=page)
+        serializer = self.serializer(qs, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, user_id=None, pk=None):
-        instance = get_object_or_404(self.model, pk=pk, user__id=user_id)
+        user = get_object_or_404(User, pk=user_id)
+        instance = get_object_or_404(self.model, pk=pk, user__id=user.id, deleted_at=None)
         serializer = self.serializer(instance)
         return Response(serializer.data)
 
-    def destroy(self, request, user_id=None, pk=None):
-        _ = get_object_or_404(User, pk=user_id)
-        instance = get_object_or_404(self.model, pk=pk)
-        instance.delete()
+    def create(self, request, user_id=None):
+        params = request.data
+        instance = self.model.objects.filter(**params)
+        if instance:
+            return Response(status=400, data={"detail": "exists"})
+        instance = self.model.objects.create(**params)
         serializer = self.serializer(instance)
         return Response(serializer.data)
 
     def update(self, request, user_id=None, pk=None):
-        _ = get_object_or_404(User, pk=user_id)
-        instance = get_object_or_404(self.model, pk=pk)
+        user = get_object_or_404(User, pk=user_id)
+        instance = self.model.objects.get(user__id=user.id, pk=pk, deleted_at=None)
         instance.__dict__.update(request.data)
         instance.save()
+        serializer = self.serializer(instance)
+        return Response(serializer.data)
+
+    def destroy(self, request, user_id=None, pk=None):
+        user = get_object_or_404(User, pk=user_id)
+        instance = self.model.objects.filter(user__id=user.id, pk=pk, deleted_at=None)
+        instance.delete()
         serializer = self.serializer(instance)
         return Response(serializer.data)
 
