@@ -517,6 +517,50 @@ const reducer = function (state = defaultState, action) {
     // ********************************************
     // Deals
     // ********************************************
+    case ReduxActions.Deals.GetWatchListSuccess: {
+      const items = arrayToObject(payload, 'id');
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          watch_list: {
+            ...state.deals.watch_list,
+            pending: false,
+            error: null,
+            list: {
+              ...state.deals.watch_list.list,
+              ...items,
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.GetWatchListError: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          watch_list: {
+            ...state.deals.watch_list,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.GetWatchListPending: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          watch_list: {
+            ...state.deals.watch_list,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
     case ReduxActions.Deals.GetDealsSuccess: {
       const items = arrayToObject(payload, 'id');
       return {

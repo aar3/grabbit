@@ -25,6 +25,9 @@ export default {
     UpdateWatchListItemPending: 'UpdateWatchListItemPending',
     UpdateWatchListItemError: 'UpdateWatchListItemError',
     UpdateWatchListItemSuccess: 'UpdateWatchListItemSuccess',
+    GetWatchListPending: 'GetWatchListPending',
+    GetWatchListSuccess: 'GetWatchListSuccess',
+    GetWatchListError: 'GetWatchListError',
   },
   Accounts: {
     GetLinkTokenPending: 'GetLinkTokenPending',

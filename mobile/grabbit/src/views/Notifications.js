@@ -1,12 +1,12 @@
 import React from 'react';
-import {View, Text, ImageBackground, TouchableOpacity, FlatList} from 'react-native';
+import {View, Text, ImageBackground, TouchableOpacity, FlatList, Image} from 'react-native';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import {Button} from 'react-native-elements';
 import {Actions} from 'react-native-router-flux';
 import ReduxActions from 'grabbit/src/Actions';
 import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
-import {Color} from 'grabbit/src/Const';
+import {Color, PLACEHOLDER_IMG} from 'grabbit/src/Const';
 import {Error} from 'grabbit/src/components/FlatList';
 
 class V extends React.Component {
@@ -277,14 +277,10 @@ class V extends React.Component {
             // borderWidth: 1,
             // borderColor: 'red',
             marginTop: 20,
+            height: 50,
+            width: 50,
           }}>
-          <Text
-            style={{
-              color: Color.ReadableGreyText,
-              fontWeight: 'bold',
-            }}>
-            Logo Here
-          </Text>
+          <Image source={{uri: PLACEHOLDER_IMG}} style={{height: 50, width: 50}} />
         </View>
       </View>
     );

@@ -1,13 +1,28 @@
 import React from 'react';
 import {View, Text, FlatList, Image} from 'react-native';
 import {connect} from 'react-redux';
-import {getStateForKey} from 'grabbit/src/Utils';
+import {getStateForKey, httpStateUpdate} from 'grabbit/src/Utils';
 import {Color} from 'grabbit/src/Const';
 
 class V extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  async componentDidMount() {
+    return httpStateUpdate({
+      dispatch: this.props.dispatch,
+      options: {
+        endpoint: `/users/${this.props.user.id}/watchlist/`,
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'X-Session-Token': this.props.user.current_session_token,
+        },
+      },
+      stateKeyPrefix: 'GetWatchList',
+    });
   }
 
   render() {
@@ -128,16 +143,11 @@ class V extends React.Component {
 }
 
 const mapStateToProps = function (state) {
-  const deals = Object.values(getStateForKey('state.deals.list.items', state));
-  const watchList = deals.filter((item) => item.is_on_watchlist);
+  const deals = Object.values(getStateForKey('state.deals.watch_list.list', state));
   return {
     user: getStateForKey('state.session.user', state),
-    watchList,
+    watchList: Object.values(deals),
   };
 };
 
-const mapDispatchToProps = function (dispatch) {
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(V);
+export default connect(mapStateToProps, null)(V);
