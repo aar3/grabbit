@@ -55,8 +55,17 @@ class UserViewSet(viewsets.ViewSet):
 class BaseUserNestedViewSet(BaseModelViewSet):
     def list(self, request, user_id=None):
         user = get_object_or_404(User, pk=user_id)
-        links = self.model.objects.filter(user__id=user.id, deleted_at=None)
-        serializer = self.serializer(links, many=True)
+        params = request.query_params.dict()
+
+        # FIXME: ideally we woudn't copy this around
+        page = params.get("page")
+        if page:
+            page = int(page)
+            del params["page"]
+
+        qs = self.model.objects.filter(user__id=user.id, deleted_at=None)
+        qs = self._paginated_queryset(qs, page=page)
+        serializer = self.serializer(qs, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, user_id=None, pk=None):

@@ -22,7 +22,7 @@ class M extends React.Component {
   }
 
   render() {
-    const merchantLogo = MerchantLogos[this.props.userDeal.deal.merchant_name];
+    const merchantLogo = MerchantLogos[this.props.deal.merchant_name];
     return (
       <Modal
         animationType={'slid'}
@@ -92,7 +92,7 @@ class M extends React.Component {
                 fontWeight: '600',
                 color: Color.ReadableGreyText,
               }}>
-              {this.props.userDeal.deal.merchant_name}
+              {this.props.deal.merchant_name}
             </Text>
 
             <Text
@@ -100,7 +100,7 @@ class M extends React.Component {
                 marginTop: 20,
                 color: Color.ReadableGreyText,
               }}>
-              {this.props.userDeal.deal.title}
+              {this.props.deal.title}
             </Text>
 
             <View
@@ -117,7 +117,7 @@ class M extends React.Component {
                 style={{
                   height: 150,
                 }}
-                data={this.props.userDeal.deal.all_img_urls}
+                data={this.props.deal.all_img_urls}
                 renderItem={({item, index}) => {
                   return (
                     <Image
@@ -142,7 +142,7 @@ class M extends React.Component {
                 fontSize: 12,
                 textAlign: 'center',
               }}>
-              {this.props.userDeal.deal.description}
+              {this.props.deal.description}
             </Text>
 
             <View
@@ -152,13 +152,13 @@ class M extends React.Component {
                 marginTop: 20,
               }}>
               <GrabbitButton
-                disabled={this.props.userDeal.is_on_watchlist}
+                disabled={this.props.is_on_watchlist}
                 onPress={
-                  this.props.userDeal.is_on_watchlist
+                  this.props.is_on_watchlist
                     ? null
                     : () =>
                         this.props.putUserDealOnWatchList({
-                          endpoint: `/users/${this.props.user.id}/deals/${this.props.userDeal.id}/`,
+                          endpoint: `/users/${this.props.user.id}/deals/${this.props.id}/`,
                           method: 'PUT',
                           headers: {
                             'X-Session-Token': this.props.user.current_session_token,
@@ -205,7 +205,7 @@ class M extends React.Component {
 const mapStateToProps = function (state) {
   return {
     showDealFocusedModal: getStateForKey('state.deals.focused.show_modal', state),
-    userDeal: getStateForKey('state.deals.focused.item', state),
+    deal: getStateForKey('state.deals.focused.item', state),
   };
 };
 

@@ -46,17 +46,12 @@ class Deal(BaseModel):
         super(Deal, self).save()
 
     def last_scraped_today(self):
-        last_update = None
-        if self.price_history:
-            # pylint: disable=unsubscriptable-object
-            last_update = self.price_history[-1]["date"]
-        else:
-            last_update = self.created_at
-
+        # pylint: disable=unsubscriptable-object
+        last_update = self.price_history[-1]["date"] if self.current_value else self.created_at
+        if isinstance(last_update, str):
+            last_update = dt.datetime.strptime(last_update, "%Y-%m-%d %H:%M:%S")
         delta = dt.datetime.now() - last_update
-        days, seconds = delta.days, delta.seconds
-        hours = days * 24 + seconds // 3600
-        return hours <= 24
+        return delta.days < 1
 
 
 class MatchedDeal(BaseModel):
@@ -69,7 +64,7 @@ class MatchedDeal(BaseModel):
 
 
 @receiver(post_save, sender=MatchedDeal)
-def create_notification_for_new_user_deal(sender, instance, created, **kwargs):
+def create_notification_for_new_matched_deal(sender, instance, created, **kwargs):
     if created:
         _ = Notification.objects.create(
             user=instance.user,
@@ -78,3 +73,11 @@ def create_notification_for_new_user_deal(sender, instance, created, **kwargs):
             title="New deal match",
             text="We found a new deal for you",
         )
+
+
+class WatchList(BaseModel):
+    class Meta:
+        db_table = "watch_list"
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    deal = models.ForeignKey(Deal, on_delete=models.CASCADE)

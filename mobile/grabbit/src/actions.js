@@ -14,6 +14,9 @@ export default {
     PostUserSignupSuccess: 'PostUserSignupSuccess',
   },
   Deals: {
+    GetDealsPending: 'GetDealsPending',
+    GetDealsError: 'GetDealsError',
+    GetDealsSuccess: 'GetDealsSuccess',
     GetUserDealsPending: 'GetUserDealsPending',
     GetUserDealsSuccess: 'GetUserDealsSuccess',
     GetUserDealsError: 'GetUserDealsError',

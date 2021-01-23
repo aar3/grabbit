@@ -145,13 +145,13 @@ const defaultState = {
         description: 'View deals on your Watch List',
         routeKey: 'watchList',
       },
-      {
-        id: 0,
-        title: 'Link an account',
-        icon: 'toggle-right',
-        description: 'Link one of your external accounts to your Grabbit profile',
-        routeKey: 'accountType',
-      },
+      // {
+      //   id: 0,
+      //   title: 'Link an account',
+      //   icon: 'toggle-right',
+      //   description: 'Link one of your external accounts to your Grabbit profile',
+      //   routeKey: 'accountType',
+      // },
       {
         id: 1,
         title: 'Settings',
@@ -517,15 +517,59 @@ const reducer = function (state = defaultState, action) {
     // ********************************************
     // Deals
     // ********************************************
+    case ReduxActions.Deals.GetDealsSuccess: {
+      const items = arrayToObject(payload, 'id');
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          all: {
+            ...state.deals.all,
+            pending: false,
+            error: null,
+            items: {
+              ...state.deals.all.items,
+              ...items,
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.GetDealsError: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          all: {
+            ...state.deals.all,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.GetDealsPending: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          all: {
+            ...state.deals.all,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
     case ReduxActions.Deals.UpdateWatchListItemSuccess: {
       return {
         ...state,
         deals: {
           ...state.deals,
-          list: {
-            ...state.deals.list,
-            items: {
-              ...state.deals.list.items,
+          watch_list: {
+            ...state.deals.watch_list,
+            list: {
+              ...state.deals.watch_list.list,
               payload,
             },
           },

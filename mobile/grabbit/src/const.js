@@ -45,8 +45,11 @@ export const BankLogos = {
 };
 
 export const MerchantLogos = {
-  Target: 'https://www.anbmedia.com/wp/wp-content/uploads/2019/10/target-logo-1024x780.jpg',
-  Nike: 'https://qph.fs.quoracdn.net/main-qimg-18d801a88c5d4fefd289642da0d074d9.webp',
+  'Target': 'https://www.anbmedia.com/wp/wp-content/uploads/2019/10/target-logo-1024x780.jpg',
+  'Nike': 'https://qph.fs.quoracdn.net/main-qimg-18d801a88c5d4fefd289642da0d074d9.webp',
+  'Fenty Beauty': 'https://i.pinimg.com/originals/68/78/b7/6878b7f65027abb3ab067c6941743c48.jpg',
 };
+
+export const PLACEHOLDER_IMG = 'https://ultralifecafe.com/wp-content/uploads/2019/12/placeholder.png';
 
 export const Font = 'Arial';

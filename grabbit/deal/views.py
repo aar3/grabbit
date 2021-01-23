@@ -7,11 +7,11 @@ from lib.const import Scrapers
 from lib.middlewares import TokenAuthentication
 from user.models import User
 from user.views import BaseUserNestedViewSet
-from deal.models import Deal, MatchedDeal
-from deal.serializers import DealSerializer, UserDealSerializer
+from deal.models import Deal, MatchedDeal, WatchList
+from deal.serializers import DealSerializer, UserDealSerializer, WatchListSerializer
 
 
-class UserDealViewSet(BaseUserNestedViewSet):
+class MatchedDealViewSet(BaseUserNestedViewSet):
     model = MatchedDeal
     serializer = UserDealSerializer
     authentication_classes = [TokenAuthentication]
@@ -20,4 +20,10 @@ class UserDealViewSet(BaseUserNestedViewSet):
 class DealViewSet(BaseModelViewSet):
     model = Deal
     serializer = DealSerializer
+    authentication_classes = [TokenAuthentication]
+
+
+class WatchListViewSet(BaseUserNestedViewSet):
+    model = WatchList
+    serializer = WatchListSerializer
     authentication_classes = [TokenAuthentication]

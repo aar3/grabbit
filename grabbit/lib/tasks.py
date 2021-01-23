@@ -24,10 +24,9 @@ START_URLS = {
     "target": "https://www.target.com/p/powerbeats-pro-true-wireless-in-ear-earphones/-/A-78362035?preselect=54610898#lnk=sametab",
     "amazon": "https://www.amazon.com/TOZO-Wireless-Upgraded-Sleep-Friendly-FastCharging/dp/B07FM8R7J1/ref=sr_1_3?dchild=1&keywords=wireless+charger&qid=1610070173&sr=8-3",
     "nike": "https://www.nike.com/t/air-max-270-react-womens-shoe-trW1vK/CZ6685-100",
-    "fentybeauty": "https://www.fentybeauty.com/two-lil-stunnas-mini-longwear-fluid-lip-color-duo/47670.html",
+    "fenty-beauty": "https://www.fentybeauty.com/two-lil-stunnas-mini-longwear-fluid-lip-color-duo/47670.html",
 }
 
-WAIT = 1.0
 INTEGER_ONLY_REGEX = re.compile(r"[^\d.]+")
 
 
@@ -38,22 +37,6 @@ def cookie_dict_to_str(d):
     return "; ".join(items)
 
 
-class Scrapers:
-    Slickdeals = "slickdeals"
-    Target = "target"
-    Amazon = "amazon"
-    Nike = "nike"
-    FentyBeauty = "fentybeauty"
-
-
-class Domains:
-    Slickdeals = "https://slickdeals.net"
-    Target = "https://target.com"
-    Amazon = "https://amazon.com"
-    Nike = "https://nike.com"
-    FentyBeauty = "https://fentybeauty.com"
-
-
 class LockedQueue(collections.deque):
     def __init__(self, *args, **kwargs):
         super(LockedQueue, self).__init__(*args, **kwargs)
@@ -61,14 +44,16 @@ class LockedQueue(collections.deque):
 
 
 class ThreadedScraper(abc.ABC):
-    def __init__(self, name, domain, max_handles=10, max_successful_tasks=10, max_total_tasks=20, **kwargs):
+    def __init__(
+        self, name, domain, max_handles=10, max_successful_tasks=10, max_total_tasks=20, timeout=3, sleep=1, start=None
+    ):
         self.domain = domain
         self.queue = LockedQueue()
         self.max_handles = max_handles
         self.max_successful_tasks = max_successful_tasks
         self.max_total_tasks = max_total_tasks
         self.name = name
-        self.start = self._set_start_url(start=kwargs.get("start"))
+        self.start = self._set_start_url(start)
         self.session = requests.Session()
         self.soup = None
         self._handles = []
@@ -78,14 +63,18 @@ class ThreadedScraper(abc.ABC):
             "successful_tasks": 0,
             "total_tasks": 0,
             "queue": 0,
+            "successes_with_updates": 0,
+            "too_recent_duplicates": 0,
             "max_successful_tasks": self.max_successful_tasks,
             "max_total_tasks": self.max_total_tasks,
             "duplicate_tasks": 0,
             "bad_tasks": 0,
             "failed_tasks": 0,
+            "finished_at": None,
         }
         self.lock = threading.Lock()
-        self.timeout = 3
+        self.timeout = timeout
+        self.sleep = sleep
 
     def _set_start_url(self, start):
         if start:
@@ -97,6 +86,7 @@ class ThreadedScraper(abc.ABC):
 
     def run(self):
         self.queue.append(self.start)
+        start = time.time()
         while self.queue and (
             (self.info["successful_tasks"] < self.max_successful_tasks)
             and (self.info["total_tasks"] < self.max_total_tasks)
@@ -114,8 +104,12 @@ class ThreadedScraper(abc.ABC):
 
                 self._handles.append(handle)
 
+        with self.lock:
+            self.info["finished_at"] = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%s")
+            self.info["runtime"] = time.time() - start
+
         _ = ScraperStats.objects.create(name=self.domain, metadata=self.info)
-        time.sleep(WAIT)
+        time.sleep(self.sleep)
 
     def download_and_process_url_contents(self, url):
         response = self.session.get(url, headers=self.headers)
@@ -149,7 +143,6 @@ class ThreadedScraper(abc.ABC):
         current_value, original_value = self._price_metadata(url)
         img_url, img_urls = self._product_imgs(url)
         title = self._product_title()
-        merchant_name = self._merchant_name()
 
         conditions = [
             (not current_value, "price"),
@@ -157,7 +150,6 @@ class ThreadedScraper(abc.ABC):
             (not img_url, "img-url"),
             (not img_urls, "img-urls"),
             (not description, "description"),
-            (not merchant_name, "merchant-name"),
         ]
 
         for condition, reason in conditions:
@@ -168,7 +160,7 @@ class ThreadedScraper(abc.ABC):
         # data = {
         #     "description": description,
         #     "current_value": current_value,
-        #     "merchant_name": merchant_name,
+        #     "merchant_name": self.name,
         #     "original_value": original_value,
         #     "img_url": img_url,
         #     "scraper": self.name,
@@ -182,7 +174,7 @@ class ThreadedScraper(abc.ABC):
             current_value=current_value,
             original_value=original_value,
             description=description,
-            merchant_name=merchant_name,
+            merchant_name=self.merchant_name,
             img_url=img_url,
             scraper=self.name,
             all_img_urls=img_urls,
@@ -196,14 +188,17 @@ class ThreadedScraper(abc.ABC):
                 other = Deal.objects.get(uid=instance.uid)
                 if other.last_scraped_today():
                     logger.info(
-                        "Processed a scraped deal that already exists (however it was scraped too recently to update)"
+                        "Processed a scraped deal that already exists (however it was scraped too recently to update): %s",
+                        url,
                     )
                     self.info["duplicate_tasks"] += 1
+                    self.info["too_recent_duplicates"] += 1
                     return
 
                 instance.save(other=other)
-                logger.info("Processed a scraped deal that already exists (updating price history)")
-                self.info["duplicate_tasks"] += 1
+                logger.info("Processed a scraped deal that already exists (updating price history): %s", url)
+                self.info["successes_with_updates"] += 1
+                self.info["successful_tasks"] += 1
             except Deal.DoesNotExist:
                 instance.save()
                 logger.info("Processed a new scraped deal: %s", instance.uid)
@@ -220,10 +215,6 @@ class ThreadedScraper(abc.ABC):
 
     @abc.abstractmethod
     def _product_title(self):
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    def _merchant_name(self):
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -261,9 +252,10 @@ class ThreadedScraper(abc.ABC):
 
 class TargetScraper(ThreadedScraper):
     # NOTE: https://stackoverflow.com/a/59011424/4701228
-    def __init__(self, name=Scrapers.Target, domain=Domains.Target, **kwargs):
+    def __init__(self, name="target", domain="https://target.com", **kwargs):
         super(TargetScraper, self).__init__(name, domain, **kwargs)
         self.name = name
+        self.merchant_name = "Target"
         self.domain = domain
         self.visitor_id = None
         self.store_id = None
@@ -324,8 +316,8 @@ class TargetScraper(ThreadedScraper):
                         return logger.info("set_redsky_api_cookies was successful")
         logger.info("set_redsky_api_cookies didn't properly set the store_id and visitor_id")
 
-    def _merchant_name(self):
-        return "Target"
+    # def _merchant_name(self):
+    #     return "Target"
 
     def _product_title(self):
         title = self.soup.find("title", {"data-react-helmet": "true"})
@@ -410,8 +402,9 @@ class TargetScraper(ThreadedScraper):
 
 
 class NikeScraper(ThreadedScraper):
-    def __init__(self, name=Scrapers.Nike, domain=Domains.Nike, **kwargs):
+    def __init__(self, name="nike", domain="https://nike.com", **kwargs):
         super(NikeScraper, self).__init__(name, domain, **kwargs)
+        self.merchant_name = "Nike"
         self.headers = {
             "referer": "https://www.nike.com/",
             "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:84.0) Gecko/20100101 Firefox/84.0",
@@ -454,9 +447,6 @@ class NikeScraper(ThreadedScraper):
         if not description:
             return None
         return description.get_text()
-
-    def _merchant_name(self):
-        return "Nike"
 
     def _price_metadata(self, url):
         empty = (None, None)
@@ -511,11 +501,17 @@ class NikeScraper(ThreadedScraper):
 
 
 class FentyBeautyScraper(ThreadedScraper):
-    def __init__(self, name=Scrapers.FentyBeauty, domain=Domains.FentyBeauty, **kwargs):
+    def __init__(self, name="fenty-beauty", domain="https://fentybeauty.com", **kwargs):
         super(FentyBeautyScraper, self).__init__(name, domain, **kwargs)
+        self.merchant_name = "Fenty Beauty"
 
     def hydrate_queue_from_deal_page(self):
-        pass
+        response = self.session.get("https://www.fentybeauty.com/sale")
+        soup = BeautifulSoup(response.content, "html5lib")
+        product_titles = soup.find_all("div", {"class": "product-tile"})
+        link_items = [tile.find("a", {"itemprop": "url"}) for tile in product_titles]
+        hrefs = [item.get("href") for item in link_items]
+        return [url for url in hrefs if self._is_product_url(url)]
 
     def _product_title(self):
         name = self.soup.find("h1", {"itemprop": "name"})
@@ -537,9 +533,6 @@ class FentyBeautyScraper(ThreadedScraper):
         pdp_description = " ".join([li.get_text() for li in lis])
 
         return description + "\n\n" + pdp_description
-
-    def _merchant_name(self):
-        return "Fenty Beauty"
 
     def _price_metadata(self, url):
         empty = (None, None)
@@ -622,5 +615,12 @@ class FentyBeautyScraper(ThreadedScraper):
 
 if __name__ == "__main__":
 
-    s = FentyBeautyScraper()
-    s.run()
+    # s = FentyBeautyScraper()
+    # s.run()
+    r = requests.get("https://www.fentybeauty.com/sale")
+    s = BeautifulSoup(r.content, "html5lib")
+    f1 = s.find_all("div", {"class": "product-tile"})
+    f2 = [item.find("a", {"itemprop": "url"}) for item in f1]
+    f3 = [item.get("href") for item in f2]
+
+    print(f3)
