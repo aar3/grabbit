@@ -34,6 +34,7 @@ class WebSocketMsg:
         self.status = None
         self.user_id = None
         self.model = None
+        self.redux_action = None
         self.instance = None
         self.uid = None
 
@@ -115,6 +116,7 @@ async def handle_client_redux_connection(websocket, path):
                     response.status = 200
                     response.details = "success"
                     response.model = "user"
+                    response.redux_action = "GetSessionUserSuccess"
                     response.user_id = user["id"]
                     response.instance = user
         except Exception as err:

@@ -7,7 +7,7 @@ import {Actions} from 'react-native-router-flux';
 import ReduxActions from 'grabbit/src/Actions';
 import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
 import {Color, PLACEHOLDER_IMG} from 'grabbit/src/Const';
-import {Error} from 'grabbit/src/components/FlatList';
+import {Error} from 'grabbit/src/components/Error';
 
 class V extends React.Component {
   constructor(props) {

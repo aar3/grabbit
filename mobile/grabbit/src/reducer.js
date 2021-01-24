@@ -49,7 +49,7 @@ const defaultState = {
     inactive: {},
     all: {
       pending: false,
-      error: null,
+      error: {details: 'Something went wrong'},
       items: {},
     },
     focused: {
@@ -64,7 +64,7 @@ const defaultState = {
     matches: {
       items: {},
       pending: false,
-      error: null,
+      error: {details: 'Something went wrong'},
     },
   },
   stats: {

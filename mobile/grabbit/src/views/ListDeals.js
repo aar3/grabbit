@@ -1,12 +1,13 @@
 import React from 'react';
-import {View, Text, FlatList, Image, Modal, TouchableOpacity, ImageBackground} from 'react-native';
+import {View, Text, FlatList, Image, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import ReduxActions from 'grabbit/src/Actions';
 import {getStateForKey, httpRequest, httpStateUpdate} from 'grabbit/src/Utils';
+import {LoadingView, ErrorView} from 'grabbit/src/components/Basic';
 import {Color, Font, PLACEHOLDER_IMG} from 'grabbit/src/Const';
 import DealFocusModal from 'grabbit/src/components/modals/DealFocus';
-import {Error} from 'grabbit/src/components/FlatList';
+import {Error} from 'grabbit/src/components/Error';
 
 class V extends React.Component {
   constructor(props) {
@@ -18,19 +19,14 @@ class V extends React.Component {
     this._options = {};
   }
 
-  // get options() {
-  //   return {
-  //     endpoint: `/users/${this.props.user.id}/deals/`,
-  //     method: 'GET',
-  //     headers: {
-  //       'Accept': 'application/json',
-  //       'X-Session-Token': this.props.user.current_session_token,
-  //     },
-  //   };
+  // componentDidMount() {
+  //   this.getDeals();
+  //   this.getMatchedDeals();
+  //   this.getWatchList();
   // }
 
-  async componentDidMount() {
-    await httpStateUpdate({
+  getDeals() {
+    return httpStateUpdate({
       dispatch: this.props.dispatch,
       options: {
         endpoint: `/deals?page=1`,
@@ -42,8 +38,10 @@ class V extends React.Component {
       },
       stateKeyPrefix: 'GetDeals',
     });
+  }
 
-    await httpStateUpdate({
+  getMatchedDeals() {
+    return httpStateUpdate({
       dispatch: this.props.dispatch,
       options: {
         endpoint: `/users/${this.props.user.id}/deals/`,
@@ -57,7 +55,66 @@ class V extends React.Component {
     });
   }
 
-  _renderMatchedDealsFlatList() {
+  getWatchList() {
+    return httpStateUpdate({
+      dispatch: this.props.dispatch,
+      options: {
+        endpoint: `/users/${this.props.user.id}/watchlist/`,
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'X-Session-Token': this.props.user.current_session_token,
+        },
+      },
+      stateKeyPrefix: 'GetWatchList',
+    });
+  }
+
+  _renderHorizontalFlatList() {
+    if (this.props.getMatchedDealsPending) {
+      return (
+        <View
+          style={{
+            // borderWidth: 1,
+            // borderColor: 'red',
+            height: 200,
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 20,
+            width: '90%',
+          }}>
+          <Text>Fetching stuff we found for you...</Text>
+          <LoadingView
+            style={{
+              marginTop: 20,
+              width: 50,
+              height: 50,
+            }}
+          />
+        </View>
+      );
+    }
+
+    if (this.props.getMatchedDealsError) {
+      return (
+        <View
+          style={{
+            borderWidth: 1,
+            borderColor: 'green',
+            width: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 275,
+          }}>
+          <ErrorView
+            overrideMsg={'There was an issue getting your matches'}
+            error={this.props.getMatchedDealsError}
+            onTryAgain={() => this.getMatchedDeals()}
+          />
+        </View>
+      );
+    }
+
     if (this.props.matchedDeals.length === 0) {
       return (
         <View
@@ -109,96 +166,109 @@ class V extends React.Component {
     }
 
     return (
-      <FlatList
-        horizontal
-        data={this.props.matchedDeals}
+      <View
         style={{
-          // borderWidth: 1,
-          // borderColor: 'green',
-          backgroundColor: Color.TopNavBackground,
-          borderBottomWidth: 0,
-          height: 400,
           width: '100%',
-          marginBottom: 2,
-        }}
-        refreshing={this.props.getMatchedDealsPending}
-        onRefresh={() => this._onRefresh()}
-        keyExtractor={(_item, index) => index.toString()}
-        renderItem={({item, index}) => {
-          const discount = Number(
-            ((item.deal.original_value - item.deal.current_value) / item.deal.current_value) * 100,
-          ).toFixed(0);
+          height: 275,
+          borderWidth: 1,
+          borderColor: 'green',
+        }}>
+        <FlatList
+          horizontal
+          data={this.props.matchedDeals}
+          style={{
+            borderWidth: 1,
+            borderColor: 'green',
+            backgroundColor: Color.TopNavBackground,
+            borderBottomWidth: 0,
+            height: 275,
+            width: '100%',
+            // marginBottom: 2,
+          }}
+          refreshing={this.props.getMatchedDealsPending}
+          onRefresh={() => this._onRefresh()}
+          keyExtractor={(_item, index) => index.toString()}
+          renderItem={({item, index}) => {
+            const discount = Number(
+              ((item.deal.original_value - item.deal.current_value) / item.deal.current_value) * 100,
+            ).toFixed(0);
 
-          const shortTitle = item.deal.title.length > 50 ? `${item.deal.title.substr(0, 50)}...` : item.deal.title;
+            const shortTitle = item.deal.title.length > 50 ? `${item.deal.title.substr(0, 50)}...` : item.deal.title;
 
-          return (
-            <TouchableOpacity onPress={() => this.props.setFocusedDeal(item)}>
-              <View
-                style={{
-                  height: 250,
-                  width: 250,
-                  borderRadius: 5,
-                  marginTop: 5,
-                  // marginBottom: 40,
-                  backgroundColor: Color.White,
-                  marginLeft: 10,
-                  borderColor: Color.BorderLightGrey,
-                  borderWidth: 1,
-                  borderRadius: 10,
-                }}>
+            return (
+              <TouchableOpacity
+                onPress={() =>
+                  this.props.dispatch({
+                    type: ReduxActions.Deals.SetFocusedDeal,
+                    payload: item,
+                  })
+                }>
                 <View
                   style={{
-                    // borderWidth: 1,
-                    // borderColor: 'orange',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    height: 250,
+                    width: 250,
+                    borderRadius: 5,
+                    marginTop: 5,
+                    backgroundColor: Color.White,
+                    marginLeft: 10,
+                    borderColor: Color.BorderLightGrey,
+                    borderWidth: 1,
+                    borderRadius: 10,
                   }}>
                   <View
                     style={{
                       // borderWidth: 1,
-                      // borderColor: 'red',
-                      width: 250,
-                      height: 250,
+                      // borderColor: 'orange',
                       justifyContent: 'center',
                       alignItems: 'center',
                     }}>
-                    <Image
-                      source={{uri: item.deal.img_url, cache: 'force-cache'}}
+                    <View
                       style={{
-                        height: 248,
-                        width: 248,
-                        borderRadius: 10,
-                      }}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      backgroundColor: Color.QueenBlue,
-                      opacity: 0.7,
-                      width: 200,
-                      maxHeight: 60,
-                      position: 'absolute',
-                      bottom: 0,
-                      padding: 5,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <Text
-                      style={{
-                        fontWeight: 13,
-                        textAlign: 'center',
-                        color: Color.White,
-                        fontWeight: '500',
+                        // borderWidth: 1,
+                        // borderColor: 'red',
+                        width: 250,
+                        height: 250,
+                        justifyContent: 'center',
+                        alignItems: 'center',
                       }}>
-                      {shortTitle}
-                    </Text>
+                      <Image
+                        source={{uri: item.deal.img_url, cache: 'force-cache'}}
+                        style={{
+                          height: 248,
+                          width: 248,
+                          borderRadius: 10,
+                        }}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        backgroundColor: Color.QueenBlue,
+                        opacity: 0.7,
+                        width: 200,
+                        maxHeight: 60,
+                        position: 'absolute',
+                        bottom: 0,
+                        padding: 5,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Text
+                        style={{
+                          fontWeight: 13,
+                          textAlign: 'center',
+                          color: Color.White,
+                          fontWeight: '500',
+                        }}>
+                        {shortTitle}
+                      </Text>
+                    </View>
                   </View>
                 </View>
-              </View>
-            </TouchableOpacity>
-          );
-        }}
-      />
+              </TouchableOpacity>
+            );
+          }}
+        />
+      </View>
     );
   }
 
@@ -241,53 +311,60 @@ class V extends React.Component {
     return this.props.refreshViaFlatList(this.options);
   }
 
-  render() {
-    if (this.props.getMatchedDealsPending && !this.state.flatListReloading) {
+  _renderVerticalFlatList() {
+    if (this.props.getDealsPending) {
       return (
         <View
           style={{
-            flex: 1,
+            // borderWidth: 1,
+            // borderColor: 'red',
+            height: 400,
+            marginTop: 20,
             justifyContent: 'center',
             alignItems: 'center',
+            width: '90%',
           }}>
-          <Text style={{fontSize: 22, fontWeight: 'bold', color: Color.BorderLightGrey}}>Loading Rewards</Text>
-          <ImageBackground
-            source={require('./../../assets/imgs/Loading-Transparent-Cropped.gif')}
+          <Text>Fetching other stuff you might like...</Text>
+          <LoadingView
             style={{
               marginTop: 20,
-              // borderWidth: 1,
-              // borderColor: 'red',
-              height: 50,
               width: 50,
-            }}></ImageBackground>
+              height: 50,
+            }}
+          />
         </View>
       );
     }
 
-    if (this.props.getMatchedDealsError) {
+    if (this.props.getDealsError) {
       return (
-        <Error error={this.props.getMatchedDealsError} onTryAgain={() => this.props.getMatchedDeals(this.options)} />
+        <View
+          style={{
+            borderWidth: 1,
+            borderColor: 'blue',
+            marginTop: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            height: 400,
+          }}>
+          <ErrorView
+            overrideMsg={'There was an issue getting other deals'}
+            error={this.props.getDealsError}
+            onTryAgain={() => this.getDeals()}
+          />
+        </View>
       );
     }
 
     return (
       <View
         style={{
-          flex: 1,
-          alignItems: 'center',
-          backgroundColor: Color.BorderLightGrey,
+          borderWidth: 1,
+          borderColor: 'red',
+          width: '100%',
+          marginTop: 10,
         }}>
-        {this._renderModal()}
-        {this._renderMatchedDealsFlatList()}
-        <View
-          style={{
-            // borderWidth: 1,
-            // borderColor: 'red',
-            width: '100%',
-            borderBottomWidth: 1,
-            borderBottomColor: Color.BorderLightGrey,
-          }}></View>
-
         <FlatList
           data={this.props.deals}
           style={{
@@ -415,26 +492,7 @@ class V extends React.Component {
                         justifyContent: 'flex-end',
                         marginTop: 5,
                       }}>
-                      <TouchableOpacity
-                      // item.is_on_watchlist
-                      //   ? null
-                      //   : () =>
-                      //       this.props.dispatch(() =>
-                      //         httpStateUpdate({
-                      //           endpoint: `/users/${this.props.user.id}/deals/${item.id}/`,
-                      //           method: 'PUT',
-                      //           headers: {
-                      //             'X-Session-Token': this.props.user.current_session_token,
-                      //             'Content-Type': 'application/json',
-                      //           },
-                      //           data: {
-                      //             user_id: this.props.user.id,
-                      //             deal_id: item.id,
-                      //             is_on_watchlist: 1,
-                      //           },
-                      //         }),
-                      //       )
-                      >
+                      <TouchableOpacity>
                         <Icon
                           name="bookmark"
                           size={20}
@@ -448,6 +506,21 @@ class V extends React.Component {
             );
           }}
         />
+      </View>
+    );
+  }
+
+  render() {
+    return (
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          backgroundColor: Color.BorderLightGrey,
+        }}>
+        {this._renderModal()}
+        {this._renderHorizontalFlatList()}
+        {this._renderVerticalFlatList()}
       </View>
     );
   }
