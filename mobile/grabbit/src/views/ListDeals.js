@@ -21,6 +21,7 @@ class V extends React.Component {
     this.getDeals();
     this.getMatchedDeals();
     this.getWatchList();
+    this.getNotifications();
   }
 
   getDeals(page) {
@@ -67,6 +68,21 @@ class V extends React.Component {
         },
       },
       stateKeyPrefix: 'GetWatchList',
+    });
+  }
+
+  getNotifications() {
+    return httpStateUpdate({
+      dispatch: this.props.dispatch,
+      options: {
+        endpoint: `/users/${this.props.user.id}/notifications/`,
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'X-Session-Token': this.props.user.current_session_token,
+        },
+      },
+      stateKeyPrefix: 'GetNotifications',
     });
   }
 

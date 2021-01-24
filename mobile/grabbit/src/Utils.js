@@ -87,9 +87,13 @@ export class Websocket_ {
       this.connected = true;
     };
 
-    this.socket.onmessage = (e) => {
-      console.log('Just received ', e.data);
-      this.dispatchToState(e.data);
+    this.socket.onmessage = ({data}) => {
+      const serialized = JSON.parse(data);
+      console.log('Just received ', serialized);
+      this.dispatchToState({
+        type: serialized.redux_action,
+        payload: serialized.instance,
+      });
     };
 
     this.socket.onerror = (e) => {
@@ -101,10 +105,10 @@ export class Websocket_ {
     };
   }
 
-  dispatchToState(data = {}) {
+  dispatchToState({type, payload}) {
     this.store.dispatch({
-      type: ReduxActions.GENERIC_ACTION,
-      payload: {foo: 'bar'},
+      type,
+      payload,
     });
   }
 

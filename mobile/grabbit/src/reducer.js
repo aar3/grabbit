@@ -113,7 +113,6 @@ const defaultState = {
     ],
   },
   notifications: {
-    hasNewNotification: false,
     list: {
       pending: false,
       error: null,
@@ -179,6 +178,7 @@ const reducer = function (state = defaultState, action) {
     // WebSocket
     // ********************************************
     case ReduxActions.WebSocket.IncomingNotification: {
+      console.log('>>>> IM HERE');
       return {
         ...state,
         notifications: {

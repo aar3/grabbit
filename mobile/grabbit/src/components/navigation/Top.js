@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import PlaidLink from 'react-native-plaid-link-sdk';
 import {connect} from 'react-redux';
 import ReduxActions from 'grabbit/src/Actions';
-import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
+import {getStateForKey} from 'grabbit/src/Utils';
 
 class MainTopNavigationBar extends React.Component {
   _renderNewNotificationIcon() {
@@ -107,15 +107,16 @@ class MainTopNavigationBar extends React.Component {
 }
 
 const mapStateToProps = function (state) {
+  const notifications = getStateForKey('state.notifications.list.items', state);
+  const hasNewNotification = Object.values(notifications).filter((item) => !item.seen_at).length > 0;
+
+  console.log(Object.values(notifications).map((item) => item.seen_at));
+
   return {
-    hasNewNotification: getStateForKey('state.notifications.hasNewNotification', state),
+    hasNewNotification,
   };
 };
 
-const mapDispatchToProps = function (dispatch) {
-  return {};
-};
-
 module.exports = {
-  MainTopNavigationBar: connect(mapStateToProps, mapDispatchToProps)(MainTopNavigationBar),
+  MainTopNavigationBar: connect(mapStateToProps, null)(MainTopNavigationBar),
 };

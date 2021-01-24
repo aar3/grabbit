@@ -147,3 +147,8 @@ def main(*args, **kwargs):
 
     loop.run_forever()
     handle.join()
+
+
+if __name__ == "__main__":
+
+    main()
