@@ -95,18 +95,18 @@ class V extends React.Component {
               // borderColor: 'red',
               paddingLeft: 10,
               width: '100%',
-              paddingTop: 10,
+              paddingTop: 20,
             }}>
             {this._renderErrorHeader()}
             <Text
               style={{
                 fontWeight: 'bold',
-                fontSize: 22,
-                textAlign: 'center',
-                color: Color.QueenBlue,
-                marginBottom: 10,
+                fontSize: 20,
+                color: Color.White,
+                marginBottom: 20,
+                marginLeft: 20,
               }}>
-              Logo Here
+              Login with your phone number
             </Text>
             <View
               style={{
@@ -167,46 +167,34 @@ class V extends React.Component {
                 justifyContent: 'center',
                 width: '90%',
                 alignItems: 'center',
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
+                justifyContent: 'center',
                 marginTop: 20,
               }}>
-              <View
-                style={{
-                  // borderWidth: 1,
-                  // borderColor: 'blue',
-                  height: 50,
-                  borderRadius: 100,
-                  width: 50,
-                  justifyContent: 'center',
-                  alignItems: 'center',
+              <GrabbitButton
+                onPress={() => {
+                  return this.props.postUserLogin({
+                    endpoint: '/users/login/',
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    data: {
+                      phone: this.props.countryCode + this.props.phone,
+                      secret: this.props.secret,
+                    },
+                  });
+                }}
+                _buttonStyle={{
                   backgroundColor: Color.White,
-                  shadowColor: '#000',
-                  shadowOffset: {
-                    width: 2,
-                    height: -2,
-                  },
-                  shadowOpacity: 0.5,
-                  shadowRadius: 3.84,
-                  elevation: 10,
-                }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    return this.props.postUserLogin({
-                      endpoint: '/users/login/',
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      data: {
-                        phone: this.props.countryCode + this.props.phone,
-                        secret: this.props.secret,
-                      },
-                    });
-                  }}>
-                  <Icon name={'chevron-right'} size={40} color={Color.QueenBlue} />
-                </TouchableOpacity>
-              </View>
+                  borderWidth: 1,
+                  borderColor: Color.QueenBlue,
+                }}
+                titleStyle={{
+                  color: Color.QueenBlue,
+                  fontWeight: 'bold',
+                }}
+                title="Login"
+              />
             </View>
             <View
               style={{

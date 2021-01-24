@@ -92,10 +92,9 @@ class BaseUserNestedViewSet(BaseModelViewSet):
         return Response(serializer.data)
 
     def destroy(self, request, user_id=None, pk=None):
-        user = get_object_or_404(User, pk=user_id)
-        instance = self.model.objects.filter(user__id=user.id, pk=pk, deleted_at=None)
-        instance.delete()
+        instance = get_object_or_404(self.model.objects.filter(pk=pk))
         serializer = self.serializer(instance)
+        instance.soft_delete()
         return Response(serializer.data)
 
 

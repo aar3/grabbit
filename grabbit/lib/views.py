@@ -65,8 +65,8 @@ class BaseModelViewSet(viewsets.ViewSet):
 
     def destroy(self, request, pk=None):
         instance = get_object_or_404(self.model.objects.filter(pk=pk))
-        instance.delete()
         serializer = self.serializer(instance)
+        instance.soft_delete()
         return Response(serializer.data)
 
     def _paginated_queryset(self, queryset, page):

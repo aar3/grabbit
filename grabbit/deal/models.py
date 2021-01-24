@@ -77,7 +77,7 @@ def create_notification_for_new_matched_deal(sender, instance, created, **kwargs
 
 class WatchList(BaseModel):
     class Meta:
-        db_table = "watch_list"
+        db_table = "watch_lists"
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     deal = models.ForeignKey(Deal, on_delete=models.CASCADE)
