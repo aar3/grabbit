@@ -65,7 +65,7 @@ class V extends React.Component {
           }}>
           <Text
             style={{
-              color: Color.White,
+              color: Color.ErrorRed,
               textDecorationStyle: 'solid',
               fontWeight: 'bold',
             }}>
@@ -87,7 +87,7 @@ class V extends React.Component {
             paddingTop: 50,
             backgroundColor: Color.White,
             alignItems: 'center',
-            backgroundColor: Color.QueenBlue,
+            backgroundColor: Color.White,
           }}>
           <View
             style={{
@@ -102,7 +102,7 @@ class V extends React.Component {
               style={{
                 fontWeight: 'bold',
                 fontSize: 20,
-                color: Color.White,
+                color: Color.QueenBlue,
                 marginBottom: 20,
                 marginLeft: 20,
               }}>
@@ -165,7 +165,7 @@ class V extends React.Component {
                 // borderWidth: 1,
                 // borderColor: 'red',
                 justifyContent: 'center',
-                width: '90%',
+                width: '100%',
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginTop: 20,
@@ -185,12 +185,12 @@ class V extends React.Component {
                   });
                 }}
                 _buttonStyle={{
-                  backgroundColor: Color.White,
-                  borderWidth: 1,
-                  borderColor: Color.QueenBlue,
+                  backgroundColor: Color.QueenBlue,
+                  // borderWidth: 1,
+                  // borderColor: Color.QueenBlue,
                 }}
                 titleStyle={{
-                  color: Color.QueenBlue,
+                  color: Color.White,
                   fontWeight: 'bold',
                 }}
                 title="Login"
@@ -203,7 +203,7 @@ class V extends React.Component {
               }}>
               <Text
                 style={{
-                  color: Color.White,
+                  color: Color.QueenBlue,
                   fontSize: 11,
                 }}>
                 Don't have an account?{' '}
@@ -214,7 +214,7 @@ class V extends React.Component {
                     // fontWeight: 'bold',
                     fontSize: 11,
                     textDecorationLine: 'underline',
-                    color: Color.White,
+                    color: Color.HyperlinkBlue,
                   }}>
                   Sign Up
                 </Text>

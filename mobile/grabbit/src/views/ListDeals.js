@@ -30,7 +30,7 @@ class V extends React.Component {
   // }
 
   async componentDidMount() {
-    return httpStateUpdate({
+    await httpStateUpdate({
       dispatch: this.props.dispatch,
       options: {
         endpoint: `/deals?page=1`,
@@ -41,6 +41,19 @@ class V extends React.Component {
         },
       },
       stateKeyPrefix: 'GetDeals',
+    });
+
+    await httpStateUpdate({
+      dispatch: this.props.dispatch,
+      options: {
+        endpoint: `/users/${this.props.user.id}/deals/`,
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'X-Session-Token': this.props.user.current_session_token,
+        },
+      },
+      stateKeyPrefix: 'GetMatchedDeals',
     });
   }
 
@@ -252,7 +265,9 @@ class V extends React.Component {
     }
 
     if (this.props.getMatchedDealsError) {
-      return <Error error={this.props.getMatchedDealsError} onTryAgain={() => this.props.getUserDeals(this.options)} />;
+      return (
+        <Error error={this.props.getMatchedDealsError} onTryAgain={() => this.props.getMatchedDeals(this.options)} />
+      );
     }
 
     return (
@@ -461,36 +476,36 @@ const mapDispatchToProps = function (dispatch) {
       const {data, error} = await httpRequest(options);
       if (error) {
         return dispatch({
-          type: ReduxActions.Deals.GetUserDealsError,
+          type: ReduxActions.Deals.GetMatchedDealsError,
           payload: error,
         });
       }
 
       return dispatch({
-        type: ReduxActions.Deals.GetUserDealsSuccess,
+        type: ReduxActions.Deals.GetMatchedDealsSuccess,
         payload: data,
       });
     },
 
-    // getUserDeals: async function(options, prefix) {
+    // getMatchedDeals: async function(options, prefix) {
     //   return httpStateUpdate(dispatch, options, prefix);
     // },
 
-    getUserDeals: async function (options) {
+    getMatchedDeals: async function (options) {
       dispatch({
-        type: ReduxActions.Deals.GetUserDealsPending,
+        type: ReduxActions.Deals.GetMatchedDealsPending,
       });
 
       const {data, error} = await httpRequest(options);
       if (error) {
         return dispatch({
-          type: ReduxActions.Deals.GetUserDealsError,
+          type: ReduxActions.Deals.GetMatchedDealsError,
           payload: error,
         });
       }
 
       return dispatch({
-        type: ReduxActions.Deals.GetUserDealsSuccess,
+        type: ReduxActions.Deals.GetMatchedDealsSuccess,
         payload: data,
       });
     },

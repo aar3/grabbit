@@ -8,12 +8,12 @@ from lib.middlewares import TokenAuthentication
 from user.models import User
 from user.views import BaseUserNestedViewSet
 from deal.models import Deal, MatchedDeal, WatchList
-from deal.serializers import DealSerializer, UserDealSerializer, WatchListSerializer
+from deal.serializers import DealSerializer, MatchedDealserializer, WatchListSerializer
 
 
 class MatchedDealViewSet(BaseUserNestedViewSet):
     model = MatchedDeal
-    serializer = UserDealSerializer
+    serializer = MatchedDealserializer
     authentication_classes = [TokenAuthentication]
 
 

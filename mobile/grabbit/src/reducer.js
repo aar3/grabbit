@@ -657,7 +657,7 @@ const reducer = function (state = defaultState, action) {
         },
       };
     }
-    case ReduxActions.Deals.GetUserDealsError: {
+    case ReduxActions.Deals.GetMatchedDealsError: {
       return {
         ...state,
         deals: {
@@ -671,23 +671,27 @@ const reducer = function (state = defaultState, action) {
       };
     }
 
-    case ReduxActions.Deals.GetUserDealsSuccess: {
+    case ReduxActions.Deals.GetMatchedDealsSuccess: {
       const items = arrayToObject(payload, 'id');
+
       return {
         ...state,
         deals: {
           ...state.deals,
-          list: {
-            ...state.deals.list,
-            items,
+          matches: {
+            ...state.deals.matches,
             pending: false,
             error: null,
+            items: {
+              ...state.deals.matches.items,
+              ...items,
+            },
           },
         },
       };
     }
 
-    case ReduxActions.Deals.GetUserDealsPending: {
+    case ReduxActions.Deals.GetMatchedDealsPending: {
       return {
         ...state,
         deals: {
