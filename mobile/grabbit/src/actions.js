@@ -30,6 +30,12 @@ export default {
     GetWatchListPending: 'GetWatchListPending',
     GetWatchListSuccess: 'GetWatchListSuccess',
     GetWatchListError: 'GetWatchListError',
+    PostToWatchListPending: 'PostToWatchListPending',
+    PostToWatchListError: 'PostToWatchListError',
+    PostToWatchListSuccess: 'PostToWatchListSuccess',
+    DeleteFromWatchListPending: 'DeleteFromWatchListPending',
+    DeleteFromWatchListError: 'DeleteFromWatchListError',
+    DeleteFromWatchListSuccess: 'DeleteFromWatchListSuccess',
   },
   Accounts: {
     GetLinkTokenPending: 'GetLinkTokenPending',
@@ -67,5 +73,8 @@ export default {
     GetUserSettingsPending: 'GetUserSettingsPending',
     GetUserSettingsError: 'GetUserSettingsError',
     GetUserSettingsSuccess: 'GetUserSettingsSuccess',
+  },
+  WebSocket: {
+    IncomingNotification: 'IncomingNotification',
   },
 };

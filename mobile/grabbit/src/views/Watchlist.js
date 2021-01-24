@@ -147,7 +147,7 @@ class V extends React.Component {
 }
 
 const mapStateToProps = function (state) {
-  const deals = Object.values(getStateForKey('state.deals.watch_list.list', state));
+  const deals = Object.values(getStateForKey('state.deals.watch_list.list.items', state));
   return {
     user: getStateForKey('state.session.user', state),
     watchList: Object.values(deals),

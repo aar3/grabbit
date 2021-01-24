@@ -9,8 +9,6 @@ from django.shortcuts import get_object_or_404
 from lib.models import BaseModel
 from lib.middlewares import TokenAuthentication
 
-PAGE_SIZE = 10
-
 
 class BaseAPIView(APIView):
     pass
@@ -80,8 +78,6 @@ class BaseModelViewSet(viewsets.ViewSet):
         start = 0
         end = None
         if page is not None:
-            print("PAGINATING")
             start = page_size * (page - 1)
             end = start + page_size
-        print(start, end)
         return start, end

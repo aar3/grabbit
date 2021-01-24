@@ -134,5 +134,7 @@ def create_notification_for_updated_settings(sender, instance, created, **kwargs
             text="You've updated your profile settings",
         )
         serializer = NotificationSerializer(instance)
-        data = pickle.dumps((instance.user.id, serializer.data, instance._meta.verbose_name.lower()))
+        data = pickle.dumps(
+            (instance.user.id, serializer.data, instance._meta.verbose_name.lower(), "IncomingNotification")
+        )
         django_unix_client(data)

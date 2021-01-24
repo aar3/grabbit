@@ -7,7 +7,6 @@ import {getStateForKey, httpRequest, httpStateUpdate} from 'grabbit/src/Utils';
 import {LoadingView, ErrorView} from 'grabbit/src/components/Basic';
 import {Color, Font, PLACEHOLDER_IMG} from 'grabbit/src/Const';
 import DealFocusModal from 'grabbit/src/components/modals/DealFocus';
-import {Error} from 'grabbit/src/components/Error';
 
 class V extends React.Component {
   constructor(props) {
@@ -188,8 +187,11 @@ class V extends React.Component {
           ref={(ref) => {
             this.horizontalFlatList = ref;
           }}
-          onEndReachedThreshold={0.75}
+          onEndReachedThreshold={1}
           onEndReached={async () => {
+            // FIXME: This gets fired when the number of matched deals is less than the number
+            // of items it takes to make the list scrollable (the list is tricked into thinking
+            // that the end has been reached even though no scroll has happened)
             const page = this.props.matchedDealsPage + 1;
 
             await this.getMatchedDeals(page);
@@ -298,14 +300,46 @@ class V extends React.Component {
   _renderWatchListIcon(item) {
     if (item.is_on_watchlist) {
       return (
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            return httpStateUpdate({
+              dispatch: this.props.dispatch,
+              options: {
+                endpoint: `/users/${this.props.user.id}/watchlist/${item.id}/`,
+                method: 'DELETE',
+                headers: {
+                  'Accept': 'application/json',
+                  'X-Session-Token': this.props.user.current_session_token,
+                },
+              },
+              stateKeyPrefix: 'PostToWatchList',
+            });
+          }}>
           <Icon name="bookmark" size={20} color={Color.QueenBlue} />
         </TouchableOpacity>
       );
     }
 
     return (
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          return httpStateUpdate({
+            dispatch: this.props.dispatch,
+            options: {
+              endpoint: `/users/${this.props.user.id}/watchlist/`,
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'X-Session-Token': this.props.user.current_session_token,
+              },
+              data: {
+                deal_id: item.id,
+                user_id: this.props.user.id,
+              },
+            },
+            stateKeyPrefix: 'DeleteFromWatchList',
+          });
+        }}>
         <Icon name="bookmark" size={20} color={Color.BorderLightGrey} />
       </TouchableOpacity>
     );
@@ -354,7 +388,7 @@ class V extends React.Component {
 
     console.log(x, this.props.deals[x]);
 
-    return {viewPosition: x, item: this.props.deals[x]};
+    return {index: x, item: this.props.deals[x]};
   }
 
   _renderVerticalFlatList() {
@@ -429,14 +463,15 @@ class V extends React.Component {
           // FIX ME: need to get this working
           // onContentSizeChange={() => {
           //   const {index = 0, item} = this._getFoobarItem();
+          //   console.log('>>> INDEX ', index);
           //   this.verticalFlatList.scrollToIndex({
           //     // viewOffset: 10,
-          //     viewPosition: 0.5,
+          //     // viewPosition: 0.5,
           //     index,
-          //     animated: true
-          //   })
+          //     animated: true,
+          //   });
           // }}
-          onEndReachedThreshold={0.75}
+          onEndReachedThreshold={1}
           onEndReached={async () => {
             const page = this.props.dealsPage + 1;
 
@@ -447,7 +482,6 @@ class V extends React.Component {
               payload: page,
             });
           }}
-          // onViewableItemsChanged={() => this.scrollToOffset(5)}
           refreshing={this.props.getDealsPending}
           onRefresh={() => this.getDeals()}
           keyExtractor={(_item, index) => index.toString()}
@@ -595,18 +629,20 @@ class V extends React.Component {
 }
 
 const mapStateToProps = function (state) {
-  const watchList = getStateForKey('state.deals.watch_list.list', state);
+  const watchList = getStateForKey('state.deals.watch_list.list.items', state);
   const watchListIds = new Set(Object.values(watchList).map((item) => item.deal.id));
 
   // Tag on_watch_list to each deal for watch list icon rendering
   let deals = getStateForKey('state.deals.all.items', state);
   deals = Object.values(deals);
-  deals = deals.map((item) => {
-    if (watchListIds.has(item.id)) {
-      item.is_on_watchlist = true;
-    }
-    return item;
-  });
+  deals = deals
+    .map((item) => {
+      if (watchListIds.has(item.id)) {
+        item.is_on_watchlist = true;
+      }
+      return item;
+    })
+    .sort((a, b) => a.id > b.id);
 
   const matchedDeals = getStateForKey('state.deals.matches.items', state);
 

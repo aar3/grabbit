@@ -50,7 +50,7 @@ def handle_django_client_connect(conn, addr, loop):
             data = conn.recv(1024)
             if not data:
                 break
-            user_id, data, model = pickle.loads(data)
+            user_id, data, model, action = pickle.loads(data)
             logger.debug("Received %s from process at %s", (user_id, data, model), addr)
 
             websocket, client_addr = router[user_id]
@@ -59,6 +59,7 @@ def handle_django_client_connect(conn, addr, loop):
             response.status = 200
             response.details = "success"
             response.instance = data
+            response.redux_action = action
             response.model = model
 
             msg = response.serialize()
