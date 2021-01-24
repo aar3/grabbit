@@ -14,9 +14,11 @@ export default {
     PostUserSignupSuccess: 'PostUserSignupSuccess',
   },
   Deals: {
+    IncrementDealsPage: 'IncrementDealsPage',
     GetDealsPending: 'GetDealsPending',
     GetDealsError: 'GetDealsError',
     GetDealsSuccess: 'GetDealsSuccess',
+    IncrementMatchedDealsPage: 'IncrementMatchedDealsPage',
     GetMatchedDealsPending: 'GetMatchedDealsPending',
     GetMatchedDealsSuccess: 'GetMatchedDealsSuccess',
     GetMatchedDealsError: 'GetMatchedDealsError',

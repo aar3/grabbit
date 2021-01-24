@@ -11,6 +11,10 @@ class V extends React.Component {
   }
 
   async componentDidMount() {
+    this.getWatchList();
+  }
+
+  getWatchList() {
     return httpStateUpdate({
       dispatch: this.props.dispatch,
       options: {

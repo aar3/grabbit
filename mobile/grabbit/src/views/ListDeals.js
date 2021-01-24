@@ -16,20 +16,20 @@ class V extends React.Component {
       flatListReloading: false,
       infoModalVisible: false,
     };
-    this._options = {};
   }
 
-  // componentDidMount() {
-  //   this.getDeals();
-  //   this.getMatchedDeals();
-  //   this.getWatchList();
-  // }
+  componentDidMount() {
+    this.getDeals();
+    this.getMatchedDeals();
+    this.getWatchList();
+  }
 
-  getDeals() {
+  getDeals(page) {
+    const p = page || this.props.dealsPage;
     return httpStateUpdate({
       dispatch: this.props.dispatch,
       options: {
-        endpoint: `/deals?page=1`,
+        endpoint: `/deals?page=${p}`,
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -40,11 +40,12 @@ class V extends React.Component {
     });
   }
 
-  getMatchedDeals() {
+  getMatchedDeals(page) {
+    const p = page || this.props.matchedDealsPage;
     return httpStateUpdate({
       dispatch: this.props.dispatch,
       options: {
-        endpoint: `/users/${this.props.user.id}/deals/`,
+        endpoint: `/users/${this.props.user.id}/deals?page=${p}`,
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -183,10 +184,23 @@ class V extends React.Component {
             borderBottomWidth: 0,
             height: 275,
             width: '100%',
-            // marginBottom: 2,
+          }}
+          ref={(ref) => {
+            this.horizontalFlatList = ref;
+          }}
+          onEndReachedThreshold={0.75}
+          onEndReached={async () => {
+            const page = this.props.matchedDealsPage + 1;
+
+            await this.getMatchedDeals(page);
+
+            this.props.dispatch({
+              type: ReduxActions.Deals.IncrementMatchedDealsPage,
+              payload: page,
+            });
           }}
           refreshing={this.props.getMatchedDealsPending}
-          onRefresh={() => this._onRefresh()}
+          onRefresh={() => this.getMatchedDeals()}
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
             const discount = Number(
@@ -281,6 +295,22 @@ class V extends React.Component {
     return modal;
   }
 
+  _renderWatchListIcon(item) {
+    if (item.is_on_watchlist) {
+      return (
+        <TouchableOpacity>
+          <Icon name="bookmark" size={20} color={Color.QueenBlue} />
+        </TouchableOpacity>
+      );
+    }
+
+    return (
+      <TouchableOpacity>
+        <Icon name="bookmark" size={20} color={Color.BorderLightGrey} />
+      </TouchableOpacity>
+    );
+  }
+
   _renderExpiryTag(item) {
     const reward = new Reward(item);
     if (reward.expired()) {
@@ -307,8 +337,24 @@ class V extends React.Component {
     );
   }
 
-  _onRefresh() {
-    return this.props.refreshViaFlatList(this.options);
+  _getFoobarItem() {
+    const n = this.props.deals.length;
+    if (n <= 10) {
+      return 0;
+    }
+
+    let x;
+
+    const rem = n % 10;
+    if (rem === 0) {
+      x = n - 11;
+    } else {
+      x = rem;
+    }
+
+    console.log(x, this.props.deals[x]);
+
+    return {viewPosition: x, item: this.props.deals[x]};
   }
 
   _renderVerticalFlatList() {
@@ -360,10 +406,12 @@ class V extends React.Component {
     return (
       <View
         style={{
+          flex: 1,
           borderWidth: 1,
           borderColor: 'red',
           width: '100%',
           marginTop: 10,
+          paddingBottom: 10,
         }}>
         <FlatList
           data={this.props.deals}
@@ -375,8 +423,33 @@ class V extends React.Component {
             borderTopWidth: 1,
             borderTopColor: Color.BorderLightGrey,
           }}
-          refreshing={this.props.getMatchedDealsPending}
-          onRefresh={() => this._onRefresh()}
+          ref={(ref) => {
+            this.verticalFlatList = ref;
+          }}
+          // FIX ME: need to get this working
+          // onContentSizeChange={() => {
+          //   const {index = 0, item} = this._getFoobarItem();
+          //   this.verticalFlatList.scrollToIndex({
+          //     // viewOffset: 10,
+          //     viewPosition: 0.5,
+          //     index,
+          //     animated: true
+          //   })
+          // }}
+          onEndReachedThreshold={0.75}
+          onEndReached={async () => {
+            const page = this.props.dealsPage + 1;
+
+            await this.getDeals(page);
+
+            this.props.dispatch({
+              type: ReduxActions.Deals.IncrementDealsPage,
+              payload: page,
+            });
+          }}
+          // onViewableItemsChanged={() => this.scrollToOffset(5)}
+          refreshing={this.props.getDealsPending}
+          onRefresh={() => this.getDeals()}
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
             const size = 90;
@@ -401,6 +474,7 @@ class V extends React.Component {
                     padding: 10,
                     backgroundColor: Color.White,
                     flexDirection: 'row',
+                    height: 175,
                   }}>
                   <View
                     style={{
@@ -492,13 +566,7 @@ class V extends React.Component {
                         justifyContent: 'flex-end',
                         marginTop: 5,
                       }}>
-                      <TouchableOpacity>
-                        <Icon
-                          name="bookmark"
-                          size={20}
-                          color={item.is_on_watchlist ? Color.QueenBlue : Color.BorderLightGrey}
-                        />
-                      </TouchableOpacity>
+                      {this._renderWatchListIcon(item)}
                     </View>
                   </View>
                 </View>
@@ -527,89 +595,32 @@ class V extends React.Component {
 }
 
 const mapStateToProps = function (state) {
-  const deals = getStateForKey('state.deals.all.items', state);
+  const watchList = getStateForKey('state.deals.watch_list.list', state);
+  const watchListIds = new Set(Object.values(watchList).map((item) => item.deal.id));
+
+  // Tag on_watch_list to each deal for watch list icon rendering
+  let deals = getStateForKey('state.deals.all.items', state);
+  deals = Object.values(deals);
+  deals = deals.map((item) => {
+    if (watchListIds.has(item.id)) {
+      item.is_on_watchlist = true;
+    }
+    return item;
+  });
+
   const matchedDeals = getStateForKey('state.deals.matches.items', state);
 
   return {
     user: getStateForKey('state.session.user', state),
-    deals: Object.values(deals),
+    deals,
     getDealsPending: getStateForKey('state.deals.all.pending', state),
     getDealsError: getStateForKey('state.deals.all.error', state),
     matchedDeals: Object.values(matchedDeals),
     getMatchedDealsPending: getStateForKey('state.deals.matches.pending', state),
     getMatchedDealsError: getStateForKey('state.deals.matches.error', state),
     showDealFocusedModal: getStateForKey('state.deals.focused.show_modal', state),
-  };
-};
-
-const mapDispatchToProps = function (dispatch) {
-  return {
-    // NOTE: Remove the pending state so it doesn't clash with default FlatList loading image
-    refreshViaFlatList: async function (options) {
-      const {data, error} = await httpRequest(options);
-      if (error) {
-        return dispatch({
-          type: ReduxActions.Deals.GetMatchedDealsError,
-          payload: error,
-        });
-      }
-
-      return dispatch({
-        type: ReduxActions.Deals.GetMatchedDealsSuccess,
-        payload: data,
-      });
-    },
-
-    // getMatchedDeals: async function(options, prefix) {
-    //   return httpStateUpdate(dispatch, options, prefix);
-    // },
-
-    getMatchedDeals: async function (options) {
-      dispatch({
-        type: ReduxActions.Deals.GetMatchedDealsPending,
-      });
-
-      const {data, error} = await httpRequest(options);
-      if (error) {
-        return dispatch({
-          type: ReduxActions.Deals.GetMatchedDealsError,
-          payload: error,
-        });
-      }
-
-      return dispatch({
-        type: ReduxActions.Deals.GetMatchedDealsSuccess,
-        payload: data,
-      });
-    },
-
-    setFocusedDeal: function (deal) {
-      dispatch({
-        type: ReduxActions.Deals.SetFocusedDeal,
-        payload: deal,
-      });
-
-      // return Actions.rewardFocus();
-    },
-    postNewWatchListItem: async function (options) {
-      dispatch({
-        type: ReduxActions.Deals.UpdateWatchListItemPending,
-      });
-
-      const {data, error} = await httpRequest(options);
-
-      if (error) {
-        dispatch({
-          type: ReduxActions.Deals.UpdateWatchListItemError,
-          payload: error,
-        });
-      }
-
-      return dispatch({
-        type: ReduxActions.Deals.UpdateWatchListItemSuccess,
-        payload: data,
-      });
-    },
+    dealsPage: getStateForKey('state.deals.all.page', state),
+    matchedDealsPage: getStateForKey('state.deals.matches.page', state),
   };
 };
 

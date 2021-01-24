@@ -79,7 +79,9 @@ class BaseModelViewSet(viewsets.ViewSet):
         page_size = 10
         start = 0
         end = None
-        if page:
+        if page is not None:
+            print("PAGINATING")
             start = page_size * (page - 1)
             end = start + page_size
+        print(start, end)
         return start, end

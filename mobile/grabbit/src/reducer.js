@@ -48,8 +48,9 @@ const defaultState = {
   deals: {
     inactive: {},
     all: {
+      page: 1,
       pending: false,
-      error: {details: 'Something went wrong'},
+      error: null,
       items: {},
     },
     focused: {
@@ -62,9 +63,10 @@ const defaultState = {
       error: null,
     },
     matches: {
+      page: 1,
       items: {},
       pending: false,
-      error: {details: 'Something went wrong'},
+      error: null,
     },
   },
   stats: {
@@ -517,6 +519,30 @@ const reducer = function (state = defaultState, action) {
     // ********************************************
     // Deals
     // ********************************************
+    case ReduxActions.Deals.IncrementDealsPage: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          all: {
+            ...state.deals.all,
+            page: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.IncrementDealsPage: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          all: {
+            ...state.deals.all,
+            page: payload,
+          },
+        },
+      };
+    }
     case ReduxActions.Deals.GetWatchListSuccess: {
       const items = arrayToObject(payload, 'id');
       return {

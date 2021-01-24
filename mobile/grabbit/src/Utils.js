@@ -9,6 +9,7 @@ export const httpRequest = async function (options) {
 
   try {
     options.url = 'http://192.168.1.87:8000/api/v1' + options.endpoint;
+    console.log(options.method, options.url);
     const {data, status, headers} = await axios(options);
     if (status === 200) {
       return {data};
