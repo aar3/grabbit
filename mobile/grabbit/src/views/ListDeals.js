@@ -3,7 +3,7 @@ import {View, Text, FlatList, Image, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import ReduxActions from 'grabbit/src/Actions';
-import {getStateForKey, httpRequest, httpStateUpdate} from 'grabbit/src/Utils';
+import {getStateForKey, httpStateUpdate} from 'grabbit/src/Utils';
 import {LoadingView, ErrorView} from 'grabbit/src/components/Basic';
 import {Color, Font, PLACEHOLDER_IMG} from 'grabbit/src/Const';
 import DealFocusModal from 'grabbit/src/components/modals/DealFocus';
@@ -11,10 +11,6 @@ import DealFocusModal from 'grabbit/src/components/modals/DealFocus';
 class V extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      flatListReloading: false,
-      infoModalVisible: false,
-    };
   }
 
   componentDidMount() {
@@ -649,6 +645,7 @@ const mapStateToProps = function (state) {
   const watchListIds = new Set(Object.values(watchList).map((item) => item.deal.id));
 
   // Tag on_watch_list to each deal for watch list icon rendering
+  // This effects other places that we reference the deal such as DealFocus
   let deals = getStateForKey('state.deals.all.items', state);
   deals = Object.values(deals);
   deals = deals

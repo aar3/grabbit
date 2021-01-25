@@ -18,21 +18,29 @@ export default {
     GetDealsPending: 'GetDealsPending',
     GetDealsError: 'GetDealsError',
     GetDealsSuccess: 'GetDealsSuccess',
+
     IncrementMatchedDealsPage: 'IncrementMatchedDealsPage',
+
     GetMatchedDealsPending: 'GetMatchedDealsPending',
     GetMatchedDealsSuccess: 'GetMatchedDealsSuccess',
     GetMatchedDealsError: 'GetMatchedDealsError',
+
     SetFocusedDeal: 'SetFocusedDeal',
+
     ToggleFocusedDealModal: 'ToggleFocusedDealModal',
+
     UpdateWatchListItemPending: 'UpdateWatchListItemPending',
     UpdateWatchListItemError: 'UpdateWatchListItemError',
     UpdateWatchListItemSuccess: 'UpdateWatchListItemSuccess',
+
     GetWatchListPending: 'GetWatchListPending',
     GetWatchListSuccess: 'GetWatchListSuccess',
     GetWatchListError: 'GetWatchListError',
+
     PostToWatchListPending: 'PostToWatchListPending',
     PostToWatchListError: 'PostToWatchListError',
     PostToWatchListSuccess: 'PostToWatchListSuccess',
+
     DeleteFromWatchListPending: 'DeleteFromWatchListPending',
     DeleteFromWatchListError: 'DeleteFromWatchListError',
     DeleteFromWatchListSuccess: 'DeleteFromWatchListSuccess',

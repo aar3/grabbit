@@ -1,12 +1,12 @@
 import React from 'react';
-import {View, Modal, TouchableOpacity, Image, Text, FlatList, StyleSheet} from 'react-native';
+import {View, Modal, TouchableOpacity, ScrollView, Image, Text, FlatList, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {connect} from 'react-redux';
 import {Button} from 'react-native-elements';
 import ReduxActions from 'grabbit/src/Actions';
-import {Color, MerchantLogos} from 'grabbit/src/Const';
+import {Color, MerchantLogos, DealType} from 'grabbit/src/Const';
 import {GrabbitButton} from 'grabbit/src/components/Basic';
-import {getStateForKey} from 'grabbit/src/Utils';
+import {getStateForKey, getDealType} from 'grabbit/src/Utils';
 
 class M extends React.Component {
   constructor(props) {
@@ -14,15 +14,86 @@ class M extends React.Component {
   }
 
   show() {
-    return this.props.toggleFocusedDealModal();
+    return this.props.dispatch({
+      type: ReduxActions.Deals.ToggleFocusedDealModal,
+    });
   }
 
   hide() {
-    return this.props.toggleFocusedDealModal();
+    return this.props.dispatch({
+      type: ReduxActions.Deals.ToggleFocusedDealModal,
+    });
+  }
+
+  _renderWatchListButton() {
+    if (this.props.type === DealType.WatchList || this.props.type === DealType.DerivedWatchList) {
+      return (
+        <GrabbitButton
+          onPress={() => {
+            return httpStateUpdate({
+              dispatch: this.props.dispatch,
+              options: {
+                // FIXME: We have to decide how we're removing from watchlist
+                endpoint: `/users/${this.props.user.id}/watchlist/${this.props.deal.id}/`,
+                method: 'DELETE',
+                headers: {
+                  'Accept': 'application/json',
+                  'X-Session-Token': this.props.user.current_session_token,
+                },
+              },
+              stateKeyPrefix: 'PostToWatchList',
+            });
+          }}
+          _buttonStyle={{
+            backgroundColor: Color.White,
+            borderColor: Color.QueenBlue,
+            borderWidth: 1,
+          }}
+          titleStyle={{
+            color: Color.QueenBlue,
+            fontWeight: 'bold',
+          }}
+          title="Remove From Watch List"
+        />
+      );
+    }
+
+    if (this.props.type !== DealType.WatchList) {
+      return (
+        <GrabbitButton
+          onPress={() => {
+            return httpStateUpdate({
+              dispatch: this.props.dispatch,
+              options: {
+                endpoint: `/users/${this.props.user.id}/watchlist/`,
+                method: 'POST',
+                headers: {
+                  'Accept': 'application/json',
+                  'X-Session-Token': this.props.user.current_session_token,
+                },
+              },
+              stateKeyPrefix: 'PostToWatchList',
+            });
+          }}
+          _buttonStyle={{
+            backgroundColor: Color.White,
+            borderColor: Color.QueenBlue,
+            borderWidth: 1,
+          }}
+          titleStyle={{
+            color: Color.QueenBlue,
+            fontWeight: 'bold',
+          }}
+          title="Add to Watch List"
+        />
+      );
+    }
   }
 
   render() {
+    console.log('>>> ITEM ', this.props.deal);
     const merchantLogo = MerchantLogos[this.props.deal.merchant_name];
+
     return (
       <Modal
         animationType={'slid'}
@@ -30,7 +101,9 @@ class M extends React.Component {
         visible={this.props.showDealFocusedModal}
         onRequestClose={() => {
           console.log('modal closed');
-          this.props.toggleFocusedDealModal();
+          this.props.dispatch({
+            type: ReduxActions.Deals.ToggleFocusedDealModal,
+          });
         }}>
         <View
           style={{
@@ -63,7 +136,12 @@ class M extends React.Component {
               flexDirection: 'row',
               justifyContent: 'flex-end',
             }}>
-            <TouchableOpacity onPress={() => this.props.toggleFocusedDealModal()}>
+            <TouchableOpacity
+              onPress={() =>
+                this.props.dispatch({
+                  type: ReduxActions.Deals.ToggleFocusedDealModal,
+                })
+              }>
               <Icon name="x" size={30} color={Color.BorderLightGrey} />
             </TouchableOpacity>
           </View>
@@ -135,15 +213,26 @@ class M extends React.Component {
               />
             </View>
 
-            <Text
+            <View
               style={{
+                // borderWidth: 1,
+                // borderColor: 'red',
+                width: '100%',
+                padding: 5,
+                height: 200,
                 marginTop: 20,
-                color: Color.ReadableGreyText,
-                fontSize: 12,
-                textAlign: 'center',
               }}>
-              {this.props.deal.description}
-            </Text>
+              <ScrollView>
+                <Text
+                  style={{
+                    color: Color.ReadableGreyText,
+                    fontSize: 12,
+                    // textAlign: 'center',
+                  }}>
+                  {this.props.deal.description}
+                </Text>
+              </ScrollView>
+            </View>
 
             <View
               style={{
@@ -151,37 +240,7 @@ class M extends React.Component {
                 // borderColor: 'green',
                 marginTop: 20,
               }}>
-              <GrabbitButton
-                disabled={this.props.is_on_watchlist}
-                onPress={
-                  this.props.is_on_watchlist
-                    ? null
-                    : () =>
-                        this.props.putUserDealOnWatchList({
-                          endpoint: `/users/${this.props.user.id}/deals/${this.props.id}/`,
-                          method: 'PUT',
-                          headers: {
-                            'X-Session-Token': this.props.user.current_session_token,
-                            'Content-Type': 'application/json',
-                          },
-                          data: {
-                            user_id: this.props.user.id,
-                            deal_id: this.props.deal.id,
-                            is_on_watchlist: 1,
-                          },
-                        })
-                }
-                _buttonStyle={{
-                  backgroundColor: Color.White,
-                  borderColor: Color.QueenBlue,
-                  borderWidth: 1,
-                }}
-                titleStyle={{
-                  color: Color.QueenBlue,
-                  fontWeight: 'bold',
-                }}
-                title="Add to Watch List"
-              />
+              {this._renderWatchListButton()}
               <GrabbitButton
                 _buttonStyle={{
                   backgroundColor: Color.White,
@@ -203,18 +262,23 @@ class M extends React.Component {
 }
 
 const mapStateToProps = function (state) {
+  const item = getStateForKey('state.deals.focused.item', state);
+  console.log('>>> ITEM ', item);
+  const type = getDealType(item);
+  console.log('>>> TYPE ', type);
+  const deal = [DealType.DerivedWatchList, DealType.Deal].includes(type) ? item : item.deal;
+
   return {
     showDealFocusedModal: getStateForKey('state.deals.focused.show_modal', state),
-    deal: getStateForKey('state.deals.focused.item', state),
+    deal,
+    type,
   };
 };
 
 const mapDispatchToProps = function (dispatch) {
   return {
     toggleFocusedDealModal: () => {
-      return dispatch({
-        type: ReduxActions.Deals.ToggleFocusedDealModal,
-      });
+      return;
     },
     putUserDealOnWatchList: async function (options) {
       dispatch({
@@ -238,7 +302,7 @@ const mapDispatchToProps = function (dispatch) {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(M);
+export default connect(mapStateToProps, null)(M);
 
 const styles = StyleSheet.create({
   footerButton: {

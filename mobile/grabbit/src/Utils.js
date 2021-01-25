@@ -1,5 +1,6 @@
 import axios from 'axios';
 import ReduxActions from 'grabbit/src/Actions';
+import {DealType} from 'grabbit/src/Const';
 import Store from 'grabbit/src/Reducer';
 
 export const httpRequest = async function (options) {
@@ -139,4 +140,23 @@ export const httpStateUpdate = async function ({dispatch, options, stateKeyPrefi
     type: stateKeyPrefix + 'Success',
     payload: data,
   });
+};
+
+// IMPORTANT: This is a bit confusing, because not only do we have 3 deal types, but on
+// ListDeals we're also tagging is_on_watchlist to deals the deal is in the Watchlist set.
+// Ideally this should be cleaned up in the future to remove the hacks
+export const getDealType = function (item) {
+  if (item.hasOwnProperty('url')) {
+    if (item.hasOwnProperty('is_on_watchlist')) {
+      return DealType.DerivedWatchList;
+    }
+    return DealType.Deal;
+  }
+
+  if (item.hasOwnProperty('deal')) {
+    if (item.hasOwnProperty('is_on_watchlist')) {
+      return DealType.Match;
+    }
+    return DealType.WatchList;
+  }
 };
