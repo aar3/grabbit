@@ -17,7 +17,6 @@ class BaseModel(models.Model):
     deleted_at = models.DateTimeField(null=True)
 
     # pylint: disable=arguments-differ
-    def delete(self):
-        self.updated_at = timezone.now
-        self.deleted_at = timezone.now
+    def soft_delete(self):
+        self.deleted_at = timezone.now()
         self.save()

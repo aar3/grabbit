@@ -1,5 +1,6 @@
 import axios from 'axios';
 import ReduxActions from 'grabbit/src/Actions';
+import {DealType} from 'grabbit/src/Const';
 import Store from 'grabbit/src/Reducer';
 
 export const httpRequest = async function (options) {
@@ -9,6 +10,7 @@ export const httpRequest = async function (options) {
 
   try {
     options.url = 'http://192.168.1.87:8000/api/v1' + options.endpoint;
+    console.log(options.method, options.url);
     const {data, status, headers} = await axios(options);
     if (status === 200) {
       return {data};
@@ -86,9 +88,13 @@ export class Websocket_ {
       this.connected = true;
     };
 
-    this.socket.onmessage = (e) => {
-      console.log('Just received ', e.data);
-      this.dispatchToState(e.data);
+    this.socket.onmessage = ({data}) => {
+      const serialized = JSON.parse(data);
+      console.log('Just received ', serialized);
+      this.dispatchToState({
+        type: serialized.redux_action,
+        payload: serialized.instance,
+      });
     };
 
     this.socket.onerror = (e) => {
@@ -100,10 +106,10 @@ export class Websocket_ {
     };
   }
 
-  dispatchToState(data = {}) {
+  dispatchToState({type, payload}) {
     this.store.dispatch({
-      type: ReduxActions.GENERIC_ACTION,
-      payload: {foo: 'bar'},
+      type,
+      payload,
     });
   }
 
@@ -134,4 +140,23 @@ export const httpStateUpdate = async function ({dispatch, options, stateKeyPrefi
     type: stateKeyPrefix + 'Success',
     payload: data,
   });
+};
+
+// IMPORTANT: This is a bit confusing, because not only do we have 3 deal types, but on
+// ListDeals we're also tagging is_on_watchlist to deals the deal is in the Watchlist set.
+// Ideally this should be cleaned up in the future to remove the hacks
+export const getDealType = function (item) {
+  if (item.hasOwnProperty('url')) {
+    if (item.hasOwnProperty('is_on_watchlist')) {
+      return DealType.DerivedWatchList;
+    }
+    return DealType.Deal;
+  }
+
+  if (item.hasOwnProperty('deal')) {
+    if (item.hasOwnProperty('is_on_watchlist')) {
+      return DealType.Match;
+    }
+    return DealType.WatchList;
+  }
 };

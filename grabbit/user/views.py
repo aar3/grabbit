@@ -92,10 +92,9 @@ class BaseUserNestedViewSet(BaseModelViewSet):
         return Response(serializer.data)
 
     def destroy(self, request, user_id=None, pk=None):
-        user = get_object_or_404(User, pk=user_id)
-        instance = self.model.objects.filter(user__id=user.id, pk=pk, deleted_at=None)
-        instance.delete()
+        instance = get_object_or_404(self.model.objects.filter(pk=pk))
         serializer = self.serializer(instance)
+        instance.soft_delete()
         return Response(serializer.data)
 
 
@@ -106,10 +105,20 @@ class NotificationViewSet(BaseUserNestedViewSet):
 
     def list(self, request, user_id=None):
         user = get_object_or_404(User, pk=user_id)
-        self.model.objects.filter(user__id=user.id, seen_at=None).update(seen_at=timezone.now())
-        instances = self.model.objects.filter(user__id=user.id)
+        # self.model.objects.filter(user__id=user.id, deleted_at=None)
+        instances = self.model.objects.filter(user__id=user.id, deleted_at=None)
         serializer = self.serializer(instances, many=True)
         return Response(serializer.data)
+
+
+@api_view(["GET"])
+@authentication_classes([TokenAuthentication])
+def get_notifications_and_set_as_seen(request, user_id=None):
+    user = get_object_or_404(User, pk=user_id)
+    Notification.objects.filter(user__id=user.id, seen_at=None, deleted_at=None).update(seen_at=timezone.now())
+    instances = Notification.objects.filter(user__id=user.id)
+    serializer = NotificationSerializer(instances, many=True)
+    return Response(serializer.data)
 
 
 @api_view(["POST"])

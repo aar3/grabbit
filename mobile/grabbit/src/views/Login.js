@@ -65,7 +65,7 @@ class V extends React.Component {
           }}>
           <Text
             style={{
-              color: Color.White,
+              color: Color.ErrorRed,
               textDecorationStyle: 'solid',
               fontWeight: 'bold',
             }}>
@@ -87,7 +87,7 @@ class V extends React.Component {
             paddingTop: 50,
             backgroundColor: Color.White,
             alignItems: 'center',
-            backgroundColor: Color.QueenBlue,
+            backgroundColor: Color.White,
           }}>
           <View
             style={{
@@ -95,18 +95,18 @@ class V extends React.Component {
               // borderColor: 'red',
               paddingLeft: 10,
               width: '100%',
-              paddingTop: 10,
+              paddingTop: 20,
             }}>
             {this._renderErrorHeader()}
             <Text
               style={{
                 fontWeight: 'bold',
-                fontSize: 22,
-                textAlign: 'center',
+                fontSize: 20,
                 color: Color.QueenBlue,
-                marginBottom: 10,
+                marginBottom: 20,
+                marginLeft: 20,
               }}>
-              Logo Here
+              Login with your phone number
             </Text>
             <View
               style={{
@@ -165,48 +165,36 @@ class V extends React.Component {
                 // borderWidth: 1,
                 // borderColor: 'red',
                 justifyContent: 'center',
-                width: '90%',
+                width: '100%',
                 alignItems: 'center',
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
+                justifyContent: 'center',
                 marginTop: 20,
               }}>
-              <View
-                style={{
+              <GrabbitButton
+                onPress={() => {
+                  return this.props.postUserLogin({
+                    endpoint: '/users/login/',
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    data: {
+                      phone: this.props.countryCode + this.props.phone,
+                      secret: this.props.secret,
+                    },
+                  });
+                }}
+                _buttonStyle={{
+                  backgroundColor: Color.QueenBlue,
                   // borderWidth: 1,
-                  // borderColor: 'blue',
-                  height: 50,
-                  borderRadius: 100,
-                  width: 50,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: Color.White,
-                  shadowColor: '#000',
-                  shadowOffset: {
-                    width: 2,
-                    height: -2,
-                  },
-                  shadowOpacity: 0.5,
-                  shadowRadius: 3.84,
-                  elevation: 10,
-                }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    return this.props.postUserLogin({
-                      endpoint: '/users/login/',
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      data: {
-                        phone: this.props.countryCode + this.props.phone,
-                        secret: this.props.secret,
-                      },
-                    });
-                  }}>
-                  <Icon name={'chevron-right'} size={40} color={Color.QueenBlue} />
-                </TouchableOpacity>
-              </View>
+                  // borderColor: Color.QueenBlue,
+                }}
+                titleStyle={{
+                  color: Color.White,
+                  fontWeight: 'bold',
+                }}
+                title="Login"
+              />
             </View>
             <View
               style={{
@@ -215,7 +203,7 @@ class V extends React.Component {
               }}>
               <Text
                 style={{
-                  color: Color.White,
+                  color: Color.QueenBlue,
                   fontSize: 11,
                 }}>
                 Don't have an account?{' '}
@@ -226,7 +214,7 @@ class V extends React.Component {
                     // fontWeight: 'bold',
                     fontSize: 11,
                     textDecorationLine: 'underline',
-                    color: Color.White,
+                    color: Color.HyperlinkBlue,
                   }}>
                   Sign Up
                 </Text>

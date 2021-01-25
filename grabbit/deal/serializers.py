@@ -23,7 +23,7 @@ class DealSerializer(BaseModelSerializer):
         ]
 
 
-class UserDealSerializer(BaseModelSerializer):
+class MatchedDealserializer(BaseModelSerializer):
     deal = DealSerializer(read_only=True)
 
     class Meta:

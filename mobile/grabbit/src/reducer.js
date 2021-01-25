@@ -48,6 +48,7 @@ const defaultState = {
   deals: {
     inactive: {},
     all: {
+      page: 1,
       pending: false,
       error: null,
       items: {},
@@ -57,11 +58,22 @@ const defaultState = {
       item: null,
     },
     watch_list: {
-      list: {},
-      pending: false,
-      error: null,
+      list: {
+        items: {},
+        pending: false,
+        error: null,
+      },
+      add: {
+        error: null,
+        pending: false,
+      },
+      remove: {
+        error: null,
+        pending: false,
+      },
     },
     matches: {
+      page: 1,
       items: {},
       pending: false,
       error: null,
@@ -101,7 +113,6 @@ const defaultState = {
     ],
   },
   notifications: {
-    hasNewNotification: false,
     list: {
       pending: false,
       error: null,
@@ -139,19 +150,12 @@ const defaultState = {
   account: {
     links: [
       {
-        id: 2,
+        id: 0,
         title: 'Watch List',
         icon: 'bookmark',
         description: 'View deals on your Watch List',
         routeKey: 'watchList',
       },
-      // {
-      //   id: 0,
-      //   title: 'Link an account',
-      //   icon: 'toggle-right',
-      //   description: 'Link one of your external accounts to your Grabbit profile',
-      //   routeKey: 'accountType',
-      // },
       {
         id: 1,
         title: 'Settings',
@@ -170,6 +174,26 @@ const defaultState = {
 const reducer = function (state = defaultState, action) {
   const {payload, type, key} = action;
   switch (type) {
+    // ********************************************
+    // WebSocket
+    // ********************************************
+    case ReduxActions.WebSocket.IncomingNotification: {
+      console.log('>>>> IM HERE');
+      return {
+        ...state,
+        notifications: {
+          ...state.notifications,
+          list: {
+            ...state.notifications.list,
+            items: {
+              ...state.notifications.list.items,
+              ...payload,
+            },
+          },
+        },
+      };
+    }
+
     // ********************************************
     // Settings
     // ********************************************
@@ -517,6 +541,133 @@ const reducer = function (state = defaultState, action) {
     // ********************************************
     // Deals
     // ********************************************
+    case ReduxActions.Deals.DeleteFromWatchListSuccess: {
+      const items = state.deals.watch_list.list.items;
+      delete items[payload.id];
+
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          watch_list: {
+            ...state.deals.watch_list,
+            list: {
+              ...state.deals.watch_list.list,
+              items,
+            },
+            remove: {
+              pending: false,
+              error: null,
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.DeleteFromWatchListError: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          watch_list: {
+            ...state.deals.watch_list,
+            remove: {
+              ...state.deals.watch_list.remove,
+              pending: false,
+              error: payload,
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.DeleteFromWatchListPending: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          watch_list: {
+            ...state.deals.watch_list,
+            remove: {
+              ...state.deals.watch_list.remove,
+              pending: true,
+              error: null,
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.PostToWatchListSuccess: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          watch_list: {
+            ...state.deals.watch_list,
+            list: {
+              ...state.deals.watch_list.list,
+              ...payload,
+            },
+            add: {
+              pending: false,
+              error: null,
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.PostToWatchListError: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          watch_list: {
+            ...state.deals.watch_list,
+            add: {
+              pending: false,
+              error: payload,
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.PostToWatchListPending: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          watch_list: {
+            ...state.deals.watch_list,
+            add: {
+              pending: true,
+              error: null,
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.IncrementDealsPage: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          all: {
+            ...state.deals.all,
+            page: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.IncrementDealsPage: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          all: {
+            ...state.deals.all,
+            page: payload,
+          },
+        },
+      };
+    }
     case ReduxActions.Deals.GetWatchListSuccess: {
       const items = arrayToObject(payload, 'id');
       return {
@@ -525,11 +676,14 @@ const reducer = function (state = defaultState, action) {
           ...state.deals,
           watch_list: {
             ...state.deals.watch_list,
-            pending: false,
-            error: null,
             list: {
               ...state.deals.watch_list.list,
-              ...items,
+              pending: false,
+              error: null,
+              items: {
+                ...state.deals.watch_list.list.items,
+                ...items,
+              },
             },
           },
         },
@@ -542,8 +696,11 @@ const reducer = function (state = defaultState, action) {
           ...state.deals,
           watch_list: {
             ...state.deals.watch_list,
-            pending: false,
-            error: payload,
+            list: {
+              ...state.deals.watch_list.list,
+              pending: false,
+              error: payload,
+            },
           },
         },
       };
@@ -555,8 +712,11 @@ const reducer = function (state = defaultState, action) {
           ...state.deals,
           watch_list: {
             ...state.deals.watch_list,
-            pending: true,
-            error: null,
+            list: {
+              ...state.deals.watch_list.list,
+              pending: true,
+              error: null,
+            },
           },
         },
       };
@@ -657,7 +817,7 @@ const reducer = function (state = defaultState, action) {
         },
       };
     }
-    case ReduxActions.Deals.GetUserDealsError: {
+    case ReduxActions.Deals.GetMatchedDealsError: {
       return {
         ...state,
         deals: {
@@ -671,23 +831,27 @@ const reducer = function (state = defaultState, action) {
       };
     }
 
-    case ReduxActions.Deals.GetUserDealsSuccess: {
+    case ReduxActions.Deals.GetMatchedDealsSuccess: {
       const items = arrayToObject(payload, 'id');
+
       return {
         ...state,
         deals: {
           ...state.deals,
-          list: {
-            ...state.deals.list,
-            items,
+          matches: {
+            ...state.deals.matches,
             pending: false,
             error: null,
+            items: {
+              ...state.deals.matches.items,
+              ...items,
+            },
           },
         },
       };
     }
 
-    case ReduxActions.Deals.GetUserDealsPending: {
+    case ReduxActions.Deals.GetMatchedDealsPending: {
       return {
         ...state,
         deals: {
@@ -847,7 +1011,7 @@ const reducer = function (state = defaultState, action) {
       };
     }
     case ReduxActions.GENERIC_ACTION: {
-      console.log('>>>>>> ACTION ', action);
+      console.log('>>>>>> GENERIC ACTION ', action);
       return state;
     }
     default: {

@@ -53,3 +53,10 @@ export const MerchantLogos = {
 export const PLACEHOLDER_IMG = 'https://ultralifecafe.com/wp-content/uploads/2019/12/placeholder.png';
 
 export const Font = 'Arial';
+
+export const DealType = {
+  Match: 'match',
+  WatchList: 'watchlist',
+  Deal: 'deal',
+  DerivedWatchList: 'derivedwatchlist',
+};

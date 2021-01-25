@@ -7,7 +7,7 @@ import PlaidLink from 'react-native-plaid-link-sdk';
 import ReduxActions from 'grabbit/src/Actions';
 import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
 import {ToggleStyle} from 'grabbit/src/Styles';
-import {Error} from 'grabbit/src/components/FlatList';
+import {Error} from 'grabbit/src/components/Error';
 import {Color, BankLogos} from 'grabbit/src/Const';
 
 class V extends React.Component {

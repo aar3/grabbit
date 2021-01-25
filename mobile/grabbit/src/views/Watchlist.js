@@ -1,8 +1,10 @@
 import React from 'react';
-import {View, Text, FlatList, Image} from 'react-native';
+import {View, Text, FlatList, Image, TouchableOpacity, Alert} from 'react-native';
 import {connect} from 'react-redux';
+import ReduxActions from 'grabbit/src/Actions';
 import {getStateForKey, httpStateUpdate} from 'grabbit/src/Utils';
 import {Color} from 'grabbit/src/Const';
+import DealFocusModal from 'grabbit/src/components/modals/DealFocus';
 
 class V extends React.Component {
   constructor(props) {
@@ -10,7 +12,20 @@ class V extends React.Component {
     this.state = {};
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.getWatchList();
+  }
+
+  _renderModal() {
+    const modal = <DealFocusModal childRef={(ref) => (this.childRef = ref)} />;
+    if (!this.props.showDealFocusedModal) {
+      return;
+    }
+
+    return modal;
+  }
+
+  getWatchList() {
     return httpStateUpdate({
       dispatch: this.props.dispatch,
       options: {
@@ -33,6 +48,7 @@ class V extends React.Component {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
+        {this._renderModal()}
         <FlatList
           style={{
             // borderWidth: 1,
@@ -43,97 +59,107 @@ class V extends React.Component {
           data={this.props.watchList}
           renderItem={({item, index}) => {
             return (
-              <View
-                style={{
-                  borderWidth: 1,
-                  borderColor: 'purple',
-                  borderBottomWidth: 1,
-                  borderBottomColor: Color.BorderLightGrey,
-                  padding: 10,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
+              <TouchableOpacity
+                // TODO: this should open deal focus modal, where the deal can be
+                // removed from the watch list on that modal
+                onPress={() =>
+                  this.props.dispatch({
+                    type: ReduxActions.Deals.SetFocusedDeal,
+                    payload: item,
+                  })
+                }>
                 <View
                   style={{
                     borderWidth: 1,
-                    borderColor: 'green',
-                    flexDirection: 'row',
+                    borderColor: 'purple',
+                    borderBottomWidth: 1,
+                    borderBottomColor: Color.BorderLightGrey,
+                    padding: 10,
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
                   <View
                     style={{
-                      overflow: 'hidden',
-                      borderRadius: 100,
-                      borderWidth: 1,
-                      borderColor: Color.BorderLightGrey,
-                      height: 50,
-                      width: 50,
-                    }}>
-                    <Image source={{uri: item.deal.img_url}} style={{height: 50, width: 50}} />
-                  </View>
-                  <View
-                    style={{
-                      borderWidth: 1,
-                      borderColor: 'black',
-                      width: 300,
-                      // height: 30,
-                      marginLeft: 20,
-                    }}>
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: Color.ReadableGreyText,
-                        fontWeight: '600',
-                        marginBottom: 5,
-                      }}>
-                      {item.deal.merchant_name}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 13,
-                        color: Color.ReadableGreyText,
-                      }}>
-                      {item.deal.title}
-                    </Text>
-                  </View>
-                </View>
-                <View
-                  style={{
-                    borderWidth: 1,
-                    borderColor: 'blue',
-                    flexDirection: 'row',
-                  }}>
-                  <View
-                    style={{
-                      borderWidth: 1,
-                      borderColor: 'red',
-                    }}>
-                    <Text
-                      style={{
-                        color: Color.ReadableGreyText,
-                        fontSize: 12,
-                      }}>
-                      ${item.deal.current_value}
-                    </Text>
-                  </View>
-                  <View
-                    style={{
                       borderWidth: 1,
                       borderColor: 'green',
-                      marginLeft: 20,
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
                     }}>
-                    <Text
+                    <View
                       style={{
-                        color: Color.ErrorRed,
-                        textDecorationLine: 'line-through',
-                        fontSize: 12,
+                        overflow: 'hidden',
+                        borderRadius: 100,
+                        borderWidth: 1,
+                        borderColor: Color.BorderLightGrey,
+                        height: 50,
+                        width: 50,
                       }}>
-                      ${item.deal.original_value}
-                    </Text>
+                      <Image source={{uri: item.deal.img_url}} style={{height: 50, width: 50}} />
+                    </View>
+                    <View
+                      style={{
+                        borderWidth: 1,
+                        borderColor: 'black',
+                        width: 300,
+                        // height: 30,
+                        marginLeft: 20,
+                      }}>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: Color.ReadableGreyText,
+                          fontWeight: '600',
+                          marginBottom: 5,
+                        }}>
+                        {item.deal.merchant_name}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          color: Color.ReadableGreyText,
+                        }}>
+                        {item.deal.title}
+                      </Text>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      borderWidth: 1,
+                      borderColor: 'blue',
+                      flexDirection: 'row',
+                    }}>
+                    <View
+                      style={{
+                        borderWidth: 1,
+                        borderColor: 'red',
+                      }}>
+                      <Text
+                        style={{
+                          color: Color.ReadableGreyText,
+                          fontSize: 12,
+                        }}>
+                        ${item.deal.current_value}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        borderWidth: 1,
+                        borderColor: 'green',
+                        marginLeft: 20,
+                      }}>
+                      <Text
+                        style={{
+                          color: Color.ErrorRed,
+                          textDecorationLine: 'line-through',
+                          fontSize: 12,
+                        }}>
+                        ${item.deal.original_value}
+                      </Text>
+                    </View>
                   </View>
                 </View>
-              </View>
+              </TouchableOpacity>
             );
           }}
         />
@@ -143,10 +169,11 @@ class V extends React.Component {
 }
 
 const mapStateToProps = function (state) {
-  const deals = Object.values(getStateForKey('state.deals.watch_list.list', state));
+  const deals = Object.values(getStateForKey('state.deals.watch_list.list.items', state));
   return {
     user: getStateForKey('state.session.user', state),
     watchList: Object.values(deals),
+    showDealFocusedModal: getStateForKey('state.deals.focused.show_modal', state),
   };
 };
 

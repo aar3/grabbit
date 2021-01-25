@@ -34,6 +34,7 @@ class WebSocketMsg:
         self.status = None
         self.user_id = None
         self.model = None
+        self.redux_action = None
         self.instance = None
         self.uid = None
 
@@ -49,7 +50,7 @@ def handle_django_client_connect(conn, addr, loop):
             data = conn.recv(1024)
             if not data:
                 break
-            user_id, data, model = pickle.loads(data)
+            user_id, data, model, action = pickle.loads(data)
             logger.debug("Received %s from process at %s", (user_id, data, model), addr)
 
             websocket, client_addr = router[user_id]
@@ -58,6 +59,7 @@ def handle_django_client_connect(conn, addr, loop):
             response.status = 200
             response.details = "success"
             response.instance = data
+            response.redux_action = action
             response.model = model
 
             msg = response.serialize()
@@ -115,6 +117,7 @@ async def handle_client_redux_connection(websocket, path):
                     response.status = 200
                     response.details = "success"
                     response.model = "user"
+                    response.redux_action = "GetSessionUserSuccess"
                     response.user_id = user["id"]
                     response.instance = user
         except Exception as err:
@@ -144,3 +147,8 @@ def main(*args, **kwargs):
 
     loop.run_forever()
     handle.join()
+
+
+if __name__ == "__main__":
+
+    main()

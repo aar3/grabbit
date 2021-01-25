@@ -14,20 +14,36 @@ export default {
     PostUserSignupSuccess: 'PostUserSignupSuccess',
   },
   Deals: {
+    IncrementDealsPage: 'IncrementDealsPage',
     GetDealsPending: 'GetDealsPending',
     GetDealsError: 'GetDealsError',
     GetDealsSuccess: 'GetDealsSuccess',
-    GetUserDealsPending: 'GetUserDealsPending',
-    GetUserDealsSuccess: 'GetUserDealsSuccess',
-    GetUserDealsError: 'GetUserDealsError',
+
+    IncrementMatchedDealsPage: 'IncrementMatchedDealsPage',
+
+    GetMatchedDealsPending: 'GetMatchedDealsPending',
+    GetMatchedDealsSuccess: 'GetMatchedDealsSuccess',
+    GetMatchedDealsError: 'GetMatchedDealsError',
+
     SetFocusedDeal: 'SetFocusedDeal',
+
     ToggleFocusedDealModal: 'ToggleFocusedDealModal',
+
     UpdateWatchListItemPending: 'UpdateWatchListItemPending',
     UpdateWatchListItemError: 'UpdateWatchListItemError',
     UpdateWatchListItemSuccess: 'UpdateWatchListItemSuccess',
+
     GetWatchListPending: 'GetWatchListPending',
     GetWatchListSuccess: 'GetWatchListSuccess',
     GetWatchListError: 'GetWatchListError',
+
+    PostToWatchListPending: 'PostToWatchListPending',
+    PostToWatchListError: 'PostToWatchListError',
+    PostToWatchListSuccess: 'PostToWatchListSuccess',
+
+    DeleteFromWatchListPending: 'DeleteFromWatchListPending',
+    DeleteFromWatchListError: 'DeleteFromWatchListError',
+    DeleteFromWatchListSuccess: 'DeleteFromWatchListSuccess',
   },
   Accounts: {
     GetLinkTokenPending: 'GetLinkTokenPending',
@@ -65,5 +81,8 @@ export default {
     GetUserSettingsPending: 'GetUserSettingsPending',
     GetUserSettingsError: 'GetUserSettingsError',
     GetUserSettingsSuccess: 'GetUserSettingsSuccess',
+  },
+  WebSocket: {
+    IncomingNotification: 'IncomingNotification',
   },
 };

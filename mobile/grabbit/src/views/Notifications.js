@@ -7,7 +7,8 @@ import {Actions} from 'react-native-router-flux';
 import ReduxActions from 'grabbit/src/Actions';
 import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
 import {Color, PLACEHOLDER_IMG} from 'grabbit/src/Const';
-import {Error} from 'grabbit/src/components/FlatList';
+import {ErrorView} from 'grabbit/src/components/Basic';
+import {httpStateUpdate} from 'grabbit/src/Utils';
 
 class V extends React.Component {
   constructor(props) {
@@ -26,8 +27,23 @@ class V extends React.Component {
     };
   }
 
-  async componentDidMount() {
-    return this.props.getNotifications(this.options);
+  componentDidMount() {
+    return this.getAndSetNotifications();
+  }
+
+  getAndSetNotifications() {
+    return httpStateUpdate({
+      dispatch: this.props.dispatch,
+      options: {
+        endpoint: `/users/${this.props.user.id}/get_and_set_notifications`,
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'X-Session-Token': this.props.user.current_session_token,
+        },
+      },
+      stateKeyPrefix: 'GetNotifications',
+    });
   }
 
   _renderActionButton(item) {
@@ -140,9 +156,7 @@ class V extends React.Component {
     }
 
     if (this.props.getNotificationsError) {
-      return (
-        <Error error={this.props.getNotificationsError} onTryAgain={() => this.props.getNotifications(this.options)} />
-      );
+      return <ErrorView error={this.props.getNotificationsError} onTryAgain={() => this.getAndSetNotifications()} />;
     }
 
     if (this.props.notifications.length === 0) {
@@ -289,71 +303,14 @@ class V extends React.Component {
 
 const mapStateToProps = function (state) {
   const notifications = getStateForKey('state.notifications.list.items', state);
-  const sorted = Object.values(notifications).sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
+  const orderedNotifications = Object.values(notifications).sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
+
   return {
     user: getStateForKey('state.session.user', state),
     getNotificationsPending: getStateForKey('state.notifications.list.pending', state),
     getNotificationsError: getStateForKey('state.notifications.list.error', state),
-    notifications: sorted,
+    notifications: orderedNotifications,
   };
 };
 
-const mapDispatchToProps = function (dispatch) {
-  return {
-    // Remove the pending state so it doesn't clash with default FlatList loading image
-    getNotificationsViaFlatList: async function (options) {
-      const {data, error} = await httpRequest(options);
-
-      if (error) {
-        return dispatch({
-          type: ReduxActions.Notifications.GetNotificationsError,
-          payload: error,
-        });
-      }
-
-      return dispatch({
-        type: ReduxActions.Notifications.GetNotificationsSuccess,
-        payload: data,
-      });
-    },
-    getNotifications: async function (options) {
-      dispatch({
-        type: ReduxActions.Notifications.GetNotificationsPending,
-      });
-
-      const {data, error} = await httpRequest(options);
-
-      if (error) {
-        return dispatch({
-          type: ReduxActions.Notifications.GetNotificationsError,
-          payload: error,
-        });
-      }
-
-      return dispatch({
-        type: ReduxActions.Notifications.GetNotificationsSuccess,
-        payload: data,
-      });
-    },
-    setNotificationsSeen: async function (options) {
-      const {error, data} = await httpRequest(options);
-      if (error) {
-        console.log(`Error setting notifications as seen: ${error.details}`);
-        return;
-      }
-
-      return dispatch({
-        type: ReduxActions.Notifications.GetNotificationsSuccess,
-        payload: data,
-      });
-    },
-    testDispatch: function () {
-      return dispatch({
-        type: ReduxActions.GENERIC_ACTION,
-        payload: {foo: 'bar'},
-      });
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(V);
+export default connect(mapStateToProps, null)(V);
