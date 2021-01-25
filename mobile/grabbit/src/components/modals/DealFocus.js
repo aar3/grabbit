@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Modal, TouchableOpacity, ScrollView, Image, Text, FlatList, StyleSheet} from 'react-native';
+import {View, Modal, TouchableOpacity, ScrollView, Image, Linking, Text, FlatList, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {connect} from 'react-redux';
 import {Button} from 'react-native-elements';
@@ -180,7 +180,33 @@ class M extends React.Component {
               }}>
               {this.props.deal.title}
             </Text>
-
+            <View
+              style={{
+                // borderWidth: 1,
+                // borderColor: 'blue',
+                width: 200,
+                justifyContent: 'space-evenly',
+                flexDirection: 'row',
+                marginTop: 10,
+              }}>
+              <Text
+                style={{
+                  fontWeight: '500',
+                  color: Color.QueenBlue,
+                  fontSize: 16,
+                }}>
+                ${this.props.deal.current_value}
+              </Text>
+              <Text
+                style={{
+                  fontWeight: '500',
+                  color: Color.ErrorRed,
+                  fontSize: 16,
+                  textDecorationLine: 'line-through',
+                }}>
+                ${this.props.deal.original_value}
+              </Text>
+            </View>
             <View
               style={{
                 // borderWidth: 1,
@@ -242,6 +268,7 @@ class M extends React.Component {
               }}>
               {this._renderWatchListButton()}
               <GrabbitButton
+                onPress={() => Linking.openURL(this.props.deal.url)}
                 _buttonStyle={{
                   backgroundColor: Color.White,
                   borderColor: Color.QueenBlue,
@@ -263,9 +290,7 @@ class M extends React.Component {
 
 const mapStateToProps = function (state) {
   const item = getStateForKey('state.deals.focused.item', state);
-  console.log('>>> ITEM ', item);
   const type = getDealType(item);
-  console.log('>>> TYPE ', type);
   const deal = [DealType.DerivedWatchList, DealType.Deal].includes(type) ? item : item.deal;
 
   return {

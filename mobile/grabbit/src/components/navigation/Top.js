@@ -110,8 +110,6 @@ const mapStateToProps = function (state) {
   const notifications = getStateForKey('state.notifications.list.items', state);
   const hasNewNotification = Object.values(notifications).filter((item) => !item.seen_at).length > 0;
 
-  console.log(Object.values(notifications).map((item) => item.seen_at));
-
   return {
     hasNewNotification,
   };

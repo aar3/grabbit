@@ -182,15 +182,15 @@ class V extends React.Component {
         style={{
           width: '100%',
           height: 275,
-          borderWidth: 1,
-          borderColor: 'green',
+          // borderWidth: 1,
+          // borderColor: 'green',
         }}>
         <FlatList
           horizontal
           data={this.props.matchedDeals}
           style={{
-            borderWidth: 1,
-            borderColor: 'green',
+            // borderWidth: 1,
+            // borderColor: 'green',
             backgroundColor: Color.TopNavBackground,
             borderBottomWidth: 0,
             height: 275,
@@ -268,7 +268,7 @@ class V extends React.Component {
                         }}
                       />
                     </View>
-                    <View
+                    {/* <View
                       style={{
                         backgroundColor: Color.QueenBlue,
                         opacity: 0.7,
@@ -289,7 +289,7 @@ class V extends React.Component {
                         }}>
                         {shortTitle}
                       </Text>
-                    </View>
+                    </View> */}
                   </View>
                 </View>
               </TouchableOpacity>
@@ -453,8 +453,8 @@ class V extends React.Component {
       <View
         style={{
           flex: 1,
-          borderWidth: 1,
-          borderColor: 'red',
+          // borderWidth: 1,
+          // borderColor: 'red',
           width: '100%',
           marginTop: 10,
           paddingBottom: 10,

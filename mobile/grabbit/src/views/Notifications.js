@@ -7,8 +7,8 @@ import {Actions} from 'react-native-router-flux';
 import ReduxActions from 'grabbit/src/Actions';
 import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
 import {Color, PLACEHOLDER_IMG} from 'grabbit/src/Const';
-import {Error} from 'grabbit/src/components/Error';
-import {httpStateUpdate} from '../Utils';
+import {ErrorView} from 'grabbit/src/components/Basic';
+import {httpStateUpdate} from 'grabbit/src/Utils';
 
 class V extends React.Component {
   constructor(props) {
@@ -156,9 +156,7 @@ class V extends React.Component {
     }
 
     if (this.props.getNotificationsError) {
-      return (
-        <Error error={this.props.getNotificationsError} onTryAgain={() => this.props.getNotifications(this.options)} />
-      );
+      return <ErrorView error={this.props.getNotificationsError} onTryAgain={() => this.getAndSetNotifications()} />;
     }
 
     if (this.props.notifications.length === 0) {
