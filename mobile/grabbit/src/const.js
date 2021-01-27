@@ -11,6 +11,8 @@ export const Color = {
   HotPink: '#E20086',
   QueenBlue: '#3f729b',
   TopNavBackground: '#f0f0f0',
+
+  GreyBlue: '#587291',
 };
 
 export const TabIconSize = 24;

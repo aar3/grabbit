@@ -115,7 +115,7 @@ class V extends React.Component {
                     marginLeft: 10,
                     fontWeight: 'bold',
                     fontSize: 22,
-                    color: Color.QueenBlue,
+                    color: Color.GreyBlue,
                     marginBottom: 20,
                   }}>
                   Logo Here
@@ -126,7 +126,7 @@ class V extends React.Component {
                   marginLeft: 10,
                   fontWeight: 'bold',
                   fontSize: 22,
-                  color: Color.QueenBlue,
+                  color: Color.GreyBlue,
                   marginBottom: 20,
                 }}>
                 Join Grabbit
@@ -230,10 +230,10 @@ class V extends React.Component {
                   _buttonStyle={{
                     backgroundColor: Color.White,
                     borderWidth: 1,
-                    borderColor: Color.QueenBlue,
+                    borderColor: Color.GreyBlue,
                   }}
                   titleStyle={{
-                    color: Color.QueenBlue,
+                    color: Color.GreyBlue,
                     fontWeight: 'bold',
                   }}
                   title="Create Account"

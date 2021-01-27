@@ -63,7 +63,7 @@ class V extends React.Component {
           }}>
           <Button
             buttonStyle={{
-              backgroundColor: Color.QueenBlue,
+              backgroundColor: Color.GreyBlue,
               borderRadius: 10,
             }}
             containerStyle={{
@@ -169,7 +169,7 @@ class V extends React.Component {
           }}>
           <Text
             style={{
-              color: Color.QueenBlue,
+              color: Color.GreyBlue,
               fontWeight: 'bold',
               fontSize: 18,
               marginBottom: 20,

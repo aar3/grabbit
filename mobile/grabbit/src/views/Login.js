@@ -102,7 +102,7 @@ class V extends React.Component {
               style={{
                 fontWeight: 'bold',
                 fontSize: 20,
-                color: Color.QueenBlue,
+                color: Color.GreyBlue,
                 marginBottom: 20,
                 marginLeft: 20,
               }}>
@@ -185,9 +185,9 @@ class V extends React.Component {
                   });
                 }}
                 _buttonStyle={{
-                  backgroundColor: Color.QueenBlue,
+                  backgroundColor: Color.GreyBlue,
                   // borderWidth: 1,
-                  // borderColor: Color.QueenBlue,
+                  // borderColor: Color.GreyBlue,
                 }}
                 titleStyle={{
                   color: Color.White,
@@ -203,7 +203,7 @@ class V extends React.Component {
               }}>
               <Text
                 style={{
-                  color: Color.QueenBlue,
+                  color: Color.GreyBlue,
                   fontSize: 11,
                 }}>
                 Don't have an account?{' '}

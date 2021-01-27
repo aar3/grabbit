@@ -24,9 +24,10 @@ class TokenAuthentication(authentication.BaseAuthentication):
         if not token:
             raise exceptions.AuthenticationFailed("no token")
         # FIXME: how slow this gonna be guy? <('-'<)
-        user = json.loads(redis.get(token).decode())
-        if not user:
+        entry = redis.get(token)
+        if not entry:
             raise exceptions.AuthenticationFailed("bad token")
+        user = json.loads(entry)
         if not path_user_matches_token_user(request.path, user["id"]):
             raise exceptions.AuthenticationFailed("bad path")
         return (user, None)

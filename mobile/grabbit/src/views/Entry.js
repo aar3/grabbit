@@ -45,10 +45,10 @@ export default class V extends React.Component {
             _buttonStyle={{
               backgroundColor: Color.White,
               borderWidth: 1,
-              borderColor: Color.QueenBlue,
+              borderColor: Color.GreyBlue,
             }}
             titleStyle={{
-              color: Color.QueenBlue,
+              color: Color.GreyBlue,
               fontWeight: 'bold',
             }}
             title="Login"
@@ -57,7 +57,7 @@ export default class V extends React.Component {
           <GrabbitButton
             onPress={() => Actions.signup()}
             _buttonStyle={{
-              backgroundColor: Color.QueenBlue,
+              backgroundColor: Color.GreyBlue,
             }}
             titleStyle={{
               color: Color.White,

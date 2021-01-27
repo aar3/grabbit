@@ -46,11 +46,11 @@ class M extends React.Component {
           }}
           _buttonStyle={{
             backgroundColor: Color.White,
-            borderColor: Color.QueenBlue,
+            borderColor: Color.GreyBlue,
             borderWidth: 1,
           }}
           titleStyle={{
-            color: Color.QueenBlue,
+            color: Color.GreyBlue,
             fontWeight: 'bold',
           }}
           title="Remove From Watch List"
@@ -77,11 +77,11 @@ class M extends React.Component {
           }}
           _buttonStyle={{
             backgroundColor: Color.White,
-            borderColor: Color.QueenBlue,
+            borderColor: Color.GreyBlue,
             borderWidth: 1,
           }}
           titleStyle={{
-            color: Color.QueenBlue,
+            color: Color.GreyBlue,
             fontWeight: 'bold',
           }}
           title="Add to Watch List"
@@ -192,7 +192,7 @@ class M extends React.Component {
               <Text
                 style={{
                   fontWeight: '500',
-                  color: Color.QueenBlue,
+                  color: Color.GreyBlue,
                   fontSize: 16,
                 }}>
                 ${this.props.deal.current_value}
@@ -271,11 +271,11 @@ class M extends React.Component {
                 onPress={() => Linking.openURL(this.props.deal.url)}
                 _buttonStyle={{
                   backgroundColor: Color.White,
-                  borderColor: Color.QueenBlue,
+                  borderColor: Color.GreyBlue,
                   borderWidth: 1,
                 }}
                 titleStyle={{
-                  color: Color.QueenBlue,
+                  color: Color.GreyBlue,
                   fontWeight: 'bold',
                 }}
                 title="Visit"
@@ -338,12 +338,12 @@ const styles = StyleSheet.create({
   buttonStyle: {
     borderWidth: 1,
     height: 50,
-    borderColor: Color.QueenBlue,
+    borderColor: Color.GreyBlue,
     backgroundColor: Color.White,
   },
 
   footerButtonLabel: {
-    color: Color.QueenBlue,
+    color: Color.GreyBlue,
     fontWeight: '600',
   },
 });

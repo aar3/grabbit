@@ -92,6 +92,18 @@ class Login(BaseModel):
     user_agent = models.CharField(max_length=255, null=True)
 
 
+@receiver(post_save, sender=Login)
+def create_new_session_token_for_authd_user(sender, instance, created, **kwargs):
+    from user.serializers import UserSerializer
+
+    if created:
+        serializer = UserSerializer(instance.user)
+        key = random_string(n=10)
+        instance.user.current_session_token = key
+        _ = redis.set(key, json.dumps(serializer.data).encode())
+        instance.user.save()
+
+
 class Notification(BaseModel):
     class Meta:
         db_table = "notifications"

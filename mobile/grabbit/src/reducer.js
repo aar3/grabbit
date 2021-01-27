@@ -22,7 +22,7 @@ const defaultState = {
       qr_code_url: '',
       name: 'Rashad Alston',
       email: 'rashad.a.alston@gmail.com',
-      current_session_token: '8f710063cffbe962bcf51aec432aff687acd027e41e52589b63bda1ae9903048',
+      current_session_token: 'i2llXjNlXV',
       phone: '+12132227624',
     },
     // user: null,

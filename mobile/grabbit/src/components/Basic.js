@@ -115,8 +115,8 @@ export class LoadingView extends React.Component {
           style={[
             this.props.style,
             {
-              borderWidth: 1,
-              borderColor: 'red',
+              // borderWidth: 1,
+              // borderColor: 'red',
             },
           ]}></ImageBackground>
       </View>
@@ -140,8 +140,8 @@ export class ErrorView extends React.Component {
         ]}>
         <Text
           style={{
-            color: Color.ReadableGreyText,
-            fontWeight: '500',
+            color: Color.GreyBlue,
+            // fontWeight: '500',
             fontSize: 18,
           }}>
           Ouch, there was a hiccup
@@ -150,15 +150,15 @@ export class ErrorView extends React.Component {
           style={{
             fontSize: 14,
             marginTop: 10,
-            fontWeight: 'bold',
-            color: Color.ReadableGreyText,
+            // fontWeight: 'bold',
+            color: Color.GreyBlue,
           }}>
           {msg}
         </Text>
         <TouchableOpacity onPress={this.props.onTryAgain}>
-          <Icon style={{marginTop: 20}} name={'rotate-ccw'} size={24} color={Color.ReadableGreyText} />
+          <Icon style={{marginTop: 20}} name={'rotate-ccw'} size={24} color={Color.GreyBlue} />
         </TouchableOpacity>
-        <Text style={{color: Color.ReadableGreyText}}>Try Again</Text>
+        <Text style={{color: Color.GreyBlue, marginTop: 20}}>Try Again</Text>
       </View>
     );
   }
