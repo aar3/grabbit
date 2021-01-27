@@ -102,3 +102,9 @@ mobile/grabbit/buck-out/
 
 # CocoaPods
 mobile/grabbit/ios/Pods/
+
+#############
+# apple
+#############
+mobile/apple/
+

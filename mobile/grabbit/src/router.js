@@ -8,12 +8,13 @@ import {
   LoginView,
   SignupView,
   ListDealsView,
-  PlaidAccountsView,
+  // PlaidAccountsView,
   AccountView,
   SettingsView,
   AccountTypeView,
   WatchListView,
   NotificationsView,
+  EditAccountView,
 } from 'grabbit/src/views';
 
 export default class Router_ extends React.Component {
@@ -30,7 +31,7 @@ export default class Router_ extends React.Component {
             key="entry"
             component={EntryView}
             title="Entry"
-            // initial
+            initial
             gesturesEnabled={false}
             drawerLockMode="locked-closed"
             hideNavBar={true}
@@ -70,17 +71,17 @@ export default class Router_ extends React.Component {
             navBar={MainTopNavigationBar}
             title=""
             hideNavBar={false}
-            initial
+            // initial
             key="listDeal"
             component={ListDealsView}
           />
-          <Scene
+          {/* <Scene
             title={'Plaid Accounts'}
             hideNavBar={false}
             key="plaidAccounts"
             navigationBarStyle={styles.NavbarContainer}
             component={PlaidAccountsView}
-          />
+          /> */}
           <Scene
             title={'Notifications'}
             hideNavBar={false}
@@ -101,6 +102,14 @@ export default class Router_ extends React.Component {
             hideNavBar={false}
             key="watchList"
             component={WatchListView}
+            navigationBarStyle={styles.NavbarContainer}
+            style={styles}
+          />
+          <Scene
+            title={'Edit Account'}
+            hideNavBar={false}
+            key="editAccount"
+            component={EditAccountView}
             navigationBarStyle={styles.NavbarContainer}
             style={styles}
           />

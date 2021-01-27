@@ -20,7 +20,7 @@ export default class V extends React.Component {
         }}>
         <View
           style={{
-            height: 65,
+            height: 69,
             position: 'absolute',
             top: 400,
             width: 300,
@@ -28,7 +28,7 @@ export default class V extends React.Component {
             // borderWidth: 1,
           }}>
           <Image
-            source={require('./../../assets/imgs/Grabbit_Gradient_Letters_222x1000.png')}
+            source={require('./../../assets/imgs/Grabbit_Gradient_Letters_2042x479.png')}
             style={{flex: 1, height: undefined, width: undefined}}
           />
         </View>
@@ -45,10 +45,10 @@ export default class V extends React.Component {
             _buttonStyle={{
               backgroundColor: Color.White,
               borderWidth: 1,
-              borderColor: Color.QueenBlue,
+              borderColor: Color.Teal,
             }}
             titleStyle={{
-              color: Color.QueenBlue,
+              color: Color.Teal,
               fontWeight: 'bold',
             }}
             title="Login"
@@ -57,7 +57,7 @@ export default class V extends React.Component {
           <GrabbitButton
             onPress={() => Actions.signup()}
             _buttonStyle={{
-              backgroundColor: Color.QueenBlue,
+              backgroundColor: Color.OceanBlue,
             }}
             titleStyle={{
               color: Color.White,

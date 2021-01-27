@@ -4,7 +4,7 @@ import {Color} from 'grabbit/src/Const';
 import {Actions} from 'react-native-router-flux';
 // IMPORTANT: https://stackoverflow.com/a/55040425/4701228
 import Icon from 'react-native-vector-icons/Ionicons';
-import PlaidLink from 'react-native-plaid-link-sdk';
+// import PlaidLink from 'react-native-plaid-link-sdk';
 import {connect} from 'react-redux';
 import ReduxActions from 'grabbit/src/Actions';
 import {getStateForKey} from 'grabbit/src/Utils';
