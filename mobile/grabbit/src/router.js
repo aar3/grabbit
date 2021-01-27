@@ -8,7 +8,7 @@ import {
   LoginView,
   SignupView,
   ListDealsView,
-  PlaidAccountsView,
+  // PlaidAccountsView,
   AccountView,
   SettingsView,
   AccountTypeView,
@@ -75,13 +75,13 @@ export default class Router_ extends React.Component {
             key="listDeal"
             component={ListDealsView}
           />
-          <Scene
+          {/* <Scene
             title={'Plaid Accounts'}
             hideNavBar={false}
             key="plaidAccounts"
             navigationBarStyle={styles.NavbarContainer}
             component={PlaidAccountsView}
-          />
+          /> */}
           <Scene
             title={'Notifications'}
             hideNavBar={false}

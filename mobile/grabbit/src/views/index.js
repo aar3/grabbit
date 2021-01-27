@@ -15,7 +15,7 @@ import EditAccountView from 'grabbit/src/views/EditAccount';
 module.exports = {
   AccountView,
   EntryView,
-  PlaidAccountsView,
+  // PlaidAccountsView,
   ListDealsView,
   LoginView,
   RewardFocusView,

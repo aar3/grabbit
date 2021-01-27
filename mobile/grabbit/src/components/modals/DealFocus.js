@@ -6,7 +6,7 @@ import {Button} from 'react-native-elements';
 import ReduxActions from 'grabbit/src/Actions';
 import {Color, MerchantLogos, DealType} from 'grabbit/src/Const';
 import {GrabbitButton} from 'grabbit/src/components/Basic';
-import {getStateForKey, getDealType} from 'grabbit/src/Utils';
+import {getStateForKey, getDealType, httpStateUpdate} from 'grabbit/src/Utils';
 
 class M extends React.Component {
   constructor(props) {
