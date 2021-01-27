@@ -1,6 +1,6 @@
 import AccountView from 'grabbit/src/views/Account';
 import EntryView from 'grabbit/src/views/Entry';
-import PlaidAccountsView from 'grabbit/src/views/PlaidAccounts';
+// import PlaidAccountsView from 'grabbit/src/views/PlaidAccounts';
 import ListDealsView from 'grabbit/src/views/ListDeals';
 import LoginView from 'grabbit/src/views/Login';
 import RewardFocusView from 'grabbit/src/views/RewardFocus';

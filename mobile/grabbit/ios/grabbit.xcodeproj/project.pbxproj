@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,14 +14,12 @@
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		2D8D1734C1E6902AA0BD4F4B /* libPods-grabbit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F6B6E721D0DE7AD277F3A3FE /* libPods-grabbit.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* grabbitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* grabbitTests.m */; };
-		5ADA0F47259573B00061641B /* LinkKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5ADA0F46259573B00061641B /* LinkKit.xcframework */; };
-		5ADA0F48259573B00061641B /* LinkKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5ADA0F46259573B00061641B /* LinkKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		A42B578421BCC3909CD045B2 /* libPods-grabbit-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B6364186E3C03FBEC9FDBB24 /* libPods-grabbit-tvOSTests.a */; };
-		C710245575D484ECF80418EA /* libPods-grabbit-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C561DC3D6EEF39DCE6718FAD /* libPods-grabbit-tvOS.a */; };
-		D9EEB6F7AAC7885E4DD03448 /* libPods-grabbit-grabbitTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AC072EDBBDB19A025346AE4A /* libPods-grabbit-grabbitTests.a */; };
-		F59AC2C04B7034E5F13F5E85 /* libPods-grabbit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AFAFC649263A4233932CAB76 /* libPods-grabbit.a */; };
+		A13FDC21D2EF66836F127A2D /* libPods-grabbit-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F48D1D1D85DC932B54763B /* libPods-grabbit-tvOS.a */; };
+		AB5B801890566955117AF469 /* libPods-grabbit-grabbitTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9302B82384F47BA0BD3D0A94 /* libPods-grabbit-grabbitTests.a */; };
+		CD3B8855CFBEA7B5DDD99A53 /* libPods-grabbit-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A3EC54FB00844E6F59C7673 /* libPods-grabbit-tvOSTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,20 +39,6 @@
 		};
 /* End PBXContainerItemProxy section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		5ADA0F49259573B00061641B /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				5ADA0F48259573B00061641B /* LinkKit.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00E356EE1AD99517003FC87E /* grabbitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = grabbitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -66,24 +50,24 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = grabbit/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = grabbit/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = grabbit/main.m; sourceTree = "<group>"; };
-		2B80F2FDA329988EE59B3DF8 /* Pods-grabbit-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-grabbit-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-grabbit-tvOSTests/Pods-grabbit-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* grabbit-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "grabbit-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* grabbit-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "grabbit-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2FAD773B3B95764FBD1B78E0 /* Pods-grabbit-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-grabbit-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-grabbit-tvOSTests/Pods-grabbit-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		45414315F8864D4068D285E4 /* Pods-grabbit-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-grabbit-tvOS.release.xcconfig"; path = "Target Support Files/Pods-grabbit-tvOS/Pods-grabbit-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		5458AC9C30EF259FD02DCE30 /* Pods-grabbit-grabbitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-grabbit-grabbitTests.debug.xcconfig"; path = "Target Support Files/Pods-grabbit-grabbitTests/Pods-grabbit-grabbitTests.debug.xcconfig"; sourceTree = "<group>"; };
+		325AE1E12639E47EBB425E1A /* Pods-grabbit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-grabbit.debug.xcconfig"; path = "Target Support Files/Pods-grabbit/Pods-grabbit.debug.xcconfig"; sourceTree = "<group>"; };
 		5ADA0F46259573B00061641B /* LinkKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = LinkKit.xcframework; path = Pods/Plaid/LinkKit.xcframework; sourceTree = "<group>"; };
+		6A3EC54FB00844E6F59C7673 /* libPods-grabbit-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-grabbit-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6BC13B2D524426588C102FE1 /* Pods-grabbit-grabbitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-grabbit-grabbitTests.debug.xcconfig"; path = "Target Support Files/Pods-grabbit-grabbitTests/Pods-grabbit-grabbitTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = grabbit/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		8E916F4E7E7D8EE2FA5EA8F0 /* Pods-grabbit-grabbitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-grabbit-grabbitTests.release.xcconfig"; path = "Target Support Files/Pods-grabbit-grabbitTests/Pods-grabbit-grabbitTests.release.xcconfig"; sourceTree = "<group>"; };
-		AC072EDBBDB19A025346AE4A /* libPods-grabbit-grabbitTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-grabbit-grabbitTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		AC2A5058EFA614D7B8E12D68 /* Pods-grabbit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-grabbit.debug.xcconfig"; path = "Target Support Files/Pods-grabbit/Pods-grabbit.debug.xcconfig"; sourceTree = "<group>"; };
-		AFAFC649263A4233932CAB76 /* libPods-grabbit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-grabbit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		AFC1AC5A38ECA9BC3BC64974 /* Pods-grabbit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-grabbit.release.xcconfig"; path = "Target Support Files/Pods-grabbit/Pods-grabbit.release.xcconfig"; sourceTree = "<group>"; };
-		B6364186E3C03FBEC9FDBB24 /* libPods-grabbit-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-grabbit-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		BC5DB51A6A2DECBAA213037E /* Pods-grabbit-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-grabbit-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-grabbit-tvOS/Pods-grabbit-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		C561DC3D6EEF39DCE6718FAD /* libPods-grabbit-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-grabbit-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B3AD9E7010F0D058CBAA0BC /* Pods-grabbit-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-grabbit-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-grabbit-tvOSTests/Pods-grabbit-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		9302B82384F47BA0BD3D0A94 /* libPods-grabbit-grabbitTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-grabbit-grabbitTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		973C753E6210B94D7036D76D /* Pods-grabbit-grabbitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-grabbit-grabbitTests.release.xcconfig"; path = "Target Support Files/Pods-grabbit-grabbitTests/Pods-grabbit-grabbitTests.release.xcconfig"; sourceTree = "<group>"; };
+		AAD5E56C933D26A17A86239D /* Pods-grabbit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-grabbit.release.xcconfig"; path = "Target Support Files/Pods-grabbit/Pods-grabbit.release.xcconfig"; sourceTree = "<group>"; };
+		CA86C729D865D2B3CD18A325 /* Pods-grabbit-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-grabbit-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-grabbit-tvOSTests/Pods-grabbit-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		CD0511DB6A407BD5435B6E0F /* Pods-grabbit-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-grabbit-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-grabbit-tvOS/Pods-grabbit-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		D0F48D1D1D85DC932B54763B /* libPods-grabbit-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-grabbit-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4EAE3D74181BD178CB843E5 /* Pods-grabbit-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-grabbit-tvOS.release.xcconfig"; path = "Target Support Files/Pods-grabbit-tvOS/Pods-grabbit-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
+		F6B6E721D0DE7AD277F3A3FE /* libPods-grabbit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-grabbit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,7 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D9EEB6F7AAC7885E4DD03448 /* libPods-grabbit-grabbitTests.a in Frameworks */,
+				AB5B801890566955117AF469 /* libPods-grabbit-grabbitTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,8 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5ADA0F47259573B00061641B /* LinkKit.xcframework in Frameworks */,
-				F59AC2C04B7034E5F13F5E85 /* libPods-grabbit.a in Frameworks */,
+				2D8D1734C1E6902AA0BD4F4B /* libPods-grabbit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,7 +91,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C710245575D484ECF80418EA /* libPods-grabbit-tvOS.a in Frameworks */,
+				A13FDC21D2EF66836F127A2D /* libPods-grabbit-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -116,7 +99,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A42B578421BCC3909CD045B2 /* libPods-grabbit-tvOSTests.a in Frameworks */,
+				CD3B8855CFBEA7B5DDD99A53 /* libPods-grabbit-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,10 +143,10 @@
 				5ADA0F46259573B00061641B /* LinkKit.xcframework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				AFAFC649263A4233932CAB76 /* libPods-grabbit.a */,
-				AC072EDBBDB19A025346AE4A /* libPods-grabbit-grabbitTests.a */,
-				C561DC3D6EEF39DCE6718FAD /* libPods-grabbit-tvOS.a */,
-				B6364186E3C03FBEC9FDBB24 /* libPods-grabbit-tvOSTests.a */,
+				F6B6E721D0DE7AD277F3A3FE /* libPods-grabbit.a */,
+				9302B82384F47BA0BD3D0A94 /* libPods-grabbit-grabbitTests.a */,
+				D0F48D1D1D85DC932B54763B /* libPods-grabbit-tvOS.a */,
+				6A3EC54FB00844E6F59C7673 /* libPods-grabbit-tvOSTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -171,14 +154,14 @@
 		768008DECFF938BF2203B28E /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				AC2A5058EFA614D7B8E12D68 /* Pods-grabbit.debug.xcconfig */,
-				AFC1AC5A38ECA9BC3BC64974 /* Pods-grabbit.release.xcconfig */,
-				5458AC9C30EF259FD02DCE30 /* Pods-grabbit-grabbitTests.debug.xcconfig */,
-				8E916F4E7E7D8EE2FA5EA8F0 /* Pods-grabbit-grabbitTests.release.xcconfig */,
-				BC5DB51A6A2DECBAA213037E /* Pods-grabbit-tvOS.debug.xcconfig */,
-				45414315F8864D4068D285E4 /* Pods-grabbit-tvOS.release.xcconfig */,
-				2B80F2FDA329988EE59B3DF8 /* Pods-grabbit-tvOSTests.debug.xcconfig */,
-				2FAD773B3B95764FBD1B78E0 /* Pods-grabbit-tvOSTests.release.xcconfig */,
+				325AE1E12639E47EBB425E1A /* Pods-grabbit.debug.xcconfig */,
+				AAD5E56C933D26A17A86239D /* Pods-grabbit.release.xcconfig */,
+				6BC13B2D524426588C102FE1 /* Pods-grabbit-grabbitTests.debug.xcconfig */,
+				973C753E6210B94D7036D76D /* Pods-grabbit-grabbitTests.release.xcconfig */,
+				CD0511DB6A407BD5435B6E0F /* Pods-grabbit-tvOS.debug.xcconfig */,
+				D4EAE3D74181BD178CB843E5 /* Pods-grabbit-tvOS.release.xcconfig */,
+				8B3AD9E7010F0D058CBAA0BC /* Pods-grabbit-tvOSTests.debug.xcconfig */,
+				CA86C729D865D2B3CD18A325 /* Pods-grabbit-tvOSTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -223,13 +206,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "grabbitTests" */;
 			buildPhases = (
-				A0CD8B1FCDFBDD9FA78FE6DC /* [CP] Check Pods Manifest.lock */,
-				0CD421FDE537599035D16FC8 /* [CP] Prepare Artifacts */,
+				B2417E901B93A67AD86135A9 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				84665E2AE2ACB5E5FC277098 /* [CP] Copy Pods Resources */,
-				46B6EA68F9CFE31AB0D4BCFD /* [CP] Embed Pods Frameworks */,
+				12FBEDB08C2EF26DB64447BA /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -245,16 +226,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "grabbit" */;
 			buildPhases = (
-				3B6B8111DE9905B5CC4DD176 /* [CP] Check Pods Manifest.lock */,
+				CAE27DCE7E800E811D0D1937 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
-				63DF218D752C9B3098776781 /* [CP] Prepare Artifacts */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				1FB84B170FE21A310F60D5D0 /* [CP] Copy Pods Resources */,
-				5588AA5E5F9C295257CE7828 /* [CP] Embed Pods Frameworks */,
-				5ADA0F49259573B00061641B /* Embed Frameworks */,
+				940D980BE731D460EFEAD2D6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -269,7 +247,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "grabbit-tvOS" */;
 			buildPhases = (
-				27647A82BB9B18C3B5AC2BE4 /* [CP] Check Pods Manifest.lock */,
+				DF29E179317F4CD4930BC9B9 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
 				2D02E4771E0B4A5D006451C7 /* Sources */,
 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
@@ -289,7 +267,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "grabbit-tvOSTests" */;
 			buildPhases = (
-				12F351AF77AEDA477F808F77 /* [CP] Check Pods Manifest.lock */,
+				4BD04859D0411E15C108B9F8 /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
 				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
 				2D02E48E1E0B4A5D006451C7 /* Resources */,
@@ -401,24 +379,71 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		0CD421FDE537599035D16FC8 /* [CP] Prepare Artifacts */ = {
+		12FBEDB08C2EF26DB64447BA /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-grabbit-grabbitTests/Pods-grabbit-grabbitTests-artifacts-${CONFIGURATION}-input-files.xcfilelist",
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-grabbit-grabbitTests/Pods-grabbit-grabbitTests-resources.sh",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Feather.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Foundation.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 			);
-			name = "[CP] Prepare Artifacts";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-grabbit-grabbitTests/Pods-grabbit-grabbitTests-artifacts-${CONFIGURATION}-output-files.xcfilelist",
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Feather.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Brands.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Regular.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Solid.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Fontisto.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Foundation.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Ionicons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCommunityIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Octicons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SimpleLineIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Zocial.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-grabbit-grabbitTests/Pods-grabbit-grabbitTests-artifacts.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-grabbit-grabbitTests/Pods-grabbit-grabbitTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		12F351AF77AEDA477F808F77 /* [CP] Check Pods Manifest.lock */ = {
+		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Bundle React Native Code And Images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+		};
+		4BD04859D0411E15C108B9F8 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -440,24 +465,57 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		1FB84B170FE21A310F60D5D0 /* [CP] Copy Pods Resources */ = {
+		940D980BE731D460EFEAD2D6 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-grabbit/Pods-grabbit-resources-${CONFIGURATION}-input-files.xcfilelist",
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-grabbit/Pods-grabbit-resources.sh",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Feather.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Foundation.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/AccessibilityResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-grabbit/Pods-grabbit-resources-${CONFIGURATION}-output-files.xcfilelist",
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Feather.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Brands.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Regular.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Solid.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Fontisto.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Foundation.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Ionicons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCommunityIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Octicons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SimpleLineIcons.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Zocial.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-grabbit/Pods-grabbit-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		27647A82BB9B18C3B5AC2BE4 /* [CP] Check Pods Manifest.lock */ = {
+		B2417E901B93A67AD86135A9 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -472,28 +530,14 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-grabbit-tvOS-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-grabbit-grabbitTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Bundle React Native Code And Images";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
-		};
-		3B6B8111DE9905B5CC4DD176 /* [CP] Check Pods Manifest.lock */ = {
+		CAE27DCE7E800E811D0D1937 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -515,75 +559,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		46B6EA68F9CFE31AB0D4BCFD /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-grabbit-grabbitTests/Pods-grabbit-grabbitTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-grabbit-grabbitTests/Pods-grabbit-grabbitTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-grabbit-grabbitTests/Pods-grabbit-grabbitTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5588AA5E5F9C295257CE7828 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-grabbit/Pods-grabbit-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-grabbit/Pods-grabbit-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-grabbit/Pods-grabbit-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		63DF218D752C9B3098776781 /* [CP] Prepare Artifacts */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-grabbit/Pods-grabbit-artifacts-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Prepare Artifacts";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-grabbit/Pods-grabbit-artifacts-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-grabbit/Pods-grabbit-artifacts.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		84665E2AE2ACB5E5FC277098 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-grabbit-grabbitTests/Pods-grabbit-grabbitTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-grabbit-grabbitTests/Pods-grabbit-grabbitTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-grabbit-grabbitTests/Pods-grabbit-grabbitTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A0CD8B1FCDFBDD9FA78FE6DC /* [CP] Check Pods Manifest.lock */ = {
+		DF29E179317F4CD4930BC9B9 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -598,7 +574,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-grabbit-grabbitTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-grabbit-tvOS-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -698,7 +674,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5458AC9C30EF259FD02DCE30 /* Pods-grabbit-grabbitTests.debug.xcconfig */;
+			baseConfigurationReference = 6BC13B2D524426588C102FE1 /* Pods-grabbit-grabbitTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -707,11 +683,7 @@
 				);
 				INFOPLIST_FILE = grabbitTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -725,17 +697,13 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8E916F4E7E7D8EE2FA5EA8F0 /* Pods-grabbit-grabbitTests.release.xcconfig */;
+			baseConfigurationReference = 973C753E6210B94D7036D76D /* Pods-grabbit-grabbitTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = grabbitTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -749,18 +717,15 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AC2A5058EFA614D7B8E12D68 /* Pods-grabbit.debug.xcconfig */;
+			baseConfigurationReference = 325AE1E12639E47EBB425E1A /* Pods-grabbit.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 993ULW2J6Y;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = grabbit/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -776,17 +741,14 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AFC1AC5A38ECA9BC3BC64974 /* Pods-grabbit.release.xcconfig */;
+			baseConfigurationReference = AAD5E56C933D26A17A86239D /* Pods-grabbit.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 993ULW2J6Y;
 				INFOPLIST_FILE = grabbit/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -801,7 +763,7 @@
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BC5DB51A6A2DECBAA213037E /* Pods-grabbit-tvOS.debug.xcconfig */;
+			baseConfigurationReference = CD0511DB6A407BD5435B6E0F /* Pods-grabbit-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -813,10 +775,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "grabbit-tvOS/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -832,7 +791,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 45414315F8864D4068D285E4 /* Pods-grabbit-tvOS.release.xcconfig */;
+			baseConfigurationReference = D4EAE3D74181BD178CB843E5 /* Pods-grabbit-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -844,10 +803,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "grabbit-tvOS/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -863,7 +819,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2B80F2FDA329988EE59B3DF8 /* Pods-grabbit-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = 8B3AD9E7010F0D058CBAA0BC /* Pods-grabbit-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -874,11 +830,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "grabbit-tvOSTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -894,7 +846,7 @@
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2FAD773B3B95764FBD1B78E0 /* Pods-grabbit-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = CA86C729D865D2B3CD18A325 /* Pods-grabbit-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -905,11 +857,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "grabbit-tvOSTests/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -971,10 +919,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					/usr/lib/swift,
-					"$(inherited)",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
@@ -1027,10 +972,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					/usr/lib/swift,
-					"$(inherited)",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
 					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",

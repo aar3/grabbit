@@ -31,7 +31,7 @@ export default class Router_ extends React.Component {
             key="entry"
             component={EntryView}
             title="Entry"
-            // initial
+            initial
             gesturesEnabled={false}
             drawerLockMode="locked-closed"
             hideNavBar={true}
@@ -71,7 +71,7 @@ export default class Router_ extends React.Component {
             navBar={MainTopNavigationBar}
             title=""
             hideNavBar={false}
-            initial
+            // initial
             key="listDeal"
             component={ListDealsView}
           />

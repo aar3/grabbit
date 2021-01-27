@@ -12,7 +12,6 @@ class DealListItem_ extends React.Component {
   }
 
   _renderWatchListIcon(item) {
-    console.log('>> ITEM ', item);
     if (item.is_on_watchlist) {
       return (
         <TouchableOpacity

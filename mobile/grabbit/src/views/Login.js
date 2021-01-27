@@ -10,7 +10,7 @@ import {
   TouchableWithoutFeedback,
   ImageBackground,
 } from 'react-native';
-import {Picker} from '@react-native-picker/picker';
+// import {Picker} from '@react-native-picker/picker';
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
 import {connect} from 'react-redux';
