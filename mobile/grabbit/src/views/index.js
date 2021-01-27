@@ -10,6 +10,7 @@ import SplashView from 'grabbit/src/views/Splash';
 import NotificationsView from 'grabbit/src/views/Notifications';
 import AccountTypeView from 'grabbit/src/views/AccountType';
 import WatchListView from 'grabbit/src/views/WatchList';
+import EditAccountView from 'grabbit/src/views/EditAccount';
 
 module.exports = {
   AccountView,
@@ -24,4 +25,5 @@ module.exports = {
   NotificationsView,
   WatchListView,
   AccountTypeView,
+  EditAccountView,
 };

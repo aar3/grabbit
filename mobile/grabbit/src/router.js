@@ -14,6 +14,7 @@ import {
   AccountTypeView,
   WatchListView,
   NotificationsView,
+  EditAccountView,
 } from 'grabbit/src/views';
 
 export default class Router_ extends React.Component {
@@ -101,6 +102,14 @@ export default class Router_ extends React.Component {
             hideNavBar={false}
             key="watchList"
             component={WatchListView}
+            navigationBarStyle={styles.NavbarContainer}
+            style={styles}
+          />
+          <Scene
+            title={'Edit Account'}
+            hideNavBar={false}
+            key="editAccount"
+            component={EditAccountView}
             navigationBarStyle={styles.NavbarContainer}
             style={styles}
           />

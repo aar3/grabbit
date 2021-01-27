@@ -163,6 +163,13 @@ const defaultState = {
         description: 'Change your Grabbit account Settings',
         routeKey: 'settings',
       },
+      {
+        id: 2,
+        title: 'Edit Account',
+        icon: 'user',
+        description: 'Edit your account information',
+        routeKey: 'editAccount',
+      },
     ],
   },
   ws: {

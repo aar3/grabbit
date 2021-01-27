@@ -13,6 +13,9 @@ export const Color = {
   TopNavBackground: '#f0f0f0',
 
   GreyBlue: '#587291',
+  OceanBlue: '#2F97C1',
+  DarkerTeal: '#1CCAD8',
+  Teal: '#15E6CD',
 };
 
 export const TabIconSize = 24;
