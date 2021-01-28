@@ -1,5 +1,4 @@
 import axios from 'axios';
-import ReduxActions from 'grabbit/src/Actions';
 import {DealType} from 'grabbit/src/Const';
 import Store from 'grabbit/src/Reducer';
 
@@ -70,7 +69,7 @@ export const to12HourTime = function (t) {
 export class Websocket_ {
   constructor() {
     this.uri = 'ws://localhost:8765';
-    this.store = Store();
+    this.store = Store;
     this.user = getStateForKey('state.session.user', this.store.getState());
     this.socket = new WebSocket(this.uri);
     this.connected = false;

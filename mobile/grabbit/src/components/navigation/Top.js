@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {connect} from 'react-redux';
 import {getStateForKey} from 'grabbit/src/Utils';
 
-class BTN extends React.Component {
+class BasicTopNavigationBar extends React.Component {
   render() {
     return (
       <View
@@ -63,7 +63,7 @@ class BTN extends React.Component {
   }
 }
 
-class MTN extends React.Component {
+class MainTopNavigationBar extends React.Component {
   _renderNewNotificationIcon() {
     if (!this.props.hasNewNotification) {
       return;
@@ -170,6 +170,6 @@ const mapStateToProps = function (state) {
 };
 
 module.exports = {
-  MainTopNavigationBar: connect(mapStateToProps, null)(MTN),
-  BasicTopNavigationBar: connect(mapStateToProps, null)(BTN),
+  MainTopNavigationBar: connect(mapStateToProps, null)(MainTopNavigationBar),
+  BasicTopNavigationBar: connect(mapStateToProps, null)(BasicTopNavigationBar),
 };

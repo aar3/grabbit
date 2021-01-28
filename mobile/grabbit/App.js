@@ -5,7 +5,7 @@ import Router from 'grabbit/src/Router';
 
 export default function () {
   return (
-    <Provider store={Store()}>
+    <Provider store={Store}>
       <Router />
     </Provider>
   );

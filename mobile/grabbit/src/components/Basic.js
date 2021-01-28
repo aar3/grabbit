@@ -32,26 +32,14 @@ export class TextInput extends React.Component {
         onChangeText={onChangeText}
         autoCompleteType={autoCompleteType}
         inputContainerStyle={{
-          // borderBottomColor: 'transparent',
-          // borderTopColor: 'transparent',
           borderColor: Color.BorderLightGrey,
           borderWidth: 1,
           borderRadius: 10,
-          // shadowColor: '#000',
-          // shadowOffset: {
-          //   width: 2,
-          //   height: 1,
-          // },
-          // shadowOpacity: 0.25,
-          // shadowRadius: 3.84,
-          // elevation: 10,
         }}
         containerStyle={
           containerStyle || {
             width: 300,
             paddingBottom: 5,
-            // borderWidth: 1,
-            // borderColor: 'red',
             borderRadius: 10,
             height: 60,
           }

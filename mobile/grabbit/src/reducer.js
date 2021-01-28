@@ -193,7 +193,7 @@ const reducer = function (state = defaultState, action) {
             ...state.notifications.list,
             items: {
               ...state.notifications.list.items,
-              ...payload,
+              [payload.id]: payload,
             },
           },
         },
@@ -1026,4 +1026,5 @@ const reducer = function (state = defaultState, action) {
   }
 };
 
-export default store = () => createStore(reducer, applyMiddleware(thunk));
+// export default store = () => createStore(reducer, applyMiddleware(thunk));
+export default Store = createStore(reducer, applyMiddleware(thunk));
