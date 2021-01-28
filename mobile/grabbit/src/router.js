@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import {Router, Scene, Stack} from 'react-native-router-flux';
 import {Color} from 'grabbit/src/Const';
-import {MainTopNavigationBar} from 'grabbit/src/components/navigation/Top';
+import {MainTopNavigationBar, BasicTopNavigationBar} from 'grabbit/src/components/navigation/Top';
 import {
   EntryView,
   LoginView,
@@ -31,7 +31,7 @@ export default class Router_ extends React.Component {
             key="entry"
             component={EntryView}
             title="Entry"
-            initial
+            // initial
             gesturesEnabled={false}
             drawerLockMode="locked-closed"
             hideNavBar={true}
@@ -61,41 +61,26 @@ export default class Router_ extends React.Component {
             navigationBarStyle={styles.NavbarContainer}
           />
           <Scene
+            navBar={BasicTopNavigationBar}
+            title="Account"
+            hideNavBar={false}
             key="account"
             component={AccountView}
-            title="Account"
-            navigationBarStyle={styles.NavbarContainer}
-            hideNavBar={false}
           />
           <Scene
             navBar={MainTopNavigationBar}
             title=""
             hideNavBar={false}
-            // initial
+            initial
             key="listDeal"
             component={ListDealsView}
           />
-          {/* <Scene
-            title={'Plaid Accounts'}
-            hideNavBar={false}
-            key="plaidAccounts"
-            navigationBarStyle={styles.NavbarContainer}
-            component={PlaidAccountsView}
-          /> */}
           <Scene
             title={'Notifications'}
             hideNavBar={false}
             key="notifications"
             navigationBarStyle={styles.NavbarContainer}
             component={NotificationsView}
-          />
-          <Scene
-            title={'Links'}
-            hideNavBar={false}
-            key="accountType"
-            component={AccountTypeView}
-            navigationBarStyle={styles.NavbarContainer}
-            style={styles}
           />
           <Scene
             title={'Watch List'}

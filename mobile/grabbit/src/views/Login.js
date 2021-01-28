@@ -47,8 +47,8 @@ class V extends React.Component {
       return (
         <View
           style={{
-            borderWidth: 1,
-            borderColor: 'blue',
+            // borderWidth: 1,
+            // borderColor: 'blue',
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%',
@@ -80,9 +80,8 @@ class V extends React.Component {
           }}>
           <View
             style={{
-              borderWidth: 1,
-              borderColor: 'red',
-              // paddingLeft: 10,
+              // borderWidth: 1,
+              // borderColor: 'red',
               alignItems: 'center',
               width: '100%',
               justifyContent: 'center',
@@ -91,11 +90,9 @@ class V extends React.Component {
             <View
               style={{
                 height: 45,
-                // position: 'absolute',
-                // top: 400,
                 width: 200,
-                borderColor: 'blue',
-                borderWidth: 1,
+                // borderColor: 'blue',
+                // borderWidth: 1,
               }}>
               <Image
                 source={require('./../../assets/imgs/Grabbit_Grey_Letters_222x1000.png')}
@@ -106,7 +103,7 @@ class V extends React.Component {
               style={{
                 fontWeight: '400',
                 fontSize: 20,
-                color: Color.GreyBlue,
+                color: Color.OceanBlue,
                 marginBottom: 20,
                 marginLeft: 20,
                 marginTop: 10,
@@ -116,16 +113,17 @@ class V extends React.Component {
             {this._renderErrorHeader()}
             <View
               style={{
-                borderColor: 'green',
+                // borderColor: 'green',
+                // borderWidth: 1,
                 justifyContent: 'center',
                 alignItems: 'center',
-                borderWidth: 1,
-                width: '100%',
+
+                width: '90%',
               }}>
               <View
                 style={{
-                  borderWidth: 1,
-                  borderColor: 'blue',
+                  // borderWidth: 1,
+                  // borderColor: 'blue',
                   flexDirection: 'row',
                   width: '100%',
                 }}>
@@ -157,8 +155,8 @@ class V extends React.Component {
               </View>
               <View
                 style={{
-                  borderWidth: 1,
-                  borderColor: 'red',
+                  // borderWidth: 1,
+                  // borderColor: 'red',
                   width: '100%',
                 }}>
                 <TextInput
@@ -176,14 +174,14 @@ class V extends React.Component {
                   onChangeText={(text) => {
                     this.props.updateLoginValue('secret', text);
                   }}
-                  placeholder="**********"
+                  placeholder=""
                 />
               </View>
             </View>
             <View
               style={{
-                borderWidth: 1,
-                borderColor: 'red',
+                // borderWidth: 1,
+                // borderColor: 'red',
                 justifyContent: 'center',
                 width: '100%',
                 alignItems: 'center',
@@ -205,12 +203,12 @@ class V extends React.Component {
                   });
                 }}
                 _buttonStyle={{
-                  backgroundColor: Color.GreyBlue,
-                  // borderWidth: 1,
-                  // borderColor: Color.GreyBlue,
+                  backgroundColor: Color.White,
+                  borderWidth: 1,
+                  borderColor: Color.Teal,
                 }}
                 titleStyle={{
-                  color: Color.White,
+                  color: Color.Teal,
                   fontWeight: 'bold',
                 }}
                 title="Login"
@@ -305,7 +303,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     fontSize: 12,
     marginBottom: 5,
-    color: Color.White,
+    color: Color.ReadableGreyText,
   },
 
   inputStyle: {

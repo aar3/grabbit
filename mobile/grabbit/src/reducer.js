@@ -152,21 +152,21 @@ const defaultState = {
       {
         id: 0,
         title: 'Watch List',
-        icon: 'bookmark',
+        icon: 'bookmark-outline',
         description: 'View deals on your Watch List',
         routeKey: 'watchList',
       },
       {
         id: 1,
         title: 'Settings',
-        icon: 'settings',
+        icon: 'settings-outline',
         description: 'Change your Grabbit account Settings',
         routeKey: 'settings',
       },
       {
         id: 2,
         title: 'Edit Account',
-        icon: 'user',
+        icon: 'finger-print',
         description: 'Edit your account information',
         routeKey: 'editAccount',
       },
@@ -185,7 +185,6 @@ const reducer = function (state = defaultState, action) {
     // WebSocket
     // ********************************************
     case ReduxActions.WebSocket.IncomingNotification: {
-      console.log('>>>> IM HERE');
       return {
         ...state,
         notifications: {

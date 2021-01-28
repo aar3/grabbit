@@ -2,7 +2,6 @@ import React from 'react';
 import {View, Modal, TouchableOpacity, ScrollView, Image, Linking, Text, FlatList, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {connect} from 'react-redux';
-import {Button} from 'react-native-elements';
 import ReduxActions from 'grabbit/src/Actions';
 import {Color, MerchantLogos, DealType} from 'grabbit/src/Const';
 import {GrabbitButton} from 'grabbit/src/components/Basic';

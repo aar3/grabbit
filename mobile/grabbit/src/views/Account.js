@@ -3,7 +3,7 @@ import {View, Text, FlatList, TouchableOpacity} from 'react-native';
 import ReduxActions from 'grabbit/src/Actions';
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {getStateForKey} from 'grabbit/src/Utils';
 import {Color} from 'grabbit/src/Const';
 
@@ -78,8 +78,4 @@ const mapStateToProps = function (state) {
   };
 };
 
-const mapDispatchToProps = function (dispatch) {
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(V);
+export default connect(mapStateToProps, null)(V);
