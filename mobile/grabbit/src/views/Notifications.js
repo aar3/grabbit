@@ -286,15 +286,19 @@ class V extends React.Component {
             );
           }}
         />
+
         <View
           style={{
             // borderWidth: 1,
             // borderColor: 'red',
             marginTop: 20,
-            height: 50,
-            width: 50,
+            height: 45,
+            width: 200,
           }}>
-          <Image source={{uri: PLACEHOLDER_IMG}} style={{height: 50, width: 50}} />
+          <Image
+            source={require('./../../assets/imgs/Grabbit_Grey_Letters_222x1000.png')}
+            style={{flex: 1, height: undefined, width: undefined}}
+          />
         </View>
       </View>
     );

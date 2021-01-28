@@ -45,14 +45,14 @@ class M extends React.Component {
           }}
           _buttonStyle={{
             backgroundColor: Color.White,
-            borderColor: Color.GreyBlue,
+            borderColor: Color.OceanBlue,
             borderWidth: 1,
           }}
           titleStyle={{
-            color: Color.GreyBlue,
+            color: Color.OceanBlue,
             fontWeight: 'bold',
           }}
-          title="Remove From Watch List"
+          title="Remove from Watch List"
         />
       );
     }
@@ -75,12 +75,12 @@ class M extends React.Component {
             });
           }}
           _buttonStyle={{
-            backgroundColor: Color.White,
-            borderColor: Color.GreyBlue,
-            borderWidth: 1,
+            backgroundColor: Color.OceanBlue,
+            // borderColor: Color.GreyBlue,
+            // borderWidth: 1,
           }}
           titleStyle={{
-            color: Color.GreyBlue,
+            color: Color.White,
             fontWeight: 'bold',
           }}
           title="Add to Watch List"
@@ -90,7 +90,6 @@ class M extends React.Component {
   }
 
   render() {
-    console.log('>>> ITEM ', this.props.deal);
     const merchantLogo = MerchantLogos[this.props.deal.merchant_name];
 
     return (
@@ -146,8 +145,8 @@ class M extends React.Component {
           </View>
           <View
             style={{
-              // borderWidth: 1,
-              // borderColor: 'red',
+              borderWidth: 1,
+              borderColor: 'red',
               padding: 10,
               justifyContent: 'center',
               alignItems: 'center',
@@ -181,8 +180,8 @@ class M extends React.Component {
             </Text>
             <View
               style={{
-                // borderWidth: 1,
-                // borderColor: 'blue',
+                borderWidth: 1,
+                borderColor: 'blue',
                 width: 200,
                 justifyContent: 'space-evenly',
                 flexDirection: 'row',
@@ -208,8 +207,8 @@ class M extends React.Component {
             </View>
             <View
               style={{
-                // borderWidth: 1,
-                // borderColor: 'red',
+                borderWidth: 1,
+                borderColor: 'red',
                 marginTop: 20,
                 width: '100%',
                 height: 150,
@@ -240,12 +239,13 @@ class M extends React.Component {
 
             <View
               style={{
-                // borderWidth: 1,
-                // borderColor: 'red',
+                borderWidth: 1,
+                borderColor: 'red',
                 width: '100%',
                 padding: 5,
-                height: 200,
+                maxHeight: 200,
                 marginTop: 20,
+                marginBottom: 20,
               }}>
               <ScrollView>
                 <Text
@@ -261,20 +261,19 @@ class M extends React.Component {
 
             <View
               style={{
-                // borderWidth: 1,
-                // borderColor: 'green',
-                marginTop: 20,
+                borderWidth: 1,
+                borderColor: 'green',
               }}>
               {this._renderWatchListButton()}
               <GrabbitButton
                 onPress={() => Linking.openURL(this.props.deal.url)}
                 _buttonStyle={{
                   backgroundColor: Color.White,
-                  borderColor: Color.GreyBlue,
+                  borderColor: Color.Teal,
                   borderWidth: 1,
                 }}
                 titleStyle={{
-                  color: Color.GreyBlue,
+                  color: Color.Teal,
                   fontWeight: 'bold',
                 }}
                 title="Visit"
