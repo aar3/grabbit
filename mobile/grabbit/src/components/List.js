@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {connect} from 'react-redux';
 import {httpStateUpdate, getStateForKey} from 'grabbit/src/Utils';
 import {Color} from 'grabbit/src/Const';
@@ -12,6 +12,10 @@ class DealListItem_ extends React.Component {
   }
 
   _renderWatchListIcon(item) {
+    // NOTE: if we're on the watchList route we don't need bookmark indicator
+    if (this.props.routeKey === 'watchList') {
+      return null;
+    }
     if (item.is_on_watchlist) {
       return (
         <TouchableOpacity
@@ -29,7 +33,7 @@ class DealListItem_ extends React.Component {
               stateKeyPrefix: 'PostToWatchList',
             });
           }}>
-          <Icon name="bookmark" size={20} color={Color.GreyBlue} />
+          <Icon name="bookmark" size={20} color={Color.OceanBlue} />
         </TouchableOpacity>
       );
     }
@@ -54,7 +58,7 @@ class DealListItem_ extends React.Component {
             stateKeyPrefix: 'DeleteFromWatchList',
           });
         }}>
-        <Icon name="bookmark" size={20} color={Color.BorderLightGrey} />
+        <Icon name="bookmark-outline" size={20} color={Color.BorderLightGrey} />
       </TouchableOpacity>
     );
   }

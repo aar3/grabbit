@@ -8,6 +8,7 @@ class UserSerializer(BaseModelSerializer):
         fields = [
             "id",
             "created_at",
+            "email",
             "updated_at",
             "deleted_at",
             "current_session_token",

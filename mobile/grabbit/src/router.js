@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import {Router, Scene, Stack} from 'react-native-router-flux';
 import {Color} from 'grabbit/src/Const';
-import {MainTopNavigationBar} from 'grabbit/src/components/navigation/Top';
+import {MainTopNavigationBar, BasicTopNavigationBar} from 'grabbit/src/components/navigation/Top';
 import {
   EntryView,
   LoginView,
@@ -31,7 +31,7 @@ export default class Router_ extends React.Component {
             key="entry"
             component={EntryView}
             title="Entry"
-            initial
+            // initial
             gesturesEnabled={false}
             drawerLockMode="locked-closed"
             hideNavBar={true}
@@ -54,64 +54,47 @@ export default class Router_ extends React.Component {
             hideNavBar={true}
           />
           <Scene
-            key="settings"
-            component={SettingsView}
+            navBar={BasicTopNavigationBar}
             title="Settings"
             hideNavBar={false}
-            navigationBarStyle={styles.NavbarContainer}
+            key="settings"
+            component={SettingsView}
           />
           <Scene
+            navBar={BasicTopNavigationBar}
+            title="Account"
+            hideNavBar={false}
             key="account"
             component={AccountView}
-            title="Account"
-            navigationBarStyle={styles.NavbarContainer}
-            hideNavBar={false}
           />
           <Scene
             navBar={MainTopNavigationBar}
             title=""
             hideNavBar={false}
-            // initial
+            initial
             key="listDeal"
             component={ListDealsView}
           />
-          {/* <Scene
-            title={'Plaid Accounts'}
-            hideNavBar={false}
-            key="plaidAccounts"
-            navigationBarStyle={styles.NavbarContainer}
-            component={PlaidAccountsView}
-          /> */}
           <Scene
-            title={'Notifications'}
+            navBar={BasicTopNavigationBar}
+            title="Notifications"
             hideNavBar={false}
             key="notifications"
-            navigationBarStyle={styles.NavbarContainer}
             component={NotificationsView}
           />
           <Scene
-            title={'Links'}
-            hideNavBar={false}
-            key="accountType"
-            component={AccountTypeView}
-            navigationBarStyle={styles.NavbarContainer}
-            style={styles}
-          />
-          <Scene
-            title={'Watch List'}
+            navBar={BasicTopNavigationBar}
+            title="Watch List"
             hideNavBar={false}
             key="watchList"
             component={WatchListView}
-            navigationBarStyle={styles.NavbarContainer}
-            style={styles}
           />
           <Scene
-            title={'Edit Account'}
+            navBar={BasicTopNavigationBar}
+            title="Edit Account"
             hideNavBar={false}
             key="editAccount"
             component={EditAccountView}
-            navigationBarStyle={styles.NavbarContainer}
-            style={styles}
           />
         </Stack>
       </Router>

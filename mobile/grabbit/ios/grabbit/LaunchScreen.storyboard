@@ -16,14 +16,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="405" height="800"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Gradient_Purple_Pink_Background_583x1258" translatesAutoresizingMaskIntoConstraints="NO" id="pBd-KO-jr6">
-                                <rect key="frame" x="-25" y="-217" width="583" height="1031"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <rect key="contentStretch" x="1" y="0.0" width="1" height="1"/>
-                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Gradient_Blue_Green_Background_583x1258" translatesAutoresizingMaskIntoConstraints="NO" id="CdG-dz-UMF">
+                                <rect key="frame" x="0.0" y="-21" width="405" height="821"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Grabbit_White_Letters_222x1000" translatesAutoresizingMaskIntoConstraints="NO" id="af2-qu-h2Q">
                                 <rect key="frame" x="82" y="351" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Grabbit_Rabbit_White_450x603" translatesAutoresizingMaskIntoConstraints="NO" id="kud-EV-u8h">
+                                <rect key="frame" x="91" y="465" width="222" height="109"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
@@ -34,11 +36,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-185.59999999999999" y="371.51424287856076"/>
+            <point key="canvasLocation" x="-186.40000000000001" y="371.51424287856076"/>
         </scene>
     </scenes>
     <resources>
+        <image name="Grabbit_Rabbit_White_450x603" width="450" height="603"/>
         <image name="Grabbit_White_Letters_222x1000" width="1000" height="222"/>
-        <image name="Gradient_Purple_Pink_Background_583x1258" width="583" height="1258"/>
+        <image name="Gradient_Blue_Green_Background_583x1258" width="583" height="1258"/>
     </resources>
 </document>

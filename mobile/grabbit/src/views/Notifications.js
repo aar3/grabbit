@@ -4,9 +4,8 @@ import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import {Button} from 'react-native-elements';
 import {Actions} from 'react-native-router-flux';
-import ReduxActions from 'grabbit/src/Actions';
-import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
-import {Color, PLACEHOLDER_IMG} from 'grabbit/src/Const';
+import {getStateForKey} from 'grabbit/src/Utils';
+import {Color} from 'grabbit/src/Const';
 import {ErrorView} from 'grabbit/src/components/Basic';
 import {httpStateUpdate} from 'grabbit/src/Utils';
 
@@ -88,7 +87,7 @@ class V extends React.Component {
           // borderWidth: 1,
           width: 25,
           height: 25,
-          marginLeft: 20,
+          marginLeft: 40,
         }}>
         <Icon name={'chevron-right'} size={15} color={Color.ReadableGreyText} />
       </View>
@@ -205,7 +204,7 @@ class V extends React.Component {
             backgroundColor: Color.TopNavBackground,
             // borderWidth: 1,
             // borderColor: 'red',
-            maxHeight: 70 * this.props.notifications.length,
+            maxHeight: '85%',
           }}
           refreshing={this.props.getNotificationsPending}
           onRefresh={() => this._onRefresh()}
@@ -241,7 +240,7 @@ class V extends React.Component {
                       borderWidth: 1,
                       borderColor: Color.BorderLightGrey,
                     }}>
-                    <Icon name={item.icon} color={Color.ReadableGreyText} size={20} />
+                    <Icon name={item.icon} color={Color.OceanBlue} size={20} />
                   </View>
                   <View
                     style={{
@@ -276,7 +275,7 @@ class V extends React.Component {
                         alignItems: 'center',
                         flexDirection: 'row',
                       }}>
-                      <Icon name={'check'} size={15} color={Color.ReadableGreyText} />
+                      <Icon name={'check'} size={15} color={Color.Teal} />
                       {this._renderSeenTag(item)}
                     </View>
                   </View>
@@ -286,15 +285,19 @@ class V extends React.Component {
             );
           }}
         />
+
         <View
           style={{
             // borderWidth: 1,
             // borderColor: 'red',
             marginTop: 20,
-            height: 50,
-            width: 50,
+            height: 45,
+            width: 200,
           }}>
-          <Image source={{uri: PLACEHOLDER_IMG}} style={{height: 50, width: 50}} />
+          <Image
+            source={require('./../../assets/imgs/Grabbit_Grey_Letters_222x1000.png')}
+            style={{flex: 1, height: undefined, width: undefined}}
+          />
         </View>
       </View>
     );

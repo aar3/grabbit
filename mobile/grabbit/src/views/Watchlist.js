@@ -69,7 +69,7 @@ class V extends React.Component {
                     payload: item,
                   })
                 }>
-                <DealListItem item={item.deal} />
+                <DealListItem item={item.deal} routeKey="watchList" />
               </TouchableOpacity>
             );
           }}

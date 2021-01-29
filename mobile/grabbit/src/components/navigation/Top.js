@@ -1,13 +1,67 @@
 import React from 'react';
-import {View, Image, Text, TouchableOpacity, ImageBackground} from 'react-native';
+import {View, Text, TouchableOpacity, ImageBackground} from 'react-native';
 import {Color} from 'grabbit/src/Const';
 import {Actions} from 'react-native-router-flux';
 // IMPORTANT: https://stackoverflow.com/a/55040425/4701228
 import Icon from 'react-native-vector-icons/Ionicons';
-// import PlaidLink from 'react-native-plaid-link-sdk';
 import {connect} from 'react-redux';
-import ReduxActions from 'grabbit/src/Actions';
 import {getStateForKey} from 'grabbit/src/Utils';
+
+class BasicTopNavigationBar extends React.Component {
+  render() {
+    return (
+      <View
+        style={{
+          // borderWidth: 1,
+          // borderColor: 'orange',
+          flex: 1,
+          height: 85,
+          backgroundColor: Color.TopNavBackground,
+          borderBottomWidth: 1,
+          borderBottomColor: Color.BorderLightGrey,
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+        }}>
+        <View
+          style={{
+            // borderWidth: 1,
+            // borderColor: 'red',
+            width: 40,
+            height: 40,
+            position: 'absolute',
+            left: 20,
+            top: 40,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <TouchableOpacity onPress={() => Actions.pop()}>
+            <Icon name="chevron-back" size={25} color={Color.Black} />
+          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            // borderWidth: 1,
+            // borderColor: 'blue',
+            marginTop: 40,
+            height: 40,
+            width: 100,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              fontSize: 16,
+              color: Color.Black,
+            }}>
+            {this.props.title}
+          </Text>
+        </View>
+      </View>
+    );
+  }
+}
 
 class MainTopNavigationBar extends React.Component {
   _renderNewNotificationIcon() {
@@ -117,4 +171,5 @@ const mapStateToProps = function (state) {
 
 module.exports = {
   MainTopNavigationBar: connect(mapStateToProps, null)(MainTopNavigationBar),
+  BasicTopNavigationBar: connect(mapStateToProps, null)(BasicTopNavigationBar),
 };

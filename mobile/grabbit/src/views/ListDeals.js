@@ -12,6 +12,9 @@ import DealFocusModal from 'grabbit/src/components/modals/DealFocus';
 class V extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      scrollOffset: null,
+    };
   }
 
   componentDidMount() {
@@ -118,26 +121,6 @@ class V extends React.Component {
     );
   }
 
-  _getFoobarItem() {
-    const n = this.props.deals.length;
-    if (n <= 10) {
-      return 0;
-    }
-
-    let x;
-
-    const rem = n % 10;
-    if (rem === 0) {
-      x = n - 11;
-    } else {
-      x = rem;
-    }
-
-    console.log(x, this.props.deals[x]);
-
-    return {index: x, item: this.props.deals[x]};
-  }
-
   _renderVerticalFlatList() {
     if (this.props.getDealsPending) {
       return (
@@ -204,18 +187,12 @@ class V extends React.Component {
           ref={(ref) => {
             this.verticalFlatList = ref;
           }}
-          // FIX ME: need to get this working
-          // onContentSizeChange={() => {
-          //   const {index = 0, item} = this._getFoobarItem();
-          //   console.log('>>> INDEX ', index);
-          //   this.verticalFlatList.scrollToIndex({
-          //     // viewOffset: 10,
-          //     // viewPosition: 0.5,
-          //     index,
-          //     animated: true,
-          //   });
-          // }}
-          onEndReachedThreshold={1}
+          onScroll={(event) => {
+            const scrollOffset = event.nativeEvent.contentOffset.y;
+            console.log('>>> SCROLL INDEX ', scrollOffset);
+            this.setState({scrollOffset});
+          }}
+          onEndReachedThreshold={0.7}
           onEndReached={async () => {
             const page = this.props.dealsPage + 1;
 

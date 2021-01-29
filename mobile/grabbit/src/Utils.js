@@ -1,5 +1,4 @@
 import axios from 'axios';
-import ReduxActions from 'grabbit/src/Actions';
 import {DealType} from 'grabbit/src/Const';
 import Store from 'grabbit/src/Reducer';
 
@@ -70,9 +69,10 @@ export const to12HourTime = function (t) {
 export class Websocket_ {
   constructor() {
     this.uri = 'ws://localhost:8765';
-    this.store = Store();
+    this.store = Store;
     this.user = getStateForKey('state.session.user', this.store.getState());
     this.socket = new WebSocket(this.uri);
+    this.dispatchToState = this.dispatchToState.bind(this);
     this.connected = false;
 
     console.log(`Initializing Websocket with user: ${this.user.id}`);
@@ -107,10 +107,15 @@ export class Websocket_ {
   }
 
   dispatchToState({type, payload}) {
-    this.store.dispatch({
-      type,
-      payload,
-    });
+    // IMPORTANT: To avoid race conditions where a resource is returned from the API at the same
+    // time that a websocket update comes in, we delay the websocket state update for 2 seconds so
+    // the API state update can happen first
+    setTimeout(() => {
+      this.store.dispatch({
+        type,
+        payload,
+      });
+    }, 2000);
   }
 
   send(data = {}) {
