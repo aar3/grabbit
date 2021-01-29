@@ -72,6 +72,7 @@ export class Websocket_ {
     this.store = Store;
     this.user = getStateForKey('state.session.user', this.store.getState());
     this.socket = new WebSocket(this.uri);
+    this.dispatchToState = this.dispatchToState.bind(this);
     this.connected = false;
 
     console.log(`Initializing Websocket with user: ${this.user.id}`);
@@ -106,10 +107,12 @@ export class Websocket_ {
   }
 
   dispatchToState({type, payload}) {
-    this.store.dispatch({
-      type,
-      payload,
-    });
+    setTimeout(() => {
+      this.store.dispatch({
+        type,
+        payload,
+      });
+    }, 2000);
   }
 
   send(data = {}) {

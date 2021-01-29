@@ -180,11 +180,14 @@ const defaultState = {
 
 const reducer = function (state = defaultState, action) {
   const {payload, type, key} = action;
+  console.log('>>> SAW AN ACTION ', action);
   switch (type) {
     // ********************************************
     // WebSocket
     // ********************************************
+
     case ReduxActions.WebSocket.IncomingNotification: {
+      console.log('>>> ADDING ', payload.id);
       return {
         ...state,
         notifications: {

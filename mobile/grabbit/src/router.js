@@ -54,12 +54,11 @@ export default class Router_ extends React.Component {
             hideNavBar={true}
           />
           <Scene
-            title={'Settings'}
+            navBar={BasicTopNavigationBar}
+            title="Settings"
             hideNavBar={false}
             key="settings"
             component={SettingsView}
-            navigationBarStyle={styles.NavbarContainer}
-            style={styles}
           />
           <Scene
             navBar={BasicTopNavigationBar}
@@ -77,28 +76,25 @@ export default class Router_ extends React.Component {
             component={ListDealsView}
           />
           <Scene
-            title={'Notifications'}
+            navBar={BasicTopNavigationBar}
+            title="Notifications"
             hideNavBar={false}
             key="notifications"
             component={NotificationsView}
-            navigationBarStyle={styles.NavbarContainer}
-            style={styles}
           />
           <Scene
-            title={'Watch List'}
+            navBar={BasicTopNavigationBar}
+            title="Watch List"
             hideNavBar={false}
             key="watchList"
             component={WatchListView}
-            navigationBarStyle={styles.NavbarContainer}
-            style={styles}
           />
           <Scene
-            title={'Edit Account'}
+            navBar={BasicTopNavigationBar}
+            title="Edit Account"
             hideNavBar={false}
             key="editAccount"
             component={EditAccountView}
-            navigationBarStyle={styles.NavbarContainer}
-            style={styles}
           />
         </Stack>
       </Router>

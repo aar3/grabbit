@@ -88,7 +88,7 @@ class V extends React.Component {
           // borderWidth: 1,
           width: 25,
           height: 25,
-          marginLeft: 20,
+          marginLeft: 40,
         }}>
         <Icon name={'chevron-right'} size={15} color={Color.ReadableGreyText} />
       </View>
@@ -205,7 +205,7 @@ class V extends React.Component {
             backgroundColor: Color.TopNavBackground,
             // borderWidth: 1,
             // borderColor: 'red',
-            maxHeight: 70 * this.props.notifications.length,
+            maxHeight: '85%',
           }}
           refreshing={this.props.getNotificationsPending}
           onRefresh={() => this._onRefresh()}
@@ -241,7 +241,7 @@ class V extends React.Component {
                       borderWidth: 1,
                       borderColor: Color.BorderLightGrey,
                     }}>
-                    <Icon name={item.icon} color={Color.ReadableGreyText} size={20} />
+                    <Icon name={item.icon} color={Color.OceanBlue} size={20} />
                   </View>
                   <View
                     style={{
@@ -276,7 +276,7 @@ class V extends React.Component {
                         alignItems: 'center',
                         flexDirection: 'row',
                       }}>
-                      <Icon name={'check'} size={15} color={Color.ReadableGreyText} />
+                      <Icon name={'check'} size={15} color={Color.Teal} />
                       {this._renderSeenTag(item)}
                     </View>
                   </View>
