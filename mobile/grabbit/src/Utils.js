@@ -107,6 +107,9 @@ export class Websocket_ {
   }
 
   dispatchToState({type, payload}) {
+    // IMPORTANT: To avoid race conditions where a resource is returned from the API at the same
+    // time that a websocket update comes in, we delay the websocket state update for 2 seconds so
+    // the API state update can happen first
     setTimeout(() => {
       this.store.dispatch({
         type,

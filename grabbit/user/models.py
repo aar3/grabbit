@@ -27,8 +27,8 @@ class User(BaseModel):
     is_authenticated = False
     objects = UserManager()
 
-    email = models.CharField(max_length=255)
-    phone = models.CharField(max_length=255, null=True, unique=True)
+    email = models.CharField(max_length=255, null=True)
+    phone = models.CharField(max_length=255, unique=True)
     secret = models.CharField(max_length=255)
     salt = models.IntegerField()
     current_session_token = models.CharField(max_length=255)

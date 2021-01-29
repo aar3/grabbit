@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, TextInput} from 'react-native';
 import {connect} from 'react-redux';
-import {getStateForKey} from 'grabbit/src/Utils';
+import {getStateForKey, httpStateUpdate} from 'grabbit/src/Utils';
 import {GrabbitButton} from 'grabbit/src/components/Basic';
 import {Color} from 'grabbit/src/Const';
 
@@ -9,6 +9,21 @@ class V extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  updateUserInfo() {
+    return httpStateUpdate({
+      dispatch: this.props.dispatch,
+      options: {
+        endpoint: `/users/accounts/${this.props.user.id}/`,
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'X-Session-Token': this.props.user.current_session_token,
+        },
+      },
+      stateKeyPrefix: 'GetDeals',
+    });
   }
 
   render() {
@@ -54,8 +69,34 @@ class V extends React.Component {
               }}
             />
           </View>
+          <View
+            style={{
+              height: 60,
+              width: '100%',
+              //   borderWidth: 1,
+              //   borderColor: 'blue',
+              padding: 5,
+              marginBottom: 10,
+              // borderBottomWidth: 1,
+              // borderBottomColor: Color.BorderLightGrey,
+            }}>
+            <Text
+              style={{
+                fontWeight: 'bold',
+                marginBottom: 5,
+              }}>
+              Email
+            </Text>
+            <TextInput
+              value={this.props.user.email}
+              style={{
+                width: '100%',
+                color: Color.ReadableGreyText,
+              }}
+            />
+          </View>
           <GrabbitButton
-            onPress={() => Actions.login()}
+            onPress={() => this.updateUserInfo()}
             _buttonStyle={{
               backgroundColor: Color.White,
               borderWidth: 1,

@@ -4,9 +4,8 @@ import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import {Button} from 'react-native-elements';
 import {Actions} from 'react-native-router-flux';
-import ReduxActions from 'grabbit/src/Actions';
-import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
-import {Color, PLACEHOLDER_IMG} from 'grabbit/src/Const';
+import {getStateForKey} from 'grabbit/src/Utils';
+import {Color} from 'grabbit/src/Const';
 import {ErrorView} from 'grabbit/src/components/Basic';
 import {httpStateUpdate} from 'grabbit/src/Utils';
 
