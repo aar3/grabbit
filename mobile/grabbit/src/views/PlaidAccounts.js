@@ -4,11 +4,11 @@
 // import {connect} from 'react-redux';
 // import Icon from 'react-native-vector-icons/Feather';
 // import PlaidLink from 'react-native-plaid-link-sdk';
-// import ReduxActions from 'grabbit/src/Actions';
-// import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
+// import ReduxActions from 'grabbit/src/lib/Actions';
+// import {getStateForKey, httpRequest} from 'grabbit/src/lib/Utils';
 // import {ToggleStyle} from 'grabbit/src/Styles';
 // import {Error} from 'grabbit/src/components/Error';
-// import {Color, BankLogos} from 'grabbit/src/Const';
+// import {Color, BankLogos} from 'grabbit/src/lib/Const';
 
 // class V extends React.Component {
 //   constructor(props) {

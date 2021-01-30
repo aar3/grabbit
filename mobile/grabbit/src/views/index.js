@@ -6,7 +6,7 @@ import LoginView from 'grabbit/src/views/Login';
 import RewardFocusView from 'grabbit/src/views/RewardFocus';
 import SettingsView from 'grabbit/src/views/Settings';
 import SignupView from 'grabbit/src/views/Signup';
-import SplashView from 'grabbit/src/views/Splash';
+// import SplashView from 'grabbit/src/views/Splash';
 import NotificationsView from 'grabbit/src/views/Notifications';
 import AccountTypeView from 'grabbit/src/views/AccountType';
 import WatchListView from 'grabbit/src/views/WatchList';
@@ -21,7 +21,7 @@ module.exports = {
   RewardFocusView,
   SettingsView,
   SignupView,
-  SplashView,
+  // SplashView,
   NotificationsView,
   WatchListView,
   AccountTypeView,

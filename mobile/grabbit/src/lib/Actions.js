@@ -76,6 +76,7 @@ export default {
     GetNotificationsPending: 'GetNotificationsPending',
     GetNotificationsError: 'GetNotificationsError',
     GetNotificationsSuccess: 'GetNotificationsSuccess',
+    RegisterIOSNotificationService: 'RegisterIOSNotificationService',
   },
   Settings: {
     GetUserSettingsPending: 'GetUserSettingsPending',

@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import {Color, TabIconSize} from 'grabbit/src/Const';
+import {Color, TabIconSize} from 'grabbit/src/lib/Const';
 
 const tabStyle = {
   borderWidth: 1,

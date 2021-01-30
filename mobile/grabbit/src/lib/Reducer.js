@@ -1,6 +1,6 @@
 import {createStore, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
-import ReduxActions from 'grabbit/src/Actions';
+import ReduxActions from 'grabbit/src/lib/Actions';
 
 const arrayToObject = function (arr, keyedBy) {
   const obj = {};
@@ -113,6 +113,10 @@ const defaultState = {
     ],
   },
   notifications: {
+    ios: {
+      token: null,
+      fcmRegistered: false,
+    },
     list: {
       pending: false,
       error: null,
@@ -240,6 +244,18 @@ const reducer = function (state = defaultState, action) {
     // ********************************************
     // Notifications
     // ********************************************
+    case ReduxActions.Notifications.RegisterIOSNotificationService: {
+      return {
+        ...state,
+        notifications: {
+          ...state.notifications,
+          ios: {
+            fcmRegistered: true,
+            token: payload,
+          },
+        },
+      };
+    }
     case ReduxActions.Notifications.GetNotificationsSuccess: {
       const items = arrayToObject(payload, 'id');
       return {

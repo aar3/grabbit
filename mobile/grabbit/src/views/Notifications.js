@@ -4,10 +4,10 @@ import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import {Button} from 'react-native-elements';
 import {Actions} from 'react-native-router-flux';
-import {getStateForKey} from 'grabbit/src/Utils';
-import {Color} from 'grabbit/src/Const';
+import {getStateForKey} from 'grabbit/src/lib/Utils';
+import {Color} from 'grabbit/src/lib/Const';
 import {ErrorView} from 'grabbit/src/components/Basic';
-import {httpStateUpdate} from 'grabbit/src/Utils';
+import {httpStateUpdate} from 'grabbit/src/lib/Utils';
 
 class V extends React.Component {
   constructor(props) {

@@ -1,8 +1,8 @@
 import React from 'react';
 import {View, Text, Image, ImageBackground} from 'react-native';
-import {getStateForKey} from 'grabbit/src/Utils';
+import {getStateForKey} from 'grabbit/src/lib/Utils';
 import {connect} from 'react-redux';
-import {Color, FakeQRCodeURL} from 'grabbit/src/Const';
+import {Color, FakeQRCodeURL} from 'grabbit/src/lib/Const';
 import {GrabbitButton} from 'grabbit/src/components/Basic';
 
 class V extends React.Component {

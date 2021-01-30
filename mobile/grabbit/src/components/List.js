@@ -2,8 +2,8 @@ import React from 'react';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {connect} from 'react-redux';
-import {httpStateUpdate, getStateForKey} from 'grabbit/src/Utils';
-import {Color} from 'grabbit/src/Const';
+import {httpStateUpdate, getStateForKey} from 'grabbit/src/lib/Utils';
+import {Color} from 'grabbit/src/lib/Const';
 
 class DealListItem_ extends React.Component {
   constructor(props) {

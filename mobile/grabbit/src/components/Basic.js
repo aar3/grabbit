@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, View, Text, ImageBackground, TouchableOpacity} from 'react-native';
 import {Input, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
-import {Color} from 'grabbit/src/Const';
+import {Color} from 'grabbit/src/lib/Const';
 
 export class TextInput extends React.Component {
   render() {
@@ -147,7 +147,7 @@ export class ErrorView extends React.Component {
           {msg}
         </Text>
         <TouchableOpacity onPress={this.props.onTryAgain}>
-          <Icon style={{marginTop: 20}} name={'rotate-ccw'} size={24} color={Color.GreyBlue} />
+          <Icon style={{marginTop: 20}} name={'rotate-ccw'} size={24} color={Color.Teal} />
         </TouchableOpacity>
         <Text style={{color: Color.GreyBlue, marginTop: 20}}>Try Again</Text>
       </View>

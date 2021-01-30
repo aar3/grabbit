@@ -14,10 +14,10 @@ import {
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
 import {connect} from 'react-redux';
-import ReduxActions from 'grabbit/src/Actions';
+import ReduxActions from 'grabbit/src/lib/Actions';
 import {TextInput, GrabbitButton, LoadingView, ErrorView} from 'grabbit/src/components/Basic';
-import {Color} from 'grabbit/src/Const';
-import {httpRequest, getStateForKey} from 'grabbit/src/Utils';
+import {Color} from 'grabbit/src/lib/Const';
+import {httpRequest, getStateForKey} from 'grabbit/src/lib/Utils';
 
 class V extends React.Component {
   constructor(props) {

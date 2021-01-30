@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
 import {Router, Scene, Stack} from 'react-native-router-flux';
-import {Color} from 'grabbit/src/Const';
+import {Color} from 'grabbit/src/lib/Const';
 import {MainTopNavigationBar, BasicTopNavigationBar} from 'grabbit/src/components/navigation/Top';
 import {
   EntryView,
