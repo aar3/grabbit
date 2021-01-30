@@ -1,9 +1,9 @@
 import React from 'react';
 import {View, Text, TextInput} from 'react-native';
 import {connect} from 'react-redux';
-import {getStateForKey, httpStateUpdate} from 'grabbit/src/Utils';
+import {getStateForKey, httpStateUpdate} from 'grabbit/src/lib/Utils';
 import {GrabbitButton} from 'grabbit/src/components/Basic';
-import {Color} from 'grabbit/src/Const';
+import {Color} from 'grabbit/src/lib/Const';
 
 class V extends React.Component {
   constructor(props) {

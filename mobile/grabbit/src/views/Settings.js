@@ -2,12 +2,12 @@ import React from 'react';
 import {View, Text, TouchableOpacity, Linking, ImageBackground} from 'react-native';
 import ToggleSwitch from 'toggle-switch-react-native';
 import {connect} from 'react-redux';
-import ReduxActions from 'grabbit/src/Actions';
+import ReduxActions from 'grabbit/src/lib/Actions';
 import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Feather';
-import {getStateForKey, httpRequest} from 'grabbit/src/Utils';
+import {getStateForKey, httpRequest} from 'grabbit/src/lib/Utils';
 import {ToggleStyle} from 'grabbit/src/Styles';
-import {Color} from 'grabbit/src/Const';
+import {Color} from 'grabbit/src/lib/Const';
 
 const textSection = {
   fontSize: 12,

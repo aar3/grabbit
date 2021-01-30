@@ -1,11 +1,11 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, ImageBackground} from 'react-native';
-import {Color} from 'grabbit/src/Const';
+import {Color} from 'grabbit/src/lib/Const';
 import {Actions} from 'react-native-router-flux';
 // IMPORTANT: https://stackoverflow.com/a/55040425/4701228
 import Icon from 'react-native-vector-icons/Ionicons';
 import {connect} from 'react-redux';
-import {getStateForKey} from 'grabbit/src/Utils';
+import {getStateForKey} from 'grabbit/src/lib/Utils';
 
 class BasicTopNavigationBar extends React.Component {
   render() {

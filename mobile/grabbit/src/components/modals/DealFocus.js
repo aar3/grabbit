@@ -2,10 +2,10 @@ import React from 'react';
 import {View, Modal, TouchableOpacity, ScrollView, Image, Linking, Text, FlatList, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import {connect} from 'react-redux';
-import ReduxActions from 'grabbit/src/Actions';
-import {Color, MerchantLogos, DealType} from 'grabbit/src/Const';
+import ReduxActions from 'grabbit/src/lib/Actions';
+import {Color, MerchantLogos, DealType} from 'grabbit/src/lib/Const';
 import {GrabbitButton} from 'grabbit/src/components/Basic';
-import {getStateForKey, getDealType, httpStateUpdate} from 'grabbit/src/Utils';
+import {getStateForKey, getDealType, httpStateUpdate} from 'grabbit/src/lib/Utils';
 
 class M extends React.Component {
   constructor(props) {

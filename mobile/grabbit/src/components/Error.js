@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
-import {Color} from 'grabbit/src/Const';
+import {Color} from 'grabbit/src/lib/Const';
 import Icon from 'react-native-vector-icons/Feather';
 
 export class Error extends React.Component {

@@ -1,11 +1,11 @@
 import React from 'react';
 import {View, Text, FlatList, TouchableOpacity, ImageBackground} from 'react-native';
-import ReduxActions from 'grabbit/src/Actions';
+import ReduxActions from 'grabbit/src/lib/Actions';
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
-import {getStateForKey} from 'grabbit/src/Utils';
-import {Color} from 'grabbit/src/Const';
+import {getStateForKey} from 'grabbit/src/lib/Utils';
+import {Color} from 'grabbit/src/lib/Const';
 
 class V extends React.Component {
   constructor(props) {

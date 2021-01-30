@@ -2,11 +2,11 @@ import React from 'react';
 import {View, Text, FlatList, Image, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
-import ReduxActions from 'grabbit/src/Actions';
+import ReduxActions from 'grabbit/src/lib/Actions';
 import {DealListItem} from 'grabbit/src/components/List';
-import {getStateForKey, httpStateUpdate} from 'grabbit/src/Utils';
+import {getStateForKey, httpStateUpdate} from 'grabbit/src/lib/Utils';
 import {LoadingView, ErrorView} from 'grabbit/src/components/Basic';
-import {Color, Font, PLACEHOLDER_IMG} from 'grabbit/src/Const';
+import {Color, Font, PLACEHOLDER_IMG} from 'grabbit/src/lib/Const';
 import DealFocusModal from 'grabbit/src/components/modals/DealFocus';
 
 class V extends React.Component {
@@ -152,11 +152,18 @@ class V extends React.Component {
             borderColor: 'blue',
             justifyContent: 'center',
             alignItems: 'center',
+<<<<<<< HEAD
             width: '100%',
             // height: 400,
           }}>
           <ErrorView
             overrideMsg={'There was an issue getting other deals'}
+=======
+            marginTop: 200,
+          }}>
+          <ErrorView
+            overrideMsg={'There seems to be an issue with getting your deals'}
+>>>>>>> add ios notification frameworks
             error={this.props.getDealsError}
             onTryAgain={() => this.getDeals()}
           />

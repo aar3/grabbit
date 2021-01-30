@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Image} from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import {Color} from 'grabbit/src/Const';
+import {Color} from 'grabbit/src/lib/Const';
 import {GrabbitButton} from 'grabbit/src/components/Basic';
 
 export default class V extends React.Component {

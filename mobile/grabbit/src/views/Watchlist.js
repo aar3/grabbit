@@ -1,10 +1,10 @@
 import React from 'react';
 import {View, Text, FlatList, Image, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
-import ReduxActions from 'grabbit/src/Actions';
+import ReduxActions from 'grabbit/src/lib/Actions';
 import {DealListItem} from 'grabbit/src/components/List';
-import {getStateForKey, httpStateUpdate} from 'grabbit/src/Utils';
-import {Color} from 'grabbit/src/Const';
+import {getStateForKey, httpStateUpdate} from 'grabbit/src/lib/Utils';
+import {Color} from 'grabbit/src/lib/Const';
 import DealFocusModal from 'grabbit/src/components/modals/DealFocus';
 
 class V extends React.Component {
