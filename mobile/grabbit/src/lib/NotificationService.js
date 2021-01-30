@@ -67,7 +67,7 @@ export default class NotifService {
     PushNotification.popInitialNotification((notification) => console.log('InitialNotication:', notification));
   }
 
-  localNotif(soundName) {
+  localNotification(soundName) {
     this.lastId++;
     PushNotification.localNotification({
       /* Android Only Properties */
@@ -106,7 +106,7 @@ export default class NotifService {
     });
   }
 
-  scheduleNotif(soundName) {
+  scheduleNotification(soundName) {
     this.lastId++;
     PushNotification.localNotificationSchedule({
       date: new Date(Date.now() + 30 * 1000), // in 30 secs
@@ -147,7 +147,7 @@ export default class NotifService {
     });
   }
 
-  checkPermission(cbk) {
+  checkPermissions(cbk) {
     return PushNotification.checkPermissions(cbk);
   }
 
@@ -155,11 +155,11 @@ export default class NotifService {
     return PushNotification.requestPermissions();
   }
 
-  cancelNotif() {
+  cancelNotification() {
     PushNotification.cancelLocalNotifications({id: '' + this.lastId});
   }
 
-  cancelAll() {
+  cancelAllNotifications() {
     PushNotification.cancelAllLocalNotifications();
   }
 
