@@ -152,18 +152,10 @@ class V extends React.Component {
             borderColor: 'blue',
             justifyContent: 'center',
             alignItems: 'center',
-<<<<<<< HEAD
-            width: '100%',
-            // height: 400,
-          }}>
-          <ErrorView
-            overrideMsg={'There was an issue getting other deals'}
-=======
             marginTop: 200,
           }}>
           <ErrorView
             overrideMsg={'There seems to be an issue with getting your deals'}
->>>>>>> add ios notification frameworks
             error={this.props.getDealsError}
             onTryAgain={() => this.getDeals()}
           />

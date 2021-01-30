@@ -113,13 +113,10 @@ const defaultState = {
     ],
   },
   notifications: {
-<<<<<<< HEAD
-=======
     ios: {
       token: null,
       fcmRegistered: false,
     },
->>>>>>> add ios notification frameworks
     list: {
       pending: false,
       error: null,
@@ -247,8 +244,6 @@ const reducer = function (state = defaultState, action) {
     // ********************************************
     // Notifications
     // ********************************************
-<<<<<<< HEAD
-=======
     case ReduxActions.Notifications.RegisterIOSNotificationService: {
       return {
         ...state,
@@ -261,7 +256,6 @@ const reducer = function (state = defaultState, action) {
         },
       };
     }
->>>>>>> add ios notification frameworks
     case ReduxActions.Notifications.GetNotificationsSuccess: {
       const items = arrayToObject(payload, 'id');
       return {

@@ -45,11 +45,6 @@ static void InitializeFlipper(UIApplication *application) {
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-<<<<<<< HEAD
-  return YES;
-}
-
-=======
   
   UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
   center.delegate = self;
@@ -63,7 +58,6 @@ static void InitializeFlipper(UIApplication *application) {
   completionHandler(UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge);
 }
 
->>>>>>> add ios notification frameworks
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
 #if DEBUG
@@ -73,8 +67,6 @@ static void InitializeFlipper(UIApplication *application) {
 #endif
 }
 
-<<<<<<< HEAD
-=======
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
   [RNCPushNotificationIOS didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
@@ -96,5 +88,4 @@ withCompletionHandler:(nonnull void (^)(void))completionHandler
 {
   [RNCPushNotificationIOS didReceiveNotificationResponse:response];
 }
->>>>>>> add ios notification frameworks
 @end
