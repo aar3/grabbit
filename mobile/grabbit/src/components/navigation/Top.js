@@ -6,6 +6,7 @@ import {Actions} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {connect} from 'react-redux';
 import {getStateForKey} from 'grabbit/src/lib/Utils';
+import {not} from 'react-native-reanimated';
 
 class BasicTopNavigationBar extends React.Component {
   render() {
@@ -68,6 +69,7 @@ class MainTopNavigationBar extends React.Component {
     if (!this.props.hasNewNotification) {
       return;
     }
+    console.log('I HAVE A NEW ONE');
     return (
       <View
         style={{
@@ -78,7 +80,7 @@ class MainTopNavigationBar extends React.Component {
           top: 3,
           right: 0,
           zIndex: 999,
-          backgroundColor: Color.HotPink,
+          backgroundColor: Color.Teal,
         }}></View>
     );
   }
