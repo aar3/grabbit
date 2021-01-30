@@ -147,11 +147,7 @@ export class ErrorView extends React.Component {
           {msg}
         </Text>
         <TouchableOpacity onPress={this.props.onTryAgain}>
-<<<<<<< HEAD
-          <Icon style={{marginTop: 20}} name={'rotate-ccw'} size={24} color={Color.GreyBlue} />
-=======
           <Icon style={{marginTop: 20}} name={'rotate-ccw'} size={24} color={Color.Teal} />
->>>>>>> add ios notification frameworks
         </TouchableOpacity>
         <Text style={{color: Color.GreyBlue, marginTop: 20}}>Try Again</Text>
       </View>
