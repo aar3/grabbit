@@ -1,5 +1,5 @@
 import {Alert} from 'react-native';
-import Store from 'grabbit/src/Reducer';
+import Store from 'grabbit/src/lib/Reducer';
 import ReduxActions from 'grabbit/src/lib/Actions';
 import NotificationService from 'grabbit/src/lib/NotificationService';
 
