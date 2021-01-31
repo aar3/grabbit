@@ -22,6 +22,22 @@ class V extends React.Component {
     this.getMatchedDeals();
     this.getWatchList();
     this.getNotifications();
+    this.getLikes();
+  }
+
+  getLikes() {
+    return httpStateUpdate({
+      dispatch: this.props.dispatch,
+      options: {
+        endpoint: `/users/${this.props.user.id}/likes/`,
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'X-Session-Token': this.props.user.current_session_token,
+        },
+      },
+      stateKeyPrefix: 'GetUserLikes',
+    });
   }
 
   getDeals(page) {
@@ -214,7 +230,11 @@ class V extends React.Component {
                     payload: item,
                   })
                 }>
-                <DealListItem item={item} />
+                <DealListItem
+                  item={item}
+                  hasLike={this.props.likedIds.has(item.id)}
+                  isOnWatchList={this.props.watchListIds.has(item.id)}
+                />
               </TouchableOpacity>
             );
           }}
@@ -240,7 +260,9 @@ class V extends React.Component {
 
 const mapStateToProps = function (state) {
   const watchList = getStateForKey('state.deals.watch_list.list.items', state);
+  const likes = getStateForKey('state.deals.likes.list.items', state);
   const watchListIds = new Set(Object.values(watchList).map((item) => item.deal.id));
+  const likedIds = new Set(Object.values(likes).map((item) => item.deal.id));
 
   // Tag on_watch_list to each deal for watch list icon rendering
   // This effects other places that we reference the deal such as DealFocus
@@ -259,7 +281,9 @@ const mapStateToProps = function (state) {
 
   return {
     user: getStateForKey('state.session.user', state),
+    watchListIds: new Set(Object.values(watchList).map((item) => item.deal.id)),
     deals,
+    likedIds,
     getDealsPending: getStateForKey('state.deals.all.pending', state),
     getDealsError: getStateForKey('state.deals.all.error', state),
     matchedDeals: Object.values(matchedDeals),

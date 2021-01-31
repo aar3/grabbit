@@ -1,11 +1,12 @@
 import hashlib
+import enum
 import datetime as dt
 from django.db import models
 from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save
 from user.models import User, Notification
-from lib.const import EMPTY_IMAGE_URL
+from lib.const import EMPTY_IMAGE_URL, NotificationIcons
 from lib.models import BaseModel
 
 
@@ -68,7 +69,7 @@ def create_notification_for_new_matched_deal(sender, instance, created, **kwargs
     if created:
         _ = Notification.objects.create(
             user=instance.user,
-            icon="dollar-sign",
+            icon=NotificationIcons.BagHandleOutline.value,
             route_key="dealFocus",
             title="New deal match",
             text="We found a new deal for you",
@@ -78,6 +79,14 @@ def create_notification_for_new_matched_deal(sender, instance, created, **kwargs
 class WatchList(BaseModel):
     class Meta:
         db_table = "watch_lists"
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    deal = models.ForeignKey(Deal, on_delete=models.CASCADE)
+
+
+class Like(BaseModel):
+    class Meta:
+        db_table = "likes"
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     deal = models.ForeignKey(Deal, on_delete=models.CASCADE)

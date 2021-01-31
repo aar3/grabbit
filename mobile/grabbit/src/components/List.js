@@ -11,12 +11,68 @@ class DealListItem_ extends React.Component {
     this.state = {};
   }
 
-  _renderWatchListIcon(item) {
+  _objectContainsDeal(set) {
+    const item = Object.values(set).find((item) => item.deal.id === this.props.item.id);
+    return {exists: typeof item === 'object', item};
+  }
+
+  _renderLikeIcon(deal) {
+    const {exists, item} = this._objectContainsDeal(this.props.likes);
+
+    if (exists) {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            return httpStateUpdate({
+              dispatch: this.props.dispatch,
+              options: {
+                endpoint: `/users/${this.props.user.id}/likes/${item.id}/`,
+                method: 'DELETE',
+                headers: {
+                  'Accept': 'application/json',
+                  'X-Session-Token': this.props.user.current_session_token,
+                },
+              },
+              stateKeyPrefix: 'DeleteDealLike',
+            });
+          }}>
+          <Icon name="heart" size={20} color={Color.OceanBlue} />
+        </TouchableOpacity>
+      );
+    }
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          return httpStateUpdate({
+            dispatch: this.props.dispatch,
+            options: {
+              endpoint: `/users/${this.props.user.id}/likes/`,
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'X-Session-Token': this.props.user.current_session_token,
+              },
+              data: {
+                user_id: this.props.user.id,
+                deal_id: deal.id,
+              },
+            },
+            stateKeyPrefix: 'PostDealLike',
+          });
+        }}>
+        <Icon name="heart-outline" size={20} color={Color.BorderLightGrey} />
+      </TouchableOpacity>
+    );
+  }
+
+  _renderWatchListIcon(deal) {
+    const {exists, item} = this._objectContainsDeal(this.props.watchList);
     // NOTE: if we're on the watchList route we don't need bookmark indicator
     if (this.props.routeKey === 'watchList') {
       return null;
     }
-    if (item.is_on_watchlist) {
+
+    if (exists) {
       return (
         <TouchableOpacity
           onPress={() => {
@@ -51,7 +107,7 @@ class DealListItem_ extends React.Component {
                 'X-Session-Token': this.props.user.current_session_token,
               },
               data: {
-                deal_id: item.id,
+                deal_id: deal.id,
                 user_id: this.props.user.id,
               },
             },
@@ -167,10 +223,11 @@ class DealListItem_ extends React.Component {
               // borderWidth: 1,
               // borderColor: 'green',
               flexDirection: 'row',
-              justifyContent: 'flex-end',
+              justifyContent: 'space-evenly',
               marginTop: 5,
             }}>
             {this._renderWatchListIcon(item)}
+            {this._renderLikeIcon(item)}
           </View>
         </View>
       </View>
@@ -179,8 +236,13 @@ class DealListItem_ extends React.Component {
 }
 
 const mapStateToProps = function (state) {
+  const likes = getStateForKey('state.deals.likes.list.items', state);
+  const watchList = getStateForKey('state.deals.watch_list.list.items', state);
+
   return {
     user: getStateForKey('state.session.user', state),
+    likes,
+    watchList,
   };
 };
 

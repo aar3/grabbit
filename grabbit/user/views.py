@@ -76,6 +76,7 @@ class BaseUserNestedViewSet(BaseModelViewSet):
 
     def create(self, request, user_id=None):
         params = request.data
+        params["deleted_at"] = None
         instance = self.model.objects.filter(**params)
         if instance:
             return Response(status=400, data={"detail": "exists"})

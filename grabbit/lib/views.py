@@ -39,6 +39,7 @@ class BaseModelViewSet(viewsets.ViewSet):
 
     def create(self, request):
         params = request.data
+        params["deleted_at"] = None
         instance = self.model.objects.filter(**params)
         if instance:
             return Response(status=400, data={"detail": "exists"})

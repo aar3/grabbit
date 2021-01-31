@@ -14,6 +14,18 @@ export default {
     PostUserSignupSuccess: 'PostUserSignupSuccess',
   },
   Deals: {
+    GetUserLikesPending: 'GetUserLikesPending',
+    GetUserLikesError: 'GetUserLikesError',
+    GetUserLikesSuccess: 'GetUserLikesSuccess',
+
+    PostDealLikePending: 'PostDealLikePending',
+    PostDealLikeError: 'PostDealLikeError',
+    PostDealLikeSuccess: 'PostDealLikeSuccess',
+
+    DeleteDealLikePending: 'DeleteDealLikePending',
+    DeleteDealLikeError: 'DeleteDealLikeError',
+    DeleteDealLikeSuccess: 'DeleteDealLikeSuccess',
+
     IncrementDealsPage: 'IncrementDealsPage',
     GetDealsPending: 'GetDealsPending',
     GetDealsError: 'GetDealsError',
