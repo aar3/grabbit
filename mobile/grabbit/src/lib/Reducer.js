@@ -634,6 +634,7 @@ const reducer = function (state = defaultState, action) {
       };
     }
     case ReduxActions.Deals.PostDealLikeSuccess: {
+      console.log('>>>> ADDING LIKE ', payload.id);
       return {
         ...state,
         deals: {
@@ -733,6 +734,8 @@ const reducer = function (state = defaultState, action) {
       const items = state.deals.watch_list.list.items;
       delete items[payload.id];
 
+      console.log('>>> DELETING ITEM FROM WL');
+
       return {
         ...state,
         deals: {
@@ -784,6 +787,8 @@ const reducer = function (state = defaultState, action) {
       };
     }
     case ReduxActions.Deals.PostToWatchListSuccess: {
+      console.log('>>> ADDING ITEM TO WL');
+
       return {
         ...state,
         deals: {
@@ -792,7 +797,10 @@ const reducer = function (state = defaultState, action) {
             ...state.deals.watch_list,
             list: {
               ...state.deals.watch_list.list,
-              ...payload,
+              items: {
+                ...state.deals.watch_list.list.items,
+                [payload.id]: payload,
+              },
             },
             add: {
               pending: false,

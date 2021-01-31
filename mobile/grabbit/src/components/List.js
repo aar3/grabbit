@@ -11,22 +11,15 @@ class DealListItem_ extends React.Component {
     this.state = {};
   }
 
-  _objectContainsDeal(set) {
-    const item = Object.values(set).find((item) => item.deal.id === this.props.item.id);
-    return {exists: typeof item === 'object', item};
-  }
-
   _renderLikeIcon(deal) {
-    const {exists, item} = this._objectContainsDeal(this.props.likes);
-
-    if (exists) {
+    if (this.props.hasLike) {
       return (
         <TouchableOpacity
           onPress={() => {
             return httpStateUpdate({
               dispatch: this.props.dispatch,
               options: {
-                endpoint: `/users/${this.props.user.id}/likes/${item.id}/`,
+                endpoint: `/users/${this.props.user.id}/likes/${this.props.like.id}/`,
                 method: 'DELETE',
                 headers: {
                   'Accept': 'application/json',
@@ -66,27 +59,26 @@ class DealListItem_ extends React.Component {
   }
 
   _renderWatchListIcon(deal) {
-    const {exists, item} = this._objectContainsDeal(this.props.watchList);
     // NOTE: if we're on the watchList route we don't need bookmark indicator
     if (this.props.routeKey === 'watchList') {
       return null;
     }
 
-    if (exists) {
+    if (this.props.onWatchList) {
       return (
         <TouchableOpacity
           onPress={() => {
             return httpStateUpdate({
               dispatch: this.props.dispatch,
               options: {
-                endpoint: `/users/${this.props.user.id}/watchlist/${item.id}/`,
+                endpoint: `/users/${this.props.user.id}/watchlist/${this.props.watchListItem.id}/`,
                 method: 'DELETE',
                 headers: {
                   'Accept': 'application/json',
                   'X-Session-Token': this.props.user.current_session_token,
                 },
               },
-              stateKeyPrefix: 'PostToWatchList',
+              stateKeyPrefix: 'DeleteFromWatchList',
             });
           }}>
           <Icon name="bookmark" size={20} color={Color.OceanBlue} />
@@ -111,7 +103,7 @@ class DealListItem_ extends React.Component {
                 user_id: this.props.user.id,
               },
             },
-            stateKeyPrefix: 'DeleteFromWatchList',
+            stateKeyPrefix: 'PostToWatchList',
           });
         }}>
         <Icon name="bookmark-outline" size={20} color={Color.BorderLightGrey} />
@@ -236,13 +228,8 @@ class DealListItem_ extends React.Component {
 }
 
 const mapStateToProps = function (state) {
-  const likes = getStateForKey('state.deals.likes.list.items', state);
-  const watchList = getStateForKey('state.deals.watch_list.list.items', state);
-
   return {
     user: getStateForKey('state.session.user', state),
-    likes,
-    watchList,
   };
 };
 

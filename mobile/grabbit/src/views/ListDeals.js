@@ -25,6 +25,11 @@ class V extends React.Component {
     this.getLikes();
   }
 
+  _objectContainsDeal(set, dealId) {
+    const item = Object.values(set).find((item) => item.deal.id === dealId);
+    return {exists: typeof item === 'object', item};
+  }
+
   getLikes() {
     return httpStateUpdate({
       dispatch: this.props.dispatch,
@@ -222,6 +227,8 @@ class V extends React.Component {
           onRefresh={() => this.getDeals()}
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
+            const {exists: hasLike, item: like} = this._objectContainsDeal(this.props.likes, item.id);
+            const {exists: onWatchList, item: watchListItem} = this._objectContainsDeal(this.props.watchList, item.id);
             return (
               <TouchableOpacity
                 onPress={() =>
@@ -231,9 +238,11 @@ class V extends React.Component {
                   })
                 }>
                 <DealListItem
+                  hasLike={hasLike}
+                  like={like}
+                  watchListItem={watchListItem}
+                  onWatchList={onWatchList}
                   item={item}
-                  hasLike={this.props.likedIds.has(item.id)}
-                  isOnWatchList={this.props.watchListIds.has(item.id)}
                 />
               </TouchableOpacity>
             );
@@ -249,7 +258,6 @@ class V extends React.Component {
         style={{
           flex: 1,
           alignItems: 'center',
-          // justifyContent: 'center',
         }}>
         {this._renderModal()}
         {this._renderVerticalFlatList()}
@@ -259,39 +267,30 @@ class V extends React.Component {
 }
 
 const mapStateToProps = function (state) {
-  const watchList = getStateForKey('state.deals.watch_list.list.items', state);
-  const likes = getStateForKey('state.deals.likes.list.items', state);
-  const watchListIds = new Set(Object.values(watchList).map((item) => item.deal.id));
-  const likedIds = new Set(Object.values(likes).map((item) => item.deal.id));
-
-  // Tag on_watch_list to each deal for watch list icon rendering
-  // This effects other places that we reference the deal such as DealFocus
-  let deals = getStateForKey('state.deals.all.items', state);
-  deals = Object.values(deals);
-  deals = deals
-    .map((item) => {
-      if (watchListIds.has(item.id)) {
-        item.is_on_watchlist = true;
-      }
-      return item;
-    })
-    .sort((a, b) => a.id > b.id);
-
+  const deals = getStateForKey('state.deals.all.items', state);
+  const sortedDeals = Object.values(deals).sort((a, b) => a.id > b.id);
   const matchedDeals = getStateForKey('state.deals.matches.items', state);
+  const likes = getStateForKey('state.deals.likes.list.items', state);
+  const watchList = getStateForKey('state.deals.watch_list.list.items', state);
 
   return {
     user: getStateForKey('state.session.user', state),
-    watchListIds: new Set(Object.values(watchList).map((item) => item.deal.id)),
-    deals,
-    likedIds,
+
+    deals: sortedDeals,
     getDealsPending: getStateForKey('state.deals.all.pending', state),
     getDealsError: getStateForKey('state.deals.all.error', state),
+
     matchedDeals: Object.values(matchedDeals),
     getMatchedDealsPending: getStateForKey('state.deals.matches.pending', state),
     getMatchedDealsError: getStateForKey('state.deals.matches.error', state),
+
     showDealFocusedModal: getStateForKey('state.deals.focused.show_modal', state),
+
     dealsPage: getStateForKey('state.deals.all.page', state),
     matchedDealsPage: getStateForKey('state.deals.matches.page', state),
+
+    likes,
+    watchList,
   };
 };
 
