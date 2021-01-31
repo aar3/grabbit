@@ -11,26 +11,74 @@ class DealListItem_ extends React.Component {
     this.state = {};
   }
 
-  _renderWatchListIcon(item) {
-    // NOTE: if we're on the watchList route we don't need bookmark indicator
-    if (this.props.routeKey === 'watchList') {
-      return null;
-    }
-    if (item.is_on_watchlist) {
+  _renderLikeIcon(deal) {
+    if (this.props.hasLike) {
       return (
         <TouchableOpacity
           onPress={() => {
             return httpStateUpdate({
               dispatch: this.props.dispatch,
               options: {
-                endpoint: `/users/${this.props.user.id}/watchlist/${item.id}/`,
+                endpoint: `/users/${this.props.user.id}/likes/${this.props.like.id}/`,
                 method: 'DELETE',
                 headers: {
                   'Accept': 'application/json',
                   'X-Session-Token': this.props.user.current_session_token,
                 },
               },
-              stateKeyPrefix: 'PostToWatchList',
+              stateKeyPrefix: 'DeleteDealLike',
+            });
+          }}>
+          <Icon name="heart" size={20} color={Color.OceanBlue} />
+        </TouchableOpacity>
+      );
+    }
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          return httpStateUpdate({
+            dispatch: this.props.dispatch,
+            options: {
+              endpoint: `/users/${this.props.user.id}/likes/`,
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'X-Session-Token': this.props.user.current_session_token,
+              },
+              data: {
+                user_id: this.props.user.id,
+                deal_id: deal.id,
+              },
+            },
+            stateKeyPrefix: 'PostDealLike',
+          });
+        }}>
+        <Icon name="heart-outline" size={20} color={Color.BorderLightGrey} />
+      </TouchableOpacity>
+    );
+  }
+
+  _renderWatchListIcon(deal) {
+    // NOTE: if we're on the watchList route we don't need bookmark indicator
+    if (this.props.routeKey === 'watchList') {
+      return null;
+    }
+
+    if (this.props.onWatchList) {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            return httpStateUpdate({
+              dispatch: this.props.dispatch,
+              options: {
+                endpoint: `/users/${this.props.user.id}/watchlist/${this.props.watchListItem.id}/`,
+                method: 'DELETE',
+                headers: {
+                  'Accept': 'application/json',
+                  'X-Session-Token': this.props.user.current_session_token,
+                },
+              },
+              stateKeyPrefix: 'DeleteFromWatchList',
             });
           }}>
           <Icon name="bookmark" size={20} color={Color.OceanBlue} />
@@ -51,11 +99,11 @@ class DealListItem_ extends React.Component {
                 'X-Session-Token': this.props.user.current_session_token,
               },
               data: {
-                deal_id: item.id,
+                deal_id: deal.id,
                 user_id: this.props.user.id,
               },
             },
-            stateKeyPrefix: 'DeleteFromWatchList',
+            stateKeyPrefix: 'PostToWatchList',
           });
         }}>
         <Icon name="bookmark-outline" size={20} color={Color.BorderLightGrey} />
@@ -167,10 +215,11 @@ class DealListItem_ extends React.Component {
               // borderWidth: 1,
               // borderColor: 'green',
               flexDirection: 'row',
-              justifyContent: 'flex-end',
+              justifyContent: 'space-evenly',
               marginTop: 5,
             }}>
             {this._renderWatchListIcon(item)}
+            {this._renderLikeIcon(item)}
           </View>
         </View>
       </View>

@@ -12,7 +12,7 @@ export const httpRequest = async function (options) {
 
   try {
     options.url = 'http://192.168.1.87:8000/api/v1' + options.endpoint;
-    console.log(options.method, options.url);
+    console.log(options.method, options.url, options.data, options.headers);
     const {data, status, headers} = await axios(options);
     if (status === 200) {
       return {data};
@@ -152,6 +152,9 @@ class Websocket_ {
   }
 
   dispatchToState({type, payload}) {
+    if (type === ReduxActions.WebSocket.IncomingNotification) {
+      this.notifier.localNotification({title: 'Settings Update', text: "You've updated your account settings"});
+    }
     // IMPORTANT: To avoid race conditions where a resource is returned from the API at the same
     // time that a websocket update comes in, we delay the websocket state update for 2 seconds so
     // the API state update can happen first
@@ -170,6 +173,7 @@ class Websocket_ {
   }
 
   onNotification(notification) {
+    console.log('>>> NOTIFICATION ', notification);
     Alert.alert(notification.title, notification.message);
   }
 

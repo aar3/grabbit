@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, ImageBackground, TouchableOpacity, FlatList, Image} from 'react-native';
 import {connect} from 'react-redux';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {Button} from 'react-native-elements';
 import {Actions} from 'react-native-router-flux';
 import {getStateForKey} from 'grabbit/src/lib/Utils';
@@ -89,13 +89,27 @@ class V extends React.Component {
           height: 25,
           marginLeft: 40,
         }}>
-        <Icon name={'chevron-right'} size={15} color={Color.ReadableGreyText} />
+        <Icon name={'chevron-forward-outline'} size={15} color={Color.ReadableGreyText} />
       </View>
     );
   }
 
-  _onRefresh() {
-    return this.props.getNotificationsViaFlatList(this.options);
+  _renderLogoFooter() {
+    return (
+      <View
+        style={{
+          // borderWidth: 1,
+          // borderColor: 'red',
+          marginTop: 20,
+          height: 45,
+          width: 200,
+        }}>
+        <Image
+          source={require('./../../assets/imgs/Grabbit_Grey_Letters_222x1000.png')}
+          style={{flex: 1, height: undefined, width: undefined}}
+        />
+      </View>
+    );
   }
 
   _renderSeenTag(item) {
@@ -155,7 +169,16 @@ class V extends React.Component {
     }
 
     if (this.props.getNotificationsError) {
-      return <ErrorView error={this.props.getNotificationsError} onTryAgain={() => this.getAndSetNotifications()} />;
+      return (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <ErrorView error={this.props.getNotificationsError} onTryAgain={() => this.getAndSetNotifications()} />
+        </View>
+      );
     }
 
     if (this.props.notifications.length === 0) {
@@ -171,19 +194,11 @@ class V extends React.Component {
               color: Color.GreyBlue,
               fontWeight: 'bold',
               fontSize: 18,
-              marginBottom: 20,
+              marginBottom: 10,
             }}>
-            You have no notifications
+            Nothing here
           </Text>
-          <Text
-            style={{
-              color: Color.BorderLightGrey,
-              fontSize: 14,
-              marginBottom: 20,
-            }}>
-            For now...
-          </Text>
-          <Icon name="thumbs-up" size={20} color={Color.BorderLightGrey} />
+          {this._renderLogoFooter()}
         </View>
       );
     }
@@ -207,7 +222,7 @@ class V extends React.Component {
             maxHeight: '85%',
           }}
           refreshing={this.props.getNotificationsPending}
-          onRefresh={() => this._onRefresh()}
+          onRefresh={() => this.getAndSetNotifications()}
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
             return (
@@ -275,7 +290,7 @@ class V extends React.Component {
                         alignItems: 'center',
                         flexDirection: 'row',
                       }}>
-                      <Icon name={'check'} size={15} color={Color.Teal} />
+                      <Icon name={'checkmark-outline'} size={15} color={Color.Teal} />
                       {this._renderSeenTag(item)}
                     </View>
                   </View>
@@ -285,20 +300,7 @@ class V extends React.Component {
             );
           }}
         />
-
-        <View
-          style={{
-            // borderWidth: 1,
-            // borderColor: 'red',
-            marginTop: 20,
-            height: 45,
-            width: 200,
-          }}>
-          <Image
-            source={require('./../../assets/imgs/Grabbit_Grey_Letters_222x1000.png')}
-            style={{flex: 1, height: undefined, width: undefined}}
-          />
-        </View>
+        {this._renderLogoFooter()}
       </View>
     );
   }

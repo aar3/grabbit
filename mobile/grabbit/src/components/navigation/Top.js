@@ -32,7 +32,7 @@ class BasicTopNavigationBar extends React.Component {
             width: 40,
             height: 40,
             position: 'absolute',
-            left: 20,
+            left: 10,
             top: 40,
             justifyContent: 'center',
             alignItems: 'center',
@@ -69,7 +69,6 @@ class MainTopNavigationBar extends React.Component {
     if (!this.props.hasNewNotification) {
       return;
     }
-    console.log('I HAVE A NEW ONE');
     return (
       <View
         style={{
@@ -152,7 +151,7 @@ class MainTopNavigationBar extends React.Component {
                   }
                 }>
                 {this._renderNewNotificationIcon()}
-                <Icon name="chatbubble-outline" size={25} type="MaterialIcons" color={Color.Black} />
+                <Icon name="chatbubble-outline" size={25} color={Color.Black} />
               </View>
             </TouchableOpacity>
           </View>

@@ -58,6 +58,7 @@ class V extends React.Component {
                       style={{
                         fontSize: 12,
                         color: Color.LessReadableGreyText,
+                        marginTop: 5,
                       }}>
                       {item.description}
                     </Text>

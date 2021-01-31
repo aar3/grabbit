@@ -47,6 +47,15 @@ const defaultState = {
   },
   deals: {
     inactive: {},
+    likes: {
+      list: {
+        pending: false,
+        error: null,
+        items: {},
+      },
+      pending: false,
+      error: null,
+    },
     all: {
       page: 1,
       pending: false,
@@ -161,11 +170,18 @@ const defaultState = {
         routeKey: 'watchList',
       },
       {
-        id: 1,
-        title: 'Settings',
-        icon: 'settings-outline',
-        description: 'Change your Grabbit account Settings',
-        routeKey: 'settings',
+        id: 3,
+        title: 'Matched Deals',
+        icon: 'card',
+        description: 'Deals that we think you might like',
+        routeKey: 'matchedDeals',
+      },
+      {
+        id: 4,
+        title: 'Brands',
+        icon: 'people',
+        description: 'Follow brands that you like',
+        routeKey: 'brands',
       },
       {
         id: 2,
@@ -173,6 +189,13 @@ const defaultState = {
         icon: 'finger-print',
         description: 'Edit your account information',
         routeKey: 'editAccount',
+      },
+      {
+        id: 1,
+        title: 'Settings',
+        icon: 'settings-outline',
+        description: 'Change your Grabbit account Settings',
+        routeKey: 'settings',
       },
     ],
   },
@@ -564,9 +587,154 @@ const reducer = function (state = defaultState, action) {
     // ********************************************
     // Deals
     // ********************************************
+    case ReduxActions.Deals.DeleteDealLikeSuccess: {
+      const items = state.deals.likes.list.items;
+      delete items[payload.id];
+
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          likes: {
+            ...state.deals.likes,
+            pending: false,
+            error: null,
+            list: {
+              ...state.deals.likes.list,
+              items,
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.DeleteDealLikeError: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          likes: {
+            ...state.deals.likes,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.DeleteDealLikePending: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          likes: {
+            ...state.deals.likes,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.PostDealLikeSuccess: {
+      console.log('>>>> ADDING LIKE ', payload.id);
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          likes: {
+            ...state.deals.likes,
+            pending: false,
+            error: null,
+            list: {
+              ...state.deals.likes.list,
+              items: {
+                ...state.deals.likes.list.items,
+                [payload.id]: payload,
+              },
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.PostDealLikeError: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          likes: {
+            ...state.deals.likes,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.PostDealLikePending: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          likes: {
+            ...state.deals.likes,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.GetUserLikesSuccess: {
+      const items = arrayToObject(payload, 'id');
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          likes: {
+            ...state.deals.likes,
+            list: {
+              ...state.deals.likes.list,
+              pending: false,
+              error: null,
+              items,
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.GetUserLikesError: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          likes: {
+            ...state.deals.likes,
+            list: {
+              ...state.deals.likes.list,
+              pending: false,
+              error: payload,
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.GetUserLikesPending: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          likes: {
+            ...state.deals.likes,
+            list: {
+              ...state.deals.likes.list,
+              pending: true,
+              error: null,
+            },
+          },
+        },
+      };
+    }
     case ReduxActions.Deals.DeleteFromWatchListSuccess: {
       const items = state.deals.watch_list.list.items;
       delete items[payload.id];
+
+      console.log('>>> DELETING ITEM FROM WL');
 
       return {
         ...state,
@@ -619,6 +787,8 @@ const reducer = function (state = defaultState, action) {
       };
     }
     case ReduxActions.Deals.PostToWatchListSuccess: {
+      console.log('>>> ADDING ITEM TO WL');
+
       return {
         ...state,
         deals: {
@@ -627,7 +797,10 @@ const reducer = function (state = defaultState, action) {
             ...state.deals.watch_list,
             list: {
               ...state.deals.watch_list.list,
-              ...payload,
+              items: {
+                ...state.deals.watch_list.list.items,
+                [payload.id]: payload,
+              },
             },
             add: {
               pending: false,

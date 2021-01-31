@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Gradient_Blue_Green_Background_583x1258" translatesAutoresizingMaskIntoConstraints="NO" id="CdG-dz-UMF">
-                                <rect key="frame" x="0.0" y="-21" width="405" height="821"/>
+                                <rect key="frame" x="-88" y="-107" width="611" height="1074"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Grabbit_White_Letters_222x1000" translatesAutoresizingMaskIntoConstraints="NO" id="af2-qu-h2Q">

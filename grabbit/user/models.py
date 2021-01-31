@@ -12,6 +12,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from lib.models import BaseModel
 from lib.utils import make_qrcode, random_string, django_unix_client
+from lib.const import NotificationIcons
 from lib.cloud import GoogleCloudService
 from lib.local_redis import get_redis_instance
 from user.managers import UserManager
@@ -140,7 +141,7 @@ def create_notification_for_updated_settings(sender, instance, created, **kwargs
     if not created:
         instance = Notification.objects.create(
             user=instance.user,
-            icon="unlock",
+            icon=NotificationIcons.LockClosedOutline.value,
             route_key="settings",
             title="Profile Update",
             text="You've updated your profile settings",
