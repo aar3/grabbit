@@ -90,3 +90,19 @@ class Like(BaseModel):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     deal = models.ForeignKey(Deal, on_delete=models.CASCADE)
+
+
+class Brand(BaseModel):
+    class Meta:
+        db_table = "brands"
+
+    name = models.CharField(max_length=255, unique=True)
+    img_url = models.CharField(max_length=255, default=EMPTY_IMAGE_URL)
+
+
+class FollowedBrand(BaseModel):
+    class Meta:
+        db_table = "followed_brands"
+
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)

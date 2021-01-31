@@ -12,6 +12,10 @@ class DealListItem_ extends React.Component {
   }
 
   _renderLikeIcon(deal) {
+    // NOTE: if we're on the watchList route we don't need like indicator
+    if (this.props.routeKey === 'watchList') {
+      return null;
+    }
     if (this.props.hasLike) {
       return (
         <TouchableOpacity

@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, TextInput} from 'react-native';
 import {connect} from 'react-redux';
 import {getStateForKey, httpStateUpdate} from 'grabbit/src/lib/Utils';
-import {GrabbitButton} from 'grabbit/src/components/Basic';
+import {Button} from 'react-native-elements';
 import {Color} from 'grabbit/src/lib/Const';
 
 class V extends React.Component {
@@ -95,15 +95,46 @@ class V extends React.Component {
               }}
             />
           </View>
-          <GrabbitButton
+          <View
+            style={{
+              height: 60,
+              width: '100%',
+              //   borderWidth: 1,
+              //   borderColor: 'blue',
+              padding: 5,
+              marginBottom: 10,
+              // borderBottomWidth: 1,
+              // borderBottomColor: Color.BorderLightGrey,
+            }}>
+            <Text
+              style={{
+                fontWeight: 'bold',
+                marginBottom: 5,
+              }}>
+              Name
+            </Text>
+            <TextInput
+              value={this.props.user.name}
+              style={{
+                width: '100%',
+                color: Color.ReadableGreyText,
+              }}
+            />
+          </View>
+          <Button
             onPress={() => this.updateUserInfo()}
-            _buttonStyle={{
+            containerStyle={{
+              width: 300,
+            }}
+            buttonStyle={{
               backgroundColor: Color.White,
+              borderRadius: 30,
               borderWidth: 1,
-              borderColor: Color.GreyBlue,
+              height: 50,
+              borderColor: Color.OceanBlue,
             }}
             titleStyle={{
-              color: Color.GreyBlue,
+              color: Color.OceanBlue,
               fontWeight: 'bold',
             }}
             title="Save"

@@ -25,8 +25,8 @@ class V extends React.Component {
     this.getLikes();
   }
 
-  _objectContainsDeal(set, dealId) {
-    const item = Object.values(set).find((item) => item.deal.id === dealId);
+  _objectContainsItem(set, itemId) {
+    const item = Object.values(set).find((item) => item.deal.id === itemId);
     return {exists: typeof item === 'object', item};
   }
 
@@ -227,8 +227,8 @@ class V extends React.Component {
           onRefresh={() => this.getDeals()}
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
-            const {exists: hasLike, item: like} = this._objectContainsDeal(this.props.likes, item.id);
-            const {exists: onWatchList, item: watchListItem} = this._objectContainsDeal(this.props.watchList, item.id);
+            const {exists: hasLike, item: like} = this._objectContainsItem(this.props.likes, item.id);
+            const {exists: onWatchList, item: watchListItem} = this._objectContainsItem(this.props.watchList, item.id);
             return (
               <TouchableOpacity
                 onPress={() =>

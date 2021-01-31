@@ -14,6 +14,7 @@ import {
   AccountTypeView,
   WatchListView,
   NotificationsView,
+  BrandsView,
   EditAccountView,
 } from 'grabbit/src/views';
 
@@ -96,6 +97,7 @@ export default class Router_ extends React.Component {
             key="editAccount"
             component={EditAccountView}
           />
+          <Scene navBar={BasicTopNavigationBar} title="Brands" hideNavBar={false} key="brands" component={BrandsView} />
         </Stack>
       </Router>
     );

@@ -203,11 +203,121 @@ const defaultState = {
     connected: false,
     error: null,
   },
+  brands: {
+    list: {
+      search: null,
+      pending: false,
+      error: null,
+      items: {},
+    },
+    following: {
+      pending: false,
+      error: null,
+      items: {},
+    },
+  },
 };
 
 const reducer = function (state = defaultState, action) {
   const {payload, type, key} = action;
   switch (type) {
+    // ********************************************
+    // Brands
+    // ********************************************
+    case ReduxActions.Brands.UpdateBrandSearch: {
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          list: {
+            ...state.brands.list,
+            search: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.GetFollowedBrandsSuccess: {
+      const items = arrayToObject(payload, 'id');
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          following: {
+            ...state.brands.following,
+            pending: false,
+            error: null,
+            items,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.GetFollowedBrandsError: {
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          following: {
+            ...state.brands.following,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.GetFollowedBrandsPending: {
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          following: {
+            ...state.brands.following,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.GetBrandsError: {
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          list: {
+            ...state.brands.list,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.GetBrandsSuccess: {
+      const items = arrayToObject(payload, 'id');
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          list: {
+            ...state.brands.list,
+            pending: false,
+            error: null,
+            items,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.GetBrandsPending: {
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          list: {
+            ...state.brands.list,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
     // ********************************************
     // WebSocket
     // ********************************************

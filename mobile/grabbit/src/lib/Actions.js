@@ -98,4 +98,24 @@ export default {
   WebSocket: {
     IncomingNotification: 'IncomingNotification',
   },
+
+  Brands: {
+    UpdateBrandSearch: 'UpdateBrandSearch',
+
+    PostFollowedBrandPending: 'PostFollowedBrandPending',
+    PostFollowedBrandSuccess: 'PostFollowedBrandSuccess',
+    PostFollowedBrandError: 'PostFollowedBrandError',
+
+    DeleteFollowedBrandError: 'DeleteFollowedBrandError',
+    DeleteFollowedBrandSuccess: 'DeleteFollowedBrandSuccess',
+    DeleteFollowedBrandPending: 'DeleteFollowedBrandPending',
+
+    GetBrandsPending: 'GetBrandsPending',
+    GetBrandsError: 'GetBrandsError',
+    GetBrandsSuccess: 'GetBrandsSuccess',
+
+    GetFollowedBrandsPending: 'GetFollowedBrandsPending',
+    GetFollowedBrandsSuccess: 'GetFollowedBrandsSuccess',
+    GetFollowedBrandsError: 'GetFollowedBrandsError',
+  },
 };

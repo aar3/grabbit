@@ -11,6 +11,7 @@ import NotificationsView from 'grabbit/src/views/Notifications';
 import AccountTypeView from 'grabbit/src/views/AccountType';
 import WatchListView from 'grabbit/src/views/WatchList';
 import EditAccountView from 'grabbit/src/views/EditAccount';
+import BrandsView from 'grabbit/src/views/Brands';
 
 module.exports = {
   AccountView,
@@ -26,4 +27,5 @@ module.exports = {
   WatchListView,
   AccountTypeView,
   EditAccountView,
+  BrandsView,
 };
