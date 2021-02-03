@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, Text, ImageBackground, TouchableOpacity} from 'react-native';
+import {StyleSheet, View, Text, ImageBackground, TouchableOpacity, Image} from 'react-native';
 import {Input, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
 import {Color} from 'grabbit/src/lib/Const';
@@ -115,6 +115,67 @@ export class LoadingView extends React.Component {
   }
 }
 
+export class EmptyFlatList extends React.Component {
+  _renderLogoFooter() {
+    return (
+      <View
+        style={{
+          // borderWidth: 1,
+          // borderColor: 'red',
+          marginTop: 20,
+          height: 45,
+          width: 200,
+        }}>
+        <Image
+          source={require('./../../assets/imgs/Grabbit_Grey_Letters_222x1000.png')}
+          style={{flex: 1, height: undefined, width: undefined}}
+        />
+      </View>
+    );
+  }
+
+  render() {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <View
+          style={{
+            // borderColor: 'red',
+            // borderWidth: 1,
+            width: 300,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              color: Color.GreyBlue,
+              fontWeight: 'bold',
+              fontSize: 18,
+              textAlign: 'center',
+              marginBottom: 10,
+            }}>
+            {this.props.title || 'Nothing here'}
+          </Text>
+          <Text
+            style={{
+              color: Color.GreyBlue,
+              fontSize: 13,
+              textAlign: 'center',
+              marginBottom: 10,
+            }}>
+            {this.props.text || "Looks like we don't have anything for you here"}
+          </Text>
+          {this._renderLogoFooter()}
+        </View>
+      </View>
+    );
+  }
+}
+
 export class ErrorView extends React.Component {
   render() {
     const msg = this.props.overrideMsg || this.props.error.details;
@@ -123,8 +184,8 @@ export class ErrorView extends React.Component {
         style={[
           this.props.style,
           {
-            borderWidth: 1,
-            borderColor: 'red',
+            // borderWidth: 1,
+            // borderColor: 'red',
             justifyContent: 'center',
             alignItems: 'center',
           },
@@ -141,6 +202,7 @@ export class ErrorView extends React.Component {
           style={{
             fontSize: 14,
             marginTop: 10,
+            textAlign: 'center',
             // fontWeight: 'bold',
             color: Color.GreyBlue,
           }}>

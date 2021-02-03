@@ -1,9 +1,10 @@
 import React from 'react';
 import {View, Text, FlatList} from 'react-native';
 import {connect} from 'react-redux';
-import {LoadingView, ErrorView} from 'grabbit/src/components/Basic';
+import {LoadingView, ErrorView, EmptyFlatList} from 'grabbit/src/components/Basic';
 import {DealListItem} from 'grabbit/src/components/List';
 import ReduxActions from 'grabbit/src/lib/Actions';
+import {Color} from 'grabbit/src/lib/Const';
 import {getStateForKey, httpStateUpdate, objectContainsItem} from 'grabbit/src/lib/Utils';
 
 class V extends React.Component {
@@ -32,6 +33,64 @@ class V extends React.Component {
   }
 
   render() {
+    if (this.props.getMatchedDealsPending) {
+      return (
+        <View
+          style={{
+            // borderWidth: 1,
+            // borderColor: 'red',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 300,
+          }}>
+          <Text style={{color: Color.GreyBlue}}>Grabbing deals we think you might like..</Text>
+          <LoadingView
+            style={{
+              marginTop: 40,
+              width: 50,
+              height: 50,
+            }}
+          />
+        </View>
+      );
+    }
+
+    if (this.props.getMatchedDealsError) {
+      console.log(this.props.getMatchedDealsError);
+      return (
+        <View
+          style={{
+            flex: 1,
+            //   borderWidth: 1,
+            //   borderColor: 'blue',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <ErrorView
+            style={{
+              width: 300,
+            }}
+            overrideMsg={'There seems to be an issue with getting your matched deals'}
+            error={this.props.getMatchedDealsError}
+            onTryAgain={() => this.getMatchedDeals()}
+          />
+        </View>
+      );
+    }
+
+    if (this.props.matchedDeals.length === 0) {
+      return (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <EmptyFlatList text="We haven't found anything we think you'll really like yet" />
+        </View>
+      );
+    }
+
     return (
       <View
         style={{

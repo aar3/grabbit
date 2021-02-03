@@ -14,6 +14,11 @@ const arrayToObject = function (arr, keyedBy) {
 // api sends data over the wire
 const defaultState = {
   session: {
+    edit_account: {
+      pending: false,
+      error: null,
+      tmp_user: {},
+    },
     user: {
       id: 3,
       created_at: '2020-12-28T20:49:15.378923Z',
@@ -271,7 +276,7 @@ const reducer = function (state = defaultState, action) {
       const items = state.brands.following.items;
       delete items[payload.id];
 
-      console.log('>>> DELETING THIS ', payload.id);
+      console.log('>>> ITEMS IS NOW ', items);
 
       return {
         ...state,
@@ -280,7 +285,7 @@ const reducer = function (state = defaultState, action) {
           following: {
             ...state.brands.following,
             pending: false,
-            error: payload,
+            error: null,
             items,
           },
         },
@@ -290,6 +295,7 @@ const reducer = function (state = defaultState, action) {
       return {
         ...state,
         brands: {
+          ...state.brands,
           following: {
             ...state.brands.following,
             pending: false,
@@ -302,6 +308,7 @@ const reducer = function (state = defaultState, action) {
       return {
         ...state,
         brands: {
+          ...state.brands,
           following: {
             ...state.brands.following,
             pending: true,
@@ -1232,7 +1239,7 @@ const reducer = function (state = defaultState, action) {
           ...state.deals,
           matches: {
             ...state.deals.matches,
-            error: payload,
+            error: null,
             pending: false,
             items,
           },
@@ -1271,6 +1278,73 @@ const reducer = function (state = defaultState, action) {
     // ********************************************
     // Session
     // ********************************************
+    case ReduxActions.Session.UpdateTmpEditAccountValue: {
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          edit_account: {
+            ...state.session.edit_account,
+            tmp_user: {
+              ...state.session.edit_account.tmp_user,
+              [key]: payload,
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Session.SetEditingUser: {
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          edit_account: {
+            ...state.session.edit_account,
+            tmp_user: state.session.user,
+          },
+        },
+      };
+    }
+    case ReduxActions.Session.EditAccountInfoSuccess: {
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          user: payload,
+          edit_account: {
+            ...state.session.edit_account,
+            pending: false,
+            error: null,
+          },
+        },
+      };
+    }
+    case ReduxActions.Session.EditAccountInfoError: {
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          edit_account: {
+            ...state.session.edit_account,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Session.EditAccountInfoPending: {
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          edit_account: {
+            ...state.session.edit_account,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
     case ReduxActions.Session.PostUserSignupSuccess: {
       return {
         ...state,

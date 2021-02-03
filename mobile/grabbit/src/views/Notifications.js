@@ -7,7 +7,7 @@ import {Actions} from 'react-native-router-flux';
 import ReduxActions from 'grabbit/src/lib/Actions';
 import {getStateForKey} from 'grabbit/src/lib/Utils';
 import {Color} from 'grabbit/src/lib/Const';
-import {ErrorView} from 'grabbit/src/components/Basic';
+import {ErrorView, EmptyFlatList} from 'grabbit/src/components/Basic';
 import {httpStateUpdate} from 'grabbit/src/lib/Utils';
 
 class V extends React.Component {
@@ -200,16 +200,7 @@ class V extends React.Component {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text
-            style={{
-              color: Color.GreyBlue,
-              fontWeight: 'bold',
-              fontSize: 18,
-              marginBottom: 10,
-            }}>
-            Nothing here
-          </Text>
-          {this._renderLogoFooter()}
+          <EmptyFlatList text="We haven't found anything we think you'll really like yet" />
         </View>
       );
     }

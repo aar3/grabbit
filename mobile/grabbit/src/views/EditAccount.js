@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, TextInput} from 'react-native';
 import {connect} from 'react-redux';
+import ReduxActions from 'grabbit/src/lib/Actions';
 import {getStateForKey, httpStateUpdate} from 'grabbit/src/lib/Utils';
 import {Button} from 'react-native-elements';
 import {Color} from 'grabbit/src/lib/Const';
@@ -11,18 +12,25 @@ class V extends React.Component {
     this.state = {};
   }
 
+  componentDidMount() {
+    return this.props.dispatch({
+      type: ReduxActions.Session.SetEditingUser,
+    });
+  }
+
   updateUserInfo() {
     return httpStateUpdate({
       dispatch: this.props.dispatch,
       options: {
-        endpoint: `/users/accounts/${this.props.user.id}/`,
+        endpoint: `/users/accounts/${this.props.tmpUser.id}/`,
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
-          'X-Session-Token': this.props.user.current_session_token,
+          'X-Session-Token': this.props.tmpUser.current_session_token,
         },
+        data: this.props.tmpUser,
       },
-      stateKeyPrefix: 'GetDeals',
+      stateKeyPrefix: 'EditAccountInfo',
     });
   }
 
@@ -62,11 +70,18 @@ class V extends React.Component {
               Phone
             </Text>
             <TextInput
-              value={this.props.user.phone}
+              value={this.props.tmpUser.phone}
               style={{
                 width: '100%',
                 color: Color.ReadableGreyText,
               }}
+              onChangeText={(text) =>
+                this.props.dispatch({
+                  type: ReduxActions.Session.UpdateTmpEditAccountValue,
+                  key: 'phone',
+                  payload: text,
+                })
+              }
             />
           </View>
           <View
@@ -88,11 +103,18 @@ class V extends React.Component {
               Email
             </Text>
             <TextInput
-              value={this.props.user.email}
+              value={this.props.tmpUser.email}
               style={{
                 width: '100%',
                 color: Color.ReadableGreyText,
               }}
+              onChangeText={(text) =>
+                this.props.dispatch({
+                  type: ReduxActions.Session.UpdateTmpEditAccountValue,
+                  key: 'email',
+                  payload: text,
+                })
+              }
             />
           </View>
           <View
@@ -114,11 +136,18 @@ class V extends React.Component {
               Name
             </Text>
             <TextInput
-              value={this.props.user.name}
+              value={this.props.tmpUser.name}
               style={{
                 width: '100%',
                 color: Color.ReadableGreyText,
               }}
+              onChangeText={(text) =>
+                this.props.dispatch({
+                  type: ReduxActions.Session.UpdateTmpEditAccountValue,
+                  key: 'name',
+                  payload: text,
+                })
+              }
             />
           </View>
           <Button
@@ -148,6 +177,7 @@ class V extends React.Component {
 const mapStateToProps = function (state) {
   return {
     user: getStateForKey('state.session.user', state),
+    tmpUser: getStateForKey('state.session.edit_account.tmp_user', state),
   };
 };
 

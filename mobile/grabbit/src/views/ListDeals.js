@@ -24,11 +24,6 @@ class V extends React.Component {
     this.getLikes();
   }
 
-  // _objectContainsItem(set, itemId) {
-  //   const item = Object.values(set).find((item) => item.deal.id === itemId);
-  //   return {exists: typeof item === 'object', item};
-  // }
-
   getLikes() {
     return httpStateUpdate({
       dispatch: this.props.dispatch,
@@ -262,8 +257,6 @@ const mapStateToProps = function (state) {
   const deals = getStateForKey('state.deals.all.items', state);
   const sortedDeals = Object.values(deals).sort((a, b) => a.id > b.id);
   const matchedDeals = getStateForKey('state.deals.matches.items', state);
-  const likes = getStateForKey('state.deals.likes.list.items', state);
-  const watchList = getStateForKey('state.deals.watch_list.list.items', state);
 
   return {
     user: getStateForKey('state.session.user', state),
@@ -281,8 +274,8 @@ const mapStateToProps = function (state) {
     dealsPage: getStateForKey('state.deals.all.page', state),
     matchedDealsPage: getStateForKey('state.deals.matches.page', state),
 
-    likes,
-    watchList,
+    likes: getStateForKey('state.deals.likes.list.items', state),
+    watchList: getStateForKey('state.deals.watch_list.list.items', state),
   };
 };
 

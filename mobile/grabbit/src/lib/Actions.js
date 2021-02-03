@@ -3,6 +3,8 @@ export default {
   Session: {
     UpdateLoginValue: 'UpdateLoginValue',
     UpdateSignupValue: 'UpdateSignupValue',
+    UpdateTmpEditAccountValue: 'UpdateTmpEditAccountValue',
+    SetEditingUser: 'SetEditingUser',
 
     PostUserLoginPending: 'PostUserLoginPending',
     PostUserLoginSuccess: 'PostUserLoginSuccess',
@@ -12,6 +14,10 @@ export default {
     PostUserSignupPending: 'PostUserSignupPending',
     PostUserSignupError: 'PostUserSignupError',
     PostUserSignupSuccess: 'PostUserSignupSuccess',
+
+    EditAccountInfoPending: 'EditAccountInfoPending',
+    EditAccountInfoError: 'EditAccountInfoError',
+    EditAccountInfoSuccess: 'EditAccountInfoSuccess',
   },
   Deals: {
     GetUserLikesPending: 'GetUserLikesPending',

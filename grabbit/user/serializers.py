@@ -11,6 +11,7 @@ class UserSerializer(BaseModelSerializer):
             "email",
             "updated_at",
             "deleted_at",
+            "name",
             "current_session_token",
             "phone",
         ]

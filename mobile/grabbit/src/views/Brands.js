@@ -243,8 +243,8 @@ class V extends React.Component {
                     }}>
                     <View
                       style={{
-                        // borderWidth: 1,
-                        // borderColor: 'red',
+                        borderWidth: 1,
+                        borderColor: Color.BorderLightGrey,
                         marginLeft: 20,
                         borderRadius: 100,
                         width: 50,
@@ -258,12 +258,14 @@ class V extends React.Component {
                         // borderWidth: 1,
                         // borderColor: 'blue',
                         marginLeft: 40,
+                        width: 150,
                       }}>
                       <Text
                         style={{
                           color: Color.OceanBlue,
                           fontSize: 16,
                           fontWeight: '500',
+                          textAlign: 'center',
                         }}>
                         {item.name.toUpperCase()}
                       </Text>
