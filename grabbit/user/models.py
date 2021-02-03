@@ -30,6 +30,7 @@ class User(BaseModel):
 
     email = models.CharField(max_length=255, null=True)
     phone = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, null=True)
     secret = models.CharField(max_length=255)
     salt = models.IntegerField()
     current_session_token = models.CharField(max_length=255)

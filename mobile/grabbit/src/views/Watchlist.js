@@ -3,7 +3,7 @@ import {View, Text, FlatList, Image, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import ReduxActions from 'grabbit/src/lib/Actions';
 import {DealListItem} from 'grabbit/src/components/List';
-import {getStateForKey, httpStateUpdate} from 'grabbit/src/lib/Utils';
+import {getStateForKey, httpStateUpdate, objectContainsItem} from 'grabbit/src/lib/Utils';
 import {Color} from 'grabbit/src/lib/Const';
 import DealFocusModal from 'grabbit/src/components/modals/DealFocus';
 
@@ -22,7 +22,6 @@ class V extends React.Component {
     if (!this.props.showDealFocusedModal) {
       return;
     }
-
     return modal;
   }
 
@@ -59,18 +58,19 @@ class V extends React.Component {
           keyExtractor={(_item, index) => index.toString()}
           data={this.props.watchList}
           renderItem={({item, index}) => {
+            // FIXME: this can be abstracted a bit more (unfortunately)
+            const [hasLike, like] = objectContainsItem(this.props.likes, item.id);
+            const [onWatchList, watchListItem] = objectContainsItem(this.props.watchListObject, item.id);
+
             return (
-              <TouchableOpacity
-                // TODO: this should open deal focus modal, where the deal can be
-                // removed from the watch list on that modal
-                onPress={() =>
-                  this.props.dispatch({
-                    type: ReduxActions.Deals.SetFocusedDeal,
-                    payload: item,
-                  })
-                }>
-                <DealListItem item={item.deal} routeKey="watchList" />
-              </TouchableOpacity>
+              <DealListItem
+                hasLike={hasLike}
+                like={like}
+                onWatchList={onWatchList}
+                watchListItem={watchListItem}
+                item={item}
+                routeKey="watchList"
+              />
             );
           }}
         />
@@ -80,11 +80,13 @@ class V extends React.Component {
 }
 
 const mapStateToProps = function (state) {
-  const deals = Object.values(getStateForKey('state.deals.watch_list.list.items', state));
+  const watchListDeals = Object.values(getStateForKey('state.deals.watch_list.list.items', state));
   return {
     user: getStateForKey('state.session.user', state),
-    watchList: Object.values(deals),
+    watchList: Object.values(watchListDeals),
     showDealFocusedModal: getStateForKey('state.deals.focused.show_modal', state),
+    likes: getStateForKey('state.deals.likes.list.items', state),
+    watchListObject: watchListDeals,
   };
 };
 

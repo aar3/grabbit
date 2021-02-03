@@ -6,8 +6,15 @@ from lib.views import BaseModelViewSet
 from lib.middlewares import TokenAuthentication
 from user.models import User
 from user.views import BaseUserNestedViewSet
-from deal.models import Deal, MatchedDeal, WatchList, Like
-from deal.serializers import DealSerializer, MatchedDealserializer, WatchListSerializer, LikeSerializer
+from deal.models import Deal, MatchedDeal, WatchList, Like, Brand, FollowedBrand
+from deal.serializers import (
+    DealSerializer,
+    MatchedDealserializer,
+    WatchListSerializer,
+    LikeSerializer,
+    BrandSerializer,
+    FollowedBrandSerializer,
+)
 
 
 class MatchedDealViewSet(BaseUserNestedViewSet):
@@ -31,4 +38,18 @@ class WatchListViewSet(BaseUserNestedViewSet):
 class LikeViewSet(BaseUserNestedViewSet):
     model = Like
     serializer = LikeSerializer
+    authentication_classes = [TokenAuthentication]
+
+
+@api_view(["GET"])
+@authentication_classes([TokenAuthentication])
+def get_all_brands(request):
+    instances = Brand.objects.filter(deleted_at=None)
+    serializer = BrandSerializer(instances, many=True)
+    return Response(serializer.data)
+
+
+class FollowedBrandViewSet(BaseUserNestedViewSet):
+    model = FollowedBrand
+    serializer = FollowedBrandSerializer
     authentication_classes = [TokenAuthentication]

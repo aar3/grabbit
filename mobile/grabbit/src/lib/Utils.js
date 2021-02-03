@@ -37,15 +37,19 @@ export const httpRequest = async function (options) {
 };
 
 export const getStateForKey = function (key, state) {
-  if (!key || !state) {
-    throw new Error('getStateForKey requires valid key and state');
+  try {
+    if (!key || !state) {
+      throw new Error('getStateForKey requires valid key and state');
+    }
+    let curr = state;
+    const nodes = key.split('.').slice(1);
+    for (let i = 0; i < nodes.length; i++) {
+      curr = curr[nodes[i]];
+    }
+    return curr;
+  } catch (e) {
+    console.log('>>> STATE KEY ', key);
   }
-  let curr = state;
-  const nodes = key.split('.').slice(1);
-  for (let i = 0; i < nodes.length; i++) {
-    curr = curr[nodes[i]];
-  }
-  return curr;
 };
 
 export const formatOriginalPrice = function (item) {
@@ -190,3 +194,9 @@ class Websocket_ {
 }
 
 export const Websocket = new Websocket_();
+
+export const objectContainsItem = function (object, itemId) {
+  // IMPORTANT: this object argument _must_ have a deal property
+  const item = Object.values(object).find((item) => item.deal.id === itemId);
+  return [typeof item === 'object', item];
+};

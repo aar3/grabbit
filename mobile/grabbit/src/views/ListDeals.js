@@ -1,12 +1,11 @@
 import React from 'react';
 import {View, Text, FlatList, Image, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
-import Icon from 'react-native-vector-icons/Feather';
 import ReduxActions from 'grabbit/src/lib/Actions';
 import {DealListItem} from 'grabbit/src/components/List';
-import {getStateForKey, httpStateUpdate} from 'grabbit/src/lib/Utils';
+import {getStateForKey, httpStateUpdate, objectContainsItem} from 'grabbit/src/lib/Utils';
 import {LoadingView, ErrorView} from 'grabbit/src/components/Basic';
-import {Color, Font, PLACEHOLDER_IMG} from 'grabbit/src/lib/Const';
+import {Color} from 'grabbit/src/lib/Const';
 import DealFocusModal from 'grabbit/src/components/modals/DealFocus';
 
 class V extends React.Component {
@@ -23,11 +22,6 @@ class V extends React.Component {
     this.getWatchList();
     this.getNotifications();
     this.getLikes();
-  }
-
-  _objectContainsDeal(set, dealId) {
-    const item = Object.values(set).find((item) => item.deal.id === dealId);
-    return {exists: typeof item === 'object', item};
   }
 
   getLikes() {
@@ -227,24 +221,17 @@ class V extends React.Component {
           onRefresh={() => this.getDeals()}
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
-            const {exists: hasLike, item: like} = this._objectContainsDeal(this.props.likes, item.id);
-            const {exists: onWatchList, item: watchListItem} = this._objectContainsDeal(this.props.watchList, item.id);
+            // FIXME: this can be abstracted a bit more (unfortunately)
+            const [hasLike, like] = objectContainsItem(this.props.likes, item.id);
+            const [onWatchList, watchListItem] = objectContainsItem(this.props.watchList, item.id);
             return (
-              <TouchableOpacity
-                onPress={() =>
-                  this.props.dispatch({
-                    type: ReduxActions.Deals.SetFocusedDeal,
-                    payload: item,
-                  })
-                }>
-                <DealListItem
-                  hasLike={hasLike}
-                  like={like}
-                  watchListItem={watchListItem}
-                  onWatchList={onWatchList}
-                  item={item}
-                />
-              </TouchableOpacity>
+              <DealListItem
+                hasLike={hasLike}
+                like={like}
+                watchListItem={watchListItem}
+                onWatchList={onWatchList}
+                item={{deal: item}}
+              />
             );
           }}
         />
@@ -270,8 +257,6 @@ const mapStateToProps = function (state) {
   const deals = getStateForKey('state.deals.all.items', state);
   const sortedDeals = Object.values(deals).sort((a, b) => a.id > b.id);
   const matchedDeals = getStateForKey('state.deals.matches.items', state);
-  const likes = getStateForKey('state.deals.likes.list.items', state);
-  const watchList = getStateForKey('state.deals.watch_list.list.items', state);
 
   return {
     user: getStateForKey('state.session.user', state),
@@ -289,8 +274,8 @@ const mapStateToProps = function (state) {
     dealsPage: getStateForKey('state.deals.all.page', state),
     matchedDealsPage: getStateForKey('state.deals.matches.page', state),
 
-    likes,
-    watchList,
+    likes: getStateForKey('state.deals.likes.list.items', state),
+    watchList: getStateForKey('state.deals.watch_list.list.items', state),
   };
 };
 

@@ -14,6 +14,11 @@ const arrayToObject = function (arr, keyedBy) {
 // api sends data over the wire
 const defaultState = {
   session: {
+    edit_account: {
+      pending: false,
+      error: null,
+      tmp_user: {},
+    },
     user: {
       id: 3,
       created_at: '2020-12-28T20:49:15.378923Z',
@@ -203,11 +208,209 @@ const defaultState = {
     connected: false,
     error: null,
   },
+  brands: {
+    list: {
+      search: null,
+      pending: false,
+      error: null,
+      items: {}, // All brands
+    },
+    following: {
+      pending: false,
+      error: null,
+      items: {}, // Followed brands
+    },
+  },
 };
 
 const reducer = function (state = defaultState, action) {
   const {payload, type, key} = action;
   switch (type) {
+    // ********************************************
+    // Brands
+    // ********************************************
+    case ReduxActions.Brands.PostFollowedBrandSuccess: {
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          following: {
+            ...state.brands.following,
+            pending: false,
+            error: null,
+            items: {
+              ...state.brands.following.items,
+              [payload.id]: payload,
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.PostFollowedBrandError: {
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          following: {
+            ...state.brands.following,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.PostFollowedBrandPending: {
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          following: {
+            ...state.brands.following,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.DeleteFollowedBrandSuccess: {
+      const items = state.brands.following.items;
+      delete items[payload.id];
+
+      console.log('>>> ITEMS IS NOW ', items);
+
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          following: {
+            ...state.brands.following,
+            pending: false,
+            error: null,
+            items,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.DeleteFollowedBrandError: {
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          following: {
+            ...state.brands.following,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.DeleteFollowedBrandPending: {
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          following: {
+            ...state.brands.following,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.UpdateBrandSearch: {
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          list: {
+            ...state.brands.list,
+            search: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.GetFollowedBrandsSuccess: {
+      const items = arrayToObject(payload, 'id');
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          following: {
+            ...state.brands.following,
+            pending: false,
+            error: null,
+            items,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.GetFollowedBrandsError: {
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          following: {
+            ...state.brands.following,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.GetFollowedBrandsPending: {
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          following: {
+            ...state.brands.following,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.GetBrandsError: {
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          list: {
+            ...state.brands.list,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.GetBrandsSuccess: {
+      const items = arrayToObject(payload, 'id');
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          list: {
+            ...state.brands.list,
+            pending: false,
+            error: null,
+            items,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.GetBrandsPending: {
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          list: {
+            ...state.brands.list,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
     // ********************************************
     // WebSocket
     // ********************************************
@@ -1013,13 +1216,14 @@ const reducer = function (state = defaultState, action) {
         },
       };
     }
+
     case ReduxActions.Deals.GetMatchedDealsError: {
       return {
         ...state,
         deals: {
           ...state.deals,
-          list: {
-            ...state.deals.list,
+          matches: {
+            ...state.deals.matches,
             error: payload,
             pending: false,
           },
@@ -1029,19 +1233,15 @@ const reducer = function (state = defaultState, action) {
 
     case ReduxActions.Deals.GetMatchedDealsSuccess: {
       const items = arrayToObject(payload, 'id');
-
       return {
         ...state,
         deals: {
           ...state.deals,
           matches: {
             ...state.deals.matches,
-            pending: false,
             error: null,
-            items: {
-              ...state.deals.matches.items,
-              ...items,
-            },
+            pending: false,
+            items,
           },
         },
       };
@@ -1052,10 +1252,10 @@ const reducer = function (state = defaultState, action) {
         ...state,
         deals: {
           ...state.deals,
-          list: {
-            ...state.deals.list,
-            pending: true,
+          matches: {
+            ...state.deals.matches,
             error: null,
+            pending: true,
           },
         },
       };
@@ -1078,6 +1278,73 @@ const reducer = function (state = defaultState, action) {
     // ********************************************
     // Session
     // ********************************************
+    case ReduxActions.Session.UpdateTmpEditAccountValue: {
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          edit_account: {
+            ...state.session.edit_account,
+            tmp_user: {
+              ...state.session.edit_account.tmp_user,
+              [key]: payload,
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Session.SetEditingUser: {
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          edit_account: {
+            ...state.session.edit_account,
+            tmp_user: state.session.user,
+          },
+        },
+      };
+    }
+    case ReduxActions.Session.EditAccountInfoSuccess: {
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          user: payload,
+          edit_account: {
+            ...state.session.edit_account,
+            pending: false,
+            error: null,
+          },
+        },
+      };
+    }
+    case ReduxActions.Session.EditAccountInfoError: {
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          edit_account: {
+            ...state.session.edit_account,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Session.EditAccountInfoPending: {
+      return {
+        ...state,
+        session: {
+          ...state.session,
+          edit_account: {
+            ...state.session.edit_account,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
     case ReduxActions.Session.PostUserSignupSuccess: {
       return {
         ...state,

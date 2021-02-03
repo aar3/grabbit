@@ -3,6 +3,8 @@ export default {
   Session: {
     UpdateLoginValue: 'UpdateLoginValue',
     UpdateSignupValue: 'UpdateSignupValue',
+    UpdateTmpEditAccountValue: 'UpdateTmpEditAccountValue',
+    SetEditingUser: 'SetEditingUser',
 
     PostUserLoginPending: 'PostUserLoginPending',
     PostUserLoginSuccess: 'PostUserLoginSuccess',
@@ -12,6 +14,10 @@ export default {
     PostUserSignupPending: 'PostUserSignupPending',
     PostUserSignupError: 'PostUserSignupError',
     PostUserSignupSuccess: 'PostUserSignupSuccess',
+
+    EditAccountInfoPending: 'EditAccountInfoPending',
+    EditAccountInfoError: 'EditAccountInfoError',
+    EditAccountInfoSuccess: 'EditAccountInfoSuccess',
   },
   Deals: {
     GetUserLikesPending: 'GetUserLikesPending',
@@ -97,5 +103,25 @@ export default {
   },
   WebSocket: {
     IncomingNotification: 'IncomingNotification',
+  },
+
+  Brands: {
+    UpdateBrandSearch: 'UpdateBrandSearch',
+
+    PostFollowedBrandPending: 'PostFollowedBrandPending',
+    PostFollowedBrandSuccess: 'PostFollowedBrandSuccess',
+    PostFollowedBrandError: 'PostFollowedBrandError',
+
+    DeleteFollowedBrandError: 'DeleteFollowedBrandError',
+    DeleteFollowedBrandSuccess: 'DeleteFollowedBrandSuccess',
+    DeleteFollowedBrandPending: 'DeleteFollowedBrandPending',
+
+    GetBrandsPending: 'GetBrandsPending',
+    GetBrandsError: 'GetBrandsError',
+    GetBrandsSuccess: 'GetBrandsSuccess',
+
+    GetFollowedBrandsPending: 'GetFollowedBrandsPending',
+    GetFollowedBrandsSuccess: 'GetFollowedBrandsSuccess',
+    GetFollowedBrandsError: 'GetFollowedBrandsError',
   },
 };

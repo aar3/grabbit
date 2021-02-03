@@ -160,3 +160,9 @@ class SettingViewSet(BaseUserNestedViewSet):
         settings = Setting.objects.filter(user__id=user.id).order_by("-created_at")[0]
         serializer = SettingSerializer(settings)
         return Response(serializer.data)
+
+
+@api_view(["GET"])
+@authentication_classes([TokenAuthentication])
+def get_users_followed_brands(request, user_id=None):
+    user = get_object_or_404(USer, pk=user_id)

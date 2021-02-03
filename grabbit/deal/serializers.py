@@ -1,5 +1,5 @@
 from lib.serializers import BaseModelSerializer
-from deal.models import Deal, MatchedDeal, WatchList, Like
+from deal.models import Deal, MatchedDeal, WatchList, Like, Brand, FollowedBrand
 from user.serializers import UserSerializer
 
 
@@ -58,4 +58,32 @@ class LikeSerializer(BaseModelSerializer):
             "deleted_at",
             "user_id",
             "deal",
+        ]
+
+
+class BrandSerializer(BaseModelSerializer):
+    class Meta:
+        model = Brand
+        fields = [
+            "id",
+            "created_at",
+            "updated_at",
+            "deleted_at",
+            "img_url",
+            "name",
+        ]
+
+
+class FollowedBrandSerializer(BaseModelSerializer):
+    brand = BrandSerializer(read_only=True)
+
+    class Meta:
+        model = FollowedBrand
+        fields = [
+            "id",
+            "created_at",
+            "updated_at",
+            "deleted_at",
+            "brand",
+            "user_id",
         ]

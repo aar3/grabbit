@@ -76,7 +76,7 @@ class M extends React.Component {
           }}
           _buttonStyle={{
             backgroundColor: Color.OceanBlue,
-            // borderColor: Color.GreyBlue,
+            // borderColor: Color.OceanBlue,
             // borderWidth: 1,
           }}
           titleStyle={{
@@ -145,8 +145,8 @@ class M extends React.Component {
           </View>
           <View
             style={{
-              borderWidth: 1,
-              borderColor: 'red',
+              // borderWidth: 1,
+              // borderColor: 'red',
               padding: 10,
               justifyContent: 'center',
               alignItems: 'center',
@@ -180,8 +180,8 @@ class M extends React.Component {
             </Text>
             <View
               style={{
-                borderWidth: 1,
-                borderColor: 'blue',
+                // borderWidth: 1,
+                // borderColor: 'blue',
                 width: 200,
                 justifyContent: 'space-evenly',
                 flexDirection: 'row',
@@ -190,7 +190,7 @@ class M extends React.Component {
               <Text
                 style={{
                   fontWeight: '500',
-                  color: Color.GreyBlue,
+                  color: Color.OceanBlue,
                   fontSize: 16,
                 }}>
                 ${this.props.deal.current_value}
@@ -207,8 +207,8 @@ class M extends React.Component {
             </View>
             <View
               style={{
-                borderWidth: 1,
-                borderColor: 'red',
+                // borderWidth: 1,
+                // borderColor: 'red',
                 marginTop: 20,
                 width: '100%',
                 height: 150,
@@ -239,8 +239,8 @@ class M extends React.Component {
 
             <View
               style={{
-                borderWidth: 1,
-                borderColor: 'red',
+                // borderWidth: 1,
+                // borderColor: 'red',
                 width: '100%',
                 padding: 5,
                 maxHeight: 200,
@@ -260,20 +260,22 @@ class M extends React.Component {
             </View>
 
             <View
-              style={{
-                borderWidth: 1,
-                borderColor: 'green',
-              }}>
+              style={
+                {
+                  // borderWidth: 1,
+                  // borderColor: 'green',
+                }
+              }>
               {this._renderWatchListButton()}
               <GrabbitButton
                 onPress={() => Linking.openURL(this.props.deal.url)}
                 _buttonStyle={{
                   backgroundColor: Color.White,
-                  borderColor: Color.Teal,
+                  borderColor: Color.OceanBlue,
                   borderWidth: 1,
                 }}
                 titleStyle={{
-                  color: Color.Teal,
+                  color: Color.OceanBlue,
                   fontWeight: 'bold',
                 }}
                 title="Visit"
@@ -336,12 +338,12 @@ const styles = StyleSheet.create({
   buttonStyle: {
     borderWidth: 1,
     height: 50,
-    borderColor: Color.GreyBlue,
+    borderColor: Color.OceanBlue,
     backgroundColor: Color.White,
   },
 
   footerButtonLabel: {
-    color: Color.GreyBlue,
+    color: Color.OceanBlue,
     fontWeight: '600',
   },
 });

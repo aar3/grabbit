@@ -4,9 +4,10 @@ import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Button} from 'react-native-elements';
 import {Actions} from 'react-native-router-flux';
+import ReduxActions from 'grabbit/src/lib/Actions';
 import {getStateForKey} from 'grabbit/src/lib/Utils';
 import {Color} from 'grabbit/src/lib/Const';
-import {ErrorView} from 'grabbit/src/components/Basic';
+import {ErrorView, EmptyFlatList} from 'grabbit/src/components/Basic';
 import {httpStateUpdate} from 'grabbit/src/lib/Utils';
 
 class V extends React.Component {
@@ -50,6 +51,8 @@ class V extends React.Component {
       return null;
     }
 
+    console.log('>>> ', item);
+
     if (item.route_key === 'dealFocus') {
       return (
         <View
@@ -61,9 +64,17 @@ class V extends React.Component {
             marginLeft: 5,
           }}>
           <Button
+            onPress={() =>
+              this.props.dispatch({
+                type: ReduxActions.Deals.SetFocusedDeal,
+                payload: item.metadata.deal,
+              })
+            }
             buttonStyle={{
-              backgroundColor: Color.GreyBlue,
-              borderRadius: 10,
+              backgroundColor: Color.White,
+              borderRadius: 5,
+              borderWidth: 1,
+              borderColor: Color.OceanBlue,
             }}
             containerStyle={{
               width: 75,
@@ -71,7 +82,7 @@ class V extends React.Component {
             }}
             title="Grab It"
             titleStyle={{
-              color: Color.White,
+              color: Color.OceanBlue,
               fontWeight: '600',
               fontSize: 12,
             }}
@@ -189,16 +200,7 @@ class V extends React.Component {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text
-            style={{
-              color: Color.GreyBlue,
-              fontWeight: 'bold',
-              fontSize: 18,
-              marginBottom: 10,
-            }}>
-            Nothing here
-          </Text>
-          {this._renderLogoFooter()}
+          <EmptyFlatList text="We haven't found anything we think you'll really like yet" />
         </View>
       );
     }

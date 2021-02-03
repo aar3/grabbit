@@ -11,6 +11,7 @@ class UserSerializer(BaseModelSerializer):
             "email",
             "updated_at",
             "deleted_at",
+            "name",
             "current_session_token",
             "phone",
         ]
@@ -29,6 +30,7 @@ class NotificationSerializer(BaseModelSerializer):
             "expiry",
             "user_id",
             "route_key",
+            "metadata",
             "icon",
             "seen_at",
         ]
