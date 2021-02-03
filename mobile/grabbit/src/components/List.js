@@ -2,13 +2,19 @@ import React from 'react';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {connect} from 'react-redux';
-import {httpStateUpdate, getStateForKey} from 'grabbit/src/lib/Utils';
+import ReduxActions from 'grabbit/src/lib/Actions';
+import {httpStateUpdate, getStateForKey, objectContainsItem} from 'grabbit/src/lib/Utils';
 import {Color} from 'grabbit/src/lib/Const';
 
 class DealListItem_ extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      hasLike: false,
+      like: null,
+      onWatchList: false,
+      watchListItem: null,
+    };
   }
 
   _renderLikeIcon(deal) {
@@ -16,6 +22,7 @@ class DealListItem_ extends React.Component {
     if (this.props.routeKey === 'watchList') {
       return null;
     }
+
     if (this.props.hasLike) {
       return (
         <TouchableOpacity
@@ -116,117 +123,125 @@ class DealListItem_ extends React.Component {
   }
 
   render() {
-    const {item} = this.props;
+    const deal = this.props.item.deal;
     const size = 90;
     const shortDescription =
-      item.description.length > size ? `${item.description.substr(0, size)}...` : item.description;
+      deal.description.length > size ? `${deal.description.substr(0, size)}...` : deal.description;
 
     return (
-      <View
-        style={{
-          backgroundColor: Color.White,
-          borderBottomWidth: 1,
-          borderBottomColor: Color.BorderLightGrey,
-          marginTop: 5,
-          alignItems: 'center',
-          padding: 10,
-          backgroundColor: Color.White,
-          flexDirection: 'row',
-          height: 175,
-        }}>
+      <TouchableOpacity
+        onPress={() =>
+          this.props.dispatch({
+            type: ReduxActions.Deals.SetFocusedDeal,
+            payload: deal,
+          })
+        }>
         <View
           style={{
-            borderWidth: 1,
-            borderColor: Color.BorderLightGrey,
             backgroundColor: Color.White,
-            height: 150,
-            width: 150,
-            overflow: 'hidden',
+            borderBottomWidth: 1,
+            borderBottomColor: Color.BorderLightGrey,
+            marginTop: 5,
+            alignItems: 'center',
+            padding: 10,
+            backgroundColor: Color.White,
+            flexDirection: 'row',
+            height: 175,
           }}>
-          <Image
-            source={{uri: item.img_url}}
+          <View
             style={{
+              borderWidth: 1,
+              borderColor: Color.BorderLightGrey,
+              backgroundColor: Color.White,
               height: 150,
               width: 150,
-              // borderWidth: 1,
-              // borderColor: 'red',
-            }}
-          />
-        </View>
-        <View
-          style={{
-            marginLeft: 10,
-            width: 225,
-            height: 150,
-            justifyContent: 'center',
-            // borderWidth: 1,
-            // borderColor: 'blue',
-          }}>
+              overflow: 'hidden',
+            }}>
+            <Image
+              source={{uri: deal.img_url}}
+              style={{
+                height: 150,
+                width: 150,
+                // borderWidth: 1,
+                // borderColor: 'red',
+              }}
+            />
+          </View>
           <View
             style={{
+              marginLeft: 10,
+              width: 225,
+              height: 150,
+              justifyContent: 'center',
               // borderWidth: 1,
-              // borderColor: 'green',
-              flexDirection: 'row',
+              // borderColor: 'blue',
             }}>
-            <Text
+            <View
               style={{
-                fontSize: 13,
-
-                fontWeight: '500',
-                marginBottom: 5,
-                color: Color.LessReadableGreyText,
+                // borderWidth: 1,
+                // borderColor: 'green',
+                flexDirection: 'row',
               }}>
-              {item.merchant_name}
-            </Text>
+              <Text
+                style={{
+                  fontSize: 13,
+
+                  fontWeight: '500',
+                  marginBottom: 5,
+                  color: Color.LessReadableGreyText,
+                }}>
+                {deal.merchant_name}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 13,
+                  marginLeft: 50,
+                  color: Color.ReadableGreyText,
+                }}>
+                ${deal.current_value}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 13,
+                  color: Color.ErrorRed,
+                  marginLeft: 20,
+                  textDecorationLine: 'line-through',
+                }}>
+                ${deal.original_value}
+              </Text>
+            </View>
             <Text
               style={{
-                fontSize: 13,
-                marginLeft: 50,
+                fontSize: 12,
+                fontWeight: '500',
+                marginTop: 5,
+                color: Color.ReadableGreyText,
+                marginBottom: 10,
                 color: Color.ReadableGreyText,
               }}>
-              ${item.current_value}
+              {deal.title}
             </Text>
             <Text
               style={{
                 fontSize: 13,
-                color: Color.ErrorRed,
-                marginLeft: 20,
-                textDecorationLine: 'line-through',
+                color: Color.LessReadableGreyText,
               }}>
-              ${item.original_value}
+              {shortDescription}
             </Text>
-          </View>
-          <Text
-            style={{
-              fontSize: 12,
-              fontWeight: '500',
-              marginTop: 5,
-              color: Color.ReadableGreyText,
-              marginBottom: 10,
-              color: Color.ReadableGreyText,
-            }}>
-            {item.title}
-          </Text>
-          <Text
-            style={{
-              fontSize: 13,
-              color: Color.LessReadableGreyText,
-            }}>
-            {shortDescription}
-          </Text>
-          <View
-            style={{
-              // borderWidth: 1,
-              // borderColor: 'green',
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              marginTop: 5,
-            }}>
-            {this._renderWatchListIcon(item)}
-            {this._renderLikeIcon(item)}
+            <View
+              style={{
+                // borderWidth: 1,
+                // borderColor: 'green',
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                marginTop: 5,
+              }}>
+              {this._renderWatchListIcon(deal)}
+              {this._renderLikeIcon(deal)}
+            </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 }
@@ -234,6 +249,8 @@ class DealListItem_ extends React.Component {
 const mapStateToProps = function (state) {
   return {
     user: getStateForKey('state.session.user', state),
+    likes: getStateForKey('state.deals.likes.list.items', state),
+    watchList: getStateForKey('state.deals.watch_list.list.items', state),
   };
 };
 

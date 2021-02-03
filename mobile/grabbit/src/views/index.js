@@ -12,6 +12,7 @@ import AccountTypeView from 'grabbit/src/views/AccountType';
 import WatchListView from 'grabbit/src/views/WatchList';
 import EditAccountView from 'grabbit/src/views/EditAccount';
 import BrandsView from 'grabbit/src/views/Brands';
+import MatchedDealsView from 'grabbit/src/views/MatchedDeals';
 
 module.exports = {
   AccountView,
@@ -28,4 +29,5 @@ module.exports = {
   AccountTypeView,
   EditAccountView,
   BrandsView,
+  MatchedDealsView,
 };

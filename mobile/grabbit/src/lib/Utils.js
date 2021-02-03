@@ -190,3 +190,9 @@ class Websocket_ {
 }
 
 export const Websocket = new Websocket_();
+
+export const objectContainsItem = function (object, itemId) {
+  // IMPORTANT: this object argument _must_ have a deal property
+  const item = Object.values(object).find((item) => item.deal.id === itemId);
+  return [typeof item === 'object', item];
+};

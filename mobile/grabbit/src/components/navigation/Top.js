@@ -47,7 +47,7 @@ class BasicTopNavigationBar extends React.Component {
             // borderColor: 'blue',
             marginTop: 40,
             height: 40,
-            width: 100,
+            width: 125,
             justifyContent: 'center',
             alignItems: 'center',
           }}>

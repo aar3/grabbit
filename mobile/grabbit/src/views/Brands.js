@@ -51,7 +51,7 @@ class V extends React.Component {
   }
 
   _objectContainsItem(set, itemId) {
-    const item = Object.values(set).find((item) => item.id === itemId);
+    const item = Object.values(set).find((item) => item.brand.id === itemId);
     return {exists: typeof item === 'object', item};
   }
 

@@ -208,12 +208,12 @@ const defaultState = {
       search: null,
       pending: false,
       error: null,
-      items: {},
+      items: {}, // All brands
     },
     following: {
       pending: false,
       error: null,
-      items: {},
+      items: {}, // Followed brands
     },
   },
 };
@@ -224,6 +224,92 @@ const reducer = function (state = defaultState, action) {
     // ********************************************
     // Brands
     // ********************************************
+    case ReduxActions.Brands.PostFollowedBrandSuccess: {
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          following: {
+            ...state.brands.following,
+            pending: false,
+            error: null,
+            items: {
+              ...state.brands.following.items,
+              [payload.id]: payload,
+            },
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.PostFollowedBrandError: {
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          following: {
+            ...state.brands.following,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.PostFollowedBrandPending: {
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          following: {
+            ...state.brands.following,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.DeleteFollowedBrandSuccess: {
+      const items = state.brands.following.items;
+      delete items[payload.id];
+
+      console.log('>>> DELETING THIS ', payload.id);
+
+      return {
+        ...state,
+        brands: {
+          ...state.brands,
+          following: {
+            ...state.brands.following,
+            pending: false,
+            error: payload,
+            items,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.DeleteFollowedBrandError: {
+      return {
+        ...state,
+        brands: {
+          following: {
+            ...state.brands.following,
+            pending: false,
+            error: payload,
+          },
+        },
+      };
+    }
+    case ReduxActions.Brands.DeleteFollowedBrandPending: {
+      return {
+        ...state,
+        brands: {
+          following: {
+            ...state.brands.following,
+            pending: true,
+            error: null,
+          },
+        },
+      };
+    }
     case ReduxActions.Brands.UpdateBrandSearch: {
       return {
         ...state,
@@ -1123,13 +1209,14 @@ const reducer = function (state = defaultState, action) {
         },
       };
     }
+
     case ReduxActions.Deals.GetMatchedDealsError: {
       return {
         ...state,
         deals: {
           ...state.deals,
-          list: {
-            ...state.deals.list,
+          matches: {
+            ...state.deals.matches,
             error: payload,
             pending: false,
           },
@@ -1139,19 +1226,15 @@ const reducer = function (state = defaultState, action) {
 
     case ReduxActions.Deals.GetMatchedDealsSuccess: {
       const items = arrayToObject(payload, 'id');
-
       return {
         ...state,
         deals: {
           ...state.deals,
           matches: {
             ...state.deals.matches,
+            error: payload,
             pending: false,
-            error: null,
-            items: {
-              ...state.deals.matches.items,
-              ...items,
-            },
+            items,
           },
         },
       };
@@ -1162,10 +1245,10 @@ const reducer = function (state = defaultState, action) {
         ...state,
         deals: {
           ...state.deals,
-          list: {
-            ...state.deals.list,
-            pending: true,
+          matches: {
+            ...state.deals.matches,
             error: null,
+            pending: true,
           },
         },
       };

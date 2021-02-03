@@ -103,6 +103,7 @@ class Brand(BaseModel):
 class FollowedBrand(BaseModel):
     class Meta:
         db_table = "followed_brands"
+        unique_together = ("brand_id", "user_id", "deleted_at")
 
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

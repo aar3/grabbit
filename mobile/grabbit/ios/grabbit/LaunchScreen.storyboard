@@ -21,11 +21,11 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Grabbit_White_Letters_222x1000" translatesAutoresizingMaskIntoConstraints="NO" id="af2-qu-h2Q">
-                                <rect key="frame" x="82" y="351" width="240" height="128"/>
+                                <rect key="frame" x="97" y="313" width="240" height="128"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Grabbit_Rabbit_White_450x603" translatesAutoresizingMaskIntoConstraints="NO" id="kud-EV-u8h">
-                                <rect key="frame" x="91" y="465" width="222" height="109"/>
+                                <rect key="frame" x="106" y="449" width="222" height="109"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>

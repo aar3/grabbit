@@ -16,6 +16,7 @@ import {
   NotificationsView,
   BrandsView,
   EditAccountView,
+  MatchedDealsView,
 } from 'grabbit/src/views';
 
 export default class Router_ extends React.Component {
@@ -98,6 +99,13 @@ export default class Router_ extends React.Component {
             component={EditAccountView}
           />
           <Scene navBar={BasicTopNavigationBar} title="Brands" hideNavBar={false} key="brands" component={BrandsView} />
+          <Scene
+            navBar={BasicTopNavigationBar}
+            title="Matched Deals"
+            hideNavBar={false}
+            key="matchedDeals"
+            component={MatchedDealsView}
+          />
         </Stack>
       </Router>
     );
