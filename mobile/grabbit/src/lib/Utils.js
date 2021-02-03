@@ -112,7 +112,7 @@ export const getDealType = function (item) {
   }
 };
 
-class Websocket_ {
+export class Websocket {
   constructor() {
     this.uri = 'ws://localhost:8765';
     this.store = Store;
@@ -192,8 +192,6 @@ class Websocket_ {
     Alert.alert('Permissions', JSON.stringify(perms));
   }
 }
-
-export const Websocket = new Websocket_();
 
 export const objectContainsItem = function (object, itemId) {
   // IMPORTANT: this object argument _must_ have a deal property

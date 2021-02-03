@@ -14,6 +14,7 @@ import {
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 import ReduxActions from 'grabbit/src/lib/Actions';
+import {Button} from 'react-native-elements';
 import {TextInput, GrabbitButton} from 'grabbit/src/components/Basic';
 import {Color} from 'grabbit/src/lib/Const';
 import {httpRequest, getStateForKey} from 'grabbit/src/lib/Utils';
@@ -110,27 +111,40 @@ class V extends React.Component {
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
+                <View
+                  style={{
+                    height: 45,
+                    width: 200,
+                    // borderColor: 'blue',
+                    // borderWidth: 1,
+                    marginTop: 20,
+                  }}>
+                  <Image
+                    source={require('./../../assets/imgs/Grabbit_Grey_Letters_222x1000.png')}
+                    style={{flex: 1, height: undefined, width: undefined}}
+                  />
+                </View>
+              </View>
+              <View
+                style={{
+                  // borderWidth: 1,
+                  // borderColor: 'green',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
                 <Text
                   style={{
-                    marginLeft: 10,
-                    fontWeight: 'bold',
-                    fontSize: 22,
-                    color: Color.GreyBlue,
+                    fontWeight: '400',
+                    fontSize: 16,
+                    color: Color.OceanBlue,
                     marginBottom: 20,
+                    marginLeft: 20,
+                    marginTop: 20,
+                    textAlign: 'center',
                   }}>
-                  Logo Here
+                  Get started with Grabbit
                 </Text>
               </View>
-              <Text
-                style={{
-                  marginLeft: 10,
-                  fontWeight: 'bold',
-                  fontSize: 22,
-                  color: Color.GreyBlue,
-                  marginBottom: 20,
-                }}>
-                Join Grabbit
-              </Text>
               {this._renderErrorHeader()}
               <View
                 style={{
@@ -209,7 +223,7 @@ class V extends React.Component {
                   alignItems: 'center',
                   marginTop: 10,
                 }}>
-                <GrabbitButton
+                <Button
                   onPress={() => {
                     const options = {
                       endpoint: '/users/accounts/',
@@ -227,13 +241,20 @@ class V extends React.Component {
 
                     return this.props.postUserSignup(options);
                   }}
-                  _buttonStyle={{
+                  containerStyle={{
+                    marginTop: 10,
+                    marginBottom: 10,
+                  }}
+                  buttonStyle={{
+                    width: 300,
+                    height: 50,
+                    borderRadius: 50,
                     backgroundColor: Color.White,
                     borderWidth: 1,
-                    borderColor: Color.GreyBlue,
+                    borderColor: Color.OceanBlue,
                   }}
                   titleStyle={{
-                    color: Color.GreyBlue,
+                    color: Color.OceanBlue,
                     fontWeight: 'bold',
                   }}
                   title="Create Account"
@@ -325,6 +346,7 @@ const styles = StyleSheet.create({
   labelStyle: {
     fontWeight: 'normal',
     fontSize: 12,
+    marginBottom: 5,
   },
   inputStyle: {
     fontSize: 16,

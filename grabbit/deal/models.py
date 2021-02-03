@@ -27,7 +27,7 @@ class Deal(BaseModel):
     product_keywords = models.JSONField(default=list)
     all_img_urls = models.JSONField(default=list)
     description = models.TextField(null=True)
-    uid = models.CharField(max_length=255)
+    uid = models.CharField(max_length=255, unique=True)
 
     def set_uid(self):
         # NOTE: assuming the URL is a reliably consistent identifier
@@ -59,9 +59,10 @@ class MatchedDeal(BaseModel):
     class Meta:
         db_table = "matched_deals"
 
+    unique_together = ("user_id", "deal_id", "deleted_at")
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     deal = models.ForeignKey(Deal, on_delete=models.CASCADE)
-    is_on_watchlist = models.IntegerField(default=0)
 
 
 @receiver(post_save, sender=MatchedDeal)
@@ -80,6 +81,8 @@ class WatchList(BaseModel):
     class Meta:
         db_table = "watch_lists"
 
+    unique_together = ("user_id", "deal_id", "deleted_at")
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     deal = models.ForeignKey(Deal, on_delete=models.CASCADE)
 
@@ -87,6 +90,8 @@ class WatchList(BaseModel):
 class Like(BaseModel):
     class Meta:
         db_table = "likes"
+
+    unique_together = ("user_id", "deal_id", "deleted_at")
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     deal = models.ForeignKey(Deal, on_delete=models.CASCADE)

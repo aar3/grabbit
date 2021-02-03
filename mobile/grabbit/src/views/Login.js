@@ -102,11 +102,11 @@ class V extends React.Component {
             <Text
               style={{
                 fontWeight: '400',
-                fontSize: 20,
+                fontSize: 16,
                 color: Color.OceanBlue,
                 marginBottom: 20,
                 marginLeft: 20,
-                marginTop: 10,
+                marginTop: 20,
               }}>
               Login with your phone number
             </Text>

@@ -3,7 +3,7 @@ import {View, Text, FlatList, Image, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import ReduxActions from 'grabbit/src/lib/Actions';
 import {DealListItem} from 'grabbit/src/components/List';
-import {getStateForKey, httpStateUpdate, objectContainsItem} from 'grabbit/src/lib/Utils';
+import {getStateForKey, httpStateUpdate, objectContainsItem, Websocket} from 'grabbit/src/lib/Utils';
 import {LoadingView, ErrorView} from 'grabbit/src/components/Basic';
 import {Color} from 'grabbit/src/lib/Const';
 import DealFocusModal from 'grabbit/src/components/modals/DealFocus';
@@ -17,6 +17,9 @@ class V extends React.Component {
   }
 
   componentDidMount() {
+    // NOTE: We need to initialize the websoket after state.session.user is populated,
+    // it doesn't matter where we initialize it really
+    this.ws = new Websocket();
     this.getDeals();
     this.getMatchedDeals();
     this.getWatchList();
@@ -203,7 +206,7 @@ class V extends React.Component {
           }}
           onScroll={(event) => {
             const scrollOffset = event.nativeEvent.contentOffset.y;
-            console.log('>>> SCROLL INDEX ', scrollOffset);
+            // console.log('>>> SCROLL INDEX ', scrollOffset);
             this.setState({scrollOffset});
           }}
           onEndReachedThreshold={0.7}
@@ -221,11 +224,12 @@ class V extends React.Component {
           onRefresh={() => this.getDeals()}
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
-            // FIXME: this can be abstracted a bit more (unfortunately)
+            // FIXME: we shouldn't have to copy/paste these properties into DealListItem
             const [hasLike, like] = objectContainsItem(this.props.likes, item.id);
             const [onWatchList, watchListItem] = objectContainsItem(this.props.watchList, item.id);
             return (
               <DealListItem
+                index={index}
                 hasLike={hasLike}
                 like={like}
                 watchListItem={watchListItem}

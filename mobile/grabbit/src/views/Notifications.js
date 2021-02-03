@@ -51,8 +51,6 @@ class V extends React.Component {
       return null;
     }
 
-    console.log('>>> ', item);
-
     if (item.route_key === 'dealFocus') {
       return (
         <View
@@ -237,12 +235,13 @@ class V extends React.Component {
                 }}>
                 <View
                   style={{
+                    marginTop: 5,
                     backgroundColor: Color.White,
                     padding: 10,
                     borderBottomWidth: 0.5,
                     borderBottomColor: Color.BorderLightGrey,
                     flexDirection: 'row',
-                    height: 70,
+                    height: 80,
                     alignItems: 'center',
                   }}>
                   <View
