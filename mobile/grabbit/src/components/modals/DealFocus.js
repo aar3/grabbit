@@ -45,11 +45,11 @@ class M extends React.Component {
           }}
           _buttonStyle={{
             backgroundColor: Color.White,
-            borderColor: Color.OceanBlue,
+            borderColor: this.props.deal.brand.color_code,
             borderWidth: 1,
           }}
           titleStyle={{
-            color: Color.OceanBlue,
+            color: this.props.deal.brand.color_code,
             fontWeight: 'bold',
           }}
           title="Remove from Watch List"
@@ -109,7 +109,7 @@ class M extends React.Component {
             // justifyContent: 'center',
             // alignItems: 'center',
             marginTop: 50,
-            marginBottom: 50,
+            marginBottom: 40,
             marginLeft: 20,
             marginRight: 20,
             backgroundColor: 'white',
@@ -127,32 +127,34 @@ class M extends React.Component {
           }}>
           <View
             style={{
-              // borderWidth: 1,
-              // borderColor: 'green',
-              height: 30,
-              width: '100%',
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-            }}>
-            <TouchableOpacity
-              onPress={() =>
-                this.props.dispatch({
-                  type: ReduxActions.Deals.CloseFocusedDealModal,
-                })
-              }>
-              <Icon name="x" size={30} color={Color.BorderLightGrey} />
-            </TouchableOpacity>
-          </View>
-          <View
-            style={{
               position: 'absolute',
-              top: 5,
               // borderWidth: 1,
               // borderColor: 'red',
               padding: 10,
+              paddingTop: 0,
               justifyContent: 'center',
               alignItems: 'center',
             }}>
+            <View
+              style={{
+                // borderWidth: 1,
+                // borderColor: 'green',
+                height: 30,
+                position: 'absolute',
+                top: 5,
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.dispatch({
+                    type: ReduxActions.Deals.CloseFocusedDealModal,
+                  });
+                }}>
+                <Icon name="x" size={30} color={Color.BorderLightGrey} />
+              </TouchableOpacity>
+            </View>
             <View
               style={{
                 borderWidth: 1,
@@ -160,9 +162,10 @@ class M extends React.Component {
                 height: 100,
                 width: 100,
                 borderRadius: 100,
+                marginTop: 10,
                 overflow: 'hidden',
               }}>
-              <Image source={{uri: merchantLogo}} style={{width: 100, height: 100}} />
+              <Image source={{uri: this.props.deal.brand.img_url}} style={{width: 100, height: 100}} />
             </View>
             <Text
               style={{
@@ -294,11 +297,11 @@ class M extends React.Component {
 const mapStateToProps = function (state) {
   const item = getStateForKey('state.deals.focused.item', state);
   const type = getDealType(item);
-  const deal = [DealType.DerivedWatchList, DealType.Deal].includes(type) ? item : item.deal;
+  // const deal = [DealType.DerivedWatchList, DealType.Deal].includes(type) ? item : item.deal;
 
   return {
     showDealFocusedModal: getStateForKey('state.deals.focused.show_modal', state),
-    deal,
+    deal: item.deal,
     type,
   };
 };

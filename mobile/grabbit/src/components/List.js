@@ -199,7 +199,7 @@ class DealListItem_ extends React.Component {
           onPress={() =>
             this.props.dispatch({
               type: ReduxActions.Deals.SetFocusedDeal,
-              payload: deal,
+              payload: {deal},
             })
           }>
           <View
