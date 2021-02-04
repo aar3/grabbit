@@ -89,9 +89,9 @@ class V extends React.Component {
               width: 75,
               height: 40,
               borderRadius: 5,
-              backgroundColor: Color.OceanBlue,
+              backgroundColor: brand.color_code,
               // borderWidth: 1,
-              // borderColor: Color.OceanBlue,
+              // borderColor: brand.color_code,
             }}
             titleStyle={{
               fontSize: 12,
@@ -133,11 +133,11 @@ class V extends React.Component {
             borderRadius: 5,
             backgroundColor: Color.White,
             borderWidth: 1,
-            borderColor: Color.OceanBlue,
+            borderColor: brand.color_code,
           }}
           titleStyle={{
             fontSize: 12,
-            color: Color.OceanBlue,
+            color: brand.color_code,
             fontWeight: 'bold',
           }}
           title={'Unfollow'}
@@ -224,13 +224,15 @@ class V extends React.Component {
             keyExtractor={(_item, index) => index.toString()}
             data={brands}
             renderItem={({item, index}) => {
+              const description =
+                item.description.length > 200 ? `${item.description.substr(0, 200)}...` : item.description;
               return (
                 <View
                   style={{
                     width: '100%',
-                    padding: 5,
+                    padding: 10,
                     // borderWidth: 1,
-                    // borderColor: 'green',
+                    // borderColor: 'red',
                     borderBottomColor: Color.BorderLightGrey,
                     borderBottomWidth: 1,
                   }}>
@@ -245,7 +247,7 @@ class V extends React.Component {
                       style={{
                         borderWidth: 1,
                         borderColor: Color.BorderLightGrey,
-                        marginLeft: 20,
+                        marginLeft: 5,
                         borderRadius: 100,
                         width: 50,
                         height: 50,
@@ -257,17 +259,25 @@ class V extends React.Component {
                       style={{
                         // borderWidth: 1,
                         // borderColor: 'blue',
-                        marginLeft: 40,
-                        width: 150,
+                        marginLeft: 20,
+                        width: 225,
                       }}>
                       <Text
                         style={{
-                          color: Color.OceanBlue,
+                          color: Color.ReadableGreyText,
                           fontSize: 16,
                           fontWeight: '500',
-                          textAlign: 'center',
+                          marginBottom: 5,
+                          // textAlign: 'center',
                         }}>
                         {item.name.toUpperCase()}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 11,
+                          color: Color.ReadableGreyText,
+                        }}>
+                        {description}
                       </Text>
                     </View>
                     {this._renderFollowButton(item)}

@@ -10,6 +10,16 @@ from lib.const import EMPTY_IMAGE_URL, NotificationIcons
 from lib.models import BaseModel
 
 
+class Brand(BaseModel):
+    class Meta:
+        db_table = "brands"
+
+    name = models.CharField(max_length=255, unique=True)
+    img_url = models.CharField(max_length=255, default=EMPTY_IMAGE_URL)
+    description = models.TextField(null=True)
+    color_code = models.CharField(max_length=255, default="#000")
+
+
 class Deal(BaseModel):
     class Meta:
         db_table = "deals"
@@ -28,6 +38,7 @@ class Deal(BaseModel):
     all_img_urls = models.JSONField(default=list)
     description = models.TextField(null=True)
     uid = models.CharField(max_length=255, unique=True)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
 
     def set_uid(self):
         # NOTE: assuming the URL is a reliably consistent identifier
@@ -95,14 +106,6 @@ class Like(BaseModel):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     deal = models.ForeignKey(Deal, on_delete=models.CASCADE)
-
-
-class Brand(BaseModel):
-    class Meta:
-        db_table = "brands"
-
-    name = models.CharField(max_length=255, unique=True)
-    img_url = models.CharField(max_length=255, default=EMPTY_IMAGE_URL)
 
 
 class FollowedBrand(BaseModel):

@@ -75,7 +75,7 @@ class M extends React.Component {
             });
           }}
           _buttonStyle={{
-            backgroundColor: Color.OceanBlue,
+            backgroundColor: this.props.deal.brand.color_code,
             // borderColor: Color.OceanBlue,
             // borderWidth: 1,
           }}
@@ -137,7 +137,7 @@ class M extends React.Component {
             <TouchableOpacity
               onPress={() =>
                 this.props.dispatch({
-                  type: ReduxActions.Deals.ToggleFocusedDealModal,
+                  type: ReduxActions.Deals.CloseFocusedDealModal,
                 })
               }>
               <Icon name="x" size={30} color={Color.BorderLightGrey} />
@@ -145,6 +145,8 @@ class M extends React.Component {
           </View>
           <View
             style={{
+              position: 'absolute',
+              top: 5,
               // borderWidth: 1,
               // borderColor: 'red',
               padding: 10,
@@ -154,7 +156,7 @@ class M extends React.Component {
             <View
               style={{
                 borderWidth: 1,
-                borderColor: Color.BorderLightGrey,
+                borderColor: this.props.deal.brand.color_code,
                 height: 100,
                 width: 100,
                 borderRadius: 100,
@@ -164,8 +166,9 @@ class M extends React.Component {
             </View>
             <Text
               style={{
-                marginTop: 20,
+                marginTop: 10,
                 fontWeight: '600',
+                fontSize: 16,
                 color: Color.ReadableGreyText,
               }}>
               {this.props.deal.merchant_name}
@@ -173,7 +176,7 @@ class M extends React.Component {
 
             <Text
               style={{
-                marginTop: 20,
+                marginTop: 10,
                 color: Color.ReadableGreyText,
               }}>
               {this.props.deal.title}
@@ -211,13 +214,13 @@ class M extends React.Component {
                 // borderColor: 'red',
                 marginTop: 20,
                 width: '100%',
-                height: 150,
+                height: 300,
               }}>
               <FlatList
                 horizontal
                 keyExtractor={(_item, index) => index.toString()}
                 style={{
-                  height: 150,
+                  height: 300,
                 }}
                 data={this.props.deal.all_img_urls}
                 renderItem={({item, index}) => {
@@ -225,8 +228,8 @@ class M extends React.Component {
                     <Image
                       source={{uri: item}}
                       style={{
-                        height: 150,
-                        width: 150,
+                        height: 300,
+                        width: 300,
                         borderWidth: 1,
                         borderColor: Color.BorderLightGrey,
                         marginLeft: 5,
@@ -243,7 +246,7 @@ class M extends React.Component {
                 // borderColor: 'red',
                 width: '100%',
                 padding: 5,
-                maxHeight: 200,
+                maxHeight: 100,
                 marginTop: 20,
                 marginBottom: 20,
               }}>
@@ -271,11 +274,11 @@ class M extends React.Component {
                 onPress={() => Linking.openURL(this.props.deal.url)}
                 _buttonStyle={{
                   backgroundColor: Color.White,
-                  borderColor: Color.OceanBlue,
+                  borderColor: this.props.deal.brand.color_code,
                   borderWidth: 1,
                 }}
                 titleStyle={{
-                  color: Color.OceanBlue,
+                  color: this.props.deal.brand.color_code,
                   fontWeight: 'bold',
                 }}
                 title="Visit"

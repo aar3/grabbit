@@ -1200,6 +1200,18 @@ const reducer = function (state = defaultState, action) {
         },
       };
     }
+    case ReduxActions.Deals.CloseFocusedDealModal: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          focused: {
+            ...state.deals.focused,
+            show_modal: false,
+          },
+        },
+      };
+    }
     case ReduxActions.Deals.ToggleFocusedDealModal: {
       const prev = state.deals.focused.show_modal;
       return {

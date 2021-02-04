@@ -136,7 +136,7 @@ def main(*args, **kwargs):
     loop = asyncio.get_event_loop()
 
     server = websockets.serve(
-        handle_client_redux_connection, host, port, ping_interval=20, extra_headers={"Grabbit-WS-Version": "1.0"}
+        handle_client_redux_connection, host, port, ping_interval=5, extra_headers={"Grabbit-WS-Version": "1.0"}
     )
 
     handle = threading.Thread(target=run_unix_socket_for_django, args=(loop,))
