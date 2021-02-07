@@ -72,7 +72,12 @@ def update_session_for_existing_user(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def create_new_account_notification(sender, instance, created, **kwargs):
     if created:
-        _ = Notification.objects.create(user=instance, icon="user", text="Welcome to Grabbit!")
+        _ = Notification.objects.create(
+            user=instance,
+            icon="ios-contact",
+            title="Welcome to Grabbit!",
+            text="Get started by engaging with the deals we send you",
+        )
 
 
 # @receiver(post_save, sender=User)

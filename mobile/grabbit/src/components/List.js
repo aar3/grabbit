@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {View, Text, TouchableOpacity, Image, FlatList} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {connect} from 'react-redux';
 import ReduxActions from 'grabbit/src/lib/Actions';
@@ -129,35 +129,28 @@ class DealListItem_ extends React.Component {
       deal.description.length > size ? `${deal.description.substr(0, size)}...` : deal.description;
 
     return (
-      <TouchableOpacity
-        onPress={() =>
-          this.props.dispatch({
-            type: ReduxActions.Deals.SetFocusedDeal,
-            payload: deal,
-          })
-        }>
+      <View
+        style={{
+          backgroundColor: Color.White,
+          borderBottomWidth: 1,
+          borderBottomColor: Color.BorderLightGrey,
+          marginTop: 5,
+          alignItems: 'center',
+          padding: 10,
+          backgroundColor: Color.White,
+          flexDirection: 'row',
+          height: 175,
+        }}>
         <View
           style={{
+            borderWidth: 1,
+            borderColor: Color.BorderLightGrey,
             backgroundColor: Color.White,
-            borderBottomWidth: 1,
-            borderBottomColor: Color.BorderLightGrey,
-            marginTop: 5,
-            alignItems: 'center',
-            padding: 10,
-            backgroundColor: Color.White,
-            flexDirection: 'row',
-            height: 175,
+            height: 150,
+            width: 150,
+            overflow: 'hidden',
           }}>
-          <View
-            style={{
-              borderWidth: 1,
-              borderColor: Color.BorderLightGrey,
-              backgroundColor: Color.White,
-              height: 150,
-              width: 150,
-              overflow: 'hidden',
-            }}>
-            <Image
+          {/* <Image
               source={{uri: deal.img_url}}
               style={{
                 height: 150,
@@ -165,8 +158,50 @@ class DealListItem_ extends React.Component {
                 // borderWidth: 1,
                 // borderColor: 'red',
               }}
-            />
-          </View>
+            /> */}
+          <FlatList
+            horizontal
+            style={{
+              // borderWidth: 1,
+              // borderColor: 'green',
+              width: '100%',
+              height: '100%',
+            }}
+            keyExtractor={(_item, index) => index.toString()}
+            data={deal.all_img_urls}
+            renderItem={({item, index}) => {
+              return (
+                <View
+                  style={{
+                    // borderWidth: 1,
+                    // borderColor: Color.BorderLightGrey,
+                    // backgroundColor: Color.White,
+                    height: 145,
+                    width: 145,
+                    overflow: 'hidden',
+                    marginRight: 5,
+                  }}>
+                  <Image
+                    source={{uri: item}}
+                    style={{
+                      height: 150,
+                      width: 150,
+                      // borderWidth: 1,
+                      // borderColor: 'red',
+                    }}
+                  />
+                </View>
+              );
+            }}
+          />
+        </View>
+        <TouchableOpacity
+          onPress={() =>
+            this.props.dispatch({
+              type: ReduxActions.Deals.SetFocusedDeal,
+              payload: {deal},
+            })
+          }>
           <View
             style={{
               marginLeft: 10,
@@ -240,8 +275,8 @@ class DealListItem_ extends React.Component {
               {this._renderLikeIcon(deal)}
             </View>
           </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </View>
     );
   }
 }

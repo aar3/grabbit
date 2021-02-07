@@ -45,11 +45,11 @@ class M extends React.Component {
           }}
           _buttonStyle={{
             backgroundColor: Color.White,
-            borderColor: Color.OceanBlue,
+            borderColor: this.props.deal.brand.color_code,
             borderWidth: 1,
           }}
           titleStyle={{
-            color: Color.OceanBlue,
+            color: this.props.deal.brand.color_code,
             fontWeight: 'bold',
           }}
           title="Remove from Watch List"
@@ -75,7 +75,7 @@ class M extends React.Component {
             });
           }}
           _buttonStyle={{
-            backgroundColor: Color.OceanBlue,
+            backgroundColor: this.props.deal.brand.color_code,
             // borderColor: Color.OceanBlue,
             // borderWidth: 1,
           }}
@@ -109,7 +109,7 @@ class M extends React.Component {
             // justifyContent: 'center',
             // alignItems: 'center',
             marginTop: 50,
-            marginBottom: 50,
+            marginBottom: 40,
             marginLeft: 20,
             marginRight: 20,
             backgroundColor: 'white',
@@ -127,45 +127,51 @@ class M extends React.Component {
           }}>
           <View
             style={{
-              // borderWidth: 1,
-              // borderColor: 'green',
-              height: 30,
-              width: '100%',
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-            }}>
-            <TouchableOpacity
-              onPress={() =>
-                this.props.dispatch({
-                  type: ReduxActions.Deals.ToggleFocusedDealModal,
-                })
-              }>
-              <Icon name="x" size={30} color={Color.BorderLightGrey} />
-            </TouchableOpacity>
-          </View>
-          <View
-            style={{
+              position: 'absolute',
               // borderWidth: 1,
               // borderColor: 'red',
               padding: 10,
+              paddingTop: 0,
               justifyContent: 'center',
               alignItems: 'center',
             }}>
             <View
               style={{
+                // borderWidth: 1,
+                // borderColor: 'green',
+                height: 30,
+                position: 'absolute',
+                top: 5,
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.dispatch({
+                    type: ReduxActions.Deals.CloseFocusedDealModal,
+                  });
+                }}>
+                <Icon name="x" size={30} color={Color.BorderLightGrey} />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
                 borderWidth: 1,
-                borderColor: Color.BorderLightGrey,
+                borderColor: this.props.deal.brand.color_code,
                 height: 100,
                 width: 100,
                 borderRadius: 100,
+                marginTop: 10,
                 overflow: 'hidden',
               }}>
-              <Image source={{uri: merchantLogo}} style={{width: 100, height: 100}} />
+              <Image source={{uri: this.props.deal.brand.img_url}} style={{width: 100, height: 100}} />
             </View>
             <Text
               style={{
-                marginTop: 20,
+                marginTop: 10,
                 fontWeight: '600',
+                fontSize: 16,
                 color: Color.ReadableGreyText,
               }}>
               {this.props.deal.merchant_name}
@@ -173,7 +179,7 @@ class M extends React.Component {
 
             <Text
               style={{
-                marginTop: 20,
+                marginTop: 10,
                 color: Color.ReadableGreyText,
               }}>
               {this.props.deal.title}
@@ -211,13 +217,13 @@ class M extends React.Component {
                 // borderColor: 'red',
                 marginTop: 20,
                 width: '100%',
-                height: 150,
+                height: 300,
               }}>
               <FlatList
                 horizontal
                 keyExtractor={(_item, index) => index.toString()}
                 style={{
-                  height: 150,
+                  height: 300,
                 }}
                 data={this.props.deal.all_img_urls}
                 renderItem={({item, index}) => {
@@ -225,8 +231,8 @@ class M extends React.Component {
                     <Image
                       source={{uri: item}}
                       style={{
-                        height: 150,
-                        width: 150,
+                        height: 300,
+                        width: 300,
                         borderWidth: 1,
                         borderColor: Color.BorderLightGrey,
                         marginLeft: 5,
@@ -243,7 +249,7 @@ class M extends React.Component {
                 // borderColor: 'red',
                 width: '100%',
                 padding: 5,
-                maxHeight: 200,
+                maxHeight: 100,
                 marginTop: 20,
                 marginBottom: 20,
               }}>
@@ -271,11 +277,11 @@ class M extends React.Component {
                 onPress={() => Linking.openURL(this.props.deal.url)}
                 _buttonStyle={{
                   backgroundColor: Color.White,
-                  borderColor: Color.OceanBlue,
+                  borderColor: this.props.deal.brand.color_code,
                   borderWidth: 1,
                 }}
                 titleStyle={{
-                  color: Color.OceanBlue,
+                  color: this.props.deal.brand.color_code,
                   fontWeight: 'bold',
                 }}
                 title="Visit"
@@ -291,11 +297,11 @@ class M extends React.Component {
 const mapStateToProps = function (state) {
   const item = getStateForKey('state.deals.focused.item', state);
   const type = getDealType(item);
-  const deal = [DealType.DerivedWatchList, DealType.Deal].includes(type) ? item : item.deal;
+  // const deal = [DealType.DerivedWatchList, DealType.Deal].includes(type) ? item : item.deal;
 
   return {
     showDealFocusedModal: getStateForKey('state.deals.focused.show_modal', state),
-    deal,
+    deal: item.deal,
     type,
   };
 };

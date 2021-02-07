@@ -16,6 +16,7 @@ export const Color = {
   OceanBlue: '#2F97C1',
   DarkerTeal: '#1CCAD8',
   Teal: '#15E6CD',
+  BackgroundTeal: '#f3fffe',
 };
 
 export const TabIconSize = 24;

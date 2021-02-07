@@ -46,6 +46,7 @@ export default {
     SetFocusedDeal: 'SetFocusedDeal',
 
     ToggleFocusedDealModal: 'ToggleFocusedDealModal',
+    CloseFocusedDealModal: 'CloseFocusedDealModal',
 
     UpdateWatchListItemPending: 'UpdateWatchListItemPending',
     UpdateWatchListItemError: 'UpdateWatchListItemError',

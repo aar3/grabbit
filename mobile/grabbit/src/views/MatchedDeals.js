@@ -107,7 +107,7 @@ class V extends React.Component {
           data={this.props.matchedDeals}
           keyExtractor={(_item, index) => index.toString()}
           renderItem={({item, index}) => {
-            // FIXME: this can be abstracted a bit more (unfortunately)
+            // FIXME: we shouldn't have to copy/paste these properties into DealListItem
             const [hasLike, like] = objectContainsItem(this.props.likes, item.deal.id);
             const [onWatchList, watchListItem] = objectContainsItem(this.props.watchList, item.deal.id);
             return (

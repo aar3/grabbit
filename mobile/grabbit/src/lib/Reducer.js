@@ -19,18 +19,19 @@ const defaultState = {
       error: null,
       tmp_user: {},
     },
-    user: {
-      id: 3,
-      created_at: '2020-12-28T20:49:15.378923Z',
-      updated_at: null,
-      deleted_at: null,
-      qr_code_url: '',
-      name: 'Rashad Alston',
-      email: 'rashad.a.alston@gmail.com',
-      current_session_token: 'i2llXjNlXV',
-      phone: '+12132227624',
-    },
-    // user: null,
+    // IMPORTANT: the below user is for debug purposes
+    // user: {
+    //   id: 3,
+    //   created_at: '2020-12-28T20:49:15.378923Z',
+    //   updated_at: null,
+    //   deleted_at: null,
+    //   qr_code_url: '',
+    //   name: 'Rashad Alston',
+    //   email: 'rashad.a.alston@gmail.com',
+    //   current_session_token: 'i2llXjNlXV',
+    //   phone: '+12132227624',
+    // },
+    user: null,
     authentication: {
       input: {
         login: {
@@ -275,8 +276,6 @@ const reducer = function (state = defaultState, action) {
     case ReduxActions.Brands.DeleteFollowedBrandSuccess: {
       const items = state.brands.following.items;
       delete items[payload.id];
-
-      console.log('>>> ITEMS IS NOW ', items);
 
       return {
         ...state,
@@ -837,7 +836,6 @@ const reducer = function (state = defaultState, action) {
       };
     }
     case ReduxActions.Deals.PostDealLikeSuccess: {
-      console.log('>>>> ADDING LIKE ', payload.id);
       return {
         ...state,
         deals: {
@@ -990,8 +988,6 @@ const reducer = function (state = defaultState, action) {
       };
     }
     case ReduxActions.Deals.PostToWatchListSuccess: {
-      console.log('>>> ADDING ITEM TO WL');
-
       return {
         ...state,
         deals: {
@@ -1199,6 +1195,18 @@ const reducer = function (state = defaultState, action) {
           watch_list: {
             ...state.deals.watch_list,
             pending: true,
+          },
+        },
+      };
+    }
+    case ReduxActions.Deals.CloseFocusedDealModal: {
+      return {
+        ...state,
+        deals: {
+          ...state.deals,
+          focused: {
+            ...state.deals.focused,
+            show_modal: false,
           },
         },
       };

@@ -18,10 +18,12 @@ import {
   EditAccountView,
   MatchedDealsView,
 } from 'grabbit/src/views';
+import Websocket from 'grabbit/src/lib/Websocket';
 
 export default class Router_ extends React.Component {
   constructor(props) {
     super(props);
+    this.ws = Websocket;
     this.state = {};
   }
 
@@ -33,7 +35,7 @@ export default class Router_ extends React.Component {
             key="entry"
             component={EntryView}
             title="Entry"
-            // initial
+            initial
             gesturesEnabled={false}
             drawerLockMode="locked-closed"
             hideNavBar={true}
@@ -73,7 +75,7 @@ export default class Router_ extends React.Component {
             navBar={MainTopNavigationBar}
             title=""
             hideNavBar={false}
-            initial
+            // initial
             key="listDeal"
             component={ListDealsView}
           />

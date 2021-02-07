@@ -3,6 +3,7 @@ import {View, Text, FlatList, Image, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import ReduxActions from 'grabbit/src/lib/Actions';
 import {DealListItem} from 'grabbit/src/components/List';
+import {EmptyFlatList} from 'grabbit/src/components/Basic';
 import {getStateForKey, httpStateUpdate, objectContainsItem} from 'grabbit/src/lib/Utils';
 import {Color} from 'grabbit/src/lib/Const';
 import DealFocusModal from 'grabbit/src/components/modals/DealFocus';
@@ -41,6 +42,18 @@ class V extends React.Component {
   }
 
   render() {
+    if (this.props.watchList.length === 0) {
+      return (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <EmptyFlatList text="You haven't added anything to your Watch List" />
+        </View>
+      );
+    }
     return (
       <View
         style={{
@@ -58,7 +71,7 @@ class V extends React.Component {
           keyExtractor={(_item, index) => index.toString()}
           data={this.props.watchList}
           renderItem={({item, index}) => {
-            // FIXME: this can be abstracted a bit more (unfortunately)
+            // FIXME: we shouldn't have to copy/paste these properties into DealListItem
             const [hasLike, like] = objectContainsItem(this.props.likes, item.id);
             const [onWatchList, watchListItem] = objectContainsItem(this.props.watchListObject, item.id);
 
