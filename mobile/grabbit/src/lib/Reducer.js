@@ -20,18 +20,18 @@ const defaultState = {
       tmp_user: {},
     },
     // IMPORTANT: the below user is for debug purposes
-    user: {
-      id: 3,
-      created_at: '2020-12-28T20:49:15.378923Z',
-      updated_at: null,
-      deleted_at: null,
-      qr_code_url: '',
-      name: 'Rashad Alston',
-      email: 'rashad.a.alston@gmail.com',
-      current_session_token: 'i2llXjNlXV',
-      phone: '+12132227624',
-    },
-    // user: null,
+    // user: {
+    //   id: 3,
+    //   created_at: '2020-12-28T20:49:15.378923Z',
+    //   updated_at: null,
+    //   deleted_at: null,
+    //   qr_code_url: '',
+    //   name: 'Rashad Alston',
+    //   email: 'rashad.a.alston@gmail.com',
+    //   current_session_token: 'i2llXjNlXV',
+    //   phone: '+12132227624',
+    // },
+    user: null,
     authentication: {
       input: {
         login: {

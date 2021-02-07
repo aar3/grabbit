@@ -3,14 +3,16 @@ import {View, Text, FlatList, Image, TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import ReduxActions from 'grabbit/src/lib/Actions';
 import {DealListItem} from 'grabbit/src/components/List';
-import {getStateForKey, httpStateUpdate, objectContainsItem, Websocket} from 'grabbit/src/lib/Utils';
+import {getStateForKey, httpStateUpdate, objectContainsItem} from 'grabbit/src/lib/Utils';
 import {LoadingView, ErrorView} from 'grabbit/src/components/Basic';
 import {Color} from 'grabbit/src/lib/Const';
 import DealFocusModal from 'grabbit/src/components/modals/DealFocus';
+import Websocket from 'grabbit/src/lib/Websocket';
 
 class V extends React.Component {
   constructor(props) {
     super(props);
+    this.ws = Websocket;
     this.state = {
       scrollOffset: null,
     };
@@ -19,7 +21,7 @@ class V extends React.Component {
   componentDidMount() {
     // NOTE: We need to initialize the websoket after state.session.user is populated,
     // it doesn't matter where we initialize it really
-    this.ws = new Websocket();
+    this.ws.initWithUser(this.props.user);
     this.getDeals();
     this.getMatchedDeals();
     this.getWatchList();

@@ -9,7 +9,8 @@ __pycache__
 .env*
 TODO.md
 **/logs
-db/*.sql
+**/db/*.sql
+cloud/
 
 
 ####################

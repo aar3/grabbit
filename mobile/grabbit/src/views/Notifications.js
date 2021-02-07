@@ -65,7 +65,7 @@ class V extends React.Component {
             onPress={() =>
               this.props.dispatch({
                 type: ReduxActions.Deals.SetFocusedDeal,
-                payload: item.metadata.deal,
+                payload: { deal: item.metadata },
               })
             }
             buttonStyle={{
