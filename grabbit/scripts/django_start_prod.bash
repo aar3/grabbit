@@ -5,7 +5,7 @@ cd ../grabbit
 for PORT in 8000 8001 8002; do
     gunicorn grabbit.wsgi:application \
     --workers=3 \
-    -b 0.0.0.0:$PORT \
+    -b $IP:$PORT \
     --log-level INFO \
     --worker-class=gevent \
     --timeout=120 \
