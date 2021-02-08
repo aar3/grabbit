@@ -1,0 +1,23 @@
+# App Installation on New Machine
+- [ ] Secure VM
+- [ ] Create user, groups, and give proper perms
+    - All users belong to `dev` group
+- [ ] Install all required packages (git, nginx, Certbot, Postgres, Redis, etc)
+    - Git
+    - Nginx
+    - Certbot
+    - Postgres 
+    - Redis
+    - Pyenv
+    - Extras
+        - `sudo apt-get update; sudo apt-get install --no-install-recommends make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev`
+- [ ] Bootstrap services 
+    - Repos installed at /usr/local
+    - Postgres
+        - Create postgres user, database
+        - Edit `/etc/postgresql/11/main/pg_hba.conf` if need be
+    - Redis
+- [ ] Bootstrap Python environment
+    - Should be contained within make commands
+- [ ] Start application
+    - Should be contained within make commands
