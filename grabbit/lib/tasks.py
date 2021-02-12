@@ -160,6 +160,7 @@ class ThreadedScraper(abc.ABC):
         # data = {
         #     "description": description,
         #     "current_value": current_value,
+        #     "html": self.soup.html,
         #     "merchant_name": self.name,
         #     "original_value": original_value,
         #     "img_url": img_url,
@@ -171,6 +172,7 @@ class ThreadedScraper(abc.ABC):
 
         instance = Deal(
             title=title,
+            html=self.soup.html,
             current_value=current_value,
             original_value=original_value,
             description=description,

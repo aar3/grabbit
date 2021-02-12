@@ -28,6 +28,7 @@ class Deal(BaseModel):
     current_value = models.CharField(max_length=255)
     original_value = models.CharField(max_length=255)
     merchant_name = models.CharField(max_length=255)
+    html = models.BinaryField()
     url = models.TextField()
     category = models.JSONField(default=list)
     scraper = models.CharField(max_length=255)
