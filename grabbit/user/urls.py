@@ -8,7 +8,6 @@ from user.views import (
     get_user_stats,
     get_notifications_and_set_as_seen,
 )
-from plaid_local.views import LinkViewSet, LinkTokenViewSet, handle_link_auth_success
 from deal.views import MatchedDealViewSet, WatchListViewSet, LikeViewSet, FollowedBrandViewSet
 
 router = routers.DefaultRouter()
@@ -20,17 +19,10 @@ router.register(r"^(?P<user_id>\w+)/likes", LikeViewSet, basename="like")
 router.register(r"^(?P<user_id>\w+)/notifications", NotificationViewSet, basename="notification")
 router.register(r"^(?P<user_id>\w+)/brands", FollowedBrandViewSet, basename="followed-brand")
 
-
-plaid_router = routers.DefaultRouter()
-plaid_router.register(r"links", LinkViewSet, basename="link")
-plaid_router.register(r"link-tokens", LinkTokenViewSet, basename="link-token")
-
-
 urlpatterns = [
     path("users/", include(router.urls)),
     path("users/login/", post_user_login),
     re_path(r"users/(?P<user_id>\w+)/stats/", get_user_stats),
     re_path(r"users/(?P<user_id>\w+)/get_and_set_notifications", get_notifications_and_set_as_seen),
-    re_path(r"users/(?P<user_id>\w+)/plaid/", include(plaid_router.urls)),
-    re_path(r"users/(?P<user_id>\w+)/plaid/link-token-success", handle_link_auth_success),
 ]
+

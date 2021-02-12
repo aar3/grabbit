@@ -133,10 +133,10 @@ REDIS_WSROUTER_PORT = 6381
 # Plaid
 #################################################################
 
-PLAID_NAME = "Grabbit"
-PLAID_CLIENT_ID = os.environ["PLAID_CLIENT_ID"]
-PLAID_CLIENT_SECRET = os.environ["PLAID_SECRET"]
-PLAID_ENV = os.environ["PLAID_ENV"]
+# PLAID_NAME = "Grabbit"
+# PLAID_CLIENT_ID = os.environ["PLAID_CLIENT_ID"]
+# PLAID_CLIENT_SECRET = os.environ["PLAID_SECRET"]
+# PLAID_ENV = os.environ["PLAID_ENV"]
 
 
 #################################################################
